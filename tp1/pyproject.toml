@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sia-tp1"
+version = "0.1.0"
+description = "Motor de busqueda para Sokoban - SIA TP1"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+sia-tp1 = "sia_tp1.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

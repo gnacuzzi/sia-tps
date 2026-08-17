@@ -1,0 +1,12 @@
+{
+  "level_file": "levels/level_01.txt",
+  "algorithm": "bfs",
+  "heuristic": null,
+  "cost_model": "unit",
+  "limits": {
+    "max_expanded_nodes": null,
+    "timeout_seconds": null
+  },
+  "seed": 0
+}
+
