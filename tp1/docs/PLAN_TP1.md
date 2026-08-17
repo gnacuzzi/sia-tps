@@ -1,6 +1,6 @@
 # TP1 - Plan de trabajo y contrato de colaboración
 
-Estado: Fases 0, 1 y 2 completadas. Implementación pausada para crear y organizar el monorepo; después continúa la Fase 3, DFS y robustez.  
+Estado: Fases 0, 1 y 2 completadas. Fase 3 en curso: DFS y robustez.
 Objetivo: completar el TP entendiendo las decisiones conceptuales, usando asistencia para recuperar fluidez de programación sin delegar el razonamiento central.
 
 ## 1. Acuerdo de trabajo
@@ -590,10 +590,25 @@ Resultado reproducible sobre `level_01.txt`: `SUCCESS`, costo 3, 3 movimientos, 
 
 ### Fase 3 - DFS y robustez (1-1.5 h)
 
-- [ ] Reutilizar el motor o la interfaz común con una frontera LIFO.
-- [ ] Definir un límite defensivo configurable para experimentos difíciles.
-- [ ] Probar éxito, fracaso y estado inicial ya resuelto.
-- [ ] Confirmar que DFS no se presenta como óptimo.
+Diseño conceptual de DFS confirmado:
+
+- la frontera es una pila LIFO: los nodos se agregan con `append` y se retiran con `pop`;
+- la prioridad observable de expansión se conserva como `UP, DOWN, LEFT, RIGHT`;
+- como la pila retira primero el último elemento agregado, los hijos se incorporan en el orden inverso `RIGHT, LEFT, DOWN, UP`;
+- los repetidos se detectan mediante `set[State]`, no mediante nodos, y cada estado se marca como descubierto al agregarlo a la pila;
+- esta política evita ciclos y duplicados pendientes en la frontera;
+- DFS termina al encontrar la primera solución y no continúa buscando una alternativa más corta;
+- por lo anterior, DFS no se presenta como óptimo aunque el costo de cada movimiento sea uniforme;
+- usa los mismos límites, estados de resultado, definición de expansión y métricas que BFS.
+
+- [x] Reutilizar el motor o la interfaz común con una frontera LIFO.
+- [x] Definir un límite defensivo configurable para experimentos difíciles.
+- [x] Probar éxito, fracaso y estado inicial ya resuelto.
+- [x] Confirmar que DFS no se presenta como óptimo.
+
+**Estado del bloque:** el núcleo de DFS y sus pruebas directas están completos.
+La integración de la selección `dfs` en la CLI queda para el siguiente bloque
+pequeño y revisable. La suite completa contiene ahora 44 tests aprobados.
 
 **Terminado cuando:** BFS y DFS resuelven los mismos casos básicos y exponen el mismo formato de resultado.
 

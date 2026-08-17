@@ -12,6 +12,7 @@ from .search import (
     SearchResult,
     SearchStatus,
     breadth_first_search,
+    depth_first_search,
     reconstruct_nodes,
 )
 
@@ -31,6 +32,7 @@ __all__ = [
     "Transition",
     "apply_move",
     "breadth_first_search",
+    "depth_first_search",
     "is_goal",
     "load_config",
     "parse_level",
