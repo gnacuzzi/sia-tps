@@ -39,16 +39,62 @@ class ConfigTest(unittest.TestCase):
             with self.assertRaisesRegex(ConfigError, "positive integer"):
                 load_config(config_path)
 
+    def test_reject_heuristic_for_uninformed_algorithm(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = Path(directory) / "config.json"
+            self._write_config(
+                config_path,
+                heuristic="minimum_matching_manhattan",
+            )
+
+            with self.assertRaisesRegex(ConfigError, "requires heuristic.*null"):
+                load_config(config_path)
+
+    def test_require_heuristic_for_informed_algorithm(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = Path(directory) / "config.json"
+            self._write_config(config_path, algorithm="greedy")
+
+            with self.assertRaisesRegex(ConfigError, "requires a heuristic"):
+                load_config(config_path)
+
+    def test_reject_unknown_heuristic(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = Path(directory) / "config.json"
+            self._write_config(
+                config_path,
+                algorithm="astar",
+                heuristic="unknown",
+            )
+
+            with self.assertRaisesRegex(ConfigError, "Unknown heuristic"):
+                load_config(config_path)
+
+    def test_accept_registered_heuristic_for_informed_algorithm(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = Path(directory) / "config.json"
+            self._write_config(
+                config_path,
+                algorithm="astar",
+                heuristic="shortest_push_access",
+            )
+
+            config = load_config(config_path)
+
+            self.assertEqual(config.algorithm, "astar")
+            self.assertEqual(config.heuristic, "shortest_push_access")
+
     def _write_config(
         self,
         path: Path,
         algorithm: str = "bfs",
+        heuristic=None,
         max_expanded_nodes=None,
     ) -> None:
         data = {
             "level_file": "levels/level.txt",
             "algorithm": algorithm,
-            "heuristic": None,
+            "heuristic": heuristic,
             "cost_model": "unit",
             "limits": {
                 "max_expanded_nodes": max_expanded_nodes,
@@ -61,4 +107,3 @@ class ConfigTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

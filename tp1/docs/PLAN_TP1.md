@@ -1,6 +1,6 @@
 # TP1 - Plan de trabajo y contrato de colaboración
 
-Estado: Fases 0, 1 y 2 completadas. Fase 3 en curso: DFS y robustez.
+Estado: Fases 0, 1, 2, 3, 4 y 5 completadas. Próxima etapa: Fase 6, reproducción visual y GIF.
 Objetivo: completar el TP entendiendo las decisiones conceptuales, usando asistencia para recuperar fluidez de programación sin delegar el razonamiento central.
 
 ## 1. Acuerdo de trabajo
@@ -319,7 +319,8 @@ Objetivo: mantener el motor con pocas dependencias.
 
 - Biblioteca estándar para estructuras de datos, prioridades, JSON, CLI, rutas y medición de tiempo.
 - `pytest` como dependencia de desarrollo para tests.
-- Herramientas de análisis y gráficos se elegirán recién en la Fase 6, separadas del motor.
+- La dependencia para generar GIF se elegirá en la Fase 6 y las herramientas de
+  análisis y gráficos en la Fase 7, siempre separadas del motor de búsqueda.
 
 `pyproject.toml` documentará la versión de Python y las dependencias. Se usará el flujo tradicional `venv + pip + pyproject.toml`, sin incorporar Poetry ni uv por ahora. La versión concreta de Python se confirmará al crear el repositorio; el `python3` disponible actualmente es 3.9.6.
 
@@ -606,33 +607,350 @@ Diseño conceptual de DFS confirmado:
 - [x] Probar éxito, fracaso y estado inicial ya resuelto.
 - [x] Confirmar que DFS no se presenta como óptimo.
 
-**Estado del bloque:** el núcleo de DFS y sus pruebas directas están completos.
-La integración de la selección `dfs` en la CLI queda para el siguiente bloque
-pequeño y revisable. La suite completa contiene ahora 44 tests aprobados.
+**Estado:** fase completada. `run_search` selecciona BFS o DFS según
+`algorithm`; ambos reutilizan la misma presentación de `SearchResult`. Los
+algoritmos informados continúan rechazándose hasta que sus diseños estén
+aprobados. La suite completa contiene 45 tests aprobados.
 
 **Terminado cuando:** BFS y DFS resuelven los mismos casos básicos y exponen el mismo formato de resultado.
 
 ### Fase 4 - taller de heurísticas (60-90 min, estudiante)
 
-- [ ] Completar dos fichas de heurísticas candidatas.
-- [ ] Calcularlas a mano en varios estados.
-- [ ] Escribir una justificación de admisibilidad.
-- [ ] Buscar contraejemplos.
-- [ ] Recién entonces traducir las definiciones aprobadas a funciones.
+#### Primera heurística provisional propuesta por el estudiante
+
+Definición aprobada en palabras:
+
+```text
+h(estado) =
+    mínimo, entre todas las asignaciones uno-a-uno de cajas a objetivos,
+    de la suma de las distancias Manhattan entre cada caja y su objetivo
+    asignado
+```
+
+Para posiciones `(fila_1, columna_1)` y `(fila_2, columna_2)`, la distancia
+Manhattan usada en la definición es:
+
+```text
+|fila_1 - fila_2| + |columna_1 - columna_2|
+```
+
+La propuesta ignora paredes, exterior, ubicación y reposicionamiento de la
+persona, y bloqueos entre cajas. Cada caja se asigna a exactamente un objetivo
+y cada objetivo a exactamente una caja. Si varias asignaciones tienen el mismo
+total mínimo, el valor numérico de la heurística no depende de cuál se elija.
+
+Traducción aprobada a código:
+
+- `src/sia_tp1/heuristics.py` implementa
+  `minimum_matching_manhattan_distance` mediante todas las permutaciones de
+  objetivos y conserva la suma mínima;
+- la función valida defensivamente que coincidan las cantidades de cajas y
+  objetivos;
+- `tests/test_heuristics.py` reproduce los valores manuales `2, 2, 1, 0` de
+  `level_01.txt`, comprueba el mínimo global 7 frente a la elección local que
+  daba 13 y prueba la validación de cantidades;
+- después de este bloque, la suite completa contiene 48 tests aprobados.
+
+La implementación inicial podrá enumerar las `n!` asignaciones porque el
+alcance previsto usa niveles pequeños. Antes de escribir código todavía falta:
+
+- calcular la heurística manualmente en varios estados;
+- buscar contraejemplos a esa justificación;
+- confirmar más casos manuales además del estado objetivo.
+
+Justificación de admisibilidad construida por el estudiante:
+
+1. Toda solución real termina con cada caja sobre un objetivo distinto y, por
+   lo tanto, induce una asignación uno-a-uno de cajas a objetivos.
+2. La heurística toma el mínimo entre todas las asignaciones, incluida la que
+   induce esa solución real. Su valor no puede superar la suma correspondiente
+   a esa asignación concreta.
+3. Para una caja, cada empuje cambia sólo una fila o una columna en una unidad.
+   Por eso alcanzar su objetivo requiere al menos tantos empujes como indique
+   su distancia Manhattan.
+4. La suma de distancias de la asignación final no supera la cantidad total de
+   empujes de la solución.
+5. Cada empuje también es un movimiento válido de la persona. Como el costo
+   unitario cuenta todos sus movimientos válidos, el costo total no puede ser
+   menor que la cantidad de empujes.
+
+En consecuencia:
+
+```text
+h(estado)
+    <= suma de distancias de la asignación de una solución óptima
+    <= empujes de esa solución óptima
+    <= movimientos de esa solución óptima
+    = costo óptimo real restante
+```
+
+Además, en un estado objetivo existe una asignación de cada caja al objetivo
+que ya ocupa, con distancia total cero. Como las distancias no son negativas,
+`h(objetivo) = 0`.
+
+Comprobación manual sobre `level_01.txt`, cuya solución conocida es
+`RIGHT, RIGHT, RIGHT`:
+
+| Estado | Posición de la caja | `h` | Costo óptimo real restante |
+| --- | --- | ---: | ---: |
+| Inicial | `(1, 3)` | 2 | 3 |
+| Después del primer `RIGHT`, sin empuje | `(1, 3)` | 2 | 2 |
+| Después del segundo `RIGHT`, con empuje | `(1, 4)` | 1 | 1 |
+| Después del tercer `RIGHT`, resuelto | `(1, 5)` | 0 | 0 |
+
+La heurística permanece en 2 durante el movimiento sin empuje porque no usa la
+posición de la persona. En todos los estados comprobados su valor es menor o
+igual que el costo óptimo real restante.
+
+Revisión de posibles contraejemplos y limitaciones:
+
+- si una pared obliga a realizar un rodeo, el costo real aumenta mientras la
+  estimación puede quedar baja; eso es subestimar y no rompe la admisibilidad;
+- ignorar el reposicionamiento de la persona y los bloqueos entre cajas también
+  puede reducir la estimación, no aumentarla por encima del costo real;
+- en un estado sin solución, por ejemplo una caja trabada en una esquina que no
+  es objetivo, la heurística puede devolver un valor finito. El costo real se
+  considera infinito, por lo que esto no rompe la admisibilidad, pero muestra
+  que la heurística no detecta todos los estados insolubles;
+- un contraejemplo real necesitaría cumplir estrictamente
+  `h(estado) > costo óptimo real restante`. No se encontró uno bajo el modelo
+  actual de costo unitario y las validaciones acordadas.
+
+#### Segunda heurística propuesta por el estudiante, revisión aprobada
+
+La segunda propuesta observa la posición de la persona, información que la
+primera heurística ignora. Su definición aprobada en palabras es:
+
+```text
+si el estado está resuelto:
+    h(estado) = 0
+
+en otro caso:
+    h(estado) = longitud del camino más corto de la persona hasta cualquier
+                posición desde la que pueda realizar un empuje físicamente
+                posible, manteniendo inmóviles todas las cajas
+
+si ninguna de esas posiciones es alcanzable:
+    h(estado) = infinito
+```
+
+Para una caja y una dirección, una posición de empuje es candidata cuando:
+
+- la posición ortogonal inmediatamente detrás de la caja es piso y no contiene
+  otra caja;
+- la posición ortogonal inmediatamente delante de la caja, es decir, su destino
+  si se la empuja, es piso y no contiene otra caja.
+
+La distancia se obtiene mediante el camino transitable más corto de la persona:
+las paredes y todas las cajas son obstáculos, y durante este recorrido no se
+permite empujar. El movimiento que efectúa el primer empuje no se suma. Si la
+persona ya está en una posición candidata, la heurística devuelve cero aunque
+el estado no esté resuelto.
+
+Si un estado no objetivo no tiene ninguna posición candidata alcanzable sin
+empujar, no puede existir un primer empuje y el estado no tiene solución. El
+costo real restante es infinito y la heurística usa también infinito. La
+comprobación de objetivo debe tener prioridad, porque un estado resuelto no
+necesita ningún empuje y debe devolver cero.
+
+Traducción aprobada a código:
+
+- `shortest_push_access_distance` obtiene primero las posiciones candidatas y
+  ejecuta una BFS interna que mueve solamente a la persona;
+- durante esa BFS, las paredes, el exterior y todas las cajas son obstáculos;
+- la función devuelve la distancia al retirar la primera posición candidata,
+  cero para un estado objetivo e infinito si agota las posiciones alcanzables;
+- los tests reproducen `1, 0, 0, 0` sobre `level_01.txt`, comprueban un rodeo
+  cuyo camino real cuesta 4 frente a una distancia Manhattan de 2 y verifican
+  el resultado infinito cuando ninguna posición candidata es alcanzable;
+- después de implementar ambas heurísticas, la suite completa contiene 51
+  tests aprobados.
+
+Justificación de admisibilidad construida por el estudiante:
+
+1. Toda solución de un estado no objetivo tiene un primer empuje.
+2. La posición desde la que la persona realiza ese primer empuje cumple las
+   condiciones de una posición candidata y es alcanzable sin empujar.
+3. La heurística toma el mínimo de los caminos más cortos hasta todas las
+   candidatas alcanzables, por lo que no supera el camino más corto hasta la
+   posición usada por la solución real.
+4. Los movimientos de la solución previos al primer empuje forman un camino
+   válido hasta esa posición, manteniendo todavía inmóviles todas las cajas. El
+   camino más corto no puede ser más largo que ese prefijo.
+5. Los movimientos previos al primer empuje son parte de la solución completa y
+   no pueden superar su costo total.
+
+Por lo tanto, para cualquier solución real:
+
+```text
+h(estado)
+    <= camino más corto hasta la posición de su primer empuje
+    <= movimientos reales previos a ese empuje
+    <= costo total de esa solución
+```
+
+La desigualdad vale en particular para la solución óptima. En un estado
+objetivo la definición devuelve cero. Si un estado no objetivo no tiene ninguna
+posición de empuje alcanzable, ninguna solución puede realizar su primer empuje
+y el costo real es infinito; devolver infinito tampoco lo sobreestima.
+
+Comprobación manual sobre la solución conocida de `level_01.txt`:
+
+| Estado | Persona | Caja | `h` |
+| --- | --- | --- | ---: |
+| Inicial | `(1, 1)` | `(1, 3)` | 1 |
+| Después del primer `RIGHT` | `(1, 2)` | `(1, 3)` | 0 |
+| Después del segundo `RIGHT` | `(1, 3)` | `(1, 4)` | 0 |
+| Resuelto | `(1, 4)` | `(1, 5)` | 0 |
+
+Los valores confirman que la propuesta no es idénticamente cero y, por lo
+tanto, no es la heurística trivial en sentido formal. Usar el camino transitable
+más corto permite distinguir rodeos causados por paredes y cajas que Manhattan
+ignoraba. Sin embargo, sigue devolviendo cero en estados no objetivo cuando la
+persona ya ocupa alguna posición candidata, aunque todavía falten cajas por
+llevar a sus objetivos. Esta debilidad deberá observarse en los experimentos.
+
+Revisión de posibles contraejemplos y decisiones descartadas:
+
+- la posición candidata más cercana puede permitir un empuje que luego conduce
+  a un mal camino. Esto sólo reduce la estimación: si cuesta 3 alcanzarla pero
+  una solución óptima necesita 6 movimientos antes de su primer empuje, se
+  conserva `h(estado) = 3 <= 6`;
+- no se restringen las candidatas a empujes considerados "útiles" o dirigidos
+  hacia un objetivo. Una solución puede necesitar primero un empuje que parezca
+  desfavorable; excluirlo podría eliminar la posición del primer empuje real y
+  romper la demostración de admisibilidad;
+- las candidatas inalcanzables con las cajas inmóviles no participan del mínimo.
+  Si no queda ninguna alcanzable, no puede existir el primer empuje de una
+  solución y corresponde el valor infinito ya definido;
+- un estado objetivo se comprueba antes que la ausencia de empujes, de modo que
+  siempre recibe valor cero.
+
+No se encontró un estado solucionable donde esta definición supere el costo
+óptimo real restante.
+
+#### Comparación conceptual de las dos propuestas
+
+- La primera estima desplazamientos de cajas durante toda la solución. Ignora
+  el recorrido de la persona, las paredes y los bloqueos, pero en
+  `level_01.txt` conserva información hasta alcanzar la meta.
+- La segunda estima solamente el recorrido real de la persona anterior al
+  primer empuje. Considera paredes y cajas inmóviles durante ese prefijo, pero
+  puede devolver cero mucho antes de que el nivel esté resuelto.
+- Una heurística no orienta mejor por bajar más rápido. Greedy prioriza valores
+  bajos de `h` y A* usa `g + h`, pero una cota admisible más cercana al costo
+  real suele discriminar mejor los estados. Devolver cero prematuramente genera
+  empates y aporta poca información.
+- Después del primer `RIGHT` de `level_01.txt`, el costo óptimo restante es 2:
+  la primera heurística devuelve 2 y la segunda devuelve 0. El estudiante
+  identificó que la primera es más precisa en ese estado.
+- Las propuestas observan dificultades diferentes. La segunda puede aportar
+  información en otro nivel cuando paredes o cajas obliguen a la persona a dar
+  un rodeo antes de poder efectuar el primer empuje.
+
+- [x] Completar dos fichas de heurísticas candidatas.
+- [x] Calcularlas a mano en varios estados.
+- [x] Escribir una justificación de admisibilidad para la primera propuesta.
+- [x] Escribir una justificación de admisibilidad para la segunda propuesta.
+- [x] Buscar contraejemplos para la primera propuesta.
+- [x] Buscar contraejemplos para la segunda propuesta.
+- [x] Traducir las definiciones aprobadas a funciones.
+
+**Estado:** fase completada. El estudiante diseñó, justificó, calculó y revisó
+ambas heurísticas, y comprendió que la BFS local de la segunda función usa una
+frontera independiente de la frontera del algoritmo principal.
 
 **Terminado cuando:** el estudiante puede explicar cada función sin mostrar código y defender por qué no sobreestima.
 
 ### Fase 5 - Greedy y A* (1.5-2 h, sin delegar heurísticas)
 
-- [ ] Implementar una frontera de prioridad con desempate determinista.
-- [ ] Greedy ordena por `h(n)`.
-- [ ] A* ordena por `g(n) + h(n)`.
-- [ ] Hacer intercambiable la función heurística.
-- [ ] Comparar el costo de A* y BFS en niveles pequeños de costo uniforme.
+Decisiones conceptuales confirmadas:
+
+- Greedy prioriza `h(n)` y A* prioriza `g(n) + h(n)`;
+- la frontera de prioridad desempata mediante un contador creciente de
+  inserción, por lo que un empate conserva el orden observable de generación
+  `UP, DOWN, LEFT, RIGHT` y nunca intenta comparar objetos `Node`;
+- Greedy usa `set[State]`, marca al incorporar a la frontera y descarta toda
+  aparición posterior del mismo estado; no garantiza costo mínimo;
+- A* guarda el menor `g` conocido por estado y vuelve a incorporar un estado
+  solamente si aparece con un costo estrictamente menor;
+- las entradas anteriores de A* que queden obsoletas en el heap se descartan al
+  retirarlas y no se expanden;
+- `bfs` y `dfs` exigirán `heuristic: null`; `greedy` y `astar` exigirán una
+  heurística reconocida, sin ignorar silenciosamente configuraciones inválidas;
+- los identificadores de configuración serán `minimum_matching_manhattan` y
+  `shortest_push_access`;
+- ambos algoritmos comprobarán objetivo al retirar de la frontera y reutilizarán
+  sin cambios los límites, métricas, estados de resultado, costo unitario y
+  orden de sucesores de BFS y DFS.
+
+Implementación actual:
+
+- `src/sia_tp1/search/greedy.py` implementa Greedy con `heapq` y entradas
+  `(h, orden_de_inserción, nodo)`;
+- marca estados al incorporarlos y descarta repetidos mediante `set[State]`;
+- reutiliza límites, métricas, reconstrucción y estados de resultado comunes;
+- los tests cubren solución, meta inicial, fracaso, ambos cortes y desempate
+  determinista que conserva `UP` como primera prioridad observable;
+- `src/sia_tp1/search/astar.py` implementa A* con prioridad `g + h`, registro
+  del menor `g` conocido, reapertura y descarte perezoso de entradas obsoletas;
+- en A*, `frontier_size_at_end` cuenta estados activos y excluye entradas
+  obsoletas, mientras `max_frontier_size` usa el tamaño físico máximo del heap
+  porque esas entradas sí ocuparon memoria durante la ejecución;
+- el registro de heurísticas asocia `minimum_matching_manhattan` y
+  `shortest_push_access` con las funciones diseñadas por el estudiante;
+- `config.json` rechaza una heurística en BFS/DFS, exige una heurística conocida
+  en Greedy/A* y nunca ignora silenciosamente combinaciones inválidas;
+- la CLI despacha los cuatro algoritmos y reutiliza la misma salida de métricas
+  y camino solución;
+- A* tiene una prueba específica de reapertura y coincide con el costo óptimo de
+  BFS sobre `level_01.txt` bajo costo unitario;
+- la suite completa contiene 69 tests aprobados al cerrar la fase.
+
+- [x] Implementar una frontera de prioridad con desempate determinista para Greedy.
+- [x] Greedy ordena por `h(n)`.
+- [x] A* ordena por `g(n) + h(n)`.
+- [x] Hacer intercambiable la función heurística.
+- [x] Comparar el costo de A* y BFS en niveles pequeños de costo uniforme.
+
+**Estado:** fase completada. Greedy y A* usan las heurísticas aprobadas, exponen
+el mismo `SearchResult` que los métodos desinformados y pueden seleccionarse
+desde `config.json`.
 
 **Terminado cuando:** ambos algoritmos usan las funciones escritas por el estudiante y el camino se valida por reproducción.
 
-### Fase 6 - experimentos (1.5-2 h)
+### Fase 6 - reproducción visual y GIF de soluciones (1.5-2 h)
+
+El requisito visual consiste en mostrar el Sokoban ejecutando el camino solución
+de cada algoritmo: la persona camina y las cajas se desplazan. No se animará el
+árbol de búsqueda, la frontera ni el orden de expansión.
+
+La animación no necesita otro parser ni instrumentación adicional en los
+algoritmos. Consumirá el resultado ya existente:
+
+```text
+SearchResult exitoso
+-> solution_nodes
+-> estado inicial + un estado por movimiento
+-> una imagen por estado
+-> GIF animado
+```
+
+- [ ] Elegir una dependencia liviana para dibujar imágenes y codificar GIF.
+- [ ] Dibujar paredes, pisos, objetivos, persona y cajas con un estilo legible.
+- [ ] Mantener dimensiones y escala constantes durante toda la animación.
+- [ ] Incluir el estado inicial y luego un cuadro por cada transición.
+- [ ] Mostrar opcionalmente algoritmo, número de movimiento, dirección y empuje.
+- [ ] Exportar un GIF reproducible para BFS, DFS, Greedy y A* sobre el nivel
+  elegido para la presentación.
+- [ ] Verificar que la cantidad de cuadros sea `solution_moves + 1` y que el
+  último estado satisfaga la condición de objetivo.
+- [ ] Informar claramente que `FAILURE` y `CUTOFF` no tienen camino para animar.
+
+**Terminado cuando:** una ejecución exitosa puede convertirse en un GIF que
+reproduce exactamente su camino desde el estado inicial hasta la meta.
+
+### Fase 7 - experimentos (1.5-2 h)
 
 - [ ] Elegir pocas instancias: mínima, intermedia y una que exponga diferencias.
 - [ ] Ejecutar repeticiones para tiempo; mantener fijos nivel, equipo y configuración.
@@ -642,7 +960,7 @@ pequeño y revisable. La suite completa contiene ahora 44 tests aprobados.
 
 **Terminado cuando:** una sola orden reproduce la tabla base de la presentación.
 
-### Fase 7 - ejercicio 1, README y entrega (2-3 h)
+### Fase 8 - ejercicio 1, README y entrega (2-3 h)
 
 - [ ] Resolver el 8-puzzle conceptualmente con el mismo taller de heurísticas.
 - [ ] Escribir instrucciones exactas de instalación y ejecución.
@@ -666,6 +984,8 @@ pequeño y revisable. La suite completa contiene ahora 44 tests aprobados.
 - DFS retorna un camino válido sin afirmar optimalidad.
 - La solución de cada método se reproduce desde el estado inicial.
 - Para cada heurística creada por el estudiante: valor cero en meta y casos manuales documentados.
+- Los cuadros de cada GIF coinciden con los estados del camino solución y el
+  último cuadro muestra un estado objetivo.
 
 ## 11. Estrategia para trabajar con Codex
 
@@ -713,14 +1033,14 @@ Prioridad obligatoria:
 1. Un dominio correctamente definido.
 2. BFS, DFS, Greedy y A* correctos.
 3. Dos heurísticas admisibles diseñadas y defendidas por el estudiante.
-4. Métricas comparables y una batería pequeña reproducible.
-5. README y presentación.
+4. GIF de los caminos solución requerido para la presentación.
+5. Métricas comparables y una batería pequeña reproducible.
+6. README y presentación.
 
 Recortar primero:
 
 - IDDFS;
 - heurísticas no admisibles;
-- visualización animada;
 - niveles grandes;
 - framework GSD completo;
 - automatización sofisticada del monorepo.

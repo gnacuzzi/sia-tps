@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Mapping, Optional, Union
 
+from .heuristics import HEURISTIC_NAMES
 from .search.model import SearchLimits
 
 
@@ -50,6 +51,7 @@ def load_config(path: Union[str, Path]) -> AppConfig:
     heuristic = raw.get("heuristic")
     if heuristic is not None and not isinstance(heuristic, str):
         raise ConfigError("heuristic must be a string or null")
+    _validate_algorithm_heuristic(algorithm, heuristic)
 
     cost_model = _required_string(raw, "cost_model")
     limits = _load_limits(raw.get("limits"))
@@ -73,6 +75,24 @@ def _required_string(raw: Mapping[str, Any], key: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ConfigError(f"{key} must be a non-empty string")
     return value
+
+
+def _validate_algorithm_heuristic(
+    algorithm: str,
+    heuristic: Optional[str],
+) -> None:
+    if algorithm in {"bfs", "dfs"}:
+        if heuristic is not None:
+            raise ConfigError(f"{algorithm} requires heuristic to be null")
+        return
+
+    if heuristic is None:
+        raise ConfigError(f"{algorithm} requires a heuristic")
+    if heuristic not in HEURISTIC_NAMES:
+        allowed = ", ".join(sorted(HEURISTIC_NAMES))
+        raise ConfigError(
+            f"Unknown heuristic {heuristic!r}; expected one of: {allowed}"
+        )
 
 
 def _load_limits(raw: Any) -> SearchLimits:
@@ -102,4 +122,3 @@ def _load_limits(raw: Any) -> SearchLimits:
         )
     except ValueError as error:
         raise ConfigError(str(error)) from error
-

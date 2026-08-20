@@ -7,10 +7,17 @@ from typing import Optional, Sequence, TextIO
 
 from .config import ConfigError, load_config
 from .domain import apply_move, is_goal
+from .heuristics import get_heuristic
 from .model import Direction
 from .parser import LevelFormatError, parse_level
 from .render import render_state
-from .search import SearchStatus, breadth_first_search
+from .search import (
+    SearchStatus,
+    a_star_search,
+    breadth_first_search,
+    depth_first_search,
+    greedy_search,
+)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -92,14 +99,33 @@ def run_search(
 
     config = load_config(config_path)
     if config.cost_model != "unit":
-        raise ConfigError("BFS only supports cost_model='unit'")
-    if config.algorithm != "bfs":
+        raise ConfigError("Search only supports cost_model='unit'")
+
+    level, initial_state = parse_level(config.level_file)
+    if config.algorithm == "bfs":
+        result = breadth_first_search(level, initial_state, config.limits)
+    elif config.algorithm == "dfs":
+        result = depth_first_search(level, initial_state, config.limits)
+    elif config.algorithm == "greedy":
+        heuristic = get_heuristic(config.heuristic)
+        result = greedy_search(
+            level,
+            initial_state,
+            heuristic,
+            config.limits,
+        )
+    elif config.algorithm == "astar":
+        heuristic = get_heuristic(config.heuristic)
+        result = a_star_search(
+            level,
+            initial_state,
+            heuristic,
+            config.limits,
+        )
+    else:
         raise ConfigError(
             f"Algorithm {config.algorithm!r} is not implemented yet"
         )
-
-    level, initial_state = parse_level(config.level_file)
-    result = breadth_first_search(level, initial_state, config.limits)
 
     print(f"Status: {result.status.value}", file=output)
     print(f"Expanded nodes: {result.expanded_nodes}", file=output)

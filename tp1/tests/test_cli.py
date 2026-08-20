@@ -1,8 +1,12 @@
+import json
 import io
+import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from sia_tp1.cli import run, run_search
+from sia_tp1.search import a_star_search, depth_first_search, greedy_search
 
 
 class CliTest(unittest.TestCase):
@@ -52,6 +56,107 @@ class CliTest(unittest.TestCase):
         self.assertIn("Solution pushes: 2", rendered)
         self.assertIn("3: RIGHT, pushed=true", rendered)
         self.assertIn("#___@*#", rendered)
+
+    def test_run_configured_dfs(self) -> None:
+        output = io.StringIO()
+
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(
+                Path(directory),
+                algorithm="dfs",
+                heuristic=None,
+            )
+
+            with patch(
+                "sia_tp1.cli.depth_first_search",
+                wraps=depth_first_search,
+            ) as configured_dfs:
+                exit_code = run_search(config_path, output=output)
+
+        rendered = output.getvalue()
+        configured_dfs.assert_called_once()
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Status: success", rendered)
+        self.assertIn("Solution cost: 3", rendered)
+        self.assertIn("Solution moves: 3", rendered)
+        self.assertIn("Solution pushes: 2", rendered)
+        self.assertIn("#___@*#", rendered)
+
+    def test_run_configured_greedy(self) -> None:
+        output = io.StringIO()
+
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(
+                Path(directory),
+                algorithm="greedy",
+                heuristic="minimum_matching_manhattan",
+            )
+
+            with patch(
+                "sia_tp1.cli.greedy_search",
+                wraps=greedy_search,
+            ) as configured_greedy:
+                exit_code = run_search(config_path, output=output)
+
+        rendered = output.getvalue()
+        configured_greedy.assert_called_once()
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Status: success", rendered)
+        self.assertIn("Solution cost: 3", rendered)
+        self.assertIn("Solution moves: 3", rendered)
+        self.assertIn("Solution pushes: 2", rendered)
+        self.assertIn("#___@*#", rendered)
+
+    def test_run_configured_astar(self) -> None:
+        output = io.StringIO()
+
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(
+                Path(directory),
+                algorithm="astar",
+                heuristic="shortest_push_access",
+            )
+
+            with patch(
+                "sia_tp1.cli.a_star_search",
+                wraps=a_star_search,
+            ) as configured_astar:
+                exit_code = run_search(config_path, output=output)
+
+        rendered = output.getvalue()
+        configured_astar.assert_called_once()
+        self.assertEqual(exit_code, 0)
+        self.assertIn("Status: success", rendered)
+        self.assertIn("Solution cost: 3", rendered)
+        self.assertIn("Solution moves: 3", rendered)
+        self.assertIn("Solution pushes: 2", rendered)
+        self.assertIn("#___@*#", rendered)
+
+    def _write_search_config(
+        self,
+        directory: Path,
+        *,
+        algorithm: str,
+        heuristic,
+    ) -> Path:
+        config_path = directory / "config.json"
+        config_path.write_text(
+            json.dumps(
+                {
+                    "level_file": str(Path("levels/level_01.txt").resolve()),
+                    "algorithm": algorithm,
+                    "heuristic": heuristic,
+                    "cost_model": "unit",
+                    "limits": {
+                        "max_expanded_nodes": None,
+                        "timeout_seconds": None,
+                    },
+                    "seed": 0,
+                }
+            ),
+            encoding="utf-8",
+        )
+        return config_path
 
 
 if __name__ == "__main__":
