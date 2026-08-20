@@ -23,6 +23,7 @@ from .search import (
     greedy_search,
     reconstruct_nodes,
 )
+from .visualization import save_solution_gif
 
 __all__ = [
     "AppConfig",
@@ -51,5 +52,6 @@ __all__ = [
     "parse_level",
     "reconstruct_nodes",
     "render_state",
+    "save_solution_gif",
     "shortest_push_access_distance",
 ]

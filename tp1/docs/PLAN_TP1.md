@@ -1,6 +1,6 @@
 # TP1 - Plan de trabajo y contrato de colaboración
 
-Estado: Fases 0, 1, 2, 3, 4 y 5 completadas. Próxima etapa: Fase 6, reproducción visual y GIF.
+Estado: Fases 0, 1, 2, 3, 4 y 5 completadas. Fase 6 en curso: reproducción visual y GIF.
 Objetivo: completar el TP entendiendo las decisiones conceptuales, usando asistencia para recuperar fluidez de programación sin delegar el razonamiento central.
 
 ## 1. Acuerdo de trabajo
@@ -936,21 +936,76 @@ SearchResult exitoso
 -> GIF animado
 ```
 
-- [ ] Elegir una dependencia liviana para dibujar imágenes y codificar GIF.
-- [ ] Dibujar paredes, pisos, objetivos, persona y cajas con un estilo legible.
-- [ ] Mantener dimensiones y escala constantes durante toda la animación.
-- [ ] Incluir el estado inicial y luego un cuadro por cada transición.
-- [ ] Mostrar opcionalmente algoritmo, número de movimiento, dirección y empuje.
+Decisiones visuales y de interfaz confirmadas:
+
+- se genera un cuadro discreto por estado, sin interpolación entre casillas;
+- la cantidad de cuadros debe ser exactamente `solution_moves + 1`;
+- las paredes son bloques oscuros, el piso es claro y los objetivos son casillas
+  de piso con otro color, no círculos;
+- las cajas tienen aspecto de madera y la persona se dibuja como un círculo con
+  cara;
+- el fondo de objetivo sigue siendo visible bajo la persona o una caja;
+- una franja superior muestra algoritmo, paso, movimiento y si hubo empuje;
+- cada cuadro dura inicialmente 500 ms y el GIF se repite indefinidamente;
+- la CLI acepta `--gif RUTA` junto con `--search`, por ejemplo
+  `--gif output/videos/astar.gif`;
+- los directorios padre de la ruta solicitada se crean automáticamente;
+- `FAILURE` y `CUTOFF` no producen archivo GIF y se informan explícitamente.
+
+- [x] Elegir Pillow como dependencia para dibujar imágenes y codificar GIF.
+- [x] Dibujar paredes, pisos, objetivos, persona y cajas con un estilo legible.
+- [x] Mantener dimensiones y escala constantes durante toda la animación.
+- [x] Incluir el estado inicial y luego un cuadro por cada transición.
+- [x] Mostrar algoritmo, número de movimiento, dirección y empuje.
 - [ ] Exportar un GIF reproducible para BFS, DFS, Greedy y A* sobre el nivel
   elegido para la presentación.
-- [ ] Verificar que la cantidad de cuadros sea `solution_moves + 1` y que el
+- [x] Verificar que la cantidad de cuadros sea `solution_moves + 1` y que el
   último estado satisfaga la condición de objetivo.
-- [ ] Informar claramente que `FAILURE` y `CUTOFF` no tienen camino para animar.
+- [x] Informar claramente que `FAILURE` y `CUTOFF` no tienen camino para animar.
+
+Implementación actual:
+
+- `src/sia_tp1/visualization.py` renderiza y exporta el camino solución;
+- la CLI acepta `--gif PATH`, crea directorios padre y muestra la cantidad de
+  cuadros guardados;
+- `pyproject.toml` declara Pillow como dependencia de ejecución;
+- los tests verifican formato GIF, duración de 500 ms, repetición infinita,
+  cantidad de cuadros, creación de directorios y rechazo de resultados sin
+  solución;
+- se generó e inspeccionó visualmente `output/videos/bfs.gif` sobre
+  `level_01.txt`, con cuatro cuadros correctos;
+- se agregó `levels/level_02.txt`, reconstruido a partir del nivel de referencia
+  compartido para disponer de una instancia más difícil con dos cajas y dos
+  objetivos; un test fija sus dimensiones y posiciones iniciales;
+- se agregó `levels/level_03.txt` como instancia visual más corta, conservando
+  los objetivos inicialmente cubiertos mediante los símbolos `+` y `*`;
+- el jugador se dibuja como una pelota azul lisa, sin rasgos faciales;
+- `scripts/generate_gifs.py` recibe un nivel y genera las seis combinaciones
+  acordadas de algoritmo y heurística; modifica temporalmente `config.json` y
+  restaura sus bytes originales mediante `finally`, incluso ante un error;
+- la suite completa contiene 78 tests aprobados.
+
+**Estado actual de la fase:** el generador está completo. Queda exportar los
+cuatro GIF definitivos cuando se elija el nivel usado en la presentación.
 
 **Terminado cuando:** una ejecución exitosa puede convertirse en un GIF que
 reproduce exactamente su camino desde el estado inicial hasta la meta.
 
 ### Fase 7 - experimentos (1.5-2 h)
+
+Instancia difícil candidata:
+
+- `levels/level_02.txt`: tablero irregular de 10 filas por 15 columnas, con dos
+  cajas y dos objetivos, tomado del nivel de referencia compartido por el
+  estudiante;
+- una validación preliminar acotada confirmó que BFS, DFS, Greedy y A* pueden
+  resolverlo;
+- con `minimum_matching_manhattan`, BFS y A* encontraron 78 movimientos y 17
+  empujes, Greedy 96 movimientos y 19 empujes, y DFS 174 movimientos y 27
+  empujes;
+- estos datos sirven solamente para validar la instancia. Los tiempos y demás
+  métricas definitivas se obtendrán con el protocolo de repeticiones de esta
+  fase.
 
 - [ ] Elegir pocas instancias: mínima, intermedia y una que exponga diferencias.
 - [ ] Ejecutar repeticiones para tiempo; mantener fijos nivel, equipo y configuración.

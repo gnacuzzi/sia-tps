@@ -15,6 +15,34 @@ class ParserTest(unittest.TestCase):
         self.assertTrue(level.is_floor((1, 1)))
         self.assertTrue(level.is_floor((1, 3)))
 
+    def test_parse_level_02_from_reference_board(self) -> None:
+        level, state = parse_level("levels/level_02.txt")
+
+        self.assertEqual(level.height, 10)
+        self.assertEqual(level.width, 15)
+        self.assertEqual(state.player, (7, 7))
+        self.assertEqual(state.boxes, frozenset({(7, 6), (7, 8)}))
+        self.assertEqual(level.goals, frozenset({(1, 7), (2, 7)}))
+        self.assertTrue(level.is_void((0, 0)))
+        self.assertTrue(level.is_floor((3, 7)))
+
+    def test_parse_level_03_from_reference_board(self) -> None:
+        level, state = parse_level("levels/level_03.txt")
+
+        self.assertEqual(level.height, 6)
+        self.assertEqual(level.width, 8)
+        self.assertEqual(state.player, (3, 2))
+        self.assertEqual(
+            state.boxes,
+            frozenset({(2, 4), (3, 3), (3, 5), (4, 2)}),
+        )
+        self.assertEqual(
+            level.goals,
+            frozenset({(3, 2), (3, 3), (3, 4), (4, 4)}),
+        )
+        self.assertTrue(level.is_void((0, 0)))
+        self.assertTrue(level.is_floor((1, 2)))
+
     def test_parse_combined_symbols_by_layer(self) -> None:
         level, state = self._parse_text("######\n#+*$##\n######\n")
 
@@ -65,4 +93,3 @@ class ParserTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -5,19 +5,30 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from sia_tp1.cli import run, run_search
+from sia_tp1.cli import main, run, run_search
 from sia_tp1.search import a_star_search, depth_first_search, greedy_search
 
 
 class CliTest(unittest.TestCase):
+    def test_reject_gif_without_search(self) -> None:
+        error_output = io.StringIO()
+
+        with patch("sys.stderr", error_output):
+            exit_code = main(["--gif", "solution.gif"])
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("--gif requires --search", error_output.getvalue())
+
     def test_replay_manual_acceptance_sequence(self) -> None:
         output = io.StringIO()
 
-        exit_code = run(
-            Path("config.json"),
-            ["RIGHT", "RIGHT", "RIGHT"],
-            output=output,
-        )
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(Path(directory))
+            exit_code = run(
+                config_path,
+                ["RIGHT", "RIGHT", "RIGHT"],
+                output=output,
+            )
 
         rendered = output.getvalue()
         self.assertEqual(exit_code, 0)
@@ -33,7 +44,9 @@ class CliTest(unittest.TestCase):
     def test_invalid_move_does_not_add_cost(self) -> None:
         output = io.StringIO()
 
-        run(Path("config.json"), ["LEFT"], output=output)
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(Path(directory))
+            run(config_path, ["LEFT"], output=output)
 
         rendered = output.getvalue()
         self.assertIn("Move 1: LEFT, invalid", rendered)
@@ -43,7 +56,9 @@ class CliTest(unittest.TestCase):
     def test_run_configured_bfs(self) -> None:
         output = io.StringIO()
 
-        exit_code = run_search(Path("config.json"), output=output)
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(Path(directory))
+            exit_code = run_search(config_path, output=output)
 
         rendered = output.getvalue()
         self.assertEqual(exit_code, 0)
@@ -56,6 +71,25 @@ class CliTest(unittest.TestCase):
         self.assertIn("Solution pushes: 2", rendered)
         self.assertIn("3: RIGHT, pushed=true", rendered)
         self.assertIn("#___@*#", rendered)
+
+    def test_run_search_writes_gif_to_nested_directory(self) -> None:
+        output = io.StringIO()
+
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(Path(directory))
+            gif_path = Path(directory) / "output" / "videos" / "bfs.gif"
+
+            exit_code = run_search(
+                config_path,
+                output=output,
+                gif_path=gif_path,
+            )
+
+            self.assertTrue(gif_path.is_file())
+
+        self.assertEqual(exit_code, 0)
+        self.assertIn("GIF saved to:", output.getvalue())
+        self.assertIn("(4 frames)", output.getvalue())
 
     def test_run_configured_dfs(self) -> None:
         output = io.StringIO()
@@ -136,8 +170,8 @@ class CliTest(unittest.TestCase):
         self,
         directory: Path,
         *,
-        algorithm: str,
-        heuristic,
+        algorithm: str = "bfs",
+        heuristic=None,
     ) -> Path:
         config_path = directory / "config.json"
         config_path.write_text(

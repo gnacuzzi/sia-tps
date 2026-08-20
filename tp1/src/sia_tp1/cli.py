@@ -18,6 +18,7 @@ from .search import (
     depth_first_search,
     greedy_search,
 )
+from .visualization import save_solution_gif
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -28,7 +29,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if arguments.search:
             if arguments.moves:
                 raise ConfigError("--search cannot be combined with --moves")
-            return run_search(arguments.config)
+            return run_search(arguments.config, gif_path=arguments.gif)
+        if arguments.gif is not None:
+            raise ConfigError("--gif requires --search")
         return run(arguments.config, arguments.moves)
     except (ConfigError, LevelFormatError, OSError) as error:
         print(f"Error: {error}", file=sys.stderr)
@@ -91,6 +94,7 @@ def run(
 def run_search(
     config_path: Path,
     output: Optional[TextIO] = None,
+    gif_path: Optional[Path] = None,
 ) -> int:
     """Execute the configured search algorithm and print its result."""
 
@@ -135,9 +139,11 @@ def run_search(
 
     if result.status is SearchStatus.CUTOFF:
         print(f"Cutoff reason: {result.cutoff_reason.value}", file=output)
+        _print_missing_gif(output, gif_path, result.status)
         return 0
 
     if result.status is SearchStatus.FAILURE:
+        _print_missing_gif(output, gif_path, result.status)
         return 0
 
     print(f"Solution cost: {result.solution_cost:g}", file=output)
@@ -156,7 +162,31 @@ def run_search(
 
     print("Final state:", file=output)
     print(render_state(level, result.goal_node.state), file=output)
+
+    if gif_path is not None:
+        frame_count = save_solution_gif(
+            level,
+            result,
+            config.algorithm,
+            gif_path,
+        )
+        print(
+            f"GIF saved to: {gif_path} ({frame_count} frames)",
+            file=output,
+        )
     return 0
+
+
+def _print_missing_gif(
+    output: TextIO,
+    gif_path: Optional[Path],
+    status: SearchStatus,
+) -> None:
+    if gif_path is not None:
+        print(
+            f"GIF not generated: search status is {status.value}",
+            file=output,
+        )
 
 
 def _parse_direction(value: str) -> Direction:
@@ -190,6 +220,12 @@ def _build_argument_parser() -> argparse.ArgumentParser:
         "--search",
         action="store_true",
         help="Run the search algorithm selected in config.json",
+    )
+    parser.add_argument(
+        "--gif",
+        type=Path,
+        metavar="PATH",
+        help="Save the successful solution path as an animated GIF",
     )
     return parser
 
