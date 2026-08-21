@@ -4,6 +4,7 @@ from .config import AppConfig, ConfigError, load_config
 from .domain import apply_move, is_goal
 from .heuristics import (
     HEURISTIC_NAMES,
+    deadlock_aware_reverse_push_matching,
     get_heuristic,
     minimum_matching_manhattan_distance,
     shortest_push_access_distance,
@@ -44,6 +45,7 @@ __all__ = [
     "apply_move",
     "breadth_first_search",
     "depth_first_search",
+    "deadlock_aware_reverse_push_matching",
     "greedy_search",
     "get_heuristic",
     "is_goal",
