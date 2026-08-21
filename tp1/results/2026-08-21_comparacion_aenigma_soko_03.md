@@ -10,27 +10,32 @@ la búsqueda no encontró la meta dentro de los límites establecidos.
 
 | Algoritmo | Heurística | Resultado | Costo | Expandidos | Frontera final | Máx. frontera | Tiempo | Movimientos | Empujes |
 | --- | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| BFS | — | Corte: máximo de nodos | — | 1.000.000 | 258.826 | 258.828 | 10,225394 s | — | — |
-| DFS | — | Corte: máximo de nodos | — | 1.000.000 | 336 | 2.007 | 6,037729 s | — | — |
-| Greedy | `minimum_matching_manhattan` | Éxito | 111 | 942 | 167 | 170 | 0,022756 s | 111 | 34 |
-| Greedy | `shortest_push_access` | Corte: tiempo | — | 619.411 | 434.920 | 434.920 | 25,000050 s | — | — |
-| Greedy | `deadlock_aware_reverse_push_matching` | Éxito | 98 | 337 | 124 | 125 | 0,007720 s | 98 | 34 |
-| A* | `minimum_matching_manhattan` | Corte: tiempo | — | 734.874 | 189.053 | 195.649 | 25,000022 s | — | — |
-| A* | `shortest_push_access` | Corte: tiempo | — | 580.818 | 256.456 | 257.692 | 25,000063 s | — | — |
-| A* | `deadlock_aware_reverse_push_matching` | Corte: tiempo | — | 904.003 | 169.710 | 176.430 | 25,000049 s | — | — |
+| BFS | — | Corte: máximo de nodos | — | 1.000.000 | 258.826 | 258.828 | 10,784093 s | — | — |
+| DFS | — | Corte: máximo de nodos | — | 1.000.000 | 336 | 2.007 | 6,330902 s | — | — |
+| Greedy | `minimum_matching_manhattan` | Éxito | 111 | 942 | 167 | 170 | 0,026251 s | 111 | 34 |
+| Greedy | `shortest_push_access` | Corte: tiempo | — | 625.632 | 439.235 | 439.235 | 25,000015 s | — | — |
+| Greedy | `deadlock_aware_reverse_push_matching` | Éxito | 98 | 337 | 124 | 125 | 0,008448 s | 98 | 34 |
+| Greedy | `pair_pattern_database_matching` | Éxito | 98 | 337 | 124 | 125 | 0,039467 s | 98 | 34 |
+| A* | `minimum_matching_manhattan` | Corte: tiempo | — | 724.127 | 190.080 | 195.649 | 25,000026 s | — | — |
+| A* | `shortest_push_access` | Corte: tiempo | — | 581.487 | 256.483 | 257.809 | 25,000012 s | — | — |
+| A* | `deadlock_aware_reverse_push_matching` | Corte: tiempo | — | 862.207 | 171.009 | 176.430 | 25,155284 s | — | — |
+| A* | `pair_pattern_database_matching` | Corte: tiempo | — | 728.058 | 149.134 | 155.216 | 25,640586 s | — | — |
 
 ## Lectura de la comparación
 
-La nueva heurística permitió resolver el nivel con Greedy y encontró una
-solución 13 movimientos más corta que Greedy con Manhattan (98 frente a 111).
-No prueba optimalidad: Greedy ordena solamente por `h(n)`, sin sumar el costo
-ya recorrido `g(n)`.
+Las dos heurísticas basadas en pushes inversos permitieron resolver el nivel
+con Greedy y encontraron una solución 13 movimientos más corta que Greedy con
+Manhattan (98 frente a 111). No prueba optimalidad: Greedy ordena solamente
+por `h(n)`, sin sumar el costo ya recorrido `g(n)`.
 
-La heurística es admisible para A* porque su matching cuenta solamente
-empujes mínimos y cada empuje cuesta al menos una acción. Sin embargo, A*
-sigue generando un estado por cada paso del jugador; por eso las tres
-variantes alcanzan el tiempo límite. La siguiente mejora recomendada sería
-usar macro-movimientos de empuje, sin alterar esta heurística.
+`pair_pattern_database_matching` combina el matching inverso con una base de
+patrones de pares de cajas. Detecta bloqueos que requieren considerar ambas
+cajas simultáneamente, pero en este nivel no eleva el valor inicial (ambas
+heurísticas dan 28) ni cambia la primera ruta de Greedy. A* mantiene el costo
+óptimo como objetivo, pero sigue generando un estado por cada paso del jugador;
+las cuatro variantes alcanzan el tiempo límite. La siguiente mejora
+recomendada sería usar macro-movimientos de empuje con una PDB de tres cajas o
+con bloqueos dinámicos adicionales.
 
 ## Soluciones encontradas
 
@@ -61,3 +66,8 @@ UP LEFT UP RIGHT DOWN RIGHT RIGHT RIGHT RIGHT UP UP UP UP UP UP UP UP RIGHT UP
 LEFT UP LEFT DOWN RIGHT DOWN LEFT UP LEFT DOWN RIGHT RIGHT DOWN DOWN DOWN DOWN
 LEFT LEFT LEFT LEFT DOWN LEFT UP LEFT UP RIGHT DOWN RIGHT UP UP
 ```
+
+### Greedy con `pair_pattern_database_matching`
+
+Costo 98; 34 empujes. Encontró exactamente la misma secuencia que Greedy con
+`deadlock_aware_reverse_push_matching`, por lo que no se repite el camino.

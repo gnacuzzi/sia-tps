@@ -5,6 +5,7 @@ from sia_tp1.domain import apply_move
 from sia_tp1.heuristics import (
     deadlock_aware_reverse_push_matching,
     minimum_matching_manhattan_distance,
+    pair_pattern_database_matching,
     shortest_push_access_distance,
 )
 from sia_tp1.model import Direction, Level, State
@@ -156,6 +157,34 @@ class DeadlockAwareReversePushMatchingTest(unittest.TestCase):
         value = deadlock_aware_reverse_push_matching(level, state)
 
         self.assertEqual(value, 4)
+
+
+class PairPatternDatabaseMatchingTest(unittest.TestCase):
+    def test_matches_reverse_push_estimate_for_one_box(self) -> None:
+        level, state = parse_level("levels/level_01.txt")
+
+        value = pair_pattern_database_matching(level, state)
+
+        self.assertEqual(value, 2)
+
+    def test_detects_a_two_box_deadlock_in_a_one_cell_corridor(self) -> None:
+        level = Level(
+            walls=frozenset(),
+            floors=frozenset({(0, column) for column in range(5)}),
+            goals=frozenset({(0, 0), (0, 4)}),
+            height=1,
+            width=5,
+        )
+        state = State(
+            player=(0, 0),
+            boxes=frozenset({(0, 1), (0, 2)}),
+        )
+
+        self.assertEqual(
+            deadlock_aware_reverse_push_matching(level, state),
+            3,
+        )
+        self.assertEqual(pair_pattern_database_matching(level, state), inf)
 
 
 if __name__ == "__main__":

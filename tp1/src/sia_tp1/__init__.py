@@ -7,6 +7,7 @@ from .heuristics import (
     deadlock_aware_reverse_push_matching,
     get_heuristic,
     minimum_matching_manhattan_distance,
+    pair_pattern_database_matching,
     shortest_push_access_distance,
 )
 from .model import Direction, Level, Position, State, Transition
@@ -51,6 +52,7 @@ __all__ = [
     "is_goal",
     "load_config",
     "minimum_matching_manhattan_distance",
+    "pair_pattern_database_matching",
     "parse_level",
     "reconstruct_nodes",
     "render_state",

@@ -51,6 +51,6 @@ El nivel corresponde al tablero `soko 01` (lid 200) de la fuente consultada.
 El detalle de los tres casos está en
 [`2026-08-21_comparacion_level_02.md`](2026-08-21_comparacion_level_02.md).
 
-También se registró una matriz de ocho ejecuciones sobre el nivel difícil
+También se registró una matriz de diez ejecuciones sobre el nivel difícil
 [`aenigma_soko_03.txt`](2026-08-21_comparacion_aenigma_soko_03.md): BFS, DFS,
-las tres heurísticas con Greedy y las tres con A*.
+las cuatro heurísticas con Greedy y las cuatro con A*.
