@@ -1,0 +1,11 @@
+{
+  "level_file": "../levels/level_02.txt",
+  "algorithm": "astar",
+  "heuristic": "minimum_matching_manhattan",
+  "cost_model": "unit",
+  "limits": {
+    "max_expanded_nodes": 1000000,
+    "timeout_seconds": 25
+  },
+  "seed": 0
+}
