@@ -7,7 +7,7 @@ name = "sia-tp1"
 version = "0.1.0"
 description = "Motor de busqueda para Sokoban - SIA TP1"
 requires-python = ">=3.9"
-dependencies = ["Pillow"]
+dependencies = ["Pillow", "matplotlib"]
 
 [project.scripts]
 sia-tp1 = "sia_tp1.cli:main"

@@ -16,8 +16,9 @@ directamente con una planilla de cálculo.
 - **Nodos expandidos:** estados que el algoritmo extrajo de la frontera y
   desarrolló.
 - **Nodos frontera al finalizar:** nodos pendientes al terminar la búsqueda.
-- **Máxima frontera:** máximo de nodos pendientes simultáneamente; es la
-  medida más útil para comparar el uso de memoria.
+- **Máxima frontera:** máximo de entradas almacenadas simultáneamente. En A*
+  corresponde al tamaño físico del heap y puede incluir entradas obsoletas;
+  la frontera final de A* sí cuenta solamente estados activos.
 - **Solución:** camino de movimientos desde el estado inicial al final.
 - **Tiempo de procesamiento:** segundos que tardó la búsqueda. Depende de la
   máquina, por lo que se compara con cautela.
@@ -35,9 +36,71 @@ PYTHONPATH=src python3 -m sia_tp1 --config results/config_level_02_bfs.json --se
 ```
 
 Las configuraciones de esta primera comparación limitan la búsqueda a
-1.000.000 de nodos expandidos y 25 segundos. Para una nueva prueba, se crea
-una configuración equivalente, una ficha `AAAA-MM-DD_<nivel>_<caso>.md` y
-una fila en `registro.csv`.
+1.000.000 de nodos expandidos y 25 segundos. Se conservan como snapshots de
+los experimentos históricos; para ejecuciones nuevas se usa el runner del
+siguiente apartado.
+
+## Runner de experimentos
+
+`scripts/run_experiments.py` ejecuta los casos sin modificar `config.json` y
+genera un CSV con una fila por repetición más otro CSV resumido. Cada repetición
+se ejecuta en un proceso nuevo para que las cachés de las heurísticas comiencen
+vacías y no alteren la comparación temporal.
+
+Los seis casos obligatorios sobre un nivel:
+
+```bash
+python3 scripts/run_experiments.py levels/level_03.txt \
+  --suite core \
+  --repetitions 10 \
+  --output results/level_03_core.csv
+```
+
+Para incluir las cuatro combinaciones con las heurísticas extendidas:
+
+```bash
+python3 scripts/run_experiments.py levels/aenigma_soko_03.txt \
+  --suite all \
+  --repetitions 10 \
+  --output results/aenigma_soko_03_all.csv
+```
+
+También se pueden pasar varios niveles en una sola ejecución. Los límites por
+defecto son 1.000.000 de expansiones y 25 segundos; se cambian con
+`--max-expanded-nodes` y `--timeout-seconds`. Si no se indica `--output`, se
+crea un nombre con fecha y hora. Un archivo existente sólo se reemplaza usando
+`--overwrite`.
+
+El archivo resumido agrega `_summary` al nombre solicitado. Los tiempos se
+resumen mediante mediana, mínimo y máximo. Los estados `cutoff` se cuentan por
+separado y nunca se convierten en soluciones de costo cero.
+
+## Generación de gráficos
+
+`scripts/generate_plots.py` toma el CSV crudo, conserva las mediciones de cada
+repetición y genera los cinco análisis requeridos:
+
+- costo de solución mediante mediana e intervalo intercuartílico, considerando
+  sólo ejecuciones exitosas;
+- nodos expandidos y máxima frontera mediante mediana e intervalo
+  intercuartílico;
+- tiempo mediante boxplots de todas las repeticiones;
+- matriz de resultados con cantidades de `success`, `cutoff` y `failure`.
+
+Para la comparación principal, manteniendo el orden de dificultad elegido:
+
+```bash
+python3 scripts/generate_plots.py results/comparacion_principal.csv \
+  --output-dir results/plots/comparacion_principal \
+  --level-order level_03 level_02 level_04
+```
+
+Los gráficos se guardan como PNG. Se puede usar `--format svg` para obtener
+imágenes vectoriales apropiadas para la presentación. Cuando los valores de
+una métrica difieren por un factor de 20 o más, el eje usa automáticamente una
+escala logarítmica. Un cutoff nunca se interpreta como una solución de costo
+cero: queda excluido del gráfico de costo y aparece explícitamente en la
+matriz de resultados.
 
 ## Índice actual
 
