@@ -18,7 +18,7 @@ from .search import (
     depth_first_search,
     greedy_search,
 )
-from .visualization import save_solution_gif
+from .visualization import save_solution_gif, save_solution_video
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -29,9 +29,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         if arguments.search:
             if arguments.moves:
                 raise ConfigError("--search cannot be combined with --moves")
-            return run_search(arguments.config, gif_path=arguments.gif)
+            return run_search(
+                arguments.config,
+                gif_path=arguments.gif,
+                video_path=arguments.video,
+            )
         if arguments.gif is not None:
             raise ConfigError("--gif requires --search")
+        if arguments.video is not None:
+            raise ConfigError("--video requires --search")
         return run(arguments.config, arguments.moves)
     except (ConfigError, LevelFormatError, OSError) as error:
         print(f"Error: {error}", file=sys.stderr)
@@ -95,11 +101,14 @@ def run_search(
     config_path: Path,
     output: Optional[TextIO] = None,
     gif_path: Optional[Path] = None,
+    video_path: Optional[Path] = None,
 ) -> int:
     """Execute the configured search algorithm and print its result."""
 
     if output is None:
         output = sys.stdout
+    if video_path is not None and video_path.suffix.lower() != ".mp4":
+        raise ConfigError("--video output path must use the .mp4 extension")
 
     config = load_config(config_path)
     if config.cost_model != "unit":
@@ -139,11 +148,11 @@ def run_search(
 
     if result.status is SearchStatus.CUTOFF:
         print(f"Cutoff reason: {result.cutoff_reason.value}", file=output)
-        _print_missing_gif(output, gif_path, result.status)
+        _print_missing_animation(output, gif_path, video_path, result.status)
         return 0
 
     if result.status is SearchStatus.FAILURE:
-        _print_missing_gif(output, gif_path, result.status)
+        _print_missing_animation(output, gif_path, video_path, result.status)
         return 0
 
     print(f"Solution cost: {result.solution_cost:g}", file=output)
@@ -174,17 +183,34 @@ def run_search(
             f"GIF saved to: {gif_path} ({frame_count} frames)",
             file=output,
         )
+    if video_path is not None:
+        frame_count = save_solution_video(
+            level,
+            result,
+            config.algorithm,
+            video_path,
+        )
+        print(
+            f"Video saved to: {video_path} ({frame_count} frames)",
+            file=output,
+        )
     return 0
 
 
-def _print_missing_gif(
+def _print_missing_animation(
     output: TextIO,
     gif_path: Optional[Path],
+    video_path: Optional[Path],
     status: SearchStatus,
 ) -> None:
     if gif_path is not None:
         print(
             f"GIF not generated: search status is {status.value}",
+            file=output,
+        )
+    if video_path is not None:
+        print(
+            f"Video not generated: search status is {status.value}",
             file=output,
         )
 
@@ -221,11 +247,18 @@ def _build_argument_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Run the search algorithm selected in config.json",
     )
-    parser.add_argument(
+    animation_group = parser.add_mutually_exclusive_group()
+    animation_group.add_argument(
         "--gif",
         type=Path,
         metavar="PATH",
         help="Save the successful solution path as an animated GIF",
+    )
+    animation_group.add_argument(
+        "--video",
+        type=Path,
+        metavar="PATH",
+        help="Save the successful solution path as an H.264 MP4 video",
     )
     return parser
 

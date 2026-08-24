@@ -19,6 +19,15 @@ class CliTest(unittest.TestCase):
         self.assertEqual(exit_code, 2)
         self.assertIn("--gif requires --search", error_output.getvalue())
 
+    def test_reject_video_without_search(self) -> None:
+        error_output = io.StringIO()
+
+        with patch("sys.stderr", error_output):
+            exit_code = main(["--video", "solution.mp4"])
+
+        self.assertEqual(exit_code, 2)
+        self.assertIn("--video requires --search", error_output.getvalue())
+
     def test_replay_manual_acceptance_sequence(self) -> None:
         output = io.StringIO()
 
@@ -89,6 +98,28 @@ class CliTest(unittest.TestCase):
 
         self.assertEqual(exit_code, 0)
         self.assertIn("GIF saved to:", output.getvalue())
+        self.assertIn("(4 frames)", output.getvalue())
+
+    def test_run_search_writes_video_to_nested_directory(self) -> None:
+        output = io.StringIO()
+
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(Path(directory))
+            video_path = Path(directory) / "output" / "videos" / "bfs.mp4"
+
+            with patch(
+                "sia_tp1.cli.save_solution_video",
+                return_value=4,
+            ) as save_video:
+                exit_code = run_search(
+                    config_path,
+                    output=output,
+                    video_path=video_path,
+                )
+
+        self.assertEqual(exit_code, 0)
+        save_video.assert_called_once()
+        self.assertIn("Video saved to:", output.getvalue())
         self.assertIn("(4 frames)", output.getvalue())
 
     def test_run_configured_dfs(self) -> None:

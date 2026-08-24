@@ -24,7 +24,7 @@ directamente con una planilla de cálculo.
   máquina, por lo que se compara con cautela.
 
 También se guardan los movimientos y empujes, límites de la ejecución y la
-ruta al GIF cuando existe.
+ruta a la animación cuando existe.
 
 ## Cómo repetir una prueba
 
@@ -32,8 +32,19 @@ Desde la carpeta `tp1`, usá la configuración correspondiente. Por ejemplo:
 
 ```bash
 PYTHONPATH=src python3 -m sia_tp1 --config results/config_level_02_bfs.json --search \
-  --gif output/videos/aenigma_soko_01/bfs.gif
+  --video output/videos/aenigma_soko_01/bfs.mp4
 ```
+
+Para generar de una vez los videos de BFS, DFS, Greedy y A* con las dos
+heurísticas acordadas:
+
+```bash
+python3 scripts/generate_videos.py levels/level_03.txt \
+  --output-dir output/videos/level3
+```
+
+El runner restaura el contenido original de `config.json` incluso si una
+ejecución falla.
 
 Las configuraciones de esta primera comparación limitan la búsqueda a
 1.000.000 de nodos expandidos y 25 segundos. Se conservan como snapshots de
@@ -80,11 +91,11 @@ separado y nunca se convierten en soluciones de costo cero.
 `scripts/generate_plots.py` toma el CSV crudo, conserva las mediciones de cada
 repetición y genera los cinco análisis requeridos:
 
-- costo de solución mediante mediana e intervalo intercuartílico, considerando
-  sólo ejecuciones exitosas;
-- nodos expandidos y máxima frontera mediante mediana e intervalo
-  intercuartílico;
-- tiempo mediante boxplots de todas las repeticiones;
+- costo de solución mediante el promedio de las ejecuciones exitosas;
+- nodos expandidos y máxima frontera mediante el promedio —estas métricas
+  estructurales resultaron deterministas en la comparación principal—;
+- tiempo promedio con una barra de error de una desviación estándar, calculada
+  sobre las diez repeticiones;
 - matriz de resultados con cantidades de `success`, `cutoff` y `failure`.
 
 Para la comparación principal, manteniendo el orden de dificultad elegido:

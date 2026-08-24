@@ -8,6 +8,7 @@ import statistics
 import sys
 from datetime import datetime
 from pathlib import Path
+from time import perf_counter
 from typing import Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
 
@@ -16,7 +17,8 @@ SOURCE_ROOT = PROJECT_ROOT / "src"
 if str(SOURCE_ROOT) not in sys.path:
     sys.path.insert(0, str(SOURCE_ROOT))
 
-from sia_tp1.heuristics import get_heuristic  # noqa: E402
+from sia_tp1.heuristics import Heuristic, get_heuristic  # noqa: E402
+from sia_tp1.model import Level, State  # noqa: E402
 from sia_tp1.parser import parse_level  # noqa: E402
 from sia_tp1.search import (  # noqa: E402
     SearchLimits,
@@ -63,6 +65,10 @@ RAW_FIELDS = (
     "frontier_size_at_end",
     "max_frontier_size",
     "elapsed_seconds",
+    "initial_heuristic",
+    "heuristic_evaluations",
+    "heuristic_elapsed_seconds",
+    "heuristic_seconds_per_evaluation",
     "solution",
     "max_expanded_nodes",
     "timeout_seconds",
@@ -88,7 +94,30 @@ SUMMARY_FIELDS = (
     "elapsed_seconds_median",
     "elapsed_seconds_min",
     "elapsed_seconds_max",
+    "initial_heuristic_median",
+    "heuristic_evaluations_median",
+    "heuristic_elapsed_seconds_median",
+    "heuristic_seconds_per_evaluation_median",
 )
+
+
+class _MeasuredHeuristic:
+    """Measure heuristic values and evaluation time without changing results."""
+
+    def __init__(self, heuristic: Heuristic) -> None:
+        self._heuristic = heuristic
+        self.initial_value: Optional[float] = None
+        self.evaluations = 0
+        self.elapsed_seconds = 0.0
+
+    def __call__(self, level: Level, state: State) -> float:
+        started_at = perf_counter()
+        value = self._heuristic(level, state)
+        self.elapsed_seconds += perf_counter() - started_at
+        self.evaluations += 1
+        if self.initial_value is None:
+            self.initial_value = value
+        return value
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -264,6 +293,7 @@ def _run_case(
     limits: SearchLimits,
 ) -> Metrics:
     level, initial_state = parse_level(level_path)
+    measured_heuristic: Optional[_MeasuredHeuristic] = None
     if algorithm == "bfs":
         result = breadth_first_search(level, initial_state, limits)
     elif algorithm == "dfs":
@@ -271,11 +301,21 @@ def _run_case(
     elif algorithm in {"greedy", "astar"}:
         if heuristic_name is None:
             raise ValueError(f"{algorithm} requires a heuristic")
-        heuristic = get_heuristic(heuristic_name)
+        measured_heuristic = _MeasuredHeuristic(get_heuristic(heuristic_name))
         if algorithm == "greedy":
-            result = greedy_search(level, initial_state, heuristic, limits)
+            result = greedy_search(
+                level,
+                initial_state,
+                measured_heuristic,
+                limits,
+            )
         else:
-            result = a_star_search(level, initial_state, heuristic, limits)
+            result = a_star_search(
+                level,
+                initial_state,
+                measured_heuristic,
+                limits,
+            )
     else:
         raise ValueError(f"Unknown algorithm: {algorithm}")
 
@@ -284,6 +324,14 @@ def _run_case(
         " ".join(transition.direction.name for transition in transitions)
         if transitions is not None
         else ""
+    )
+    heuristic_evaluations = (
+        measured_heuristic.evaluations if measured_heuristic is not None else 0
+    )
+    heuristic_elapsed_seconds = (
+        measured_heuristic.elapsed_seconds
+        if measured_heuristic is not None
+        else 0.0
     )
     return {
         "status": result.status.value,
@@ -297,6 +345,18 @@ def _run_case(
         "frontier_size_at_end": result.frontier_size_at_end,
         "max_frontier_size": result.max_frontier_size,
         "elapsed_seconds": round(result.elapsed_seconds, 9),
+        "initial_heuristic": (
+            measured_heuristic.initial_value
+            if measured_heuristic is not None
+            else None
+        ),
+        "heuristic_evaluations": heuristic_evaluations,
+        "heuristic_elapsed_seconds": round(heuristic_elapsed_seconds, 9),
+        "heuristic_seconds_per_evaluation": (
+            round(heuristic_elapsed_seconds / heuristic_evaluations, 12)
+            if heuristic_evaluations
+            else None
+        ),
         "solution": solution,
     }
 
@@ -349,6 +409,18 @@ def write_summary_csv(rows: Sequence[Mapping[str, object]], path: Path) -> None:
                     "elapsed_seconds_median": round(statistics.median(elapsed), 9),
                     "elapsed_seconds_min": round(min(elapsed), 9),
                     "elapsed_seconds_max": round(max(elapsed), 9),
+                    "initial_heuristic_median": _median(
+                        group, "initial_heuristic"
+                    ),
+                    "heuristic_evaluations_median": _median(
+                        group, "heuristic_evaluations"
+                    ),
+                    "heuristic_elapsed_seconds_median": _median(
+                        group, "heuristic_elapsed_seconds"
+                    ),
+                    "heuristic_seconds_per_evaluation_median": _median(
+                        group, "heuristic_seconds_per_evaluation"
+                    ),
                 }
             )
 

@@ -57,6 +57,12 @@ COLORS = {
     "astar": "#E45756",
 }
 
+LEVEL_LABELS = {
+    "level_03": "Bajo",
+    "level_02": "Intermedio",
+    "level_04": "Difícil",
+}
+
 Method = Tuple[str, str]
 Run = Mapping[str, str]
 GroupedRuns = Dict[str, Dict[Method, List[Run]]]
@@ -93,7 +99,28 @@ def method_label(method: Method) -> str:
 
 
 def level_label(level: str) -> str:
-    return Path(level).stem.replace("_", " ").title()
+    stem = Path(level).stem
+    return LEVEL_LABELS.get(stem, stem.replace("_", " ").title())
+
+
+def _comparison_axes(plt, *, compact: bool = False):
+    figure, mosaic = plt.subplot_mosaic(
+        [
+            ["low", "."],
+            ["low", "hard"],
+            ["intermediate", "hard"],
+            ["intermediate", "."],
+        ],
+        figsize=(16, 9),
+        sharex=True,
+        empty_sentinel=".",
+        gridspec_kw={
+            "width_ratios": [1, 1],
+            "hspace": 0.30 if compact else 0.28,
+            "wspace": 0.42 if compact else 0.22,
+        },
+    )
+    return figure, [mosaic["low"], mosaic["intermediate"], mosaic["hard"]]
 
 
 def group_runs(
@@ -136,6 +163,16 @@ def generate_charts(
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
+    plt.rcParams.update(
+        {
+            "font.size": 14,
+            "axes.titlesize": 17,
+            "axes.labelsize": 15,
+            "xtick.labelsize": 13,
+            "ytick.labelsize": 14,
+        }
+    )
+
     output_dir.mkdir(parents=True, exist_ok=True)
     levels, methods, grouped = group_runs(rows, level_order)
     generated: List[Path] = []
@@ -153,9 +190,16 @@ def generate_charts(
         )
         generated.append(_save(plt, figure, output_dir, filename, image_format, dpi))
 
-    time_figure = _time_boxplot(plt, levels, methods, grouped)
+    time_figure = _time_repetitions(plt, levels, methods, grouped)
     generated.append(
-        _save(plt, time_figure, output_dir, "elapsed_time_boxplot", image_format, dpi)
+        _save(
+            plt,
+            time_figure,
+            output_dir,
+            "elapsed_time_repetitions",
+            image_format,
+            dpi,
+        )
     )
 
     outcome_figure = _outcome_matrix(plt, levels, methods, grouped)
@@ -175,78 +219,92 @@ def _metric_figure(
     x_label: str,
     successes_only: bool,
 ):
-    summaries: Dict[Tuple[str, Method], Tuple[Optional[float], float, float]] = {}
-    positive_medians = []
+    summaries: Dict[Tuple[str, Method], Optional[float]] = {}
+    positive_values = []
     for level in levels:
         for method in methods:
             runs = grouped[level].get(method, [])
             if successes_only:
                 runs = [run for run in runs if run["status"] == "success"]
             values = [value for run in runs if (value := _number(run[field])) is not None]
-            summary = _median_and_iqr(values)
+            summary = statistics.mean(values) if values else None
             summaries[(level, method)] = summary
-            if summary[0] is not None and summary[0] > 0:
-                positive_medians.append(summary[0])
+            if summary is not None and summary > 0:
+                positive_values.append(summary)
 
     logarithmic = (
-        bool(positive_medians)
-        and max(positive_medians) / min(positive_medians) >= 20
+        bool(positive_values)
+        and max(positive_values) / min(positive_values) >= 20
     )
-    figure, axes = plt.subplots(
-        len(levels),
-        1,
-        figsize=(11, max(3.2 * len(levels), 4.5)),
-        squeeze=False,
-        sharex=True,
-    )
+    is_solution_cost = field == "solution_cost"
+    figure, axes = _comparison_axes(plt, compact=is_solution_cost)
+    panel_title_size = 19 if is_solution_cost else 17
+    tick_size = 15 if is_solution_cost else 14
+    value_size = 15 if is_solution_cost else 13
 
-    for axis, level in zip(axes[:, 0], levels):
+    for axis, level in zip(axes, levels):
         for position, method in enumerate(methods):
-            median, lower_error, upper_error = summaries[(level, method)]
+            value = summaries[(level, method)]
             color = COLORS.get(method[0], "#8E8E8E")
-            if median is None:
+            if value is None:
                 axis.text(
                     0.01,
                     position,
                     "sin solución",
                     transform=axis.get_yaxis_transform(),
                     va="center",
-                    fontsize=8,
+                    fontsize=12,
                 )
                 continue
             axis.barh(
                 position,
-                median,
-                xerr=[[lower_error], [upper_error]],
+                value,
                 color=color,
                 alpha=0.9,
-                error_kw={"ecolor": "#333333", "capsize": 3, "elinewidth": 1},
             )
             axis.annotate(
-                _format_value(median),
-                (median, position),
+                _format_value(value),
+                (value, position),
                 xytext=(5, 0),
                 textcoords="offset points",
                 va="center",
-                fontsize=8,
+                fontsize=value_size,
             )
 
         axis.set_yticks(range(len(methods)), [method_label(method) for method in methods])
         axis.invert_yaxis()
-        axis.set_title(level_label(level), loc="left", fontsize=11, weight="bold")
+        axis.set_title(
+            level_label(level),
+            loc="left",
+            fontsize=panel_title_size,
+            weight="bold",
+            pad=5,
+        )
+        axis.tick_params(axis="both", labelsize=tick_size)
         axis.grid(axis="x", alpha=0.25)
         axis.set_axisbelow(True)
         if logarithmic:
             axis.set_xscale("log")
-        axis.margins(x=0.12)
+        axis.margins(x=0.08 if is_solution_cost else 0.12)
 
-    axes[-1, 0].set_xlabel(x_label + (" (escala logarítmica)" if logarithmic else ""))
-    figure.suptitle(title + " (mediana e IQR)", fontsize=15, weight="bold")
-    figure.tight_layout()
+    figure.supxlabel(
+        x_label + (" (escala logarítmica)" if logarithmic else ""),
+        fontsize=17 if is_solution_cost else 15,
+    )
+    figure.suptitle(
+        title,
+        fontsize=25 if is_solution_cost else 22,
+        weight="bold",
+        y=0.975 if is_solution_cost else 0.985,
+    )
+    if is_solution_cost:
+        figure.subplots_adjust(left=0.11, right=0.985, bottom=0.08, top=0.91)
+    else:
+        figure.tight_layout(rect=(0.02, 0.04, 0.99, 0.94), w_pad=3, h_pad=2)
     return figure
 
 
-def _time_boxplot(plt, levels, methods, grouped):
+def _time_repetitions(plt, levels, methods, grouped):
     all_times = [
         float(run["elapsed_seconds"])
         for level_groups in grouped.values()
@@ -254,44 +312,69 @@ def _time_boxplot(plt, levels, methods, grouped):
         for run in runs
     ]
     logarithmic = max(all_times) / min(all_times) >= 20
-    figure, axes = plt.subplots(
-        len(levels),
-        1,
-        figsize=(11, max(3.2 * len(levels), 4.5)),
-        squeeze=False,
-        sharex=True,
-    )
+    figure, axes = _comparison_axes(plt)
     labels = [method_label(method) for method in methods]
 
-    for axis, level in zip(axes[:, 0], levels):
-        values = [
-            [float(run["elapsed_seconds"]) for run in grouped[level].get(method, [])]
-            for method in methods
-        ]
-        boxes = axis.boxplot(
-            values,
-            vert=False,
-            tick_labels=labels,
-            patch_artist=True,
-            showfliers=True,
-            medianprops={"color": "#222222", "linewidth": 1.5},
-        )
-        for box, method in zip(boxes["boxes"], methods):
-            box.set_facecolor(COLORS.get(method[0], "#8E8E8E"))
-            box.set_alpha(0.9)
+    for axis, level in zip(axes, levels):
+        for position, method in enumerate(methods):
+            values = [
+                float(run["elapsed_seconds"])
+                for run in grouped[level].get(method, [])
+            ]
+            if not values:
+                continue
+            mean = statistics.mean(values)
+            deviation = statistics.stdev(values) if len(values) > 1 else 0
+            lower_deviation = min(deviation, mean * 0.95)
+            axis.barh(
+                position,
+                mean,
+                xerr=[[lower_deviation], [deviation]],
+                color=COLORS.get(method[0], "#8E8E8E"),
+                alpha=0.88,
+                error_kw={
+                    "ecolor": "#222222",
+                    "capsize": 4,
+                    "elinewidth": 1.5,
+                    "capthick": 1.5,
+                },
+            )
+            axis.annotate(
+                f"{mean:.3f} s" if mean < 1 else f"{mean:.2f} s",
+                (mean + deviation, position),
+                xytext=(7, 0),
+                textcoords="offset points",
+                va="center",
+                fontsize=12,
+            )
+        axis.set_yticks(range(len(methods)), labels)
         axis.invert_yaxis()
-        axis.set_title(level_label(level), loc="left", fontsize=11, weight="bold")
+        axis.set_title(level_label(level), loc="left", fontsize=17, weight="bold")
+        axis.tick_params(axis="both", labelsize=14)
         axis.grid(axis="x", alpha=0.25)
         axis.set_axisbelow(True)
         if logarithmic:
             axis.set_xscale("log")
-        axis.margins(x=0.08)
+        axis.margins(x=0.16)
 
-    axes[-1, 0].set_xlabel(
+    figure.supxlabel(
         "Segundos" + (" (escala logarítmica)" if logarithmic else "")
     )
-    figure.suptitle("Tiempo de búsqueda: distribución de repeticiones", fontsize=15, weight="bold")
-    figure.tight_layout()
+    figure.suptitle(
+        "Tiempo promedio de búsqueda",
+        fontsize=22,
+        weight="bold",
+        y=0.99,
+    )
+    figure.text(
+        0.5,
+        0.935,
+        "Barra = promedio de 10 ejecuciones · error = una desviación estándar",
+        ha="center",
+        fontsize=13,
+        color="#555555",
+    )
+    figure.tight_layout(rect=(0.02, 0.04, 0.99, 0.88), w_pad=3, h_pad=2)
     return figure
 
 
@@ -319,7 +402,8 @@ def _outcome_matrix(plt, levels, methods, grouped):
     axis.set_yticks(range(len(methods)), [method_label(method) for method in methods])
     for row_index, row in enumerate(annotations):
         for column_index, annotation in enumerate(row):
-            color = "white" if rates[row_index][column_index] < 0.35 else "#202020"
+            rate = rates[row_index][column_index]
+            color = "white" if rate < 0.35 or rate > 0.75 else "#202020"
             axis.text(
                 column_index,
                 row_index,
@@ -327,37 +411,17 @@ def _outcome_matrix(plt, levels, methods, grouped):
                 ha="center",
                 va="center",
                 color=color,
-                fontsize=9,
+                fontsize=12,
                 weight="bold",
             )
     colorbar = figure.colorbar(image, ax=axis, pad=0.02)
-    colorbar.set_label("Proporción de éxitos")
-    axis.set_title("Resultados por método y nivel", fontsize=15, weight="bold", pad=15)
-    axis.set_xlabel("S = success · C = cutoff · F = failure")
+    colorbar.set_label("Proporción de éxitos", fontsize=15)
+    colorbar.ax.tick_params(labelsize=12)
+    axis.set_title("Resultados por método y nivel", fontsize=22, weight="bold", pad=18)
+    axis.set_xlabel("S = success · C = cutoff · F = failure", fontsize=15)
+    axis.tick_params(axis="both", labelsize=14)
     figure.tight_layout()
     return figure
-
-
-def _median_and_iqr(values: Sequence[float]) -> Tuple[Optional[float], float, float]:
-    if not values:
-        return None, 0, 0
-    median = statistics.median(values)
-    first_quartile = _percentile(values, 0.25)
-    third_quartile = _percentile(values, 0.75)
-    return median, median - first_quartile, third_quartile - median
-
-
-def _percentile(values: Sequence[float], proportion: float) -> float:
-    ordered = sorted(values)
-    if len(ordered) == 1:
-        return ordered[0]
-    position = (len(ordered) - 1) * proportion
-    lower = math.floor(position)
-    upper = math.ceil(position)
-    if lower == upper:
-        return ordered[lower]
-    fraction = position - lower
-    return ordered[lower] + (ordered[upper] - ordered[lower]) * fraction
 
 
 def _number(value: str) -> Optional[float]:

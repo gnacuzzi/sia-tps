@@ -7,6 +7,7 @@ from scripts.run_experiments import (
     CORE_CASES,
     EXTENSION_CASES,
     SUMMARY_FIELDS,
+    _run_case,
     collect_experiment_rows,
     write_summary_csv,
 )
@@ -34,6 +35,14 @@ class ExperimentRunnerTest(unittest.TestCase):
                 "frontier_size_at_end": 1,
                 "max_frontier_size": 2,
                 "elapsed_seconds": 0.25,
+                "initial_heuristic": 2.0 if heuristic is not None else None,
+                "heuristic_evaluations": 3 if heuristic is not None else 0,
+                "heuristic_elapsed_seconds": (
+                    0.03 if heuristic is not None else 0.0
+                ),
+                "heuristic_seconds_per_evaluation": (
+                    0.01 if heuristic is not None else None
+                ),
                 "solution": "RIGHT RIGHT RIGHT",
             }
 
@@ -65,6 +74,22 @@ class ExperimentRunnerTest(unittest.TestCase):
         self.assertEqual(
             {row["elapsed_seconds_median"] for row in summary_rows},
             {"0.25"},
+        )
+
+    def test_records_heuristic_measurements(self) -> None:
+        metrics = _run_case(
+            Path("levels/level_01.txt"),
+            "astar",
+            "minimum_matching_manhattan",
+            SearchLimits(),
+        )
+
+        self.assertEqual(metrics["initial_heuristic"], 2)
+        self.assertGreater(metrics["heuristic_evaluations"], 0)
+        self.assertGreaterEqual(metrics["heuristic_elapsed_seconds"], 0)
+        self.assertGreaterEqual(
+            metrics["heuristic_seconds_per_evaluation"],
+            0,
         )
 
 

@@ -1,6 +1,9 @@
-"""Raster rendering and GIF export for Sokoban solution paths."""
+"""Raster rendering and animation export for Sokoban solution paths."""
 
 from pathlib import Path
+import shutil
+import subprocess
+import tempfile
 from typing import List, Optional, Union
 
 from PIL import Image, ImageDraw, ImageFont
@@ -35,8 +38,100 @@ def save_solution_gif(
 ) -> int:
     """Save one GIF frame per solution state and return the frame count."""
 
+    frames = _solution_frames(level, result, algorithm, frame_duration_ms)
+
+    gif_path = Path(output_path)
+    gif_path.parent.mkdir(parents=True, exist_ok=True)
+    frames[0].save(
+        gif_path,
+        format="GIF",
+        save_all=True,
+        append_images=frames[1:],
+        duration=frame_duration_ms,
+        loop=0,
+        disposal=2,
+        optimize=False,
+    )
+    return len(frames)
+
+
+def save_solution_video(
+    level: Level,
+    result: SearchResult,
+    algorithm: str,
+    output_path: Union[str, Path],
+    *,
+    frame_duration_ms: int = 500,
+) -> int:
+    """Save one MP4 frame per solution state and return the frame count.
+
+    Videos use H.264 with the broadly compatible yuv420p pixel format. FFmpeg
+    must be installed and available on PATH.
+    """
+
+    video_path = Path(output_path)
+    if video_path.suffix.lower() != ".mp4":
+        raise ValueError("The video output path must use the .mp4 extension")
+
+    frames = _solution_frames(level, result, algorithm, frame_duration_ms)
+    ffmpeg = shutil.which("ffmpeg")
+    if ffmpeg is None:
+        raise OSError(
+            "FFmpeg is required to generate MP4 videos but was not found on PATH"
+        )
+
+    video_path.parent.mkdir(parents=True, exist_ok=True)
+
+    with tempfile.TemporaryDirectory(
+        prefix="sokoban-video-",
+        dir=video_path.parent,
+    ) as directory:
+        temporary_directory = Path(directory)
+        for index, frame in enumerate(frames):
+            frame.save(temporary_directory / f"frame_{index:06d}.png")
+
+        encoded_path = temporary_directory / "solution.mp4"
+        completed = subprocess.run(
+            [
+                ffmpeg,
+                "-hide_banner",
+                "-loglevel",
+                "error",
+                "-y",
+                "-framerate",
+                f"1000/{frame_duration_ms}",
+                "-i",
+                str(temporary_directory / "frame_%06d.png"),
+                "-vf",
+                "pad=ceil(iw/2)*2:ceil(ih/2)*2",
+                "-c:v",
+                "libx264",
+                "-pix_fmt",
+                "yuv420p",
+                "-movflags",
+                "+faststart",
+                str(encoded_path),
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        if completed.returncode != 0:
+            detail = completed.stderr.strip() or "unknown FFmpeg error"
+            raise OSError(f"Could not generate MP4 video: {detail}")
+        encoded_path.replace(video_path)
+
+    return len(frames)
+
+
+def _solution_frames(
+    level: Level,
+    result: SearchResult,
+    algorithm: str,
+    frame_duration_ms: int,
+) -> List[Image.Image]:
     if result.status is not SearchStatus.SUCCESS:
-        raise ValueError("A solution GIF requires a successful search result")
+        raise ValueError("A solution animation requires a successful search result")
     if type(frame_duration_ms) is not int or frame_duration_ms <= 0:
         raise ValueError("frame_duration_ms must be a positive integer")
 
@@ -59,20 +154,7 @@ def save_solution_gif(
                 transition=node.transition,
             )
         )
-
-    gif_path = Path(output_path)
-    gif_path.parent.mkdir(parents=True, exist_ok=True)
-    frames[0].save(
-        gif_path,
-        format="GIF",
-        save_all=True,
-        append_images=frames[1:],
-        duration=frame_duration_ms,
-        loop=0,
-        disposal=2,
-        optimize=False,
-    )
-    return len(frames)
+    return frames
 
 
 def _render_frame(
