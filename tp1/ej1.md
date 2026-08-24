@@ -83,7 +83,9 @@ Aplicar una acción intercambia la posición del espacio vacío con la ficha num
 
 Cada movimiento tiene costo unitario:
 
-$$c(s, a, s') = 1$$
+```text
+c(s, a, s') = 1
+```
 
 Por lo tanto, el costo de una solución coincide con su cantidad de movimientos.
 
@@ -101,15 +103,20 @@ G1            G2            G3
 
 La condición de solución es:
 
-$$goal(s) = \begin{cases} 1 & \text{si } s \in \{G_1, G_2, G_3\} \\ 0 & \text{en otro caso} \end{cases}$$
+```text
+goal(s) = 1  si s ∈ {G1, G2, G3}
+goal(s) = 0  en otro caso
+```
 
 ### Espacio de estados
 
 El espacio de estados contiene todas las configuraciones alcanzables desde el estado inicial.
 
-Aunque existen $9!$ permutaciones posibles de las nueve posiciones, solamente la mitad son alcanzables desde una configuración determinada debido a la paridad del 8-puzzle:
+Aunque existen `9!` permutaciones posibles de las nueve posiciones, solamente la mitad son alcanzables desde una configuración determinada debido a la paridad del 8-puzzle:
 
-$$\frac{9!}{2} = 181\,440$$
+```text
+9! / 2 = 181 440
+```
 
 Por este motivo es importante detectar estados repetidos durante la búsqueda.
 
@@ -121,11 +128,15 @@ Para un estado `s` y un objetivo `G`, se cuenta cuántas fichas numeradas no ocu
 
 El espacio vacío no se cuenta.
 
-$$h_{\text{fuera}}(s, G) = \sum_{i=1}^{8} [\operatorname{pos}_s(i) \neq \operatorname{pos}_G(i)]$$
+```text
+h_fuera(s, G) = Σ [ pos_s(i) ≠ pos_G(i) ]   para i = 1..8
+```
 
 Como la consigna admite tres objetivos, la heurística toma el mínimo:
 
-$$h_{\text{fuera}}(s) = \min_{G \in \{G_1, G_2, G_3\}} h_{\text{fuera}}(s, G)$$
+```text
+h_fuera(s) = min { h_fuera(s, G) : G ∈ {G1, G2, G3} }
+```
 
 ### Justificación de admisibilidad
 
@@ -135,11 +146,15 @@ Por lo tanto, un movimiento puede colocar correctamente como máximo una ficha q
 
 Si existen `k` fichas fuera de lugar respecto de un objetivo, serán necesarios al menos `k` movimientos para alcanzarlo:
 
-$$h_{\text{fuera}}(s, G) \leq h^*(s, G)$$
+```text
+h_fuera(s, G) ≤ h*(s, G)
+```
 
 Al tomar el mínimo entre los tres objetivos:
 
-$$h_{\text{fuera}}(s) \leq \min_{G \in \{G_1, G_2, G_3\}} h^*(s, G)$$
+```text
+h_fuera(s) ≤ min { h*(s, G) : G ∈ {G1, G2, G3} }
+```
 
 Por lo tanto, la heurística nunca sobreestima el costo real de alcanzar alguno de los objetivos.
 
@@ -157,7 +172,9 @@ En consecuencia, es una heurística admisible no trivial.
 
 La distancia Manhattan entre dos posiciones se define como:
 
-$$d_M((f_1, c_1), (f_2, c_2)) = |f_1 - f_2| + |c_1 - c_2|$$
+```text
+d_M((f1, c1), (f2, c2)) = |f1 - f2| + |c1 - c2|
+```
 
 Para cada ficha se calcula la distancia entre su posición actual y la posición que debería ocupar en el objetivo.
 
@@ -165,11 +182,15 @@ El espacio vacío no se cuenta.
 
 Para un objetivo `G`:
 
-$$h_{\text{Manhattan}}(s, G) = \sum_{i=1}^{8} d_M(\operatorname{pos}_s(i), \operatorname{pos}_G(i))$$
+```text
+h_manhattan(s, G) = Σ d_M( pos_s(i), pos_G(i) )   para i = 1..8
+```
 
 Como hay tres objetivos posibles:
 
-$$h_{\text{Manhattan}}(s) = \min_{G \in \{G_1, G_2, G_3\}} h_{\text{Manhattan}}(s, G)$$
+```text
+h_manhattan(s) = min { h_manhattan(s, G) : G ∈ {G1, G2, G3} }
+```
 
 ### Justificación de admisibilidad
 
@@ -179,19 +200,25 @@ Por lo tanto, una acción puede reducir la suma de distancias Manhattan como má
 
 Si la suma Manhattan respecto de un objetivo vale `k`, serán necesarios al menos `k` movimientos para alcanzar ese objetivo:
 
-$$h_{\text{Manhattan}}(s, G) \leq h^*(s, G)$$
+```text
+h_manhattan(s, G) ≤ h*(s, G)
+```
 
 La heurística ignora que otras fichas pueden bloquear el recorrido. Esta relajación solamente puede hacer que la estimación sea menor que el costo real, nunca mayor.
 
 Al tomar el mínimo entre los tres objetivos:
 
-$$h_{\text{Manhattan}}(s) \leq \min_{G \in \{G_1, G_2, G_3\}} h^*(s, G)$$
+```text
+h_manhattan(s) ≤ min { h*(s, G) : G ∈ {G1, G2, G3} }
+```
 
 Por lo tanto, la heurística es admisible.
 
 También es consistente, porque para dos estados vecinos `s` y `s'` se cumple:
 
-$$h_{\text{Manhattan}}(s) \leq 1 + h_{\text{Manhattan}}(s')$$
+```text
+h_manhattan(s) ≤ 1 + h_manhattan(s')
+```
 
 ### Dominancia
 
@@ -199,11 +226,13 @@ Para cualquier ficha fuera de lugar, su distancia Manhattan es al menos uno.
 
 Por lo tanto:
 
-$$h_{\text{Manhattan}}(s) \geq h_{\text{fuera}}(s)$$
+```text
+h_manhattan(s) ≥ h_fuera(s)
+```
 
 La distancia Manhattan domina a la cantidad de fichas fuera de lugar.
 
-Esto significa que ambas son admisibles, pero Manhattan suele brindar más información y permite que A\* expanda menos nodos.
+Esto significa que ambas son admisibles, pero Manhattan suele brindar más información y permite que A* expanda menos nodos.
 
 ---
 
@@ -213,22 +242,25 @@ Los valores de las heurísticas para el estado inicial son:
 
 | Objetivo | Fichas fuera de lugar | Distancia Manhattan |
 |---|---:|---:|
-| $G_1$ | 7 | 15 |
-| $G_2$ | 8 | 17 |
-| $G_3$ | 7 | 13 |
+| G1 | 7 | 15 |
+| G2 | 8 | 17 |
+| G3 | 7 | 13 |
 | Mínimo | **7** | **13** |
 
 Por lo tanto:
 
-$$h_{\text{fuera}}(s_0) = 7$$
-
-$$h_{\text{Manhattan}}(s_0) = 13$$
+```text
+h_fuera(s0)     = 7
+h_manhattan(s0) = 13
+```
 
 Una búsqueda BFS independiente permitió verificar que la solución óptima del estado inicial tiene costo `23`.
 
 En consecuencia:
 
-$$h_{\text{fuera}}(s_0) = 7 \leq 13 = h_{\text{Manhattan}}(s_0) \leq 23 = h^*(s_0)$$
+```text
+h_fuera(s0) = 7 ≤ 13 = h_manhattan(s0) ≤ 23 = h*(s0)
+```
 
 Esto confirma, para la instancia de ejemplo, que ambas heurísticas subestiman el costo óptimo real.
 
@@ -243,15 +275,15 @@ Para la instancia de la consigna:
 | Estado | Paridad |
 |---|---|
 | Estado inicial | Impar |
-| $G_1$ | Par |
-| $G_2$ | Impar |
-| $G_3$ | Par |
+| G1 | Par |
+| G2 | Impar |
+| G3 | Par |
 
-Por lo tanto, desde el estado inicial solamente es posible alcanzar $G_2$.
+Por lo tanto, desde el estado inicial solamente es posible alcanzar G2.
 
-Los objetivos $G_1$ y $G_3$ pertenecen a otra componente del espacio de estados.
+Los objetivos G1 y G3 pertenecen a otra componente del espacio de estados.
 
-Si se realiza esta comprobación antes de iniciar la búsqueda, las heurísticas pueden calcularse únicamente respecto de $G_2$:
+Si se realiza esta comprobación antes de iniciar la búsqueda, las heurísticas pueden calcularse únicamente respecto de G2:
 
 ```text
 Fichas fuera de lugar: 8
@@ -261,7 +293,9 @@ Costo óptimo real:     23
 
 Así se obtienen estimaciones más informativas:
 
-$$8 \leq 17 \leq 23$$
+```text
+8 ≤ 17 ≤ 23
+```
 
 La comprobación de paridad es una optimización válida, pero no es necesaria para que las heurísticas definidas sobre los tres objetivos sean admisibles.
 
@@ -282,13 +316,15 @@ Por lo tanto, BFS es:
 
 BFS resulta útil como línea base para comprobar el costo óptimo, aunque puede consumir una cantidad considerable de memoria.
 
-### A\* con fichas fuera de lugar
+### A* con fichas fuera de lugar
 
-A\* ordena la frontera mediante:
+A* ordena la frontera mediante:
 
-$$f(n) = g(n) + h(n)$$
+```text
+f(n) = g(n) + h(n)
+```
 
-Utilizando la cantidad de fichas fuera de lugar, A\* conserva completitud y optimalidad porque:
+Utilizando la cantidad de fichas fuera de lugar, A* conserva completitud y optimalidad porque:
 
 - El factor de ramificación es finito.
 - Todos los costos son mayores que cero.
@@ -296,7 +332,7 @@ Utilizando la cantidad de fichas fuera de lugar, A\* conserva completitud y opti
 
 Esta combinación resulta útil como primera búsqueda informada y como referencia para comparar heurísticas.
 
-### A\* con distancia Manhattan
+### A* con distancia Manhattan
 
 Esta sería la elección principal.
 
@@ -306,7 +342,9 @@ Por ese motivo, generalmente permite descartar antes los caminos poco prometedor
 
 Ante dos nodos con igual valor de:
 
-$$f(n) = g(n) + h(n)$$
+```text
+f(n) = g(n) + h(n)
+```
 
 se elegiría primero el nodo con menor `h(n)`, siguiendo el criterio indicado en la teórica.
 
@@ -314,7 +352,9 @@ se elegiría primero el nodo con menor `h(n)`, siguiendo el criterio indicado en
 
 Greedy ordena la frontera utilizando solamente:
 
-$$f(n) = h(n)$$
+```text
+f(n) = h(n)
+```
 
 La distancia Manhattan sería la heurística más conveniente porque ofrece más información que la cantidad de fichas fuera de lugar.
 
@@ -337,13 +377,13 @@ No sería la elección principal para este problema porque:
 
 Su principal ventaja es el menor consumo de memoria respecto de BFS.
 
-### IDA\* como alternativa
+### IDA* como alternativa
 
-Si el consumo de memoria de A\* fuera demasiado elevado, podría utilizarse IDA\* con distancia Manhattan.
+Si el consumo de memoria de A* fuera demasiado elevado, podría utilizarse IDA* con distancia Manhattan.
 
-IDA\*:
+IDA*:
 
-- Mantiene las garantías de completitud y optimalidad de A\* bajo las mismas condiciones.
+- Mantiene las garantías de completitud y optimalidad de A* bajo las mismas condiciones.
 - Requiere menos memoria.
 - Puede expandir repetidamente los mismos estados.
 
@@ -360,7 +400,7 @@ Los métodos elegidos serían:
 
 DFS no sería utilizado como método principal porque el objetivo es minimizar la cantidad de movimientos y DFS no ofrece esa garantía.
 
-Si existieran restricciones importantes de memoria, se podría agregar IDA\* con distancia Manhattan.
+Si existieran restricciones importantes de memoria, se podría agregar IDA* con distancia Manhattan.
 
 ---
 
@@ -381,8 +421,8 @@ La comparación principal sería:
 | Método | Heurística | ¿Óptimo? | Resultado esperado |
 |---|---|---:|---|
 | BFS | Ninguna | Sí | Referencia óptima, alto uso de memoria |
-| A\* | Fichas fuera de lugar | Sí | Menos expansiones que BFS |
-| A\* | Manhattan | Sí | Mejor búsqueda informada propuesta |
+| A* | Fichas fuera de lugar | Sí | Menos expansiones que BFS |
+| A* | Manhattan | Sí | Mejor búsqueda informada propuesta |
 | Greedy | Manhattan | No | Posible solución rápida, no necesariamente mínima |
 
-La hipótesis principal es que A\* con distancia Manhattan encontrará una solución óptima expandiendo menos nodos que BFS y que A\* con fichas fuera de lugar.
+La hipótesis principal es que A* con distancia Manhattan encontrará una solución óptima expandiendo menos nodos que BFS y que A* con fichas fuera de lugar.
