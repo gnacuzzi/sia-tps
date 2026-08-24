@@ -27,6 +27,7 @@ class GenerateVideosScriptTest(unittest.TestCase):
                 self.assertEqual(kwargs["check"], False)
                 self.assertIn("PYTHONPATH", kwargs["env"])
                 self.assertIn("--video", command)
+                self.assertIn("--video-max-seconds", command)
                 return subprocess.CompletedProcess(command, 0)
 
             exit_code = generate_all_videos(

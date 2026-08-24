@@ -122,6 +122,27 @@ class CliTest(unittest.TestCase):
         self.assertIn("Video saved to:", output.getvalue())
         self.assertIn("(4 frames)", output.getvalue())
 
+    def test_video_duration_cap_only_reduces_frame_duration(self) -> None:
+        output = io.StringIO()
+
+        with tempfile.TemporaryDirectory() as directory:
+            config_path = self._write_search_config(Path(directory))
+            video_path = Path(directory) / "bfs.mp4"
+
+            with patch(
+                "sia_tp1.cli.save_solution_video",
+                return_value=4,
+            ) as save_video:
+                run_search(
+                    config_path,
+                    output=output,
+                    video_path=video_path,
+                    video_max_seconds=1,
+                )
+
+        self.assertEqual(save_video.call_args.kwargs["frame_duration_ms"], 250)
+        self.assertIn("250 ms/frame", output.getvalue())
+
     def test_run_configured_dfs(self) -> None:
         output = io.StringIO()
 

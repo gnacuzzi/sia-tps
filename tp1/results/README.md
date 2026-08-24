@@ -44,7 +44,18 @@ python3 scripts/generate_videos.py levels/level_03.txt \
 ```
 
 El runner restaura el contenido original de `config.json` incluso si una
-ejecución falla.
+ejecución falla. Por defecto conserva los 500 ms por cuadro, pero acelera
+automáticamente los caminos largos para que ningún MP4 supere los 60 segundos.
+El límite puede cambiarse con `--max-duration-seconds`.
+
+Los seis MP4 se pueden reunir en una grilla 3x2 Full HD de 16:9, sin deformar
+los tableros. Cada caso que termina vuelve a empezar y el video conjunto
+finaliza junto con el caso de mayor duración:
+
+```bash
+python3 scripts/combine_solution_videos.py output/videos/level3 \
+  --output output/videos/level3/all_methods.mp4
+```
 
 Las configuraciones de esta primera comparación limitan la búsqueda a
 1.000.000 de nodos expandidos y 25 segundos. Se conservan como snapshots de

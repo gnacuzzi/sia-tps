@@ -33,11 +33,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                 arguments.config,
                 gif_path=arguments.gif,
                 video_path=arguments.video,
+                video_max_seconds=arguments.video_max_seconds,
             )
         if arguments.gif is not None:
             raise ConfigError("--gif requires --search")
         if arguments.video is not None:
             raise ConfigError("--video requires --search")
+        if arguments.video_max_seconds is not None:
+            raise ConfigError("--video-max-seconds requires --search and --video")
         return run(arguments.config, arguments.moves)
     except (ConfigError, LevelFormatError, OSError) as error:
         print(f"Error: {error}", file=sys.stderr)
@@ -102,6 +105,7 @@ def run_search(
     output: Optional[TextIO] = None,
     gif_path: Optional[Path] = None,
     video_path: Optional[Path] = None,
+    video_max_seconds: Optional[float] = None,
 ) -> int:
     """Execute the configured search algorithm and print its result."""
 
@@ -109,6 +113,11 @@ def run_search(
         output = sys.stdout
     if video_path is not None and video_path.suffix.lower() != ".mp4":
         raise ConfigError("--video output path must use the .mp4 extension")
+    if video_max_seconds is not None:
+        if video_path is None:
+            raise ConfigError("video_max_seconds requires a video output path")
+        if video_max_seconds <= 0:
+            raise ConfigError("video_max_seconds must be greater than zero")
 
     config = load_config(config_path)
     if config.cost_model != "unit":
@@ -172,11 +181,12 @@ def run_search(
     print("Final state:", file=output)
     print(render_state(level, result.goal_node.state), file=output)
 
+    animation_label = _animation_label(config.algorithm, config.heuristic)
     if gif_path is not None:
         frame_count = save_solution_gif(
             level,
             result,
-            config.algorithm,
+            animation_label,
             gif_path,
         )
         print(
@@ -184,17 +194,46 @@ def run_search(
             file=output,
         )
     if video_path is not None:
+        frame_count = result.solution_moves + 1
+        frame_duration_ms = 500
+        if video_max_seconds is not None:
+            maximum_frame_duration = int(
+                video_max_seconds * 1000 // frame_count
+            )
+            if maximum_frame_duration < 1:
+                raise ConfigError(
+                    "The requested maximum video duration is too short for "
+                    f"{frame_count} frames"
+                )
+            frame_duration_ms = min(
+                frame_duration_ms,
+                maximum_frame_duration,
+            )
         frame_count = save_solution_video(
             level,
             result,
-            config.algorithm,
+            animation_label,
             video_path,
+            frame_duration_ms=frame_duration_ms,
         )
         print(
-            f"Video saved to: {video_path} ({frame_count} frames)",
+            f"Video saved to: {video_path} ({frame_count} frames) "
+            f"[{frame_duration_ms} ms/frame]",
             file=output,
         )
     return 0
+
+
+def _animation_label(algorithm: str, heuristic: Optional[str]) -> str:
+    if heuristic is None:
+        return algorithm
+    abbreviations = {
+        "minimum_matching_manhattan": "MMM",
+        "shortest_push_access": "SPA",
+        "deadlock_aware_reverse_push_matching": "DRPM",
+        "pair_pattern_database_matching": "PPDB",
+    }
+    return f"{algorithm} + {abbreviations.get(heuristic, heuristic)}"
 
 
 def _print_missing_animation(
@@ -259,6 +298,12 @@ def _build_argument_parser() -> argparse.ArgumentParser:
         type=Path,
         metavar="PATH",
         help="Save the successful solution path as an H.264 MP4 video",
+    )
+    parser.add_argument(
+        "--video-max-seconds",
+        type=float,
+        metavar="SECONDS",
+        help="Speed up an MP4 only when needed to keep it below this duration",
     )
     return parser
 

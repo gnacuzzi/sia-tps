@@ -36,6 +36,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         type=Path,
         help="Destination directory (default: output/videos/<level name>)",
     )
+    parser.add_argument(
+        "--max-duration-seconds",
+        type=float,
+        default=60.0,
+        metavar="SECONDS",
+        help="Maximum duration of each video (default: 60)",
+    )
     arguments = parser.parse_args(argv)
 
     level_path = arguments.level.resolve()
@@ -47,7 +54,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     )
 
     try:
-        return generate_all_videos(level_path, config_path, output_dir)
+        return generate_all_videos(
+            level_path,
+            config_path,
+            output_dir,
+            max_duration_seconds=arguments.max_duration_seconds,
+        )
     except (OSError, ValueError, json.JSONDecodeError) as error:
         print(f"Error: {error}", file=sys.stderr)
         return 2
@@ -58,6 +70,7 @@ def generate_all_videos(
     config_path: Path,
     output_dir: Path,
     *,
+    max_duration_seconds: float = 60.0,
     runner: Callable[..., subprocess.CompletedProcess] = subprocess.run,
 ) -> int:
     """Run all cases and restore the exact original config in every outcome."""
@@ -66,6 +79,8 @@ def generate_all_videos(
         raise ValueError(f"Level file does not exist: {level_path}")
     if not config_path.is_file():
         raise ValueError(f"Config file does not exist: {config_path}")
+    if max_duration_seconds <= 0:
+        raise ValueError("max_duration_seconds must be greater than zero")
 
     original_config = config_path.read_bytes()
     base_config = json.loads(original_config.decode("utf-8"))
@@ -107,6 +122,8 @@ def generate_all_videos(
                     "--config",
                     str(config_path),
                     "--search",
+                    "--video-max-seconds",
+                    str(max_duration_seconds),
                     "--video",
                     str(video_path),
                 ],
