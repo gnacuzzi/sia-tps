@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sia-tp2"
+version = "0.1.0"
+description = "Aproximacion de imagenes mediante triangulos y algoritmos geneticos"
+requires-python = ">=3.9"
+dependencies = [
+  "numpy>=1.23",
+  "Pillow>=9.0"
+]
+
+[project.scripts]
+sia-tp2 = "sia_tp2.cli:main"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
+
