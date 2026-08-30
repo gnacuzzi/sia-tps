@@ -260,7 +260,8 @@ Reglas:
 - Tipo: `null` o un objeto con `patience` y `min_improvement`.
 - `patience`: entero mayor que `0`.
 - `min_improvement`: número finito mayor o igual que `0`.
-- El corte ocurre cuando el mejor NMSE no disminuye al menos `min_improvement` durante `patience` generaciones consecutivas.
+- Se conserva como referencia el NMSE de la última mejora significativa. Las mejoras pequeñas pueden acumularse: cuando la diferencia acumulada alcanza `min_improvement`, se actualiza la referencia y se reinicia el contador.
+- El corte ocurre al completar `patience` generaciones sin alcanzar esa mejora acumulada. Si `min_improvement` vale `0`, sólo una disminución estricta del NMSE reinicia el contador.
 
 #### `max_seconds`
 
@@ -307,6 +308,7 @@ Además de validar cada campo:
 3. Todos los resultados de selección, cruza, mutación y supervivencia deben conservar individuos válidos.
 4. Todo cromosoma debe contener exactamente `triangle_count` genes antes y después de cada operador.
 5. `alpha_range` y las mutaciones deben respetar siempre `A > 0`.
+   Si la probabilidad de mutación es positiva, el rango debe contener al menos dos valores para que una mutación de alfa pueda producir un cambio efectivo.
 6. La configuración del método elegido no puede contener parámetros pertenecientes a otro método.
 7. `output.directory` no puede ser el archivo de imagen de entrada ni apuntar a una ruta de archivo existente.
 8. Una configuración inválida impide comenzar la corrida; no se corrige silenciosamente.
@@ -323,5 +325,6 @@ triangles.json
 best.png
 ```
 
-`metadata.json` registra semilla, motivo de corte, generación final, mejor generación, NMSE, fitness, dimensiones de trabajo y dimensiones originales.
+En una corrida evolutiva, `metrics.csv` agrega una fila por generación muestreada. La columna `diversity` mide la distancia absoluta media entre los alelos normalizados de todos los pares de individuos: `0` significa una población genotípicamente idéntica y valores mayores indican más variedad. La última fila informa también `stop_reason`.
 
+`metadata.json` registra semilla, motivo de corte, generación final, mejor generación, NMSE, fitness, dimensiones de trabajo y dimensiones originales.

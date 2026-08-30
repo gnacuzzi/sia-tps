@@ -104,6 +104,14 @@ La ejecución termina cuando se cumple el primero de los criterios de corte habi
 
 Los valores exactos se definen en `config.json`. No se exige una coincidencia perfecta con la imagen objetivo, porque la representación mediante una cantidad fija de triángulos puede no tener capacidad para reproducirla exactamente.
 
+Para hacer operativo el estancamiento, se compara el mejor NMSE global con el de la última mejora significativa. Las mejoras menores pueden acumularse hasta alcanzar `min_improvement`; al alcanzarlo se reinicia el contador. Esto evita ignorar una sucesión de mejoras pequeñas que, en conjunto, sí es relevante.
+
+## 9. Diversidad registrada
+
+La diversidad genotípica se calcula como la distancia absoluta media entre todos los pares de individuos. Para comparar propiedades heterogéneas, las coordenadas ya están en `[0, 1]` y los canales RGBA se dividen por `255`. Luego se promedian las diferencias de todas las propiedades y loci.
+
+El resultado queda en `[0, 1]`: vale `0` cuando todos los cromosomas son iguales y crece a medida que sus alelos se separan. Se eligió esta medida en lugar de contar cromosomas únicos porque, al usar coordenadas continuas, casi todos los individuos podrían ser formalmente únicos aun siendo muy parecidos.
+
 Durante la evolución se renderizan los fenotipos necesarios para calcular el fitness. Además, se mantiene explícitamente el mejor individuo encontrado desde el comienzo de la ejecución. Cuando se activa un criterio de corte, el resultado final es ese `best-so-far`, aunque no pertenezca a la última población. A partir de su cromosoma se generan la imagen de salida y la enumeración final de triángulos.
 
 ## 9. Hipótesis iniciales

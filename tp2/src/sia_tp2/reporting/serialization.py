@@ -3,7 +3,7 @@
 import csv
 import json
 from pathlib import Path
-from typing import Mapping
+from typing import Mapping, Sequence, Union
 
 from PIL import Image
 
@@ -30,19 +30,25 @@ def write_json(path: Path, payload: object) -> None:
     )
 
 
-def write_metrics(path: Path, row: Mapping[str, object]) -> None:
+def write_metrics(
+    path: Path,
+    rows: Union[Mapping[str, object], Sequence[Mapping[str, object]]],
+) -> None:
+    normalized_rows = [rows] if isinstance(rows, Mapping) else list(rows)
+    if not normalized_rows:
+        raise ValueError("at least one metrics row is required")
     with path.open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=list(row))
+        writer = csv.DictWriter(stream, fieldnames=list(normalized_rows[0]))
         writer.writeheader()
-        writer.writerow(row)
+        writer.writerows(normalized_rows)
 
 
-def write_phase1_artifacts(
+def write_run_artifacts(
     *,
     run_directory: Path,
     effective_config: Mapping[str, object],
     metadata: Mapping[str, object],
-    metrics: Mapping[str, object],
+    metrics: Union[Mapping[str, object], Sequence[Mapping[str, object]]],
     best: Individual,
     best_image: Image.Image,
 ) -> None:
@@ -55,3 +61,19 @@ def write_phase1_artifacts(
     )
     best_image.save(run_directory / "best.png", format="PNG")
 
+
+def write_checkpoint(
+    *,
+    run_directory: Path,
+    generation: int,
+    best: Individual,
+    best_image: Image.Image,
+) -> None:
+    checkpoint_directory = run_directory / "checkpoints"
+    checkpoint_directory.mkdir(exist_ok=True)
+    stem = f"generation-{generation:06d}"
+    write_json(
+        checkpoint_directory / f"{stem}.json",
+        {"schema_version": 1, "generation": generation, "individual": best.to_dict()},
+    )
+    best_image.save(checkpoint_directory / f"{stem}.png", format="PNG")

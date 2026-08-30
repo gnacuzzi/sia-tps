@@ -576,6 +576,11 @@ def _validate_config(raw: object, source_path: Path, project_root: Path) -> AppC
         probability=mutation_probability,
         allele_change=allele_change,
     )
+    if mutation_probability > 0.0 and alpha_range[0] == alpha_range[1]:
+        errors.append(
+            "representation.alpha_range must contain at least two values "
+            "when mutation probability is positive"
+        )
 
     survival_obj = _object(
         genetic_obj.get("survival"), "genetic.survival", errors
@@ -780,4 +785,3 @@ def load_config(
     except (json.JSONDecodeError, ValueError) as error:
         raise ConfigError([f"invalid JSON in {source_path}: {error}"]) from error
     return _validate_config(raw, source_path, root)
-

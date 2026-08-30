@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Optional, Sequence
 
 from sia_tp2.config import ConfigError, load_config
-from sia_tp2.workflow import render_random_population
+from sia_tp2.workflow import evolve_image, render_random_population
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -33,6 +33,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print(f"NMSE: {result.best.error:.12f}")
             print(f"Fitness: {result.best.fitness:.12f}")
             return 0
+        if args.command == "evolve":
+            result = evolve_image(config)
+            print(f"Run directory: {result.run_directory}")
+            print(f"Stop reason: {result.evolution.stop_reason}")
+            print(f"Final generation: {result.evolution.final_generation}")
+            print(f"Best generation: {result.evolution.best_generation}")
+            print(f"NMSE: {result.evolution.best.error:.12f}")
+            print(f"Fitness: {result.evolution.best.fitness:.12f}")
+            return 0
     except (ConfigError, OSError, ValueError) as error:
         print(f"Error: {error}", file=sys.stderr)
         return 2
@@ -54,8 +63,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "command",
-        choices=("inspect-config", "render-random"),
+        choices=("inspect-config", "render-random", "evolve"),
         help="Operation to execute.",
     )
     return parser
-

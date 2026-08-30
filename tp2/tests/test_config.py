@@ -115,3 +115,11 @@ def test_duplicate_json_keys_are_rejected(tmp_path: Path) -> None:
     with pytest.raises(ConfigError, match="duplicate JSON key"):
         load_config(path, project_root=tmp_path)
 
+
+def test_mutation_requires_more_than_one_allowed_alpha_value(tmp_path: Path) -> None:
+    image = _create_image(tmp_path)
+    payload = _valid_payload(image, tmp_path / "runs")
+    payload["representation"]["alpha_range"] = [100, 100]
+
+    with pytest.raises(ConfigError, match="at least two values"):
+        load_config(_write_config(tmp_path, payload), project_root=tmp_path)
