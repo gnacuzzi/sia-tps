@@ -21,7 +21,8 @@ def test_engine_runs_stages_in_order_and_improves_controlled_problem() -> None:
             fitness=candidate.value / 10,
         )
 
-    def select(population, count, rng):
+    def select(population, count, generation, rng):
+        del generation
         del rng
         events.append("select")
         return (max(population, key=lambda item: item.fitness),) * count
@@ -36,7 +37,8 @@ def test_engine_runs_stages_in_order_and_improves_controlled_problem() -> None:
         events.append("mutate")
         return Candidate(candidate.value + 1)
 
-    def survive(population, children, rng):
+    def survive(population, children, generation, rng):
+        del generation
         del rng
         events.append("survive")
         return tuple(
@@ -104,10 +106,10 @@ def test_engine_stops_after_configured_stagnation_window() -> None:
         evaluate=evaluate,
         error=lambda item: item.error,
         fitness=lambda item: item.fitness,
-        select_parents=lambda population, count, rng: population,
+        select_parents=lambda population, count, generation, rng: population,
         crossover=lambda first, second, rng: (first, second),
         mutate=lambda item, rng: Candidate(item.value),
-        survive=lambda population, children, rng: children,
+        survive=lambda population, children, generation, rng: children,
         diversity=lambda population: 0.0,
     )
 
@@ -132,10 +134,10 @@ def test_engine_keeps_global_best_even_if_survival_discards_it() -> None:
         evaluate=evaluate,
         error=lambda item: item.error,
         fitness=lambda item: item.fitness,
-        select_parents=lambda population, count, rng: population,
+        select_parents=lambda population, count, generation, rng: population,
         crossover=lambda first, second, rng: (first, second),
         mutate=lambda item, rng: Candidate(9),
-        survive=lambda population, children, rng: children,
+        survive=lambda population, children, generation, rng: children,
         diversity=lambda population: 0.0,
     )
 

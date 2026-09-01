@@ -1,23 +1,49 @@
-"""Survivor-selection operators independent from the problem domain."""
+"""Survival strategies independent from the problem domain."""
 
+import random
 from typing import Callable, Sequence, Tuple, TypeVar
 
 
 T = TypeVar("T")
+Selector = Callable[[Sequence[T], int, int, random.Random], Sequence[T]]
 
 
-def additive_elite_survival(
+def select_survivors(
     population: Sequence[T],
     offspring: Sequence[T],
     *,
     population_size: int,
-    fitness: Callable[[T], float],
+    strategy: str,
+    generation: int,
+    selector: Selector[T],
+    rng: random.Random,
 ) -> Tuple[T, ...]:
-    """Keep the fittest individuals from parents and offspring together."""
+    """Apply additive or exclusive replacement with a configured selector."""
 
-    candidates = tuple(population) + tuple(offspring)
-    if population_size < 1 or population_size > len(candidates):
-        raise ValueError("population_size must fit within the candidate pool")
-    return tuple(
-        sorted(candidates, key=fitness, reverse=True)[:population_size]
-    )
+    if population_size < 1:
+        raise ValueError("population_size must be positive")
+    if strategy == "additive":
+        survivors = tuple(
+            selector((*population, *offspring), population_size, generation, rng)
+        )
+    elif strategy == "exclusive":
+        if len(offspring) > population_size:
+            survivors = tuple(
+                selector(offspring, population_size, generation, rng)
+            )
+        else:
+            retained_parents = tuple(
+                selector(
+                    population,
+                    population_size - len(offspring),
+                    generation,
+                    rng,
+                )
+            )
+            survivors = tuple(offspring) + retained_parents
+    else:
+        raise ValueError(f"unsupported survival strategy: {strategy}")
+
+    if len(survivors) != population_size:
+        raise ValueError("survival selector returned an unexpected count")
+    return survivors

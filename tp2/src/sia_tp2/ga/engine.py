@@ -72,10 +72,14 @@ def evolve(
     evaluate: Callable[[T], T],
     error: Callable[[T], float],
     fitness: Callable[[T], float],
-    select_parents: Callable[[Sequence[T], int, random.Random], Sequence[T]],
+    select_parents: Callable[
+        [Sequence[T], int, int, random.Random], Sequence[T]
+    ],
     crossover: Callable[[T, T, random.Random], Tuple[T, T]],
     mutate: Callable[[T, random.Random], T],
-    survive: Callable[[Sequence[T], Sequence[T], random.Random], Sequence[T]],
+    survive: Callable[
+        [Sequence[T], Sequence[T], int, random.Random], Sequence[T]
+    ],
     diversity: Callable[[Sequence[T]], float],
     on_generation: Optional[
         Callable[[GenerationMetrics, Sequence[T], T], None]
@@ -117,7 +121,9 @@ def evolve(
 
     stop_reason = "max_generations"
     for generation in range(1, limits.max_generations + 1):
-        parents = tuple(select_parents(population, offspring_count, rng))
+        parents = tuple(
+            select_parents(population, offspring_count, generation, rng)
+        )
         if len(parents) != offspring_count:
             raise ValueError("parent selection returned an unexpected count")
 
@@ -128,7 +134,9 @@ def evolve(
 
         evaluated_children = tuple(evaluate(child) for child in children)
         evaluations += len(evaluated_children)
-        population = tuple(survive(population, evaluated_children, rng))
+        population = tuple(
+            survive(population, evaluated_children, generation, rng)
+        )
         if len(population) != len(initial_population):
             raise ValueError("survival changed the configured population size")
 

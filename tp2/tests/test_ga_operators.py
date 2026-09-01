@@ -3,11 +3,11 @@ import random
 from sia_tp2.domain.diversity import triangle_population_diversity
 from sia_tp2.domain.model import Individual, TriangleGene
 from sia_tp2.domain.operators import (
-    multigene_uniform_local_mutation,
+    mutate_individual,
     uniform_crossover,
 )
-from sia_tp2.ga.selection import deterministic_tournament
-from sia_tp2.ga.survival import additive_elite_survival
+from sia_tp2.ga.selection import deterministic_tournament, elite_selection
+from sia_tp2.ga.survival import select_survivors
 
 
 def _gene(offset: int) -> TriangleGene:
@@ -65,9 +65,11 @@ def test_uniform_crossover_preserves_loci_and_parental_genes() -> None:
 def test_multigene_probability_one_changes_every_gene_without_mutating_parent() -> None:
     parent = _individual(10, 20, 30)
 
-    child = multigene_uniform_local_mutation(
+    child = mutate_individual(
         parent,
+        method="multigene_uniform",
         probability=1.0,
+        allele_mode="local_delta",
         position_delta=0.1,
         color_delta=10,
         alpha_delta=10,
@@ -83,15 +85,22 @@ def test_multigene_probability_one_changes_every_gene_without_mutating_parent() 
     assert child.error is None and child.fitness is None
 
 
-def test_additive_elite_survival_keeps_best_from_both_sources() -> None:
+def test_additive_survival_with_elite_keeps_best_from_both_sources() -> None:
     parents = (_individual(1, fitness=0.9), _individual(2, fitness=0.2))
     children = (_individual(3, fitness=0.8), _individual(4, fitness=0.1))
 
-    survivors = additive_elite_survival(
+    def selector(pool, count, generation, rng):
+        del generation, rng
+        return elite_selection(pool, count=count, fitness=lambda item: item.fitness)
+
+    survivors = select_survivors(
         parents,
         children,
         population_size=2,
-        fitness=lambda item: item.fitness,
+        strategy="additive",
+        generation=1,
+        selector=selector,
+        rng=random.Random(0),
     )
 
     assert [item.fitness for item in survivors] == [0.9, 0.8]

@@ -11,13 +11,13 @@ from sia_tp2.domain.diversity import triangle_population_diversity
 from sia_tp2.domain.initialization import create_random_population
 from sia_tp2.domain.model import Individual
 from sia_tp2.domain.operators import (
-    multigene_uniform_local_mutation,
-    uniform_crossover,
+    crossover_individuals,
+    mutate_individual,
 )
 from sia_tp2.domain.renderer import load_target_images, render_individual
 from sia_tp2.ga.engine import EvolutionLimits, EvolutionResult, evolve
-from sia_tp2.ga.selection import deterministic_tournament
-from sia_tp2.ga.survival import additive_elite_survival
+from sia_tp2.ga.selection import select_population
+from sia_tp2.ga.survival import select_survivors
 from sia_tp2.reporting.serialization import (
     create_run_directory,
     write_checkpoint,
@@ -130,9 +130,8 @@ def render_random_population(config: AppConfig) -> RandomPopulationResult:
 
 
 def evolve_image(config: AppConfig) -> ImageEvolutionResult:
-    """Evolve triangle images with the minimal Phase 2 operator set."""
+    """Evolve triangle images with operators selected entirely from config."""
 
-    _require_phase2_operators(config)
     original_target, working_target = load_target_images(
         config.input.image, config.input.working_max_side
     )
@@ -155,24 +154,27 @@ def evolve_image(config: AppConfig) -> ImageEvolutionResult:
         )
         return evaluated
 
-    def parent_selector(population, count, rng):
-        return deterministic_tournament(
+    def parent_selector(population, count, generation, rng):
+        selection = config.genetic.parent_selection
+        return select_population(
             population,
             count=count,
-            tournament_size=int(
-                config.genetic.parent_selection.params["tournament_size"]
-            ),
+            method=selection.method,
+            params=selection.params,
+            generation=generation,
             fitness=_required_fitness,
             rng=rng,
         )
 
     def crossover(first, second, rng):
-        return uniform_crossover(
+        swap_probability = config.genetic.crossover.params.get("swap_probability")
+        return crossover_individuals(
             first,
             second,
+            method=config.genetic.crossover.method,
             probability=config.genetic.crossover.probability,
-            swap_probability=float(
-                config.genetic.crossover.params["swap_probability"]
+            swap_probability=(
+                float(swap_probability) if swap_probability is not None else None
             ),
             rng=rng,
         )
@@ -180,25 +182,40 @@ def evolve_image(config: AppConfig) -> ImageEvolutionResult:
     allele_change = config.genetic.mutation.allele_change
 
     def mutate(individual, rng):
-        return multigene_uniform_local_mutation(
+        return mutate_individual(
             individual,
+            method=config.genetic.mutation.method,
             probability=config.genetic.mutation.probability,
-            position_delta=_required_number(
-                allele_change.position_delta, "position_delta"
-            ),
-            color_delta=_required_integer(allele_change.color_delta, "color_delta"),
-            alpha_delta=_required_integer(allele_change.alpha_delta, "alpha_delta"),
+            allele_mode=allele_change.mode,
+            position_delta=allele_change.position_delta,
+            color_delta=allele_change.color_delta,
+            alpha_delta=allele_change.alpha_delta,
             alpha_range=config.representation.alpha_range,
             rng=rng,
         )
 
-    def survive(population, offspring, rng):
-        del rng
-        return additive_elite_survival(
+    def survive(population, offspring, generation, rng):
+        selection = config.genetic.survival.selection
+
+        def survival_selector(pool, count, current_generation, current_rng):
+            return select_population(
+                pool,
+                count=count,
+                method=selection.method,
+                params=selection.params,
+                generation=current_generation,
+                fitness=_required_fitness,
+                rng=current_rng,
+            )
+
+        return select_survivors(
             population,
             offspring,
             population_size=config.genetic.population_size,
-            fitness=_required_fitness,
+            strategy=config.genetic.survival.strategy,
+            generation=generation,
+            selector=survival_selector,
+            rng=rng,
         )
 
     stagnation = config.termination.stagnation
@@ -300,48 +317,6 @@ def evolve_image(config: AppConfig) -> ImageEvolutionResult:
         working_size=working_target.size,
         original_size=original_target.size,
     )
-
-
-def _require_phase2_operators(config: AppConfig) -> None:
-    expected = {
-        "parent selection": (
-            config.genetic.parent_selection.method,
-            "tournament_deterministic",
-        ),
-        "crossover": (config.genetic.crossover.method, "uniform"),
-        "mutation": (config.genetic.mutation.method, "multigene_uniform"),
-        "allele change": (
-            config.genetic.mutation.allele_change.mode,
-            "local_delta",
-        ),
-        "survival strategy": (config.genetic.survival.strategy, "additive"),
-        "survival selection": (
-            config.genetic.survival.selection.method,
-            "elite",
-        ),
-    }
-    unsupported = [
-        f"{name}={actual!r} (expected {wanted!r})"
-        for name, (actual, wanted) in expected.items()
-        if actual != wanted
-    ]
-    if unsupported:
-        raise ValueError(
-            "Phase 2 evolve supports only the vertical operator set: "
-            + "; ".join(unsupported)
-        )
-
-
-def _required_number(value, name: str) -> float:
-    if value is None:
-        raise ValueError(f"{name} is required")
-    return value
-
-
-def _required_integer(value, name: str) -> int:
-    if value is None:
-        raise ValueError(f"{name} is required")
-    return value
 
 
 def _required_error(individual: Individual) -> float:

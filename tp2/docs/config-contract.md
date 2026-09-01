@@ -178,6 +178,18 @@ Validaciones específicas:
 - Los métodos sin parámetros exigen exactamente `params: {}`.
 - Los métodos de selección deben devolver exactamente la cantidad solicitada y pueden seleccionar un individuo más de una vez cuando el método lo permita.
 
+Semántica implementada:
+
+- **Elite:** ordena por fitness descendente. Si se solicitan más individuos que los disponibles, recorre nuevamente el mismo ranking desde el mejor.
+- **Ruleta:** realiza `K` selecciones independientes con reemplazo y peso igual al fitness.
+- **Universal:** usa los mismos pesos que Ruleta, un único inicio aleatorio y `K` punteros equidistantes.
+- **Ranking:** ordena por fitness y reemplaza el fitness por la pseudoaptitud `N - rank`, con rank empezando en `1`; luego aplica Ruleta.
+- **Boltzmann:** aplica Ruleta con pesos proporcionales a `exp(fitness / T)`. Se calcula de forma estable como `exp((fitness - max_fitness) / T)`, transformación equivalente que evita overflow.
+- **Torneo determinístico:** toma `tournament_size` individuos distintos en cada torneo y elige el de mayor fitness.
+- **Torneo probabilístico:** toma dos individuos distintos y elige el mejor con probabilidad `threshold`; en caso contrario elige el peor.
+
+Boltzmann recibe la generación actual tanto al seleccionar padres como al seleccionar sobrevivientes. Esto permite que ambos usos del selector respeten el mismo cronograma de temperatura.
+
 #### `crossover`
 
 - `method`: `"one_point"` o `"uniform"`.

@@ -1,0 +1,63 @@
+{
+  "config_version": 1,
+  "input": {
+    "image": "assets/targets/01_simple.png",
+    "working_max_side": 32
+  },
+  "representation": {
+    "triangle_count": 5,
+    "canvas_rgb": [255, 255, 255],
+    "alpha_range": [1, 255],
+    "initialization": "uniform_random"
+  },
+  "genetic": {
+    "population_size": 10,
+    "offspring_count": 6,
+    "parent_selection": {
+      "method": "boltzmann",
+      "params": {
+        "initial_temperature": 1.0,
+        "final_temperature": 0.05,
+        "decay_rate": 0.2
+      }
+    },
+    "crossover": {
+      "method": "one_point",
+      "probability": 0.9,
+      "params": {}
+    },
+    "mutation": {
+      "method": "single_gene",
+      "probability": 0.2,
+      "allele_change": {
+        "mode": "global_resample"
+      }
+    },
+    "survival": {
+      "strategy": "exclusive",
+      "selection": {
+        "method": "ranking",
+        "params": {}
+      }
+    }
+  },
+  "fitness": {
+    "metric": "normalized_mse",
+    "epsilon": 1e-12
+  },
+  "termination": {
+    "max_generations": 5,
+    "target_nmse": null,
+    "stagnation": null,
+    "max_seconds": null
+  },
+  "run": {
+    "seed": 0
+  },
+  "output": {
+    "directory": "output/runs",
+    "metrics_every": 1,
+    "checkpoint_every": null,
+    "render_original_size": true
+  }
+}
