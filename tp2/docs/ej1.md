@@ -44,6 +44,8 @@ Se cruzan los dos mapas respetando la correspondencia entre posiciones. Para cad
 
 El método de cruza elegido determina qué posiciones se heredan de cada padre. Como ambos padres tienen la misma estructura de `N x N` y todos sus alelos pertenecen al alfabeto permitido, los hijos conservan un tamaño y una estructura válidos.
 
+Para este ejercicio usamos **cruza uniforme**: para cada celda `(fila, columna)` se elige con probabilidad `0,5` el carácter del primer padre y con probabilidad `0,5` el del segundo padre, siempre en esa misma celda. Es preferible al cruce de un punto porque permite combinar de forma independiente las aproximaciones que cada padre aporta en cada región de la imagen; un corte único mezclaría bloques enteros de celdas sin una ventaja específica para esta representación.
+
 ## 8. ¿Cómo mutamos un individuo?
 
 Después de la cruza, se selecciona al azar una celda del hijo y se reemplaza su carácter actual por otro carácter permitido. Para asegurar que exista un cambio efectivo, el nuevo alelo debe ser diferente del que el hijo tenía en esa posición.
