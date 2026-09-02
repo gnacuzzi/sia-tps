@@ -1,0 +1,17 @@
+{
+  "config_version": 1,
+  "input": {"image": "assets/targets/01_simple.png", "working_max_side": 48},
+  "representation": {"triangle_count": 20, "canvas_rgb": [255, 255, 255], "alpha_range": [1, 255], "initialization": "uniform_random"},
+  "genetic": {
+    "population_size": 50,
+    "offspring_count": 50,
+    "parent_selection": {"method": "tournament_deterministic", "params": {"tournament_size": 3}},
+    "crossover": {"method": "uniform", "probability": 0.9, "params": {"swap_probability": 0.5}},
+    "mutation": {"method": "multigene_uniform", "probability": 0.05, "allele_change": {"mode": "local_delta", "position_delta": 0.08, "color_delta": 20, "alpha_delta": 20}},
+    "survival": {"strategy": "additive", "selection": {"method": "elite", "params": {}}}
+  },
+  "fitness": {"metric": "normalized_mse", "epsilon": 1e-12},
+  "termination": {"max_generations": 100, "target_nmse": null, "stagnation": null, "max_seconds": null},
+  "run": {"seed": 12},
+  "output": {"directory": "output/experiments", "metrics_every": 1, "checkpoint_every": null, "render_original_size": true}
+}
