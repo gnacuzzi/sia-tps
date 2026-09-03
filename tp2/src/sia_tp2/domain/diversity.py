@@ -1,5 +1,7 @@
 """Genotypic diversity for populations of triangle chromosomes."""
 
+import math
+
 from typing import Sequence, Tuple
 
 from .model import Individual
@@ -19,11 +21,15 @@ def triangle_population_diversity(population: Sequence[Individual]) -> float:
     difference_sum = 0.0
     for dimension in range(dimension_count):
         values = sorted(vector[dimension] for vector in vectors)
-        difference_sum += sum(
-            (2 * index - len(values) + 1) * value
+        baseline = values[0]
+        difference_sum += math.fsum(
+            (2 * index - len(values) + 1) * (value - baseline)
             for index, value in enumerate(values)
         )
-    return difference_sum / (pair_count * dimension_count)
+    diversity = difference_sum / (pair_count * dimension_count)
+    # The pairwise distance is mathematically bounded by [0, 1], but summing
+    # many cancelling floating-point terms can produce a tiny value outside it.
+    return min(1.0, max(0.0, diversity))
 
 
 def _normalized_alleles(individual: Individual) -> Tuple[float, ...]:
