@@ -38,6 +38,7 @@ PYTHONPATH=src python scripts/run_study.py showcase \
   --selected ../.context/tp2-comparative-study/decisions/mutation.json \
   --validation-records ../.context/tp2-comparative-study/records/validation.csv
 PYTHONPATH=src python scripts/analyze_study.py showcase --figures
+PYTHONPATH=src python scripts/generate_comparative_report.py
 ```
 
 `showcase` elige, para cada imagen, la semilla con NMSE final mediano entre las
@@ -48,3 +49,7 @@ semilla, porque la presentación debe mostrar un resultado representativo.
 Los CSV de `summaries/` contienen mediana, cuartiles, tiempo y diversidad. Las
 curvas están normalizadas por el NMSE de la generación cero y siempre se basan
 en el mejor histórico, no sólo en la última población.
+
+El último comando genera `experiments/results/COMPARATIVE-REPORT.md`. Copia las
+imágenes de la semilla mediana de cada condición y deja visibles las secciones
+que aún no tienen cinco réplicas completas.
