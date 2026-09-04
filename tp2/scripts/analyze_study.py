@@ -4,6 +4,7 @@
 import argparse
 import csv
 import json
+import shutil
 from collections import defaultdict
 from pathlib import Path
 from typing import Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
@@ -18,6 +19,7 @@ from sia_tp2.study import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = PROJECT_ROOT.parent / ".context" / "tp2-comparative-study"
+DEFAULT_PUBLISHED_OUTPUT = PROJECT_ROOT / "experiments" / "results"
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -28,12 +30,23 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "phase", choices=("profile", "selection", "crossover", "mutation", "validation", "showcase")
     )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument(
+        "--published-output",
+        type=Path,
+        default=DEFAULT_PUBLISHED_OUTPUT,
+        help="Versioned destination for summaries, decisions, and final figures.",
+    )
     parser.add_argument("--figures", action="store_true")
     args = parser.parse_args(argv)
 
     if args.phase == "profile":
         profile_path = args.output / "profile" / "selection-pressure.csv"
         _render_selection_profile(profile_path, args.output / "figures" / "selection-pressure.svg")
+        _copy_artifact(profile_path, args.published_output / "profile" / profile_path.name)
+        _copy_artifact(
+            args.output / "figures" / "selection-pressure.svg",
+            args.published_output / "figures" / "selection-pressure.svg",
+        )
         print(f"Figure: {args.output / 'figures' / 'selection-pressure.svg'}")
         return 0
 
@@ -48,6 +61,16 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     decision_path.write_text(json.dumps(decisions, indent=2) + "\n", encoding="utf-8")
     if args.figures:
         _render_figures(records, args.output / "figures" / args.phase)
+    _copy_artifact(summary_path, args.published_output / "summaries" / summary_path.name)
+    _copy_artifact(
+        args.output / "reports" / f"{args.phase}.md",
+        args.published_output / "reports" / f"{args.phase}.md",
+    )
+    _copy_artifact(decision_path, args.published_output / "decisions" / decision_path.name)
+    figure_directory = args.output / "figures" / args.phase
+    if figure_directory.is_dir():
+        for figure in figure_directory.glob("*.svg"):
+            _copy_artifact(figure, args.published_output / "figures" / args.phase / figure.name)
     print(f"Summary: {summary_path}")
     print(f"Decisions: {decision_path}")
     return 0
@@ -196,6 +219,11 @@ def _render_selection_profile(profile_path: Path, figure_path: Path) -> None:
     figure_path.parent.mkdir(parents=True, exist_ok=True)
     figure.savefig(figure_path, format="svg")
     plt.close(figure)
+
+
+def _copy_artifact(source: Path, destination: Path) -> None:
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, destination)
 
 
 if __name__ == "__main__":

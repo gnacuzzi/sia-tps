@@ -5,9 +5,10 @@ familia de operadores y se conservan las decisiones de la etapa anterior. Las
 cinco semillas fijas (`101`, `202`, `303`, `404`, `505`) permiten repetir cada
 comparación exactamente.
 
-Los resultados crudos se escriben fuera de Git, bajo `.context/`; el manifiesto,
-los scripts y esta guía sí se versionan. Ejecutar desde `tp2` con el entorno del
-proyecto activo:
+Los resultados crudos se escriben fuera de Git, bajo `.context/`. El analizador
+copia automáticamente los CSV resumidos, las decisiones y las figuras finales a
+`experiments/results/`, que sí se versiona. Ejecutar desde `tp2` con el entorno
+del proyecto activo:
 
 ```bash
 PYTHONPATH=src python scripts/run_study.py profile
