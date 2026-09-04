@@ -80,33 +80,15 @@ def _decisions(phase: str, summaries: Sequence[Mapping[str, object]]) -> Mapping
     if phase == "selection":
         return {"selection": select_conditions(summaries, phase=phase, count=2)}
     if phase == "crossover":
-        winner = _operator_winner(summaries, "crossover")
-        return {"crossover": (winner,)}
+        winner = select_conditions(summaries, phase=phase, count=1)[0]
+        selector, crossover = winner.rsplit("__", 1)
+        return {"selection": (selector,), "crossover": (crossover,)}
     if phase == "mutation":
         winner = select_conditions(summaries, phase=phase, count=1)[0]
         mutation = "multigene_local" if winner.startswith("multigene") else "single_global"
         survival = winner.rsplit("__", 1)[-1]
         return {"mutation": (mutation,), "survival": (survival,)}
     return {}
-
-
-def _operator_winner(summaries: Sequence[Mapping[str, object]], segment: str) -> str:
-    buckets: Dict[str, List[Mapping[str, object]]] = defaultdict(list)
-    for row in summaries:
-        condition = str(row["condition"])
-        method = condition.rsplit("__", 1)[-1]
-        buckets[method].append(row)
-    scored = []
-    for method, rows in buckets.items():
-        scored.append(
-            (
-                sum(float(row["median_normalized_auc"]) for row in rows) / len(rows),
-                sum(float(row["median_best_error"]) for row in rows) / len(rows),
-                -sum(float(row["median_final_diversity"]) for row in rows) / len(rows),
-                method,
-            )
-        )
-    return min(scored)[-1]
 
 
 def _write_report_fragment(summaries: Sequence[Mapping[str, object]], path: Path) -> None:

@@ -1,0 +1,8 @@
+{
+  "selection": [
+    "ranking"
+  ],
+  "crossover": [
+    "uniform"
+  ]
+}
