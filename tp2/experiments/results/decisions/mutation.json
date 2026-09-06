@@ -1,8 +1,5 @@
 {
   "mutation": [
-    "multigene_local"
-  ],
-  "survival": [
-    "additive"
+    "single_local"
   ]
 }

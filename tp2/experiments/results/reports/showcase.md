@@ -2,6 +2,6 @@
 
 | Objetivo | Condición | Corridas | Mediana NMSE | Mediana AUC normalizada | Diversidad final | Éxitos 90% |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| flag | winner_median_seed | 1 | 0.000795 | 0.026916 | 0.006240 | 1 |
-| icon | winner_median_seed | 1 | 0.010379 | 0.175373 | 0.007889 | 0 |
-| sign | winner_median_seed | 1 | 0.005779 | 0.118755 | 0.010314 | 1 |
+| flag | winner_median_seed | 1 | 0.000462 | 0.033620 | 0.001879 | 1 |
+| icon | winner_median_seed | 1 | 0.006481 | 0.107614 | 0.000356 | 1 |
+| sign | winner_median_seed | 1 | 0.004501 | 0.104226 | 0.000464 | 1 |

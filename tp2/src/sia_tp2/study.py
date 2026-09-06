@@ -44,7 +44,19 @@ def build_specs(
     base["selection_variants"] = manifest["selection_variants"]
     selected_methods = selected_methods or {}
 
-    if phase == "selection":
+    if phase == "resolution":
+        target_names = ("flag",)
+        conditions = tuple(
+            (f"side_{side}", {"working_max_side": int(side)})
+            for side in _sequence(manifest["resolution_variants"])
+        )
+    elif phase == "capacity":
+        target_names = ("flag",)
+        conditions = tuple(
+            (f"triangles_{count}", {"triangle_count": int(count)})
+            for count in _sequence(manifest["triangle_count_variants"])
+        )
+    elif phase == "selection":
         target_names = ("flag",)
         variants = _mapping(manifest["selection_variants"])
         conditions = tuple((name, {"selector": name}) for name in variants)
@@ -64,32 +76,40 @@ def build_specs(
         target_names = ("flag", "sign")
         conditions = (
             (
-                "multigene_local__additive",
+                "multigene_local_balanced",
                 {
                     "selector": selector,
                     "crossover": crossover,
-                    "mutation": "multigene_local",
+                    "mutation": "multigene_local_balanced",
                     "survival": "additive",
                 },
             ),
             (
-                "single_global__additive",
+                "single_local",
                 {
                     "selector": selector,
                     "crossover": crossover,
-                    "mutation": "single_global",
+                    "mutation": "single_local",
                     "survival": "additive",
                 },
             ),
+        )
+    elif phase == "survival":
+        selector = _one_selected(selected_methods, "selection")
+        crossover = _one_selected(selected_methods, "crossover")
+        mutation = _one_selected(selected_methods, "mutation")
+        target_names = ("flag", "sign")
+        conditions = tuple(
             (
-                "single_global__exclusive",
+                strategy,
                 {
                     "selector": selector,
                     "crossover": crossover,
-                    "mutation": "single_global",
-                    "survival": "exclusive",
+                    "mutation": mutation,
+                    "survival": strategy,
                 },
-            ),
+            )
+            for strategy in ("additive", "exclusive")
         )
     elif phase == "validation":
         selector = _one_selected(selected_methods, "selection")
@@ -116,9 +136,13 @@ def build_specs(
         for condition_name, overrides in conditions:
             for seed in seeds:
                 run_id = f"{phase}__{target_name}__{condition_name}__seed-{seed}"
+                target = dict(_mapping(targets[target_name]))
+                for key in ("working_max_side", "triangle_count"):
+                    if key in overrides:
+                        target[key] = overrides[key]
                 payload = _payload(
                     base=base,
-                    target=_mapping(targets[target_name]),
+                    target=target,
                     overrides=overrides,
                     seed=seed,
                     output_directory=output_root / "raw" / phase / run_id,
@@ -217,19 +241,22 @@ def run_specs(
     config_directory: Path,
     project_root: Path,
     resume: bool,
+    order_seed: int = 0,
     progress: Optional[Callable[[str], None]] = None,
 ) -> Tuple[Mapping[str, object], ...]:
-    """Run specs sequentially so every condition receives the same CPU budget."""
+    """Run specs in reproducibly shuffled order with equal evaluation budgets."""
+
+    ordered_specs = order_specs(specs, seed=order_seed)
 
     # Reject every bad configuration before spending CPU on the first run.
     configs = {
         spec.run_id: load_config(
             config_directory / f"{spec.run_id}.json", project_root=project_root
         )
-        for spec in specs
+        for spec in ordered_specs
     }
     records = []
-    for number, spec in enumerate(specs, start=1):
+    for number, spec in enumerate(ordered_specs, start=1):
         run_parent = Path(spec.payload["output"]["directory"])
         existing = run_parent / f"evolution-seed-{spec.seed}" / "metadata.json"
         if resume and existing.is_file():
@@ -237,20 +264,30 @@ def run_specs(
             _verify_evaluation_budget(spec, record)
             records.append(record)
             if progress:
-                progress(f"[{number}/{len(specs)}] reused {spec.run_id}")
+                progress(f"[{number}/{len(ordered_specs)}] reused {spec.run_id}")
             continue
         if progress:
-            progress(f"[{number}/{len(specs)}] running {spec.run_id}")
+            progress(f"[{number}/{len(ordered_specs)}] running {spec.run_id}")
         result = evolve_image(configs[spec.run_id])
         record = _record_from_directory(spec, result.run_directory)
         _verify_evaluation_budget(spec, record)
         records.append(record)
         if progress:
             progress(
-                f"[{number}/{len(specs)}] done {spec.run_id} "
+                f"[{number}/{len(ordered_specs)}] done {spec.run_id} "
                 f"(NMSE={float(record['best_error']):.6g}, {float(record['elapsed_seconds']):.1f}s)"
             )
     return tuple(records)
+
+
+def order_specs(
+    specs: Sequence[ExperimentSpec], *, seed: int
+) -> Tuple[ExperimentSpec, ...]:
+    """Return a deterministic random order to reduce temporal execution bias."""
+
+    ordered = list(specs)
+    random.Random(seed).shuffle(ordered)
+    return tuple(ordered)
 
 
 def write_records(records: Sequence[Mapping[str, object]], path: Path) -> None:
@@ -330,20 +367,27 @@ def write_summaries(summaries: Sequence[Mapping[str, object]], path: Path) -> No
 def select_conditions(
     summaries: Sequence[Mapping[str, object]], *, phase: str, count: int
 ) -> Tuple[str, ...]:
-    """Rank by quality, then convergence, then diversity; all are medians."""
+    """Rank within each target, then aggregate quality, convergence and diversity."""
 
     candidates = [summary for summary in summaries if summary["phase"] == phase]
     if not candidates:
         raise ValueError(f"no summaries exist for phase {phase}")
-    scores: Dict[str, List[Tuple[float, float, float]]] = {}
+    by_target: Dict[str, List[Mapping[str, object]]] = {}
     for item in candidates:
-        scores.setdefault(str(item["condition"]), []).append(
-            (
-                float(item["median_best_error"]),
-                float(item["median_normalized_auc"]),
-                -float(item["median_final_diversity"]),
-            )
+        by_target.setdefault(str(item["target"]), []).append(item)
+
+    scores: Dict[str, List[Tuple[float, float, float]]] = {}
+    for target_items in by_target.values():
+        error_ranks = _condition_ranks(target_items, "median_best_error")
+        auc_ranks = _condition_ranks(target_items, "median_normalized_auc")
+        diversity_ranks = _condition_ranks(
+            target_items, "median_final_diversity", reverse=True
         )
+        for item in target_items:
+            condition = str(item["condition"])
+            scores.setdefault(condition, []).append(
+                (error_ranks[condition], auc_ranks[condition], diversity_ranks[condition])
+            )
     ranked = sorted(
         (
             (
@@ -360,10 +404,14 @@ def select_conditions(
 def selection_profile(
     manifest: Mapping[str, object], *, draws: int = 1000
 ) -> Tuple[Mapping[str, object], ...]:
-    """Measure the exact selector implementations over a known fitness ranking."""
+    """Measure selector pressure over a representative normalized-fitness ranking."""
 
     variants = _mapping(manifest["selection_variants"])
     population = tuple(range(20))
+    fitness_values = {
+        member: 0.9 + (0.095 * member / (len(population) - 1))
+        for member in population
+    }
     top_quartile = set(population[-5:])
     profiles = []
     for index, (name, config) in enumerate(variants.items()):
@@ -374,7 +422,7 @@ def selection_profile(
             method=str(config["method"]),
             params=_mapping(config["params"]),
             generation=int(config.get("profile_generation", 500)),
-            fitness=float,
+            fitness=fitness_values.__getitem__,
             rng=rng,
         )
         frequency = {member: selected.count(member) / draws for member in population}
@@ -427,7 +475,7 @@ def _payload(
             "offspring_count": target["offspring_count"],
             "parent_selection": selection,
             "crossover": _crossover(crossover_name),
-            "mutation": _mutation(mutation_name),
+            "mutation": _mutation(mutation_name, triangle_count=int(target["triangle_count"])),
             "survival": {
                 "strategy": survival_name,
                 "selection": {"method": "elite", "params": {}},
@@ -463,7 +511,7 @@ def _crossover(name: str) -> Dict[str, object]:
     raise ValueError(f"unsupported crossover: {name}")
 
 
-def _mutation(name: str) -> Dict[str, object]:
+def _mutation(name: str, *, triangle_count: int) -> Dict[str, object]:
     if name == "multigene_local":
         return {
             "method": "multigene_uniform",
@@ -480,6 +528,24 @@ def _mutation(name: str) -> Dict[str, object]:
             "method": "single_gene",
             "probability": 0.25,
             "allele_change": {"mode": "global_resample"},
+        }
+    local_change = {
+        "mode": "local_delta",
+        "position_delta": 0.1,
+        "color_delta": 25,
+        "alpha_delta": 20,
+    }
+    if name == "multigene_local_balanced":
+        return {
+            "method": "multigene_uniform",
+            "probability": 1.0 / triangle_count,
+            "allele_change": local_change,
+        }
+    if name == "single_local":
+        return {
+            "method": "single_gene",
+            "probability": 1.0,
+            "allele_change": local_change,
         }
     raise ValueError(f"unsupported mutation: {name}")
 
@@ -540,6 +606,12 @@ def _mapping(value: object) -> Mapping[str, object]:
     return value
 
 
+def _sequence(value: object) -> Sequence[object]:
+    if not isinstance(value, list):
+        raise ValueError("manifest variant collections must be lists")
+    return value
+
+
 def _one_selected(selected: Mapping[str, Sequence[str]], key: str) -> str:
     values = tuple(selected.get(key, ()))
     if len(values) != 1:
@@ -554,6 +626,27 @@ def _quantile(values: Sequence[float], fraction: float) -> float:
     lower = int(index)
     upper = min(lower + 1, len(values) - 1)
     return values[lower] + (values[upper] - values[lower]) * (index - lower)
+
+
+def _condition_ranks(
+    items: Sequence[Mapping[str, object]], metric: str, *, reverse: bool = False
+) -> Mapping[str, float]:
+    """Assign normalized average ranks, preserving ties."""
+
+    ordered = sorted(items, key=lambda item: float(item[metric]), reverse=reverse)
+    denominator = max(1, len(ordered) - 1)
+    ranks: Dict[str, float] = {}
+    start = 0
+    while start < len(ordered):
+        value = float(ordered[start][metric])
+        end = start + 1
+        while end < len(ordered) and float(ordered[end][metric]) == value:
+            end += 1
+        average_position = (start + end - 1) / 2
+        for item in ordered[start:end]:
+            ranks[str(item["condition"])] = average_position / denominator
+        start = end
+    return ranks
 
 
 def _log2(value: float) -> float:

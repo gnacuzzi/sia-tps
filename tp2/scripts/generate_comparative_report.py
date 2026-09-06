@@ -8,13 +8,22 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Dict, List, Mapping, Optional, Sequence
 
-from sia_tp2.study import read_records, summarize_records
+from sia_tp2.study import read_records, select_conditions, summarize_records
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = PROJECT_ROOT.parent / ".context" / "tp2-comparative-study"
+DEFAULT_OUTPUT = PROJECT_ROOT.parent / ".context" / "tp2-colombia-final-study"
 DEFAULT_RESULTS = PROJECT_ROOT / "experiments" / "results"
-PHASES = ("selection", "crossover", "mutation", "validation", "showcase")
+PHASES = (
+    "resolution",
+    "capacity",
+    "selection",
+    "crossover",
+    "mutation",
+    "survival",
+    "validation",
+    "showcase",
+)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -48,14 +57,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 def _header(completed: Mapping[str, Sequence[Mapping[str, str]]]) -> List[str]:
     phases = ", ".join(completed) if completed else "ninguna"
+    if all(phase in completed for phase in PHASES):
+        state = "El protocolo planificado se completó en su totalidad."
+    else:
+        state = (
+            "Las secciones pendientes se mantienen visibles para no presentar "
+            "conclusiones antes de tener las cinco semillas por condición."
+        )
     return [
         "# TP2 — Informe comparativo de operadores",
         "",
         "## Estado",
         "",
-        f"Fases con resultados completos: **{phases}**. Las secciones pendientes se "
-        "mantienen visibles para que el informe no presente conclusiones antes de tener "
-        "las cinco semillas por condición.",
+        f"Fases con resultados completos: **{phases}**. {state}",
         "",
         "## Protocolo controlado",
         "",
@@ -72,9 +86,12 @@ def _phase_section(
     results: Path,
 ) -> List[str]:
     title = {
+        "resolution": "Resolución de trabajo",
+        "capacity": "Cantidad de triángulos",
         "selection": "Selección de padres",
         "crossover": "Cruza",
-        "mutation": "Mutación y supervivencia",
+        "mutation": "Mutación",
+        "survival": "Supervivencia",
         "validation": "Validación final",
         "showcase": "Demostraciones visuales extendidas",
     }[phase]
@@ -133,6 +150,24 @@ def _representative_images(
 
 
 def _observation(phase: str, summaries: Sequence[Mapping[str, object]]) -> str:
+    if phase == "validation":
+        return (
+            "**Resultado:** la configuración elegida se evaluó sobre los tres niveles de "
+            "dificultad. Sus NMSE se interpretan dentro de cada objetivo, no como un ranking "
+            "directo entre imágenes."
+        )
+    if phase == "showcase":
+        return (
+            "**Resultado:** se extendió la semilla mediana de cada objetivo para obtener "
+            "evidencia visual representativa; estas tres ejecuciones no forman una nueva "
+            "comparación estadística."
+        )
+    if phase in ("crossover", "mutation", "survival"):
+        winner = select_conditions(summaries, phase=phase, count=1)[0]
+        return (
+            f"**Resultado:** `{winner}` obtuvo el mejor ranking agregado después de ordenar "
+            "las condiciones dentro de cada objetivo por calidad, AUC y diversidad."
+        )
     winner = min(summaries, key=lambda item: float(item["median_best_error"]))
     if phase == "selection":
         return (
@@ -148,9 +183,12 @@ def _observation(phase: str, summaries: Sequence[Mapping[str, object]]) -> str:
 
 def _pending_section(phase: str) -> List[str]:
     labels = {
+        "resolution": "Resolución de trabajo",
+        "capacity": "Cantidad de triángulos",
         "selection": "Selección de padres",
         "crossover": "Cruza",
-        "mutation": "Mutación y supervivencia",
+        "mutation": "Mutación",
+        "survival": "Supervivencia",
         "validation": "Validación final",
         "showcase": "Demostraciones visuales extendidas",
     }

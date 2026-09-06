@@ -18,7 +18,7 @@ from sia_tp2.study import (
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_OUTPUT = PROJECT_ROOT.parent / ".context" / "tp2-comparative-study"
+DEFAULT_OUTPUT = PROJECT_ROOT.parent / ".context" / "tp2-colombia-final-study"
 DEFAULT_PUBLISHED_OUTPUT = PROJECT_ROOT / "experiments" / "results"
 
 
@@ -27,7 +27,18 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         description="Summarize a TP2 comparative-study phase."
     )
     parser.add_argument(
-        "phase", choices=("profile", "selection", "crossover", "mutation", "validation", "showcase")
+        "phase",
+        choices=(
+            "profile",
+            "resolution",
+            "capacity",
+            "selection",
+            "crossover",
+            "mutation",
+            "survival",
+            "validation",
+            "showcase",
+        ),
     )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument(
@@ -77,17 +88,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 
 def _decisions(phase: str, summaries: Sequence[Mapping[str, object]]) -> Mapping[str, Sequence[str]]:
+    if phase in ("resolution", "capacity", "mutation", "survival"):
+        return {phase: select_conditions(summaries, phase=phase, count=1)}
     if phase == "selection":
         return {"selection": select_conditions(summaries, phase=phase, count=2)}
     if phase == "crossover":
         winner = select_conditions(summaries, phase=phase, count=1)[0]
         selector, crossover = winner.rsplit("__", 1)
         return {"selection": (selector,), "crossover": (crossover,)}
-    if phase == "mutation":
-        winner = select_conditions(summaries, phase=phase, count=1)[0]
-        mutation = "multigene_local" if winner.startswith("multigene") else "single_global"
-        survival = winner.rsplit("__", 1)[-1]
-        return {"mutation": (mutation,), "survival": (survival,)}
     return {}
 
 

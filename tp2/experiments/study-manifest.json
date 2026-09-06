@@ -1,42 +1,45 @@
 {
   "study_name": "tp2-comparative-operators",
   "seeds": [101, 202, 303, 404, 505],
+  "execution_seed": 20260906,
+  "resolution_variants": [32, 64],
+  "triangle_count_variants": [10, 25, 50],
   "base": {
     "selector": "tournament_2",
     "crossover": "uniform",
-    "mutation": "multigene_local",
+    "mutation": "multigene_local_balanced",
     "survival": "additive",
     "metrics_every": 25
   },
   "targets": {
     "flag": {
       "image": "assets/targets/01_simple.png",
-      "working_max_side": 32,
-      "triangle_count": 60,
-      "population_size": 100,
-      "offspring_count": 100,
+      "working_max_side": 64,
+      "triangle_count": 25,
+      "population_size": 50,
+      "offspring_count": 50,
       "max_generations": 1000,
       "showcase_generations": 3000,
       "checkpoint_every": null
     },
     "sign": {
       "image": "assets/targets/02_intermediate.png",
-      "working_max_side": 48,
-      "triangle_count": 60,
-      "population_size": 100,
-      "offspring_count": 100,
+      "working_max_side": 64,
+      "triangle_count": 100,
+      "population_size": 50,
+      "offspring_count": 50,
       "max_generations": 1000,
-      "showcase_generations": 2000,
+      "showcase_generations": 5000,
       "checkpoint_every": null
     },
     "icon": {
       "image": "assets/targets/03_complex.png",
-      "working_max_side": 48,
-      "triangle_count": 60,
-      "population_size": 100,
-      "offspring_count": 100,
+      "working_max_side": 64,
+      "triangle_count": 100,
+      "population_size": 50,
+      "offspring_count": 50,
       "max_generations": 1000,
-      "showcase_generations": 2000,
+      "showcase_generations": 5000,
       "checkpoint_every": null
     }
   },
@@ -70,7 +73,7 @@
   "hypotheses": {
     "selection": "La presión de selección define el compromiso entre velocidad de mejora y diversidad.",
     "crossover": "Uniforme favorece genes independientes; un punto puede preservar capas coadaptadas.",
-    "mutation": "Multigénica local refina; single-gene global explora y puede requerir recambio exclusivo.",
-    "survival": "Aditiva con elite preserva refinamientos; exclusiva se justifica sólo si mejora exploración difícil."
+    "mutation": "Con el mismo alcance local y una esperanza de un gen mutado, single-gene y multigénica pueden diferir por cómo distribuyen los cambios.",
+    "survival": "Aditiva con elite preserva refinamientos; exclusiva puede sostener más recambio, pero arriesga perder soluciones buenas."
   }
 }

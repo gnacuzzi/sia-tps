@@ -1,0 +1,76 @@
+{
+  "study_name": "tp2-comparative-operators",
+  "seeds": [101, 202, 303, 404, 505],
+  "base": {
+    "selector": "tournament_2",
+    "crossover": "uniform",
+    "mutation": "multigene_local",
+    "survival": "additive",
+    "metrics_every": 25
+  },
+  "targets": {
+    "flag": {
+      "image": "assets/targets/01_simple.png",
+      "working_max_side": 32,
+      "triangle_count": 60,
+      "population_size": 100,
+      "offspring_count": 100,
+      "max_generations": 1000,
+      "showcase_generations": 3000,
+      "checkpoint_every": null
+    },
+    "sign": {
+      "image": "assets/targets/02_intermediate.png",
+      "working_max_side": 48,
+      "triangle_count": 60,
+      "population_size": 100,
+      "offspring_count": 100,
+      "max_generations": 1000,
+      "showcase_generations": 2000,
+      "checkpoint_every": null
+    },
+    "icon": {
+      "image": "assets/targets/03_complex.png",
+      "working_max_side": 48,
+      "triangle_count": 60,
+      "population_size": 100,
+      "offspring_count": 100,
+      "max_generations": 1000,
+      "showcase_generations": 2000,
+      "checkpoint_every": null
+    }
+  },
+  "selection_variants": {
+    "elite": {"method": "elite", "params": {}},
+    "roulette": {"method": "roulette", "params": {}},
+    "universal": {"method": "universal", "params": {}},
+    "ranking": {"method": "ranking", "params": {}},
+    "boltzmann": {
+      "method": "boltzmann",
+      "params": {
+        "initial_temperature": 1.0,
+        "final_temperature": 0.05,
+        "decay_rate": 0.005
+      },
+      "profile_generation": 500
+    },
+    "tournament_2": {
+      "method": "tournament_deterministic",
+      "params": {"tournament_size": 2}
+    },
+    "tournament_5": {
+      "method": "tournament_deterministic",
+      "params": {"tournament_size": 5}
+    },
+    "probabilistic_0_6": {
+      "method": "tournament_probabilistic",
+      "params": {"threshold": 0.6}
+    }
+  },
+  "hypotheses": {
+    "selection": "La presión de selección define el compromiso entre velocidad de mejora y diversidad.",
+    "crossover": "Uniforme favorece genes independientes; un punto puede preservar capas coadaptadas.",
+    "mutation": "Multigénica local refina; single-gene global explora y puede requerir recambio exclusivo.",
+    "survival": "Aditiva con elite preserva refinamientos; exclusiva se justifica sólo si mejora exploración difícil."
+  }
+}

@@ -21,7 +21,7 @@ from sia_tp2.study import (
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_MANIFEST = PROJECT_ROOT / "experiments" / "study-manifest.json"
-DEFAULT_OUTPUT = PROJECT_ROOT.parent / ".context" / "tp2-comparative-study"
+DEFAULT_OUTPUT = PROJECT_ROOT.parent / ".context" / "tp2-colombia-final-study"
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
@@ -30,7 +30,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     )
     parser.add_argument(
         "phase",
-        choices=("profile", "selection", "crossover", "mutation", "validation", "showcase"),
+        choices=(
+            "profile",
+            "resolution",
+            "capacity",
+            "selection",
+            "crossover",
+            "mutation",
+            "survival",
+            "validation",
+            "showcase",
+        ),
     )
     parser.add_argument("--manifest", type=Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
@@ -93,6 +103,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         config_directory=config_directory,
         project_root=PROJECT_ROOT,
         resume=not args.no_resume,
+        order_seed=int(manifest.get("execution_seed", 0)),
         progress=print,
     )
     record_path = args.output / "records" / f"{args.phase}.csv"
