@@ -69,6 +69,24 @@ def test_resolution_and_capacity_change_only_the_studied_representation_factor(
     assert {spec.payload["input"]["working_max_side"] for spec in capacity} == {64}
 
 
+def test_capacity_can_compare_multiple_manifest_targets(tmp_path: Path) -> None:
+    manifest = dict(load_manifest(MANIFEST))
+    manifest["capacity_targets"] = ["sign", "icon"]
+    manifest["triangle_count_variants"] = [25, 50, 75, 100, 125]
+
+    specs = build_specs(manifest, phase="capacity", output_root=tmp_path)
+
+    assert len(specs) == 2 * 5 * 5
+    assert {spec.target for spec in specs} == {"sign", "icon"}
+    assert {spec.payload["representation"]["triangle_count"] for spec in specs} == {
+        25,
+        50,
+        75,
+        100,
+        125,
+    }
+
+
 def test_mutations_have_equal_local_scope_and_one_expected_changed_gene(
     tmp_path: Path,
 ) -> None:

@@ -51,7 +51,16 @@ def build_specs(
             for side in _sequence(manifest["resolution_variants"])
         )
     elif phase == "capacity":
-        target_names = ("flag",)
+        target_names = tuple(
+            str(name)
+            for name in _sequence(manifest.get("capacity_targets", ["flag"]))
+        )
+        unknown_targets = set(target_names) - set(targets)
+        if unknown_targets:
+            raise ValueError(
+                "capacity_targets contains unknown targets: "
+                + ", ".join(sorted(unknown_targets))
+            )
         conditions = tuple(
             (f"triangles_{count}", {"triangle_count": int(count)})
             for count in _sequence(manifest["triangle_count_variants"])
