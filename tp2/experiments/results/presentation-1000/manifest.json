@@ -1,0 +1,73 @@
+{
+  "study_name": "tp2-presentation-1000-generations",
+  "seeds": [101, 202, 303, 404, 505],
+  "execution_seed": 20260907,
+  "resolution_variants": [64],
+  "triangle_count_variants": [25],
+  "base": {
+    "selector": "tournament_5",
+    "crossover": "uniform",
+    "mutation": "single_local",
+    "survival": "additive",
+    "metrics_every": 25
+  },
+  "targets": {
+    "flag": {
+      "image": "assets/targets/01_simple.png",
+      "working_max_side": 64,
+      "triangle_count": 25,
+      "population_size": 50,
+      "offspring_count": 50,
+      "max_generations": 1000,
+      "showcase_generations": 1000,
+      "checkpoint_every": null
+    },
+    "sign": {
+      "image": "assets/targets/02_intermediate.png",
+      "working_max_side": 64,
+      "triangle_count": 25,
+      "population_size": 50,
+      "offspring_count": 50,
+      "max_generations": 1000,
+      "showcase_generations": 1000,
+      "checkpoint_every": null
+    },
+    "icon": {
+      "image": "assets/targets/03_complex.png",
+      "working_max_side": 64,
+      "triangle_count": 25,
+      "population_size": 50,
+      "offspring_count": 50,
+      "max_generations": 1000,
+      "showcase_generations": 1000,
+      "checkpoint_every": null
+    }
+  },
+  "selection_variants": {
+    "elite": {"method": "elite", "params": {}},
+    "roulette": {"method": "roulette", "params": {}},
+    "universal": {"method": "universal", "params": {}},
+    "ranking": {"method": "ranking", "params": {}},
+    "boltzmann": {
+      "method": "boltzmann",
+      "params": {
+        "initial_temperature": 1.0,
+        "final_temperature": 0.05,
+        "decay_rate": 0.005
+      },
+      "profile_generation": 500
+    },
+    "tournament_2": {
+      "method": "tournament_deterministic",
+      "params": {"tournament_size": 2}
+    },
+    "tournament_5": {
+      "method": "tournament_deterministic",
+      "params": {"tournament_size": 5}
+    },
+    "probabilistic_0_6": {
+      "method": "tournament_probabilistic",
+      "params": {"threshold": 0.6}
+    }
+  }
+}
