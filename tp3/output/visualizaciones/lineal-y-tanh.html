@@ -1,0 +1,72 @@
+<div id="sia-curves">
+<h3>Los pesos cambian la función que predice la neurona</h3>
+<div class="viz-controls">
+<label class="form-label" for="curve-w">Peso w: <output id="curve-w-val">0.30</output><input class="form-range" id="curve-w" type="range" min="-2" max="2" step="0.05" value="0.3"></label>
+<label class="form-label" for="curve-b">Bias b: <output id="curve-b-val">0.25</output><input class="form-range" id="curve-b" type="range" min="-1" max="1" step="0.05" value="0.25"></label>
+</div>
+<div class="viz-row text-small"><span>● Muestras objetivo</span><span>━ Predicción con tus pesos</span></div>
+<h3>Lineal: objetivo y = x</h3><div data-plot="linear"></div>
+<h3>No lineal: objetivo y = tanh(x)</h3><div data-plot="tanh"></div>
+<div id="curve-mse" class="tabular-nums" aria-live="polite"></div>
+<div class="tooltip" role="tooltip" hidden></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>
+(()=>{const root=document.getElementById('sia-curves');
+const c1='var(--viz-series-1)',c2='var(--viz-series-2)';
+const fmt=n=>(Math.abs(n)<1e-9?0:n).toFixed(2);
+function save(values){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{visual:root.id,...values},privateContent:null}).catch(()=>{});}
+function restore(){let s=window.openai?.widgetState?.modelContent;return s?.visual===root.id?s:{};}
+function plot(el,points,xlabel,ylabel,domainPoints=points){
+ const width=el.clientWidth||320,height=310,m={left:64,right:22,top:20,bottom:52};
+ const svg=d3.select(el).selectAll('svg').data([0]).join('svg').attr('viewBox',`0 0 ${width} ${height}`).attr('width','100%').attr('height',height).attr('role','img').attr('aria-label',`${xlabel} versus ${ylabel}`);svg.selectAll('*').remove();
+ const pad=(v)=>{let [a,b]=d3.extent(v);let p=(b-a)*.25||1;return[a-p,b+p];};
+ const x=d3.scaleLinear().domain(pad(domainPoints.map(d=>d.x))).range([m.left+12,width-m.right-12]);
+ const y=d3.scaleLinear().domain(pad(domainPoints.map(d=>d.y))).range([height-m.bottom-12,m.top+12]);
+ const left=m.left,right=width-m.right,top=m.top,bottom=height-m.bottom;
+ svg.append('rect').attr('data-chart-frame','').attr('x',left).attr('y',top).attr('width',right-left).attr('height',bottom-top).attr('fill','none').attr('stroke','var(--border)');
+ svg.append('g').attr('transform',`translate(0,${bottom})`).call(d3.axisBottom(x).ticks(width<400?3:5).tickSize(0).tickPadding(10));
+ svg.append('g').attr('transform',`translate(${left},0)`).call(d3.axisLeft(y).ticks(4).tickSize(0).tickPadding(8));
+ svg.selectAll('.domain').remove();svg.selectAll('text').attr('fill','var(--foreground)').style('font-size','12px');
+ svg.append('text').attr('class','axis-title').attr('data-axis','x').attr('x',(left+right)/2).attr('y',height-7).attr('text-anchor','middle').text(xlabel);
+ svg.append('text').attr('class','axis-title').attr('data-axis','y').attr('transform',`translate(15,${(top+bottom)/2}) rotate(-90)`).attr('text-anchor','middle').text(ylabel);
+ const id=root.id+'-'+el.dataset.plot;
+ svg.append('defs').append('clipPath').attr('id',id).append('rect').attr('x',left).attr('y',top).attr('width',right-left).attr('height',bottom-top);
+ const g=svg.append('g').attr('clip-path',`url(#${id})`);
+ for(const [ax,scale]of[['x',x],['y',y]])if(scale.domain()[0]<=0&&scale.domain()[1]>=0)g.append('line').attr('x1',ax==='x'?x(0):left).attr('x2',ax==='x'?x(0):right).attr('y1',ax==='y'?y(0):top).attr('y2',ax==='y'?y(0):bottom).attr('stroke','var(--border)');
+ return{svg,g,x,y,left,right,top,bottom};
+}
+function boundary(p,w1,w2,b){
+ const dx=p.x.domain(),dy=p.y.domain();let pts=[];
+ if(Math.abs(w2)>1e-9)for(const x of dx)pts.push({x,y:-(w1*x+b)/w2});
+ else if(Math.abs(w1)>1e-9)pts=dy.map(y=>({x:-b/w1,y}));
+ if(pts.length)p.g.append('path').datum(pts).attr('d',d3.line().x(d=>p.x(d.x)).y(d=>p.y(d.y))).attr('fill','none').attr('stroke','var(--foreground)').attr('stroke-width',2);
+}
+function dots(p,points,selected=-1){
+ points.forEach((d,i)=>{const x=p.x(d.x),y=p.y(d.y);
+ if(i===selected)p.g.append('circle').attr('cx',x).attr('cy',y).attr('r',15).attr('fill','none').attr('stroke','var(--foreground)');
+ p.g.append('path').attr('transform',`translate(${x},${y})`).attr('d',d3.symbol().type(d.target===1?d3.symbolCircle:d3.symbolSquare).size(105)()).attr('fill',d.target===1?c1:c2);
+ p.g.append('circle').attr('cx',x).attr('cy',y).attr('r',20).attr('fill','transparent').attr('data-chart-hit','').attr('data-tooltip',`${d.name}: clase ${d.target>0?'+1':'−1'}`);
+ if(d.label!==false)p.g.append('text').attr('x',x).attr('y',y-21).attr('text-anchor','middle').text(d.name);
+ });
+}
+function styleLabels(){root.querySelectorAll('svg text').forEach(t=>{t.style.fill='var(--foreground)';t.style.fontSize='12px';});}
+const wi=root.querySelector('#curve-w'),bi=root.querySelector('#curve-b'),state=restore();wi.value=state.w??.3;bi.value=state.b??.25;
+const xs=d3.range(50).map(i=>-1+2*i/49);const tip=root.querySelector('[role="tooltip"]');root.style.position='relative';let errors=[];
+function draw(){const w=+wi.value,b=+bi.value;errors=[];tip.hidden=true;
+ for(const kind of ['linear','tanh']){const fn=kind==='linear'?x=>x:Math.tanh;const data=xs.map(x=>({x,y:fn(x),pred:fn(w*x+b)}));let bounds=data.flatMap(d=>[{x:d.x,y:d.y},{x:d.x,y:d.pred}]);let p=plot(root.querySelector(`[data-plot="${kind}"]`),data,'Entrada x','Salida y',bounds);
+ p.g.selectAll('circle.sample').data(data).join('circle').attr('class','sample').attr('cx',d=>p.x(d.x)).attr('cy',d=>p.y(d.y)).attr('r',3).attr('fill',c2);
+ const curve=d3.range(151).map(i=>{let x=-1+2*i/150;return{x,y:fn(w*x+b)};});
+ p.g.append('path').datum(curve).attr('d',d3.line().x(d=>p.x(d.x)).y(d=>p.y(d.y))).attr('fill','none').attr('stroke',c1).attr('stroke-width',2.5);
+ const guide=p.g.append('line').attr('data-chart-hover-guide','').attr('y1',p.top).attr('y2',p.bottom).attr('stroke','var(--border)').style('display','none');
+ const marks=[c2,c1].map(c=>p.g.append('circle').attr('data-chart-hover-marker','').attr('r',5).attr('fill',c).style('display','none'));
+ function hover(event){const [px]=d3.pointer(event,p.svg.node());const x=Math.max(-1,Math.min(1,p.x.invert(px)));const gx=p.x(x);guide.attr('x1',gx).attr('x2',gx).style('display',null);[fn(x),fn(w*x+b)].forEach((v,i)=>marks[i].attr('cx',gx).attr('cy',p.y(v)).style('display',null));
+ tip.hidden=false;tip.textContent=`x: ${fmt(x)} · Objetivo: ${fmt(fn(x))} · Predicción: ${fmt(fn(w*x+b))}`;tip.style.position='absolute';tip.style.pointerEvents='none';tip.style.left='64px';tip.style.top=(p.svg.node().getBoundingClientRect().top-root.getBoundingClientRect().top+10)+'px';tip.style.maxWidth='calc(100% - 80px)';}
+ p.g.append('rect').attr('x',p.x(-1)).attr('y',p.top).attr('width',p.x(1)-p.x(-1)).attr('height',p.bottom-p.top).attr('fill','transparent').attr('data-chart-hit','').attr('data-chart-hover-overlay','cross-series').on('pointermove',hover).on('click',hover).on('pointerleave',()=>{tip.hidden=true;guide.style('display','none');marks.forEach(m=>m.style('display','none'));});
+ errors.push(d3.mean(data,d=>(d.y-d.pred)**2));}
+ styleLabels();root.querySelector('#curve-w-val').textContent=fmt(w);root.querySelector('#curve-b-val').textContent=fmt(b);root.querySelector('#curve-mse').textContent=`MSE lineal: ${errors[0].toFixed(4)} · MSE tanh: ${errors[1].toFixed(4)} · 50 muestras`;
+}
+[wi,bi].forEach(e=>e.addEventListener('input',()=>{draw();save({w:+wi.value,b:+bi.value});}));
+window.addEventListener('openai:set_globals',e=>{let s=e.detail?.globals?.widgetState?.modelContent;if(s?.visual===root.id){wi.value=s.w??.3;bi.value=s.b??.25;draw();}});
+new ResizeObserver(draw).observe(root.querySelector('[data-plot]'));draw();})();
+</script>

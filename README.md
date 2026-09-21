@@ -34,3 +34,11 @@ hiperparámetros.
 
 La implementación, las instrucciones de ejecución y el detalle de los
 resultados se encuentran en el [README del TP2](tp2/README.md).
+
+## TP3 — Perceptrón simple y multicapa
+
+El tercer trabajo implementa perceptrones simples y redes multicapa con NumPy.
+La base se valida con AND, ajuste de funciones y XOR en dos arquitecturas,
+incluyendo pruebas de gradientes y corridas reproducibles.
+
+La consigna, las fórmulas, los comandos y resultados están en el [README del TP3](tp3/README.md).

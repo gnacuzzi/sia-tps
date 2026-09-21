@@ -1,0 +1,71 @@
+<div id="sia-and">
+<h3>AND: aprender a separar cuatro puntos</h3>
+<div class="viz-row text-small"><span>● Clase +1: ambas entradas verdaderas</span><span>■ Clase −1: los otros casos</span></div>
+<div data-plot="and"></div>
+<label class="form-label" for="and-step">Muestras procesadas: <output id="and-count">0</output></label>
+<input class="form-range" id="and-step" type="range" min="0" max="8" step="1" value="0">
+<div class="viz-row"><button class="btn" id="and-prev" type="button">Anterior</button><button class="btn btn-primary" id="and-next" type="button">Siguiente muestra</button></div>
+<div id="and-values" class="tabular-nums" aria-live="polite"></div>
+<div id="and-detail" class="text-small"></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script>
+(()=>{const root=document.getElementById('sia-and');
+const c1='var(--viz-series-1)',c2='var(--viz-series-2)';
+const fmt=n=>(Math.abs(n)<1e-9?0:n).toFixed(2);
+function save(values){if(window.openai?.setWidgetState)window.openai.setWidgetState({modelContent:{visual:root.id,...values},privateContent:null}).catch(()=>{});}
+function restore(){let s=window.openai?.widgetState?.modelContent;return s?.visual===root.id?s:{};}
+function plot(el,points,xlabel,ylabel,domainPoints=points){
+ const width=el.clientWidth||320,height=310,m={left:64,right:22,top:20,bottom:52};
+ const svg=d3.select(el).selectAll('svg').data([0]).join('svg').attr('viewBox',`0 0 ${width} ${height}`).attr('width','100%').attr('height',height).attr('role','img').attr('aria-label',`${xlabel} versus ${ylabel}`);svg.selectAll('*').remove();
+ const pad=(v)=>{let [a,b]=d3.extent(v);let p=(b-a)*.25||1;return[a-p,b+p];};
+ const x=d3.scaleLinear().domain(pad(domainPoints.map(d=>d.x))).range([m.left+12,width-m.right-12]);
+ const y=d3.scaleLinear().domain(pad(domainPoints.map(d=>d.y))).range([height-m.bottom-12,m.top+12]);
+ const left=m.left,right=width-m.right,top=m.top,bottom=height-m.bottom;
+ svg.append('rect').attr('data-chart-frame','').attr('x',left).attr('y',top).attr('width',right-left).attr('height',bottom-top).attr('fill','none').attr('stroke','var(--border)');
+ svg.append('g').attr('transform',`translate(0,${bottom})`).call(d3.axisBottom(x).ticks(width<400?3:5).tickSize(0).tickPadding(10));
+ svg.append('g').attr('transform',`translate(${left},0)`).call(d3.axisLeft(y).ticks(4).tickSize(0).tickPadding(8));
+ svg.selectAll('.domain').remove();svg.selectAll('text').attr('fill','var(--foreground)').style('font-size','12px');
+ svg.append('text').attr('class','axis-title').attr('data-axis','x').attr('x',(left+right)/2).attr('y',height-7).attr('text-anchor','middle').text(xlabel);
+ svg.append('text').attr('class','axis-title').attr('data-axis','y').attr('transform',`translate(15,${(top+bottom)/2}) rotate(-90)`).attr('text-anchor','middle').text(ylabel);
+ const id=root.id+'-'+el.dataset.plot;
+ svg.append('defs').append('clipPath').attr('id',id).append('rect').attr('x',left).attr('y',top).attr('width',right-left).attr('height',bottom-top);
+ const g=svg.append('g').attr('clip-path',`url(#${id})`);
+ for(const [ax,scale]of[['x',x],['y',y]])if(scale.domain()[0]<=0&&scale.domain()[1]>=0)g.append('line').attr('x1',ax==='x'?x(0):left).attr('x2',ax==='x'?x(0):right).attr('y1',ax==='y'?y(0):top).attr('y2',ax==='y'?y(0):bottom).attr('stroke','var(--border)');
+ return{svg,g,x,y,left,right,top,bottom};
+}
+function boundary(p,w1,w2,b){
+ const dx=p.x.domain(),dy=p.y.domain();let pts=[];
+ if(Math.abs(w2)>1e-9)for(const x of dx)pts.push({x,y:-(w1*x+b)/w2});
+ else if(Math.abs(w1)>1e-9)pts=dy.map(y=>({x:-b/w1,y}));
+ if(pts.length)p.g.append('path').datum(pts).attr('d',d3.line().x(d=>p.x(d.x)).y(d=>p.y(d.y))).attr('fill','none').attr('stroke','var(--foreground)').attr('stroke-width',2);
+}
+function dots(p,points,selected=-1){
+ points.forEach((d,i)=>{const x=p.x(d.x),y=p.y(d.y);
+ if(i===selected)p.g.append('circle').attr('cx',x).attr('cy',y).attr('r',15).attr('fill','none').attr('stroke','var(--foreground)');
+ p.g.append('path').attr('transform',`translate(${x},${y})`).attr('d',d3.symbol().type(d.target===1?d3.symbolCircle:d3.symbolSquare).size(105)()).attr('fill',d.target===1?c1:c2);
+ p.g.append('circle').attr('cx',x).attr('cy',y).attr('r',20).attr('fill','transparent').attr('data-chart-hit','').attr('data-tooltip',`${d.name}: clase ${d.target>0?'+1':'−1'}`);
+ if(d.label!==false)p.g.append('text').attr('x',x).attr('y',y-21).attr('text-anchor','middle').text(d.name);
+ });
+}
+function styleLabels(){root.querySelectorAll('svg text').forEach(t=>{t.style.fill='var(--foreground)';t.style.fontSize='12px';});}
+const points=[{x:-1,y:1,target:-1,name:'(−1, 1)'},{x:1,y:-1,target:-1,name:'(1, −1)'},{x:-1,y:-1,target:-1,name:'(−1, −1)'},{x:1,y:1,target:1,name:'(1, 1)'}];
+let states=[{w1:0,w2:0,b:0}],last=states[0];
+for(let k=0;k<8;k++){let d=points[k%4],h=last.w1*d.x+last.w2*d.y+last.b,e=d.target-(h>=-1e-12?1:-1);last={w1:last.w1+.1*e*d.x,w2:last.w2+.1*e*d.y,b:last.b+.1*e,index:k%4,e,h};states.push(last);}
+const input=root.querySelector('input');input.value=Math.min(8,Math.max(0,restore().paso||0));
+function draw(){let k=+input.value,s=states[k],p=plot(root.querySelector('[data-plot]'),points,'Entrada x₁','Entrada x₂');
+ const n=45;const xd=p.x.domain(),yd=p.y.domain(),dx=(xd[1]-xd[0])/n,dy=(yd[1]-yd[0])/n;
+ const grid=p.g.insert('g',':first-child');
+ for(let i=0;i<n;i++)for(let j=0;j<n;j++){let x=xd[0]+i*dx,y=yd[0]+j*dy;grid.append('rect').attr('x',p.x(x)).attr('y',p.y(y+dy)).attr('width',p.x(x+dx)-p.x(x)+.5).attr('height',p.y(y)-p.y(y+dy)+.5).attr('fill',s.w1*(x+dx/2)+s.w2*(y+dy/2)+s.b>=-1e-12?c1:c2).attr('opacity',.07);}
+ boundary(p,s.w1,s.w2,s.b);dots(p,points,k?s.index:-1);styleLabels();
+ let correct=points.filter(d=>(s.w1*d.x+s.w2*d.y+s.b>=-1e-12?1:-1)===d.target).length;
+ root.querySelector('#and-count').textContent=k+' / 8';
+ root.querySelector('#and-values').textContent=`w₁: ${fmt(s.w1)} · w₂: ${fmt(s.w2)} · b: ${fmt(s.b)} · Aciertos: ${correct}/4`;
+ root.querySelector('#and-detail').textContent=k?`Muestra ${points[s.index].name} · h previo: ${fmt(s.h)} · error: ${s.e} · ${s.e?'Pesos actualizados':'Sin cambio'}`:'Inicio: todos los pesos en cero; salida +1 para los cuatro puntos.';
+ root.querySelector('#and-prev').disabled=k===0;root.querySelector('#and-next').disabled=k===8;
+}
+function change(){draw();save({paso:+input.value});}
+input.addEventListener('input',change);root.querySelector('#and-prev').onclick=()=>{input.value=+input.value-1;change();};root.querySelector('#and-next').onclick=()=>{input.value=+input.value+1;change();};
+window.addEventListener('openai:set_globals',e=>{let s=e.detail?.globals?.widgetState?.modelContent;if(s?.visual===root.id){input.value=Math.min(8,Math.max(0,s.paso||0));draw();}});
+new ResizeObserver(draw).observe(root.querySelector('[data-plot]'));draw();})();
+</script>
