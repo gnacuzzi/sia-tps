@@ -1,0 +1,7 @@
+level,algorithm,heuristic,runs,successes,failures,cutoffs,cutoff_reasons,solution_cost_min,solution_cost_median,solution_moves_median,solution_pushes_median,expanded_nodes_median,frontier_size_at_end_median,max_frontier_size_median,elapsed_seconds_median,elapsed_seconds_min,elapsed_seconds_max,initial_heuristic_median,heuristic_evaluations_median,heuristic_elapsed_seconds_median,heuristic_seconds_per_evaluation_median
+levels/level_03.txt,astar,minimum_matching_manhattan,10,10,0,0,,43.0,43.0,43.0,10.0,43039.0,210.0,3515.0,0.994052625,0.960804458,1.048148334,4.0,43260.0,0.7006019565,1.6195144500000002e-05
+levels/level_03.txt,astar,shortest_push_access,10,10,0,0,,43.0,43.0,43.0,10.0,41018.0,844.0,4055.0,0.775091229,0.7563435,0.904032209,0.0,41941.0,0.5006224265,1.1936349e-05
+levels/level_03.txt,bfs,null,10,10,0,0,,43.0,43.0,43.0,10.0,43709.0,71.0,2898.0,0.231289208,0.226014667,0.263346959,,0.0,0.0,
+levels/level_03.txt,dfs,null,10,10,0,0,,51.0,51.0,51.0,14.0,43449.0,19.0,103.0,0.233815125,0.223830375,0.256804041,,0.0,0.0,
+levels/level_03.txt,greedy,minimum_matching_manhattan,10,10,0,0,,47.0,47.0,47.0,10.0,4344.0,1285.0,1291.0,0.1190385,0.11619425,0.120027292,4.0,5630.0,0.0920163085,1.6343927e-05
+levels/level_03.txt,greedy,shortest_push_access,10,10,0,0,,83.0,83.0,83.0,22.0,34565.0,5793.0,9151.0,0.695720854,0.677846042,0.735127666,0.0,40359.0,0.46822731149999997,1.1601559e-05
