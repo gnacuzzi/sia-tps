@@ -221,3 +221,6 @@ __marimo__/
 tmp/
 .DS_Store
 output/
+
+# Transcripciones de clase: material local, no publicar.
+/tp3/docs/transcripciones/
