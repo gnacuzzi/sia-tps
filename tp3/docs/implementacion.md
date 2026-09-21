@@ -1,0 +1,149 @@
+# Implementación reutilizable y validación
+
+## Qué resuelve cada archivo
+
+| Archivo | Responsabilidad |
+|---|---|
+| `src/sia_tp3/models.py` | Perceptrón simple, red multicapa, activaciones, forward, Rosenblatt, backpropagation y guardado/carga |
+| `src/sia_tp3/training.py` | Entrenamiento online y métricas al terminar cada época, sin conocer el dataset |
+| `src/sia_tp3/validation.py` | Datos sintéticos de la consigna, configuración y evidencia de las corridas |
+| `configs/validation.json` | Arquitecturas, inicialización, semillas, tasas, orden y criterios de aceptación |
+| `scripts/plot_validation.py` | Gráficos a partir de resultados guardados, sin volver a entrenar |
+| `tests/` | Cuentas manuales, gradientes numéricos, persistencia, determinismo y aprendizaje |
+
+El código de AND/XOR no está dentro de las neuronas: los modelos reciben matrices.
+Para fraude y dígitos se reutilizan `Perceptron`, `MultilayerPerceptron` y `fit`.
+Lo que cambiará será la preparación de los datos, la arquitectura, los
+hiperparámetros y el protocolo de evaluación.
+
+## Contrato de los datos
+
+- `X`: matriz de forma `(cantidad_de_muestras, cantidad_de_entradas)`.
+- `y`: matriz de forma `(cantidad_de_muestras, cantidad_de_salidas)`, incluso
+  cuando haya una sola salida. Se rechazan vectores 1D para evitar broadcasting
+  que podría producir errores silenciosos.
+- Pesos por capa: `(neuronas_destino, neuronas_origen)`.
+- Bias por capa: `(neuronas_destino,)`.
+- `predict(X)` devuelve valores continuos para identidad, tanh y logística;
+  solo el escalón devuelve clases directamente.
+- El motor no normaliza, divide ni modifica los datasets recibidos. Esas
+  decisiones pertenecen a cada ejercicio y se tomarán sobre su conjunto de desarrollo.
+
+Se usa `float64` y operaciones matriciales de NumPy. La red admite cualquier
+cantidad de entradas, capas y salidas. Se verificó también el cálculo de
+gradientes de una red con varias salidas y la forma de salida de una red
+`[784, 8, 10]`; eso no equivale a haber entrenado el clasificador de dígitos.
+
+## Modelos y reglas
+
+`Perceptron(input_size, activation=...)` representa una sola neurona.
+`MultilayerPerceptron(architecture, activations=...)` recibe una activación
+por capa de pesos. El perceptrón simple reutiliza el mismo cálculo matricial
+como caso de una capa; no hay fórmulas diferentes en el runner de validación.
+
+| Activación | Predicción | Derivada |
+|---|---|---|
+| `step` | +1 si h ≥ 0; −1 si h < 0 | No se deriva: actualización de Rosenblatt |
+| `linear` | h | 1 |
+| `tanh` | tanh(βh) | β(1 − salida²) |
+| `logistic` | 1 / (1 + exp(−2βh)) | 2β · salida · (1 − salida) |
+
+La logística respeta la parametrización de clase 10.2. Está disponible como
+opción reutilizable para probabilidades, pero no se seleccionó todavía el
+modelo del ejercicio de fraude. Su cálculo evita overflow y su derivada está
+contrastada numéricamente. No se agregaron funciones de activación ajenas a
+los materiales recibidos.
+
+El escalón solo se permite en una neurona simple; usarlo en una capa oculta
+impediría entrenar mediante las derivadas de backpropagation.
+
+Para los modelos diferenciables, `loss` es:
+
+$$
+L=\frac{1}{2N}\sum_{\mu=1}^N\sum_{j=1}^{K}
+(\hat y_j^{(\mu)}-y_j^{(\mu)})^2.
+$$
+
+`gradients` devuelve las derivadas de **esa** función, calculadas antes de
+modificar los pesos. El código define delta con el signo del gradiente
+`(obtenido − esperado) · derivada` y luego **resta** `eta * gradiente`.
+Es algebraicamente equivalente al apunte, que usa el signo de corrección
+`(esperado − obtenido)` y **suma** el ajuste.
+
+El MSE registrado promedia sobre muestras y salidas: `MSE = 2L/K`.
+En la validación todas las redes tienen una salida, por lo que `MSE = 2L`.
+El gradiente de una muestra se usa para cada actualización online; calcular
+un gradiente sobre varias muestras también sirve para comprobarlo numéricamente,
+pero `fit` por ahora entrena solamente online.
+
+## Entrenamiento y reproducibilidad
+
+Los pesos se inicializan uniformemente en `[-init_scale, init_scale]` y los
+bias en cero. Los pesos de distintas neuronas son aleatorios para romper la
+simetría; no se asigna la solución conocida de AND ni de XOR al entrenar.
+Los ejemplos manuales con todos los parámetros nulos se mantienen en tests
+como comprobación separada de una sola actualización.
+
+La inicialización y el orden usan generadores locales de NumPy, con semilla
+explícita. Misma configuración, semilla y entorno produce la misma trayectoria.
+Se documentan las versiones de Python y NumPy; no se promete igualdad de bits
+entre versiones o plataformas diferentes.
+
+Se registra la época cero y se evalúa todo el conjunto con parámetros fijos
+al terminar cada época. No se mezclan predicciones de distintos momentos del
+entrenamiento para calcular accuracy o MSE.
+
+Criterios de aceptación, fijados antes de la corrida:
+
+- AND: MSE = 0 y cuatro clases correctas.
+- Lineal y tanh: MSE ≤ 10⁻⁶ sobre las 50 muestras.
+- XOR, ambas arquitecturas: MSE ≤ 10⁻³ y cuatro clases correctas.
+- Cada caso tiene un máximo de épocas. Alcanzarlo sin cumplir los criterios
+  produce `converged=false`, y el comando termina con código 1 si algún caso falla.
+
+En AND se mantiene el orden de la consigna. Los modelos diferenciables
+barajan las mismas muestras al comenzar cada época; la semilla permite
+repetir exactamente ese orden en el mismo entorno.
+
+## Configuración y resultados
+
+`validation.json` contiene solo cuatro campos globales: `seeds`,
+`sample_count`, `input_interval` y `cases`. Cada caso declara todos los campos
+que aparecen en el archivo de referencia; se rechazan claves desconocidas,
+nombres duplicados, dimensiones incompatibles y valores de entrenamiento inválidos.
+Las rutas de CLI son relativas al directorio desde el que se invoca el comando.
+
+Cada corrida conserva:
+
+- `config.json` y `environment.json`.
+- `summary.csv` y `summary.json`, con aprobación/fallo por caso y semilla.
+- Por caso/semilla: `initial.npz`, `model.npz`, `data.npz`, `history.csv` y
+  `predictions.csv`.
+
+El CLI exige una carpeta nueva o vacía para no pisar corridas anteriores.
+El modelo se guarda sin pickle y puede recargarse para predecir o seguir
+entrenando. Guarda parámetros y arquitectura, no el estado del generador de
+barajado ni la época: continuar con `fit` inicia un nuevo tramo y no promete
+reproducir una corrida ininterrumpida.
+
+## Ejemplo de uso independiente de la validación
+
+```python
+import numpy as np
+from sia_tp3 import MultilayerPerceptron, fit
+
+X = np.array([[-1, 1], [1, -1], [-1, -1], [1, 1]], dtype=float)
+y = np.array([[1], [1], [-1], [-1]], dtype=float)
+model = MultilayerPerceptron([2, 2, 1], activations=['tanh', 'tanh'], seed=0)
+history = fit(model, X, y, learning_rate=0.03, max_epochs=10000,
+              target_mse=0.001, shuffle=True, seed=0,
+              require_bipolar_accuracy=True)
+print(model.predict(X))
+model.save('xor.npz')
+restored = MultilayerPerceptron.load('xor.npz')
+```
+
+Las arquitecturas y técnicas base corresponden a clases 10.1, 10.2 y 11.
+Los optimizadores adicionales, mini-batch, preprocesamiento, particiones y
+métricas de los ejercicios obligatorios siguen pendientes. No se utilizó
+`digits_test.csv` para ninguna elección de este desarrollo.

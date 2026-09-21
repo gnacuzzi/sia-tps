@@ -1,0 +1,105 @@
+{
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "sample_count": 50,
+  "input_interval": [
+    -1.0,
+    1.0
+  ],
+  "cases": [
+    {
+      "name": "and",
+      "dataset": "and",
+      "architecture": [
+        2,
+        1
+      ],
+      "activations": [
+        "step"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "learning_rate": 0.1,
+      "max_epochs": 100,
+      "target_mse": 0.0,
+      "shuffle": false
+    },
+    {
+      "name": "linear",
+      "dataset": "linear",
+      "architecture": [
+        1,
+        1
+      ],
+      "activations": [
+        "linear"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "learning_rate": 0.05,
+      "max_epochs": 1000,
+      "target_mse": 1e-06,
+      "shuffle": true
+    },
+    {
+      "name": "tanh",
+      "dataset": "tanh",
+      "architecture": [
+        1,
+        1
+      ],
+      "activations": [
+        "tanh"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "learning_rate": 0.05,
+      "max_epochs": 1000,
+      "target_mse": 1e-06,
+      "shuffle": true
+    },
+    {
+      "name": "xor-2-2-1",
+      "dataset": "xor",
+      "architecture": [
+        2,
+        2,
+        1
+      ],
+      "activations": [
+        "tanh",
+        "tanh"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "learning_rate": 0.03,
+      "max_epochs": 10000,
+      "target_mse": 0.001,
+      "shuffle": true
+    },
+    {
+      "name": "xor-2-3-2-1",
+      "dataset": "xor",
+      "architecture": [
+        2,
+        3,
+        2,
+        1
+      ],
+      "activations": [
+        "tanh",
+        "tanh",
+        "tanh"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "learning_rate": 0.1,
+      "max_epochs": 10000,
+      "target_mse": 0.001,
+      "shuffle": true
+    }
+  ]
+}
