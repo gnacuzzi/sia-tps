@@ -18,7 +18,8 @@
     "matplotlib": "3.10.8",
     "sha256": {
       "fraud_dataset.csv": "0e0d2fdf7e6c294b7b8ea2e80452a270f1fad1de02edee9cc25f6eec2ab4c707",
-      "digits.csv": "11271dbc12a3a8db967f6c2708e55ae1918d69186e81d91c53c24e305fc5d3f4"
+      "digits.csv": "11271dbc12a3a8db967f6c2708e55ae1918d69186e81d91c53c24e305fc5d3f4",
+      "digits_test.csv": "56e2ca2d55a7a646fa8883a0c85b8138bbc2b4536438c60cb6bcab02f57f8e55"
     }
   },
   "fraud": {
@@ -356,6 +357,11 @@
       "duplicate_input_rows": 0,
       "extra_input_copies": 0,
       "conflicting_target_groups": 0
+    },
+    "train_test_overlap": {
+      "shared_input_groups": 0,
+      "training_rows_in_shared_groups": 0,
+      "test_rows_in_shared_groups": 0
     }
   },
   "digits": {
@@ -449,6 +455,11 @@
       "duplicate_input_rows": 0,
       "extra_input_copies": 0,
       "conflicting_target_groups": 0
+    },
+    "train_test_overlap": {
+      "shared_input_groups": 0,
+      "training_rows_in_shared_groups": 0,
+      "test_rows_in_shared_groups": 0
     }
   }
 }

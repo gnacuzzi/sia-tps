@@ -4,7 +4,8 @@ Generado por `scripts/analyze_training.py`. No se entrenan modelos ni se transfo
 
 - Fraude: 6000 filas de training; test_fraction=0.2, seed=0.
 - Dígitos: 12449 imágenes de 784 píxeles.
-- No se abren `digits_test.csv` ni `more_digits.csv`.
+- `digits_test.csv` se abre sólo para comparar imágenes exactas; no se interpretan sus etiquetas.
+- No se abre `more_digits.csv`.
 - En fraude se leen las etiquetas para reproducir el split, pero sólo se analizan filas de training.
 - Estadísticos sobre valores finitos; faltantes/NaN e infinitos se cuentan por separado.
 - Desvío descriptivo con ddof=0; cuartiles/percentiles con interpolación lineal de NumPy.
@@ -40,6 +41,8 @@ Generado por `scripts/analyze_training.py`. No se entrenan modelos ni se transfo
 
 Entradas duplicadas: 0 grupos, 0 filas involucradas,
 0 copias adicionales y 0 grupos con objetivos distintos.
+Solapamiento training/test: 0 grupos exactos;
+0 filas de training y 0 de test involucradas.
 
 ## Dígitos: balance y duplicados
 
@@ -58,6 +61,8 @@ Entradas duplicadas: 0 grupos, 0 filas involucradas,
 
 Entradas duplicadas: 0 grupos, 0 filas involucradas,
 0 copias adicionales y 0 grupos con objetivos distintos.
+Solapamiento training/test: 0 grupos exactos;
+0 filas de training y 0 de test involucradas.
 
 Píxeles constantes: 97; constantes en cero: 97.
 Clases ausentes en training: [8]. Píxeles en cero: 81.27%.

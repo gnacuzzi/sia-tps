@@ -6,8 +6,8 @@ contiene ejemplos de la clase 8** y tiene sólo **271 ejemplos de la clase 5**.
 En fraude hay diferencias grandes de escala entre entradas. Estos resultados
 orientan las decisiones siguientes; todavía no se aplicó preprocesamiento.
 
-Las siete decisiones fueron acordadas antes de ejecutar el análisis y están
-en [decisiones.md](decisiones.md#punto-3-análisis-de-training-decisiones-acordadas).
+Los criterios utilizados y las dos decisiones confirmadas durante la revisión
+están en [decisiones.md](decisiones.md#punto-3-análisis-de-training).
 El [resumen reproducible](eda-training/resumen.md) reúne tablas y los seis
 gráficos; [summary.json](eda-training/summary.json) conserva cifras completas,
 configuración, versiones y hashes de los archivos fuente.
@@ -20,8 +20,10 @@ configuración, versiones y hashes de los archivos fuente.
   gráficos y conteos usan sólo las filas de training; las filas elegidas están
   en [fraud-training-rows.csv](eda-training/fraud-training-rows.csv), con numeración
   física del CSV (encabezado = fila 1).
-- Dígitos: se abre solamente `digits.csv`; **no se abren `digits_test.csv` ni
-  `more_digits.csv`**. No se conoce su balance a partir de este análisis.
+- Dígitos: todas las estadísticas y figuras usan solamente `digits.csv`.
+  De `digits_test.csv` se leen exclusivamente los vectores de imagen para
+  detectar coincidencias exactas con training; no se interpretan sus etiquetas
+  ni se calculan distribuciones o métricas. No se abre `more_digits.csv`.
 - `flagged_fraud` se utiliza sólo para el reparto y el conteo descriptivo de
   clases autorizado. No participa de las entradas, del objetivo BigModel ni
   de la matriz de correlaciones.
@@ -49,6 +51,10 @@ constantes ni entradas duplicadas exactas. Tampoco se detectaron alertas en
 los chequeos semánticos implementados: valores negativos, cantidades o
 resoluciones no positivas, fracciones en columnas documentadas como enteras,
 o probabilidades fuera de `[0,1]`.
+
+No hay vectores de entrada exactamente repetidos entre las 6000 filas de
+training y las 1500 de test. Este control no utilizó el objetivo BigModel ni
+la etiqueta real de las filas de test.
 
 Esto verifica esos controles concretos, no garantiza que cada transacción
 sea correcta ni que las etiquetas reflejen perfectamente el fraude real.
@@ -130,6 +136,10 @@ finitos. No hay imágenes duplicadas exactas, completamente vacías ni de
 intensidad uniforme. El loader valida estructura y finitud antes del análisis;
 ante una fila inválida abortaría, sin omitirla silenciosamente.
 
+Tampoco hay imágenes exactamente repetidas entre `digits.csv` y
+`digits_test.csv`. Para comprobarlo sólo se compararon los 784 píxeles; las
+etiquetas de test no se interpretaron.
+
 Los píxeles **ya vienen en `[0,1]`**, con 256 valores distintos. No se aplicó
 esa transformación en este trabajo ni se presupone cómo fue realizada.
 Volver a dividirlos por 255 reduciría innecesariamente la escala. La decisión
@@ -154,15 +164,17 @@ una lectura independiente de la columna `label` del CSV original.
 **La red no dispondrá de ejemplos positivos del 8 para aprender esa clase.**
 Esto limita la cobertura del conjunto de entrenamiento y no se resuelve por
 sí solo aumentando épocas o neuronas. No permite calcular ahora la accuracy
-de test ni afirmar cuánto mejorará al agregar datos: no se inspeccionaron
-test ni `more_digits.csv`.
+de test ni afirmar cuánto mejorará al agregar datos: de test sólo se hizo el
+control de inputs repetidos, sin interpretar etiquetas ni métricas; no se
+inspeccionó `more_digits.csv`.
 
 ### Píxeles constantes y límite de la regla IQR
 
 Hay **97 de 784 píxeles constantes**, todos en cero (12,37 %), principalmente
-en los bordes. Son columnas sin variación en este training; todavía se
-conservan las 784 entradas. Quitarlas exigiría mantener la misma selección
-de columnas en cualquier evaluación posterior y no es una decisión tomada.
+en los bordes. Son columnas sin variación en este training. Se decidió
+conservar las 784 entradas: quitarlas exigiría mantener la misma selección
+de columnas en cualquier evaluación posterior y aún no hay evidencia de que
+esa reducción mejore el modelo.
 
 El 81,27 % de todos los valores de píxel es cero. Por eso los cuartiles globales
 Q1 y Q3 son ambos cero: la regla IQR marcaría los **1828063 píxeles no nulos**
@@ -174,18 +186,20 @@ Los mapas de media/desvío/constantes y los ejemplos por clase están en el
 resumen generado. Se muestran hasta tres ejemplos por clase, elegidos con
 semilla 0, y sus filas quedan registradas. La clase 8 aparece como «Sin muestras».
 
-## Qué queda para decidir en el punto 4
+## Decisiones resultantes y pendientes del punto 4
 
-| Evidencia | Alternativas para discutir; todavía no aplicadas |
+| Evidencia | Decisión o pendiente |
 |---|---|
 | Escalas muy diferentes en fraude | Estandarización o min-max, según la activación y la comparación que se acuerde; parámetros calculados sólo con training |
 | Píxeles ya en `[0,1]` | Mantener su rango o justificar otro; evitar una segunda división por 255 |
-| Candidatos IQR plausibles y sin errores semánticos detectados | Conservarlos como referencia; cualquier exclusión necesita evidencia adicional |
-| 97 píxeles constantes y variables tabulares con poca asociación lineal | Mantener las entradas actuales como referencia; no confundir este hallazgo con una selección de variables ya aprobada |
+| Candidatos IQR plausibles y sin errores semánticos detectados | **Decisión:** conservarlos; no hay evidencia para eliminar filas |
+| 97 píxeles constantes y variables tabulares con poca asociación lineal | **Decisión:** mantener las nueve variables de fraude y los 784 píxeles como referencia inicial |
 | Ausencia del 8 y escasez del 5 | Documentar el límite y estudiar resultados por clase al implementar métricas; el análisis de datos adicionales queda para su etapa |
 
-No se imputaron, eliminaron, balancearon ni transformaron datos. No se eligió
-modelo, activación, umbral, optimizador ni regularización.
+No se imputaron, eliminaron, balancearon ni transformaron datos. La decisión
+de conservar todas las entradas puede revisarse después sólo si los
+experimentos aportan nueva evidencia. No se eligió modelo, activación, umbral,
+optimizador ni regularización.
 
 ## Reproducción y controles
 
@@ -200,13 +214,14 @@ pytest -q
 El destino debe ser una carpeta nueva o vacía. Para reproducir la evidencia
 versionada se usaron los valores por defecto (`--seed 0 --test-fraction 0.2`).
 Los CSV incluyen estadísticos por cada uno de los 784 píxeles, verificaciones
-semánticas, correlaciones, balances y filas seleccionadas. No se usan librerías
-de redes neuronales ni se altera el motor de entrenamiento.
+semánticas, correlaciones, balances, filas seleccionadas y el control de
+solapamiento exacto entre particiones. No se usan librerías de redes neuronales
+ni se altera el motor de entrenamiento.
 
 Los controles automatizados cubren el cálculo de cuartiles/faltantes, duplicados
-con objetivos diferentes, el reparto de fraude sin convertir las entradas de
-test y la lectura exclusiva de `digits.csv`. La suite completa aprobó **42 tests**.
-Dos ejecuciones generaron CSV, JSON y resumen Markdown idénticos; también se
+con objetivos diferentes y el uso exclusivo de los inputs —sin etiquetas— en
+el control de solapamiento entre training y test. Dos ejecuciones generaron
+CSV, JSON y resumen Markdown idénticos; también se
 verificó que los archivos fuente permanecieran intactos. Se inspeccionaron los
 seis gráficos. Fuentes de criterio: consigna
 página 4 y clase 12.2, páginas 32–35 y transcripción sobre EDA y desbalance.

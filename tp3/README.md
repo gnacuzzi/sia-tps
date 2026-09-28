@@ -33,8 +33,9 @@ Estos ejercicios **no se presentan**, según la consigna: sirven para verificar
 las herramientas antes de trabajar con los datos de los ejercicios obligatorios.
 Los ejemplos del apunte y de la guía interactiva son cálculos didácticos.
 Las corridas reales están en el informe de resultados: **15/15 aprobadas**
-con la configuración final y tres semillas, además de **42 tests aprobados**
-(31 del motor/validación, 7 de carga de datos y 4 del EDA; con el extra `plot`).
+con la configuración final y tres semillas. También hay pruebas automatizadas
+para el motor, la carga de datos y el EDA, incluido el control de solapamiento
+exacto entre las entradas de training y test (con el extra `plot`).
 También se conservan los fallos de la configuración inicial de XOR.
 
 ## Instalar y ejecutar
@@ -86,7 +87,9 @@ python scripts/analyze_training.py --output output/eda-nueva
 
 Requiere el extra `plot` y una carpeta de salida nueva o vacía. Genera tablas
 CSV, seis gráficos, un resumen Markdown y configuración/versiones/hashes en
-JSON. Usa el split vigente de fraude (test 20 %, semilla 0) y sólo `digits.csv`;
-no abre el test externo ni los datos adicionales. Mantiene training/test sin
-validation y no aplica preprocesamiento. La evidencia versionada está en
+JSON. Usa el split vigente de fraude (test 20 %, semilla 0) y `digits.csv` para
+los estadísticos. Sólo lee las entradas de test para comprobar duplicados
+exactos entre particiones; no usa sus etiquetas, distribuciones ni métricas, y
+no abre los datos adicionales. Mantiene training/test sin validation y no
+aplica preprocesamiento. La evidencia versionada está en
 [`docs/eda-training/`](docs/eda-training/resumen.md).

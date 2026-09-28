@@ -1,6 +1,7 @@
 """EDA reproducible de training; conserva los datos y no evalúa modelos."""
 
 import argparse
+import ast
 import csv
 import hashlib
 import json
@@ -22,9 +23,10 @@ INTEGER_FEATURES = {"timestamp", "quantity_purchased", "account_age_days",
                     "device_screen_resolution", "items_viewed_before_purchase"}
 
 
-def write_csv(path, rows):
+def write_csv(path, rows, *, lineterminator="\r\n"):
     with Path(path).open("w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(file, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(file, fieldnames=list(rows[0]),
+                                lineterminator=lineterminator)
         writer.writeheader()
         writer.writerows(rows)
 
@@ -52,12 +54,8 @@ def describe(name, values, unit):
     return result
 
 
-def fraud_training(path, test_fraction=0.2, seed=0):
-    """Reutilizar el split vigente y convertir sólo las entradas de training.
-
-    La etiqueta real completa se lee únicamente para reproducir la
-    estratificación. Sus valores de training se devuelven sólo para conteos.
-    """
+def _fraud_rows_and_indices(path, test_fraction, seed):
+    """Leer las etiquetas necesarias para reproducir el split vigente."""
     with Path(path).open(newline="", encoding="utf-8") as file:
         reader = csv.DictReader(file)
         expected = set(FRAUD_FEATURES) | {FRAUD_TARGET, FRAUD_LABEL}
@@ -67,11 +65,54 @@ def fraud_training(path, test_fraction=0.2, seed=0):
     labels = np.array([int(row[FRAUD_LABEL]) for row in rows])
     if not np.isin(labels, [0, 1]).all():
         raise ValueError("flagged_fraud debe contener 0 o 1 para reproducir el split")
-    train, _ = _stratified_indices(labels, test_fraction, seed)
+    train, test = _stratified_indices(labels, test_fraction, seed)
+    return rows, labels, train, test
+
+
+def fraud_training(path, test_fraction=0.2, seed=0):
+    """Reutilizar el split vigente y convertir sólo las entradas de training.
+
+    La etiqueta real completa se lee únicamente para reproducir la
+    estratificación. Sus valores de training se devuelven sólo para conteos.
+    """
+    rows, labels, train, _ = _fraud_rows_and_indices(path, test_fraction, seed)
     names = list(FRAUD_FEATURES) + [FRAUD_TARGET]
     values = np.array([[float(rows[i][name]) if rows[i][name].strip() else np.nan
                         for name in names] for i in train], dtype=np.float64)
     return train, values, labels[train]
+
+
+def fraud_test_inputs(path, test_fraction=0.2, seed=0):
+    """Convertir sólo las entradas de test para comprobar solapamiento exacto."""
+    rows, _, _, test = _fraud_rows_and_indices(path, test_fraction, seed)
+    try:
+        values = np.asarray([[float(rows[i][name]) for name in FRAUD_FEATURES]
+                             for i in test], dtype=np.float64)
+    except (TypeError, ValueError) as error:
+        raise ValueError("test de fraude contiene entradas no numéricas") from error
+    if not np.isfinite(values).all():
+        raise ValueError("test de fraude contiene entradas no finitas")
+    return values
+
+
+def digit_test_inputs(path):
+    """Leer imágenes de test sin interpretar ni devolver sus etiquetas."""
+    images = []
+    with Path(path).open(newline="", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        if set(reader.fieldnames or []) != {"label", "image"}:
+            raise ValueError("columnas inesperadas en test de dígitos")
+        for row_number, row in enumerate(reader, start=2):
+            try:
+                image = np.asarray(ast.literal_eval(row["image"]), dtype=np.float32)
+            except (SyntaxError, TypeError, ValueError) as error:
+                raise ValueError(f"imagen de test inválida en la fila {row_number}") from error
+            if image.shape != (784,) or not np.isfinite(image).all():
+                raise ValueError(f"imagen de test inválida en la fila {row_number}")
+            images.append(image)
+    if not images:
+        raise ValueError("digits_test.csv está vacío")
+    return np.stack(images)
 
 
 def duplicates(X, y):
@@ -90,6 +131,22 @@ def duplicates(X, y):
                 conflicting_target_groups=sum(len(group[1]) > 1 for group in repeated))
 
 
+def train_test_overlap(X_train, X_test):
+    """Contar entradas idénticas entre splits sin consultar objetivos de test."""
+    X_train, X_test = np.asarray(X_train), np.asarray(X_test)
+    if X_train.ndim != 2 or X_test.ndim != 2 or X_train.shape[1] != X_test.shape[1]:
+        raise ValueError("training y test deben ser matrices con igual cantidad de entradas")
+    dtype = np.result_type(X_train.dtype, X_test.dtype)
+    train = np.ascontiguousarray(X_train, dtype=dtype)
+    test = np.ascontiguousarray(X_test, dtype=dtype)
+    train_keys = [row.tobytes() for row in train]
+    test_keys = [row.tobytes() for row in test]
+    shared = set(train_keys) & set(test_keys)
+    return dict(shared_input_groups=len(shared),
+                training_rows_in_shared_groups=sum(key in shared for key in train_keys),
+                test_rows_in_shared_groups=sum(key in shared for key in test_keys))
+
+
 def save_figure(fig, output, name):
     fig.savefig(output / name, dpi=140, bbox_inches="tight")
     plt.close(fig)
@@ -97,6 +154,7 @@ def save_figure(fig, output, name):
 
 def analyze_fraud(data_dir, output, seed, test_fraction):
     indices, data, labels = fraud_training(data_dir / "fraud_dataset.csv", test_fraction, seed)
+    test_inputs = fraud_test_inputs(data_dir / "fraud_dataset.csv", test_fraction, seed)
     names = list(FRAUD_FEATURES) + [FRAUD_TARGET]
     stats = [describe(name, data[:, i], unit) for i, (name, unit) in enumerate(zip(names, UNITS))]
     for row in stats:
@@ -167,12 +225,14 @@ def analyze_fraud(data_dir, output, seed, test_fraction):
     return dict(rows=len(indices), statistics=stats, classes=counts, semantic_checks=quality,
                 constant_features=[row["variable"] for row in stats if row["unique"] == 1],
                 duplicate_rows_analyzed=int(complete.sum()),
-                duplicates=duplicates(data[complete, :-1], data[complete, -1]))
+                duplicates=duplicates(data[complete, :-1], data[complete, -1]),
+                train_test_overlap=train_test_overlap(data[:, :-1], test_inputs))
 
 
 def analyze_digits(data_dir, output, seed):
-    # Este loader lee un solo archivo; nunca se llama al que también abre test.
+    # Las etiquetas y estadísticas provienen sólo de training.
     X, y = _load_digit_file(data_dir / "digits.csv")
+    X_test = digit_test_inputs(data_dir / "digits_test.csv")
     stats = [describe(f"pixel_{i}", X[:, i], "intensidad original") for i in range(X.shape[1])]
     write_csv(output / "digits-pixel-statistics.csv", stats)
     global_stats = describe("all_pixels", X.ravel(), "intensidad original")
@@ -232,7 +292,8 @@ def analyze_digits(data_dir, output, seed):
                 zero_constant_pixels=int((constant & (means == 0)).sum()),
                 blank_images=int(np.all(X == 0, axis=1).sum()),
                 constant_images=int((np.ptp(X, axis=1) == 0).sum()),
-                duplicates=duplicates(X, y))
+                duplicates=duplicates(X, y),
+                train_test_overlap=train_test_overlap(X, X_test))
 
 
 def run(data_dir, output, seed=0, test_fraction=0.2):
@@ -245,19 +306,25 @@ def run(data_dir, output, seed=0, test_fraction=0.2):
                     std_ddof=0, percentiles=[0, 1, 25, 50, 75, 99, 100],
                     python=platform.python_version(), numpy=np.__version__,
                     matplotlib=matplotlib.__version__, sha256={})
-    for name in ("fraud_dataset.csv", "digits.csv"):
+    for name in ("fraud_dataset.csv", "digits.csv", "digits_test.csv"):
         metadata["sha256"][name] = hashlib.sha256((data_dir / name).read_bytes()).hexdigest()
     print("Analizando training de fraude...", flush=True)
     fraud = analyze_fraud(data_dir, output, seed, test_fraction)
     print("Analizando digits.csv...", flush=True)
     digits = analyze_digits(data_dir, output, seed)
     result = dict(metadata=metadata, fraud=fraud, digits=digits)
+    overlap_rows = []
+    for name, section in (("fraud", fraud), ("digits", digits)):
+        overlap_rows.append({"dataset": name, **section["train_test_overlap"]})
+    # LF evita que Git interprete el CR propio del dialecto CSV como whitespace.
+    write_csv(output / "train-test-overlap.csv", overlap_rows, lineterminator="\n")
     (output / "summary.json").write_text(json.dumps(result, indent=2, ensure_ascii=False, allow_nan=False) + "\n")
     lines = ["# EDA de training: resumen generado", "",
              "Generado por `scripts/analyze_training.py`. No se entrenan modelos ni se transforman datos.", "",
              f"- Fraude: {fraud['rows']} filas de training; test_fraction={test_fraction}, seed={seed}.",
              f"- Dígitos: {digits['rows']} imágenes de {digits['pixels_per_image']} píxeles.",
-             "- No se abren `digits_test.csv` ni `more_digits.csv`.",
+             "- `digits_test.csv` se abre sólo para comparar imágenes exactas; no se interpretan sus etiquetas.",
+             "- No se abre `more_digits.csv`.",
              "- En fraude se leen las etiquetas para reproducir el split, pero sólo se analizan filas de training.",
              "- Estadísticos sobre valores finitos; faltantes/NaN e infinitos se cuentan por separado.",
              "- Desvío descriptivo con ddof=0; cuartiles/percentiles con interpolación lineal de NumPy.",
@@ -281,8 +348,11 @@ def run(data_dir, output, seed=0, test_fraction=0.2):
                   "| Clase | Cantidad | Porcentaje |", "|---|---:|---:|"]
         lines += [f"| {r['class']} | {r['count']} | {100*r['fraction']:.2f}% |" for r in section["classes"]]
         d = section["duplicates"]
+        overlap = section["train_test_overlap"]
         lines += ["", f"Entradas duplicadas: {d['duplicate_input_groups']} grupos, {d['duplicate_input_rows']} filas involucradas,",
-                  f"{d['extra_input_copies']} copias adicionales y {d['conflicting_target_groups']} grupos con objetivos distintos."]
+                  f"{d['extra_input_copies']} copias adicionales y {d['conflicting_target_groups']} grupos con objetivos distintos.",
+                  f"Solapamiento training/test: {overlap['shared_input_groups']} grupos exactos;",
+                  f"{overlap['training_rows_in_shared_groups']} filas de training y {overlap['test_rows_in_shared_groups']} de test involucradas."]
     lines += ["", f"Píxeles constantes: {digits['constant_pixels']}; constantes en cero: {digits['zero_constant_pixels']}.",
               f"Clases ausentes en training: {digits['absent_classes']}. Píxeles en cero: {100*digits['zero_pixel_fraction']:.2f}%.",
               f"Imágenes con todos los píxeles iguales: {digits['constant_images']}; completamente en cero: {digits['blank_images']}.",

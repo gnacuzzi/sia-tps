@@ -37,6 +37,13 @@ def test_duplicate_counts_distinguish_copies_and_conflicting_targets():
                           extra_input_copies=2, conflicting_target_groups=1)
 
 
+def test_train_test_overlap_uses_only_inputs():
+    result = eda.train_test_overlap(np.array([[1, 2], [3, 4], [3, 4]]),
+                                    np.array([[3, 4], [5, 6]]))
+    assert result == dict(shared_input_groups=1, training_rows_in_shared_groups=2,
+                          test_rows_in_shared_groups=1)
+
+
 def test_fraud_eda_uses_existing_split_without_parsing_test_features(tmp_path):
     labels = np.array([0, 1] * 5)
     training, test = _stratified_indices(labels, 0.2, 0)
@@ -58,7 +65,7 @@ def test_fraud_eda_uses_existing_split_without_parsing_test_features(tmp_path):
     assert values.shape == (8, 10)  # Nueve entradas y BigModel; sin etiqueta real.
 
 
-def test_digit_eda_opens_only_training_file(tmp_path, monkeypatch):
+def test_digit_eda_reads_only_test_inputs_and_ignores_test_labels(tmp_path, monkeypatch):
     data = tmp_path / "data"
     data.mkdir()
     with (data / "digits.csv").open("w", newline="") as file:
@@ -66,7 +73,12 @@ def test_digit_eda_opens_only_training_file(tmp_path, monkeypatch):
         writer.writeheader()
         writer.writerow({"label": 0, "image": [0] * 784})
         writer.writerow({"label": 1, "image": [1] * 784})
-    # Los otros datasets no existen. Registrar todos los CSV abiertos.
+    with (data / "digits_test.csv").open("w", newline="") as file:
+        writer = csv.DictWriter(file, fieldnames=["label", "image"])
+        writer.writeheader()
+        writer.writerow({"label": "NO INTERPRETAR", "image": [0] * 784})
+        writer.writerow({"label": "TAMPOCO", "image": [0.5] * 784})
+    # Registrar todos los CSV abiertos y comprobar que no se piden otros archivos.
     opened = []
     original_open = Path.open
     def recording_open(path, *args, **kwargs):
@@ -78,7 +90,10 @@ def test_digit_eda_opens_only_training_file(tmp_path, monkeypatch):
     output = tmp_path / "output"
     output.mkdir()
     result = eda.analyze_digits(data, output, seed=0)
-    assert opened == ["digits.csv"]
+    assert opened == ["digits.csv", "digits_test.csv"]
     assert result["rows"] == 2
     assert result["statistics"]["missing_or_nan"] == 0
     assert result["blank_images"] == 1
+    assert result["train_test_overlap"] == dict(
+        shared_input_groups=1, training_rows_in_shared_groups=1,
+        test_rows_in_shared_groups=1)

@@ -27,5 +27,8 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
 - No comenzar opcionales antes de completar los ejercicios obligatorios.
 - Punto 3: EDA en `scripts/analyze_training.py`, informe en `docs/eda-training.md`.
   Se mantiene training/test sin validation por decisión del equipo. El EDA
-  sólo analiza training; `flagged_fraud` se usa únicamente para estratificar
-  y contar clases. Los tratamientos del punto 4 aún no están acordados.
+  calcula estadísticas sólo sobre training; usa entradas de test únicamente
+  para detectar solapamientos exactos. Ese control no usa etiquetas ni métricas
+  de test; se conserva la estratificación de fraude ya decidida.
+  `flagged_fraud` se usa únicamente para estratificar y contar clases. Se decidió
+  conservar variables, outliers y píxeles constantes en esta etapa.

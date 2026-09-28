@@ -48,4 +48,8 @@ Se implementó únicamente una separación training/test, sin validation:
 El [análisis exploratorio de training](../docs/eda-training.md) está realizado
 para fraude y `digits.csv`. Todavía no se aplicaron normalización,
 estandarización ni codificación de las etiquetas. El test queda reservado:
-no debe emplearse para escoger parámetros o hiperparámetros.
+no debe emplearse para escoger parámetros o hiperparámetros. Sus entradas se
+usan únicamente en un control de integridad que comprueba si existen muestras
+exactamente repetidas entre training y test. Ese control no utiliza etiquetas,
+distribuciones ni métricas de test; se conserva la estratificación de fraude
+ya definida.

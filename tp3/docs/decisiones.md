@@ -199,34 +199,38 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Justificar preprocesamiento y regularización con evidencia | Seguir el hilo experimental de clases 12.2 y 13 | EDA sobre training antes de transformar; regularización solo ante un diagnóstico de sobreajuste; todavía no implementados |
 | Mantener el motor y la configuración de validación actuales | La nueva ejecución pasó los 38 tests y las 15 corridas sin cambios | Punto 1 verificado; se recargaron los 15 modelos y se reprodujeron sus métricas; evidencia en `resultados-validacion.md` |
 
-## Punto 3: análisis de training (decisiones acordadas)
+## Punto 3: análisis de training
 
 Se mantiene la partición ya implementada: fraude con 20 % de test, semilla 0
 y estratificación; dígitos con `digits.csv` como training y `digits_test.csv`
-como test externo. No se introduce validation. El análisis de este punto se
-limita a training y no consulta estadísticas, imágenes ni métricas de test.
+como test externo. No se introduce validation. Los estadísticos y gráficos se
+limitan a training; de test sólo se comparan los inputs exactos, sin usar sus
+etiquetas ni métricas en ese control.
 El punto 3 del plan es el EDA; no debe confundirse con el ejercicio 3 de la
 consigna, que incorpora los datos adicionales.
 
-El equipo confirmó las siete opciones recomendadas antes de implementar el
-análisis. Se registran las decisiones, sus motivos y las alternativas
-consideradas. Los resultados medidos están en `eda-training.md` y los artefactos reproducibles
-en `eda-training/`.
+El commit inicial aplicó siete criterios de análisis. Durante la revisión del
+punto se confirmaron además dos decisiones explícitas: comprobar solapamiento
+exacto entre particiones sin utilizar etiquetas de test y conservar por ahora
+variables, candidatos a outlier y píxeles constantes. Los resultados medidos
+están en `eda-training.md` y los artefactos reproducibles en `eda-training/`.
 
-| ID | Decisión acordada | Motivo y aplicación | Alternativa considerada | Estado |
+| ID | Criterio o decisión | Motivo y aplicación | Alternativa considerada | Estado |
 |---|---|---|---|---|
-| EDA-1 | Datasets incluidos ahora | Fraude y `digits.csv`; dejar `more_digits.csv` para la incorporación de nuevos datos y conservar una referencia del ejercicio 2 | Empezar sólo por fraude, o analizar también `more_digits.csv` por separado | Acordado y aplicado en `scripts/analyze_training.py` |
-| EDA-2 | Formato y herramientas | Script Python con NumPy/Matplotlib, tablas CSV e informe Markdown con gráficos; reutilizar las herramientas y organización del TP | Notebook con código y explicación | Acordado y aplicado en `scripts/analyze_training.py` |
-| EDA-3 | Descripción de distribuciones y escalas | Tipos, unidades, faltantes, no finitos, cantidad de valores distintos, mínimo/máximo, media, mediana, desvío, cuartiles y percentiles 1/99; histogramas y boxplots. En dígitos: conteos por clase, rango de píxeles y ejemplos de imágenes | Resumen reducido a rangos, cuartiles, histogramas y balance | Acordado y aplicado en `scripts/analyze_training.py` |
-| EDA-4 | Criterio para señalar outliers numéricos | Regla del boxplot: valores fuera de [Q1 − 1,5×IQR; Q3 + 1,5×IQR], con IQR = Q3 − Q1; revisar el significado de cada variable. Son candidatos, no errores confirmados ni una regla para eliminar registros o píxeles | Sólo percentiles y gráficos sin regla de outliers | Acordado y aplicado en `scripts/analyze_training.py` |
-| EDA-5 | Balance real de fraude | Contar `flagged_fraud` sólo en las filas de training para describir proporciones, sin incorporarlo a entradas/objetivos ni usarlo para seleccionar variables. El loader actual sólo expone sus valores de test, el equipo autorizó este acceso sólo para los conteos descriptivos del EDA. Analizar BigModel como probabilidad continua, sin fijar umbral | Mantener la etiqueta real oculta y describir sólo la distribución de probabilidades de BigModel; no llamarla balance de clases reales | Acordado y aplicado en `scripts/analyze_training.py` |
-| EDA-6 | Diagnóstico de variables problemáticas | Revisar constantes, duplicados exactos, valores incompatibles con su significado y correlaciones lineales entre entradas y con BigModel. Correlación baja no implica irrelevancia. En dígitos: píxeles constantes e imágenes duplicadas, sin matriz de 784×784 | Calidad básica y constantes; posponer correlaciones | Acordado y aplicado en `scripts/analyze_training.py` |
-| EDA-7 | Qué hacer ante hallazgos | Registrar evidencia y alternativas; decidir los tratamientos en el punto 4. Conservar originales y no imputar, eliminar, reescalar, balancear ni crear variables durante el EDA | Revisar y decidir el tratamiento de cada hallazgo antes de continuar el análisis | Acordado y aplicado en `scripts/analyze_training.py` |
+| EDA-1 | Datasets incluidos ahora | Fraude y `digits.csv`; dejar `more_digits.csv` para la incorporación de nuevos datos y conservar una referencia del ejercicio 2 | Empezar sólo por fraude, o analizar también `more_digits.csv` por separado | Aplicado en `scripts/analyze_training.py` |
+| EDA-2 | Formato y herramientas | Script Python con NumPy/Matplotlib, tablas CSV e informe Markdown con gráficos; reutilizar las herramientas y organización del TP | Notebook con código y explicación | Aplicado en `scripts/analyze_training.py` |
+| EDA-3 | Descripción de distribuciones y escalas | Tipos, unidades, faltantes, no finitos, cantidad de valores distintos, mínimo/máximo, media, mediana, desvío, cuartiles y percentiles 1/99; histogramas y boxplots. En dígitos: conteos por clase, rango de píxeles y ejemplos de imágenes | Resumen reducido a rangos, cuartiles, histogramas y balance | Aplicado en `scripts/analyze_training.py` |
+| EDA-4 | Criterio para señalar outliers numéricos | Regla del boxplot: valores fuera de [Q1 − 1,5×IQR; Q3 + 1,5×IQR], con IQR = Q3 − Q1; revisar el significado de cada variable. Son candidatos, no errores confirmados ni una regla para eliminar registros o píxeles | Sólo percentiles y gráficos sin regla de outliers | Aplicado en `scripts/analyze_training.py` |
+| EDA-5 | Balance real de fraude | Contar `flagged_fraud` sólo en las filas de training para describir proporciones, sin incorporarlo a entradas/objetivos ni usarlo para seleccionar variables. El loader público sólo expone sus valores de test; el script accede a training exclusivamente para este conteo descriptivo. Analizar BigModel como probabilidad continua, sin fijar umbral | Mantener la etiqueta real oculta y describir sólo la distribución de probabilidades de BigModel; no llamarla balance de clases reales | Aplicado en `scripts/analyze_training.py` |
+| EDA-6 | Diagnóstico de variables problemáticas | Revisar constantes, duplicados exactos, valores incompatibles con su significado y correlaciones lineales entre entradas y con BigModel. Correlación baja no implica irrelevancia. En dígitos: píxeles constantes e imágenes duplicadas, sin matriz de 784×784 | Calidad básica y constantes; posponer correlaciones | Aplicado en `scripts/analyze_training.py` |
+| EDA-7 | Qué hacer ante hallazgos | Registrar evidencia y alternativas; decidir los tratamientos en el punto 4. Conservar originales y no imputar, eliminar, reescalar, balancear ni crear variables durante el EDA | Revisar y decidir el tratamiento de cada hallazgo antes de continuar el análisis | Aplicado en `scripts/analyze_training.py` |
+| EDA-8 | Comprobar duplicados exactos entre training y test | Detectar data leakage sin utilizar test para ajustar el modelo; se comparan únicamente los vectores de entrada y no se interpretan etiquetas, distribuciones ni métricas de test | Posponer cualquier apertura de test hasta la evaluación final | Confirmado en la revisión y aplicado; no se encontraron solapamientos |
+| EDA-9 | Conservar todas las entradas y candidatos IQR | Los outliers observados pueden ser casos reales y los 97 píxeles constantes sólo describen bordes sin variación; no hay evidencia de que eliminarlos mejore el modelo | Eliminar outliers, variables de baja correlación o píxeles constantes antes de entrenar | Confirmado en la revisión; se mantienen las nueve entradas de fraude y los 784 píxeles |
 
 Base de las decisiones: consigna, página 4 (explorar documentación, rangos y
 limpieza), clase 12.2 (distribuciones, balance, boxplots y escalas) y reglas
 vigentes de `data/README.md`. La regla IQR, los percentiles y las correlaciones
-son criterios acordados de EDA descriptivo estándar; no se presentan como parámetros
+son criterios seleccionados de EDA descriptivo estándar; no se presentan como parámetros
 exigidos por la cátedra. Umbrales, gráficos particulares y tratamientos que
 dependan de los hallazgos se justificarán al revisarlos con el equipo.
 
@@ -237,9 +241,10 @@ dependan de los hallazgos se justificarán al revisarlos con el equipo.
   fraude. La etiqueta real completa sólo determina ese reparto; las entradas y
   probabilidades se convierten y analizan únicamente para las 6000 filas de
   training. La API pública de carga y el motor no cambian.
-- Dígitos usa `_load_digit_file` con `digits.csv`, sin abrir `digits_test.csv`
-  ni `more_digits.csv`. El loader valida etiquetas, longitud y finitud; una
-  fila inválida detendría el análisis, sin imputarla ni descartarla.
+- Dígitos usa `_load_digit_file` con `digits.csv`. De `digits_test.csv` sólo
+  convierte los vectores de imagen para compararlos exactamente con training;
+  no interpreta sus etiquetas ni calcula estadísticas. No abre
+  `more_digits.csv`. Una imagen inválida detendría el control de integridad.
 - Convenciones de cálculo explícitas del script: desvío descriptivo `ddof=0`,
   percentiles con interpolación lineal, Pearson por pares finitos y duplicados
   de entradas exactas. Faltantes/NaN e infinitos se informan por separado;
@@ -252,7 +257,8 @@ dependan de los hallazgos se justificarán al revisarlos con el equipo.
   entrenamiento ni requisitos atribuidos a la cátedra.
 - Se verificaron 6000 transacciones y 12449 imágenes de training. No se
   detectaron faltantes/NaN, infinitos ni duplicados exactos en esos conjuntos.
-  No hay alertas en los controles semánticos de fraude implementados.
+  Tampoco aparecieron entradas exactas compartidas entre training y test en
+  fraude o dígitos. No hay alertas en los controles semánticos implementados.
 - Fraude: 695 etiquetas positivas (11,58 %) y escalas muy diferentes entre
   variables. Las probabilidades de BigModel se describen como valores
   continuos; no se fija un umbral ni se comparan con la etiqueta real.
@@ -262,7 +268,8 @@ dependan de los hallazgos se justificarán al revisarlos con el equipo.
 - La regla IQR marca los trazos no negros como candidatos al aplicarla a todos
   los píxeles, porque Q1=Q3=0. Este hallazgo muestra por qué el criterio no debe
   convertirse automáticamente en una regla de limpieza.
-- **Pendiente de discusión en el punto 4:** escalado de fraude, rango de entrada
-  de dígitos y cualquier eventual tratamiento de valores o variables.
-  No se borraron, imputaron, balancearon ni transformaron datos; no se
-  incorporaron ejemplos adicionales ni se evaluaron modelos.
+- **Pendiente de discusión en el punto 4:** escalado de fraude y rango de
+  entrada de dígitos. Se decidió conservar variables, candidatos IQR y píxeles
+  constantes como referencia inicial. No se borraron, imputaron, balancearon
+  ni transformaron datos; no se incorporaron ejemplos adicionales ni se
+  evaluaron modelos.
