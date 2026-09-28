@@ -25,6 +25,9 @@ entrenamiento. No debe incluirse como entrada ni como objetivo de entrenamiento.
 El loader nuevo la usa para preservar aproximadamente la proporción de clases
 al separar los datos y solo devuelve sus valores de test para la futura
 evaluación final.
+El script de EDA, por acuerdo posterior del equipo, accede a las etiquetas
+de las filas de training únicamente para contar el balance de clases. No
+cambia la API del loader ni las usa en correlaciones o selección de variables.
 
 Los CSV de dígitos tienen columnas `label` e `image`. El loader suministrado
 interpreta `image` con `ast.literal_eval`, la convierte a `float32` y propone
@@ -42,6 +45,7 @@ Se implementó únicamente una separación training/test, sin validation:
 - ejercicio 3: 28190 imágenes de `digits.csv` más `more_digits.csv` para
   training y el mismo test externo de 2497 imágenes.
 
-Todavía no se aplicaron normalización, estandarización, codificación de las
-etiquetas ni análisis exploratorio. El test queda reservado: no debe emplearse
-para escoger parámetros o hiperparámetros.
+El [análisis exploratorio de training](../docs/eda-training.md) está realizado
+para fraude y `digits.csv`. Todavía no se aplicaron normalización,
+estandarización ni codificación de las etiquetas. El test queda reservado:
+no debe emplearse para escoger parámetros o hiperparámetros.

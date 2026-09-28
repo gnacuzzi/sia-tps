@@ -1,0 +1,212 @@
+# Análisis exploratorio de training
+
+El análisis del punto 3 usa **6000 transacciones de fraude** y **12449 imágenes
+de `digits.csv`**. El hallazgo principal es que el conjunto de dígitos **no
+contiene ejemplos de la clase 8** y tiene sólo **271 ejemplos de la clase 5**.
+En fraude hay diferencias grandes de escala entre entradas. Estos resultados
+orientan las decisiones siguientes; todavía no se aplicó preprocesamiento.
+
+Las siete decisiones fueron acordadas antes de ejecutar el análisis y están
+en [decisiones.md](decisiones.md#punto-3-análisis-de-training-decisiones-acordadas).
+El [resumen reproducible](eda-training/resumen.md) reúne tablas y los seis
+gráficos; [summary.json](eda-training/summary.json) conserva cifras completas,
+configuración, versiones y hashes de los archivos fuente.
+
+## Alcance y método
+
+- Se mantiene training/test **sin validation**, como decidió el equipo.
+- Fraude: el mismo split estratificado de `data.py`, test 20 % y semilla 0.
+  La etiqueta real completa se lee para reproducir el reparto. Los estadísticos,
+  gráficos y conteos usan sólo las filas de training; las filas elegidas están
+  en [fraud-training-rows.csv](eda-training/fraud-training-rows.csv), con numeración
+  física del CSV (encabezado = fila 1).
+- Dígitos: se abre solamente `digits.csv`; **no se abren `digits_test.csv` ni
+  `more_digits.csv`**. No se conoce su balance a partir de este análisis.
+- `flagged_fraud` se utiliza sólo para el reparto y el conteo descriptivo de
+  clases autorizado. No participa de las entradas, del objetivo BigModel ni
+  de la matriz de correlaciones.
+- NumPy para los estadísticos y Matplotlib para las figuras. Los valores se
+  conservan: no se eliminan filas/columnas, no se imputan faltantes, no se
+  reescalan entradas ni se generan nuevos ejemplos.
+
+Se calcularon mínimo, máximo, media, mediana, desvío descriptivo (`ddof=0`),
+cuartiles, percentiles 1/99, valores distintos y conteos de faltantes/NaN e
+infinitos. Las unidades y tipos documentados de fraude se incluyen en el CSV;
+la conversión a `float64` para calcular estadísticos no cambia su significado.
+Los píxeles se cargan como `float32`, siguiendo el loader existente.
+
+La regla de outliers es `IQR = Q3 − Q1`: se señalan valores fuera de
+`[Q1 − 1,5×IQR; Q3 + 1,5×IQR]`. Es un criterio descriptivo acordado, **no una
+prueba de error del dato**. Las correlaciones de Pearson miden asociación
+lineal, no causalidad ni toda relación posible.
+
+## Fraude
+
+### Calidad y significado
+
+En las 6000 filas analizadas no aparecieron faltantes/NaN, infinitos, entradas
+constantes ni entradas duplicadas exactas. Tampoco se detectaron alertas en
+los chequeos semánticos implementados: valores negativos, cantidades o
+resoluciones no positivas, fracciones en columnas documentadas como enteras,
+o probabilidades fuera de `[0,1]`.
+
+Esto verifica esos controles concretos, no garantiza que cada transacción
+sea correcta ni que las etiquetas reflejen perfectamente el fraude real.
+La unidad de `device_screen_resolution` es cantidad de píxeles (ancho × alto),
+y `timestamp` es tiempo Unix; no representan magnitudes comparables con USD
+o cantidades de productos. Fuente: documentación del dataset, páginas 1–2.
+
+### Distribuciones y escalas
+
+| Entrada | Rango observado | Desvío |
+|---|---:|---:|
+| `timestamp` | 1700004674–1731534222 s Unix | 9197481,64 |
+| `amount_usd` | 1–2000 USD | 151,79 |
+| `quantity_purchased` | 1–24 unidades | 4,17 |
+| `device_screen_resolution` | 1006733–8310940 píxeles | 2667816,55 |
+| `time_since_last_login_s` | 10–40160,8 s | 3560,80 |
+
+El desvío de `timestamp` es aproximadamente 2,2 millones de veces el de
+`quantity_purchased`. Además del desvío, el origen Unix aporta una magnitud
+absoluta grande. Esto **justifica discutir escalado en el punto 4**; por sí
+solo no decide entre estandarización y min-max ni demuestra que una variante
+entrene mejor.
+
+Los histogramas muestran colas hacia valores altos en monto, días desde la
+última compra y tiempo desde el último login. El monto tiene mediana 63,82 USD,
+media 107,73 y percentil 99 de 826,28. La resolución presenta varios grupos
+de valores: tratarla como si tuviera una única distribución central puede
+señalar como outliers dispositivos legítimos.
+
+### Balance y objetivo de destilación
+
+| Etiqueta real | Cantidad | Porcentaje |
+|---|---:|---:|
+| No fraude (0) | 5305 | 88,42 % |
+| Fraude (1) | 695 | 11,58 % |
+
+Hay desbalance en training. Como referencia descriptiva, predecir siempre la
+clase mayoritaria acertaría 88,42 % de estas etiquetas, sin detectar ningún
+fraude. No es un resultado de un perceptrón ni una evaluación de test.
+
+El objetivo de entrenamiento sigue siendo **la probabilidad de BigModel**:
+rango `[0,000897; 1]`, mediana 0,359399 y media 0,423723. Esa media no es el
+porcentaje real de fraude. No se eligió un umbral ni se evaluó la clasificación
+de BigModel con la etiqueta real.
+
+### Outliers y variables para revisar
+
+| Variable | Candidatos IQR | Porcentaje de training |
+|---|---:|---:|
+| Resolución de pantalla | 1140 | 19,00 % |
+| Monto | 440 | 7,33 % |
+| Días desde última compra | 291 | 4,85 % |
+| Tiempo desde último login | 282 | 4,70 % |
+| Cantidad comprada | 272 | 4,53 % |
+| Ítems vistos | 140 | 2,33 % |
+| Duración de sesión | 5 | 0,08 % |
+
+Los conteos son por columna y no se deben sumar como transacciones distintas.
+Una compra grande o un dispositivo de alta resolución no son errores por
+definición. No hay evidencia suficiente aquí para eliminar esas filas.
+
+Las asociaciones lineales con BigModel de mayor magnitud son antigüedad de
+cuenta (`r=-0,579`), cantidad comprada (`0,565`), monto (`0,560`) y duración
+de sesión (`-0,516`). Timestamp (`-0,009`), resolución (`0,022`) y tiempo
+desde login (`0,001`) tienen correlación cercana a cero.
+
+Esto permite señalar variables para estudiar, **no descartarlas**: una relación
+no lineal o una interacción puede no reflejarse en Pearson. Entre las entradas,
+el máximo `|r|` observado es 0,391 (cantidad comprada e ítems vistos); no se
+encontró una pareja con dependencia lineal casi perfecta. No se estudió
+redundancia no lineal.
+
+## Dígitos
+
+### Calidad y escala
+
+Todas las filas tienen etiqueta válida entre 0 y 9 e imágenes de 784 píxeles
+finitos. No hay imágenes duplicadas exactas, completamente vacías ni de
+intensidad uniforme. El loader valida estructura y finitud antes del análisis;
+ante una fila inválida abortaría, sin omitirla silenciosamente.
+
+Los píxeles **ya vienen en `[0,1]`**, con 256 valores distintos. No se aplicó
+esa transformación en este trabajo ni se presupone cómo fue realizada.
+Volver a dividirlos por 255 reduciría innecesariamente la escala. La decisión
+de mantener `[0,1]` o cambiar el rango se discutirá con la activación elegida.
+
+### Balance: clase ausente y clase poco representada
+
+| Dígito | Muestras | Dígito | Muestras |
+|---|---:|---|---:|
+| 0 | 1480 | 5 | **271** |
+| 1 | 1685 | 6 | 1479 |
+| 2 | 1489 | 7 | 1566 |
+| 3 | 1532 | 8 | **0** |
+| 4 | 1460 | 9 | 1487 |
+
+![Balance e intensidades](eda-training/digits-distributions.png)
+
+El 5 representa 2,18 % de training, frente a aproximadamente 12–14 % para las
+otras clases presentes. La clase 8 está ausente; el conteo se contrastó con
+una lectura independiente de la columna `label` del CSV original.
+
+**La red no dispondrá de ejemplos positivos del 8 para aprender esa clase.**
+Esto limita la cobertura del conjunto de entrenamiento y no se resuelve por
+sí solo aumentando épocas o neuronas. No permite calcular ahora la accuracy
+de test ni afirmar cuánto mejorará al agregar datos: no se inspeccionaron
+test ni `more_digits.csv`.
+
+### Píxeles constantes y límite de la regla IQR
+
+Hay **97 de 784 píxeles constantes**, todos en cero (12,37 %), principalmente
+en los bordes. Son columnas sin variación en este training; todavía se
+conservan las 784 entradas. Quitarlas exigiría mantener la misma selección
+de columnas en cualquier evaluación posterior y no es una decisión tomada.
+
+El 81,27 % de todos los valores de píxel es cero. Por eso los cuartiles globales
+Q1 y Q3 son ambos cero: la regla IQR marcaría los **1828063 píxeles no nulos**
+como candidatos. En las imágenes representan los trazos del dígito; esta
+regla **no sirve como filtro automático de píxeles**. Se deja el conteo para
+mostrar por qué hace falta interpretar el significado de cada dato.
+
+Los mapas de media/desvío/constantes y los ejemplos por clase están en el
+resumen generado. Se muestran hasta tres ejemplos por clase, elegidos con
+semilla 0, y sus filas quedan registradas. La clase 8 aparece como «Sin muestras».
+
+## Qué queda para decidir en el punto 4
+
+| Evidencia | Alternativas para discutir; todavía no aplicadas |
+|---|---|
+| Escalas muy diferentes en fraude | Estandarización o min-max, según la activación y la comparación que se acuerde; parámetros calculados sólo con training |
+| Píxeles ya en `[0,1]` | Mantener su rango o justificar otro; evitar una segunda división por 255 |
+| Candidatos IQR plausibles y sin errores semánticos detectados | Conservarlos como referencia; cualquier exclusión necesita evidencia adicional |
+| 97 píxeles constantes y variables tabulares con poca asociación lineal | Mantener las entradas actuales como referencia; no confundir este hallazgo con una selección de variables ya aprobada |
+| Ausencia del 8 y escasez del 5 | Documentar el límite y estudiar resultados por clase al implementar métricas; el análisis de datos adicionales queda para su etapa |
+
+No se imputaron, eliminaron, balancearon ni transformaron datos. No se eligió
+modelo, activación, umbral, optimizador ni regularización.
+
+## Reproducción y controles
+
+Desde `tp3/`, con el entorno activado:
+
+```bash
+pip install -e '.[dev,plot]'
+python scripts/analyze_training.py --output output/eda-nueva
+pytest -q
+```
+
+El destino debe ser una carpeta nueva o vacía. Para reproducir la evidencia
+versionada se usaron los valores por defecto (`--seed 0 --test-fraction 0.2`).
+Los CSV incluyen estadísticos por cada uno de los 784 píxeles, verificaciones
+semánticas, correlaciones, balances y filas seleccionadas. No se usan librerías
+de redes neuronales ni se altera el motor de entrenamiento.
+
+Los controles automatizados cubren el cálculo de cuartiles/faltantes, duplicados
+con objetivos diferentes, el reparto de fraude sin convertir las entradas de
+test y la lectura exclusiva de `digits.csv`. La suite completa aprobó **42 tests**.
+Dos ejecuciones generaron CSV, JSON y resumen Markdown idénticos; también se
+verificó que los archivos fuente permanecieran intactos. Se inspeccionaron los
+seis gráficos. Fuentes de criterio: consigna
+página 4 y clase 12.2, páginas 32–35 y transcripción sobre EDA y desbalance.

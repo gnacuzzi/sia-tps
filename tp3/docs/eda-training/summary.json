@@ -1,0 +1,454 @@
+{
+  "metadata": {
+    "seed": 0,
+    "test_fraction": 0.2,
+    "iqr_factor": 1.5,
+    "std_ddof": 0,
+    "percentiles": [
+      0,
+      1,
+      25,
+      50,
+      75,
+      99,
+      100
+    ],
+    "python": "3.14.3",
+    "numpy": "2.4.2",
+    "matplotlib": "3.10.8",
+    "sha256": {
+      "fraud_dataset.csv": "0e0d2fdf7e6c294b7b8ea2e80452a270f1fad1de02edee9cc25f6eec2ab4c707",
+      "digits.csv": "11271dbc12a3a8db967f6c2708e55ae1918d69186e81d91c53c24e305fc5d3f4"
+    }
+  },
+  "fraud": {
+    "rows": 6000,
+    "statistics": [
+      {
+        "variable": "timestamp",
+        "unit": "segundos Unix",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 6000,
+        "min": 1700004674.0,
+        "p01": 1700322910.96,
+        "q1": 1707901259.75,
+        "median": 1715800825.0,
+        "q3": 1723736189.0,
+        "p99": 1731200292.86,
+        "max": 1731534222.0,
+        "mean": 1715838200.6888332,
+        "std": 9197481.637988549,
+        "iqr": 15834929.25,
+        "lower_fence": 1684148865.875,
+        "upper_fence": 1747488582.875,
+        "iqr_candidates": 0,
+        "documented_type": "integer",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "amount_usd",
+        "unit": "USD",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 5009,
+        "min": 1.0,
+        "p01": 1.0,
+        "q1": 25.875,
+        "median": 63.82,
+        "q3": 127.5425,
+        "p99": 826.2766000000028,
+        "max": 2000.0,
+        "mean": 107.72543166666667,
+        "std": 151.78572368258816,
+        "iqr": 101.6675,
+        "lower_fence": -126.62625,
+        "upper_fence": 280.04375,
+        "iqr_candidates": 440,
+        "documented_type": "float",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "quantity_purchased",
+        "unit": "unidades",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 24,
+        "min": 1.0,
+        "p01": 1.0,
+        "q1": 3.0,
+        "median": 5.0,
+        "q3": 8.0,
+        "p99": 22.0,
+        "max": 24.0,
+        "mean": 5.862166666666667,
+        "std": 4.166073527782352,
+        "iqr": 5.0,
+        "lower_fence": -4.5,
+        "upper_fence": 15.5,
+        "iqr_candidates": 272,
+        "documented_type": "integer",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "session_duration_seconds",
+        "unit": "segundos",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 3478,
+        "min": 5.0,
+        "p01": 8.580000000000004,
+        "q1": 186.14999999999998,
+        "median": 286.9,
+        "q3": 374.92499999999995,
+        "p99": 570.7100000000003,
+        "max": 726.8,
+        "mean": 279.7900833333333,
+        "std": 135.5885494673489,
+        "iqr": 188.77499999999998,
+        "lower_fence": -97.01249999999999,
+        "upper_fence": 658.0874999999999,
+        "iqr_candidates": 5,
+        "documented_type": "float",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "days_since_last_purchase",
+        "unit": "días",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 2786,
+        "min": 0.0,
+        "p01": 0.08990000000000002,
+        "q1": 3.18,
+        "median": 8.51,
+        "q3": 19.2825,
+        "p99": 67.12030000000001,
+        "max": 142.32,
+        "mean": 13.659708333333333,
+        "std": 14.938200789639868,
+        "iqr": 16.1025,
+        "lower_fence": -20.97375,
+        "upper_fence": 43.43625,
+        "iqr_candidates": 291,
+        "documented_type": "float",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "account_age_days",
+        "unit": "días",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 2861,
+        "min": 1.0,
+        "p01": 19.0,
+        "q1": 642.0,
+        "median": 1640.5,
+        "q3": 2647.25,
+        "p99": 3617.0200000000004,
+        "max": 3649.0,
+        "mean": 1668.9263333333333,
+        "std": 1124.5068237112757,
+        "iqr": 2005.25,
+        "lower_fence": -2365.875,
+        "upper_fence": 5655.125,
+        "iqr_candidates": 0,
+        "documented_type": "integer",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "device_screen_resolution",
+        "unit": "píxeles (ancho × alto)",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 5833,
+        "min": 1006733.0,
+        "p01": 1015570.87,
+        "q1": 1045625.5,
+        "median": 2073258.0,
+        "q3": 3689035.25,
+        "p99": 8302445.09,
+        "max": 8310940.0,
+        "mean": 3164262.4413333335,
+        "std": 2667816.5451627015,
+        "iqr": 2643409.75,
+        "lower_fence": -2919489.125,
+        "upper_fence": 7654149.875,
+        "iqr_candidates": 1140,
+        "documented_type": "integer",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "time_since_last_login_s",
+        "unit": "segundos",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 5749,
+        "min": 10.0,
+        "p01": 38.69500000000001,
+        "q1": 1079.95,
+        "median": 2484.5,
+        "q3": 5011.925,
+        "p99": 15955.012000000004,
+        "max": 40160.8,
+        "mean": 3587.22925,
+        "std": 3560.798058839634,
+        "iqr": 3931.9750000000004,
+        "lower_fence": -4818.012500000001,
+        "upper_fence": 10909.8875,
+        "iqr_candidates": 282,
+        "documented_type": "float",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "items_viewed_before_purchase",
+        "unit": "unidades",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 29,
+        "min": 1.0,
+        "p01": 1.0,
+        "q1": 4.0,
+        "median": 8.0,
+        "q3": 12.0,
+        "p99": 27.0,
+        "max": 29.0,
+        "mean": 8.611,
+        "std": 5.403981155901021,
+        "iqr": 8.0,
+        "lower_fence": -8.0,
+        "upper_fence": 24.0,
+        "iqr_candidates": 140,
+        "documented_type": "integer",
+        "analysis_dtype": "float64"
+      },
+      {
+        "variable": "big_model_fraud_probability",
+        "unit": "probabilidad",
+        "count": 6000,
+        "missing_or_nan": 0,
+        "infinite": 0,
+        "finite_count": 6000,
+        "unique": 5894,
+        "min": 0.000897,
+        "p01": 0.01422449,
+        "q1": 0.15961799999999998,
+        "median": 0.359399,
+        "q3": 0.66562025,
+        "p99": 0.99999501,
+        "max": 1.0,
+        "mean": 0.4237233716666666,
+        "std": 0.30238443604445625,
+        "iqr": 0.5060022500000001,
+        "lower_fence": -0.5993853750000002,
+        "upper_fence": 1.4246236250000002,
+        "iqr_candidates": 0,
+        "documented_type": "float",
+        "analysis_dtype": "float64"
+      }
+    ],
+    "classes": [
+      {
+        "class": 0,
+        "count": 5305,
+        "fraction": 0.8841666666666667
+      },
+      {
+        "class": 1,
+        "count": 695,
+        "fraction": 0.11583333333333333
+      }
+    ],
+    "semantic_checks": [
+      {
+        "variable": "timestamp",
+        "negative": 0,
+        "non_integer": 0,
+        "nonpositive": "",
+        "above_one": ""
+      },
+      {
+        "variable": "amount_usd",
+        "negative": 0,
+        "non_integer": "",
+        "nonpositive": "",
+        "above_one": ""
+      },
+      {
+        "variable": "quantity_purchased",
+        "negative": 0,
+        "non_integer": 0,
+        "nonpositive": 0,
+        "above_one": ""
+      },
+      {
+        "variable": "session_duration_seconds",
+        "negative": 0,
+        "non_integer": "",
+        "nonpositive": "",
+        "above_one": ""
+      },
+      {
+        "variable": "days_since_last_purchase",
+        "negative": 0,
+        "non_integer": "",
+        "nonpositive": "",
+        "above_one": ""
+      },
+      {
+        "variable": "account_age_days",
+        "negative": 0,
+        "non_integer": 0,
+        "nonpositive": "",
+        "above_one": ""
+      },
+      {
+        "variable": "device_screen_resolution",
+        "negative": 0,
+        "non_integer": 0,
+        "nonpositive": 0,
+        "above_one": ""
+      },
+      {
+        "variable": "time_since_last_login_s",
+        "negative": 0,
+        "non_integer": "",
+        "nonpositive": "",
+        "above_one": ""
+      },
+      {
+        "variable": "items_viewed_before_purchase",
+        "negative": 0,
+        "non_integer": 0,
+        "nonpositive": "",
+        "above_one": ""
+      },
+      {
+        "variable": "big_model_fraud_probability",
+        "negative": 0,
+        "non_integer": "",
+        "nonpositive": "",
+        "above_one": 0
+      }
+    ],
+    "constant_features": [],
+    "duplicate_rows_analyzed": 6000,
+    "duplicates": {
+      "duplicate_input_groups": 0,
+      "duplicate_input_rows": 0,
+      "extra_input_copies": 0,
+      "conflicting_target_groups": 0
+    }
+  },
+  "digits": {
+    "rows": 12449,
+    "pixels_per_image": 784,
+    "dtype": "float32",
+    "statistics": {
+      "variable": "all_pixels",
+      "unit": "intensidad original",
+      "count": 9760016,
+      "missing_or_nan": 0,
+      "infinite": 0,
+      "finite_count": 9760016,
+      "unique": 256,
+      "min": 0.0,
+      "p01": 0.0,
+      "q1": 0.0,
+      "median": 0.0,
+      "q3": 0.0,
+      "p99": 0.9960784316062927,
+      "max": 1.0,
+      "mean": 0.12856833701808879,
+      "std": 0.30643797344926715,
+      "iqr": 0.0,
+      "lower_fence": 0.0,
+      "upper_fence": 0.0,
+      "iqr_candidates": 1828063
+    },
+    "classes": [
+      {
+        "class": 0,
+        "count": 1480,
+        "fraction": 0.1188850510081131
+      },
+      {
+        "class": 1,
+        "count": 1685,
+        "fraction": 0.13535223712748012
+      },
+      {
+        "class": 2,
+        "count": 1489,
+        "fraction": 0.11960800064262189
+      },
+      {
+        "class": 3,
+        "count": 1532,
+        "fraction": 0.12306209334083058
+      },
+      {
+        "class": 4,
+        "count": 1460,
+        "fraction": 0.11727849626476022
+      },
+      {
+        "class": 5,
+        "count": 271,
+        "fraction": 0.02176881677243152
+      },
+      {
+        "class": 6,
+        "count": 1479,
+        "fraction": 0.11880472327094546
+      },
+      {
+        "class": 7,
+        "count": 1566,
+        "fraction": 0.1257932364045305
+      },
+      {
+        "class": 8,
+        "count": 0,
+        "fraction": 0.0
+      },
+      {
+        "class": 9,
+        "count": 1487,
+        "fraction": 0.1194473451682866
+      }
+    ],
+    "absent_classes": [
+      8
+    ],
+    "zero_pixel_fraction": 0.8126987701659506,
+    "constant_pixels": 97,
+    "zero_constant_pixels": 97,
+    "blank_images": 0,
+    "constant_images": 0,
+    "duplicates": {
+      "duplicate_input_groups": 0,
+      "duplicate_input_rows": 0,
+      "extra_input_copies": 0,
+      "conflicting_target_groups": 0
+    }
+  }
+}

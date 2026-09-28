@@ -13,6 +13,7 @@ Sistemas de Inteligencia Artificial, ITBA, segundo cuatrimestre de 2026.
 - [Clases: índice, referencias y criterios para comenzar](docs/material-clases.md).
 - [Implementación y API reutilizable](docs/implementacion.md).
 - [Resultados de validación y gráficos de entrenamiento](docs/resultados-validacion.md).
+- [Análisis exploratorio de training: hallazgos y decisiones pendientes](docs/eda-training.md).
 
 Seguimos la organización de los TPs anteriores: una carpeta independiente
 por TP, documentación en español y material fuente dentro de `docs/`.
@@ -32,8 +33,8 @@ Estos ejercicios **no se presentan**, según la consigna: sirven para verificar
 las herramientas antes de trabajar con los datos de los ejercicios obligatorios.
 Los ejemplos del apunte y de la guía interactiva son cálculos didácticos.
 Las corridas reales están en el informe de resultados: **15/15 aprobadas**
-con la configuración final y tres semillas, además de **38 tests aprobados**
-(31 del motor/validación y 7 de carga de datos; revalidado el 28 de septiembre).
+con la configuración final y tres semillas, además de **42 tests aprobados**
+(31 del motor/validación, 7 de carga de datos y 4 del EDA; con el extra `plot`).
 También se conservan los fallos de la configuración inicial de XOR.
 
 ## Instalar y ejecutar
@@ -67,12 +68,25 @@ una separación estricta entre training y test, sin crear validation.
 
 ## Continuación del TP
 
-1. Analizar los datos de training y decidir si necesitan transformaciones.
+1. Revisar el EDA de training ya realizado y acordar las transformaciones del punto 4.
 2. Implementar las métricas y variantes de entrenamiento obligatorias.
 3. Resolver fraude y dígitos sin utilizar los conjuntos de test para elegir
    parámetros o hiperparámetros.
 
 Los datasets recibidos están en `data/`, conservando sus nombres originales.
 Hay diferencias de nombres respecto del enunciado, documentadas en el README
-de datos. Los cinco PDFs de clase están en `docs/`. Las transcripciones son
-material local excluido del repositorio por decisión del equipo.
+de datos. Los ocho PDFs de clase están en `docs/`. Se versionan las
+transcripciones de clases 12.2 y 13; las anteriores permanecen locales.
+
+## Análisis de training (punto 3)
+
+```bash
+python scripts/analyze_training.py --output output/eda-nueva
+```
+
+Requiere el extra `plot` y una carpeta de salida nueva o vacía. Genera tablas
+CSV, seis gráficos, un resumen Markdown y configuración/versiones/hashes en
+JSON. Usa el split vigente de fraude (test 20 %, semilla 0) y sólo `digits.csv`;
+no abre el test externo ni los datos adicionales. Mantiene training/test sin
+validation y no aplica preprocesamiento. La evidencia versionada está en
+[`docs/eda-training/`](docs/eda-training/resumen.md).

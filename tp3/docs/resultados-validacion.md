@@ -114,7 +114,8 @@ Para repetir la comprobación, usar los comandos de instalación y ejecución
 del [README](../README.md), eligiendo una carpeta de salida nueva.
 
 El punto 1 queda verificado para estos casos y semillas. La inspección del
-punto 2 confirmó que los loaders actuales separan training/test, pero no crean
-validation. Completar esa tercera partición es el próximo paso, antes del EDA
-y de comparar configuraciones. Esta revisión no entrenó ni evaluó modelos
+punto 2 confirmó que los loaders actuales separan training/test sin validation,
+por decisión explícita del equipo registrada en `decisiones.md`. Se mantiene
+esa decisión y se continúa con el EDA de training del punto 3. Esta revisión
+no entrenó ni evaluó modelos
 sobre el test final de fraude o dígitos.

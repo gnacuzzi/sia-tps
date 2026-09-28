@@ -25,3 +25,7 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
 - Datos originales en `data/`; documentación de fraude en `docs/`.
   `flagged_fraud` no puede usarse para entrenar, según esa documentación.
 - No comenzar opcionales antes de completar los ejercicios obligatorios.
+- Punto 3: EDA en `scripts/analyze_training.py`, informe en `docs/eda-training.md`.
+  Se mantiene training/test sin validation por decisión del equipo. El EDA
+  sólo analiza training; `flagged_fraud` se usa únicamente para estratificar
+  y contar clases. Los tratamientos del punto 4 aún no están acordados.

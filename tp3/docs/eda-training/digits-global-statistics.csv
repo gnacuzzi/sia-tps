@@ -1,0 +1,2 @@
+variable,unit,count,missing_or_nan,infinite,finite_count,unique,min,p01,q1,median,q3,p99,max,mean,std,iqr,lower_fence,upper_fence,iqr_candidates
+all_pixels,intensidad original,9760016,0,0,9760016,256,0.0,0.0,0.0,0.0,0.0,0.9960784316062927,1.0,0.12856833701808879,0.30643797344926715,0.0,0.0,0.0,1828063

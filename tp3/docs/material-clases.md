@@ -96,15 +96,18 @@ fórmulas de optimización, métricas, escalado y L2. Las transcripciones
 complementan las diapositivas; sus errores de reconocimiento no se toman
 como fórmulas ni se corrigen en los archivos originales.
 
-- **Separar training, validation y test.** Training ajusta pesos; validation
+- **Distinguir training, validation y test.** Training ajusta pesos; validation
   permite comparar configuraciones y observar las curvas durante el desarrollo;
   test se reserva para la evaluación final. La clase 13 lo aclara para los
-  ejercicios 2 y 3. El loader actual solo separa training/test: falta validation.
+  ejercicios 2 y 3. El equipo decidió trabajar con training/test sin validation
+  en esta etapa. Esa decisión está vigente en `decisiones.md`: la referencia
+  de clase no implica haber acordado cambiar el loader ni condiciona el EDA.
 - **Analizar antes de transformar.** Revisar distribuciones, escalas, balance,
   faltantes, outliers y variables problemáticas sobre training. Min-max y
   estandarización tienen propósitos distintos (clase 12.2, páginas 32–35);
   no se elige una transformación sin justificarla con esos datos. Sus parámetros
-  deberán calcularse con training y reutilizarse en validation/test.
+  deberán calcularse con training y reutilizarse en los otros conjuntos que
+  correspondan al diseño experimental acordado.
 - **Mantener las convenciones de clase.** En la matriz de confusión las filas
   representan clases reales y las columnas predicciones; TPR coincide con
   recall. Accuracy sola puede ocultar el desbalance (clase 12.2, páginas 10–16
