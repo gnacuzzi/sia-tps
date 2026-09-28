@@ -94,3 +94,27 @@ junto al código. Ver comandos en el [README](../README.md).
 
 No se entrenó aún sobre los datasets de fraude o dígitos. Esta validación
 comprueba los componentes base; no demuestra rendimiento sobre esos problemas.
+
+## Revalidación del punto 1 (28 de septiembre de 2026)
+
+Se ejecutó nuevamente la configuración completa, sin modificar modelos,
+tasas, semillas ni criterios de aceptación. Entorno: Python 3.14.3 y NumPy 2.4.2.
+
+- **38 tests aprobados** (31 del motor/validación y 7 de los loaders).
+- **15/15 corridas aprobadas**, con las mismas épocas y MSE de la tabla anterior
+  (comparación numérica con tolerancias `rtol=1e-12`, `atol=1e-15`).
+- AND alcanzó MSE cero; lineal y tanh, MSE menor que `1e-6`; ambas redes XOR,
+  MSE menor que `0.001` y 100 % de accuracy bipolar para las tres semillas.
+- Se recargaron los 15 modelos guardados: sus predicciones reprodujeron
+  exactamente el MSE y la accuracy registrados en esta nueva corrida.
+
+Los tests mantienen los controles de actualizaciones manuales, gradientes
+por diferencias finitas y el caso negativo de XOR con perceptrón escalón.
+Para repetir la comprobación, usar los comandos de instalación y ejecución
+del [README](../README.md), eligiendo una carpeta de salida nueva.
+
+El punto 1 queda verificado para estos casos y semillas. La inspección del
+punto 2 confirmó que los loaders actuales separan training/test, pero no crean
+validation. Completar esa tercera partición es el próximo paso, antes del EDA
+y de comparar configuraciones. Esta revisión no entrenó ni evaluó modelos
+sobre el test final de fraude o dígitos.

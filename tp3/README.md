@@ -32,7 +32,8 @@ Estos ejercicios **no se presentan**, según la consigna: sirven para verificar
 las herramientas antes de trabajar con los datos de los ejercicios obligatorios.
 Los ejemplos del apunte y de la guía interactiva son cálculos didácticos.
 Las corridas reales están en el informe de resultados: **15/15 aprobadas**
-con la configuración final y tres semillas, además de **31 tests aprobados**.
+con la configuración final y tres semillas, además de **38 tests aprobados**
+(31 del motor/validación y 7 de carga de datos; revalidado el 28 de septiembre).
 También se conservan los fallos de la configuración inicial de XOR.
 
 ## Instalar y ejecutar

@@ -196,3 +196,4 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Trabajar de a un punto y revisarlo antes de continuar | Pedido del equipo para comprender y justificar cada paso | Primero se vuelve a comprobar el motor con los casos de validación |
 | Incorporar validation antes del análisis y los experimentos | El plan actual pide tres particiones y reserva test para el final | Pendiente del punto 2; reemplaza la elección anterior de implementar solo training/test |
 | Justificar preprocesamiento y regularización con evidencia | Seguir el hilo experimental de clases 12.2 y 13 | EDA sobre training antes de transformar; regularización solo ante un diagnóstico de sobreajuste; todavía no implementados |
+| Mantener el motor y la configuración de validación actuales | La nueva ejecución pasó los 38 tests y las 15 corridas sin cambios | Punto 1 verificado; se recargaron los 15 modelos y se reprodujeron sus métricas; evidencia en `resultados-validacion.md` |
