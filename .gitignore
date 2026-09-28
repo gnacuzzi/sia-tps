@@ -222,5 +222,7 @@ tmp/
 .DS_Store
 output/
 
-# Transcripciones de clase: material local, no publicar.
-/tp3/docs/transcripciones/
+# Transcripciones anteriores locales; publicar solo las nuevas de clases 12.2 y 13.
+/tp3/docs/transcripciones/*
+!/tp3/docs/transcripciones/Clase12.2MétricasySobreajuste.vtt
+!/tp3/docs/transcripciones/Clase13-Regularizacion.vtt

@@ -1,0 +1,1982 @@
+WEBVTT
+
+1
+00:00:03.070 --> 00:00:07.389
+Eugenia Sol Piñeiro: Bien la idea de la clase hoy es ver un poco de métricas de evaluación que vamos a ver.
+
+2
+00:00:07.890 --> 00:00:13.480
+Eugenia Sol Piñeiro: primero cómo evaluar nuestro modelo en este caso y cómo se puede extender un poco eso?
+
+3
+00:00:13.610 --> 00:00:16.770
+Eugenia Sol Piñeiro: Y vamos a ver un concepto importante, que es el de sobreajuste
+
+4
+00:00:16.950 --> 00:00:31.559
+Eugenia Sol Piñeiro: que esto también lo van a tener que analizar en el trabajo práctico. Pero bueno, o sea, en general es lo que se usa, digamos, en en la industria, Después, cuando 1 hace una una aplicación real, digamos, de inteligencia artificial. Así que la idea es que se lleven también estas técnicas para después aplicar a otros proyectos.
+
+5
+00:00:33.120 --> 00:00:37.469
+Eugenia Sol Piñeiro: Entonces arranquemos para qué queremos ver todo esto?
+
+6
+00:00:38.140 --> 00:00:44.600
+Eugenia Sol Piñeiro: Primero, yo lo que necesito hacer es medir la performance o el desempeño de mi modelo. En este caso
+
+7
+00:00:45.030 --> 00:00:56.120
+Eugenia Sol Piñeiro: tenemos una red neuronal, pero esto no se usa únicamente en redes neuronales. Pueden ser algoritmos de de machine learning. También puede ser un clasificador, no necesariamente tiene que ser
+
+8
+00:00:56.390 --> 00:01:03.560
+Eugenia Sol Piñeiro: específicamente un perceptor multicapa. Así que lo vamos a ver bajada, ese caso uso. Pero se puede usar en otros. Entonces.
+
+9
+00:01:03.930 --> 00:01:13.590
+Eugenia Sol Piñeiro: ¿qué es lo que tenemos que hacer. Nosotros ya sabemos cómo medir el error que comete nuestro perceptrón en este caso, como lo miden ustedes, el error
+
+10
+00:01:20.270 --> 00:01:25.829
+Eugenia Sol Piñeiro: que tienen un conjunto de datos quieren clasificar. Y cómo miden el error que definen.
+
+11
+00:01:26.510 --> 00:01:30.419
+Eugenia Sol Piñeiro: comparando con la etiqueta. M. C: Bien, Perfecto.
+
+12
+00:01:30.990 --> 00:01:33.809
+Eugenia Sol Piñeiro: Por ejemplo, pueden usar eso. Entonces.
+
+13
+00:01:34.190 --> 00:01:49.030
+Eugenia Sol Piñeiro: al comparar con mi etiqueta en este caso, quiero saber cuántos ejemplos de mi conjunto de entrenamiento clasificó bien el modelo y cuántos que no pertenecen al conjunto de entrenamiento clasifica. Bien.
+
+14
+00:01:49.350 --> 00:02:05.589
+Eugenia Sol Piñeiro: ahora vamos a definir qué es esto, de que pertenezca al conjunto de entrenamiento y que no lo per que no, que no pertenezca. Y vamos a definir qué significa esto, de que clasifique correctamente Si realmente el modelo está convergen convergiendo. ¿está aprendiendo los datos o está haciendo cualquier cosa.
+
+15
+00:02:05.740 --> 00:02:09.250
+Eugenia Sol Piñeiro: Y no me sirve para después inferir una nueva etiqueta.
+
+16
+00:02:10.250 --> 00:02:12.670
+Eugenia Sol Piñeiro: Entonces objetivos?
+
+17
+00:02:12.950 --> 00:02:23.130
+Eugenia Sol Piñeiro: Vamos a evaluar algún método de clasificación. En este caso tiene una red neuronal con métricas estándar. Hay más métricas, vamos a ver las estándar y después
+
+18
+00:02:23.250 --> 00:02:28.739
+Eugenia Sol Piñeiro: quizás pueden definir hasta sus propias métricas o investigar otras. Pero por lo pronto vamos a ver las estándar.
+
+19
+00:02:28.950 --> 00:02:35.009
+Eugenia Sol Piñeiro: Vamos a comparar varios métodos de clasificación. Ese es un poco la idea. Cuando tengo
+
+20
+00:02:35.130 --> 00:02:49.430
+Eugenia Sol Piñeiro: un mismo datasset, puedo quizás cambiar, por ejemplo, los hiperparámetros de mi red y evaluar qué hiper parámetro o qué configuración de mi red performance mejor. Entonces, como para compararlo, Bueno, por ejemplo, definiendo este tipo de métricas.
+
+21
+00:02:49.730 --> 00:02:54.659
+Eugenia Sol Piñeiro: o puedo ir del otro lado. No tengo un mismo método de clasificación y varío el datasset
+
+22
+00:02:54.780 --> 00:03:08.020
+Eugenia Sol Piñeiro: por ahí. Tengo más o menos características, más o menos features. Tengo más o menos datos. ¿cómo puedo hacer para ver cuál es el que tengo que usar. Y con qué hiper parámetros funciona mejor mi red. Entonces necesito algo para comparar
+
+23
+00:03:09.030 --> 00:03:16.679
+Eugenia Sol Piñeiro: lo mismo también para medir el cambio de hiper parámetros. Ejemplo: ¿qué pasa si aumento la tasa de aprendizaje?
+
+24
+00:03:17.060 --> 00:03:27.340
+Eugenia Sol Piñeiro: ¿qué tasa de aprendizaje me conviene usar? ¿qué pasa si aumento la cantidad de épocas. Si aumenta la cantidad de capas, aumento la cantidad de neuronas en una capa. Entonces, ¿cómo puedo ver
+
+25
+00:03:27.830 --> 00:03:31.609
+Eugenia Sol Piñeiro: qué impacto tienen esos cambios sobre la performance y modelo.
+
+26
+00:03:31.800 --> 00:03:40.670
+Eugenia Sol Piñeiro: Bien, para eso es que vamos a definir todas estas métricas. Pero antes de analizar las métricas, vamos a tener que hacer una división de nuestro conjunto de datos.
+
+27
+00:03:42.870 --> 00:03:52.170
+Eugenia Sol Piñeiro: Vamos a tener nuestro conjunto de datos y lo vamos a dividir en el training set o el conjunto de entrenamiento y el testing set que va a ser el conjunto de pruebas.
+
+28
+00:03:52.700 --> 00:04:02.019
+Eugenia Sol Piñeiro: el testing set lo voy a agarrar, lo voy a dejar aparte. Lo voy a guardar y después lo voy a usar más tarde. Por lo pronto voy a entrenar. Es decir, los pesos de mi modelo
+
+29
+00:04:02.250 --> 00:04:05.839
+Eugenia Sol Piñeiro: van a tener información sobre mi conjunto de datos de entrenamiento.
+
+30
+00:04:06.360 --> 00:04:12.239
+Eugenia Sol Piñeiro: Entonces se dice que el modelo aprende bien, es decir, que converge cuando aprende el training set.
+
+31
+00:04:13.280 --> 00:04:20.239
+Eugenia Sol Piñeiro: En cambio, aprender bien el testing set entra otro concepto que vamos a ver un poquito más adelante, pero se llama generalizar.
+
+32
+00:04:20.519 --> 00:04:23.250
+Eugenia Sol Piñeiro: Entonces para eso me voy a reservar mi testing set.
+
+33
+00:04:23.410 --> 00:04:25.100
+Eugenia Sol Piñeiro: Por lo pronto, no lo voy a usar.
+
+34
+00:04:26.270 --> 00:04:34.670
+Eugenia Sol Piñeiro: Entonces, ¿qué vamos a hacer? Vamos a entrenar nuestra red con nuestro trainingset, evaluamos la red con las métricas que vamos a definir con el training set
+
+35
+00:04:34.760 --> 00:04:49.050
+Eugenia Sol Piñeiro: y después vamos a evaluarlo de nuevo con este conjunto de prueba que van a ser con es un conjunto de datos que no fue usado para calcular los pesos. Es un conjunto de datos totalmente nuevo que la red no vio. Entonces, por eso es que me lo tengo que separar
+
+36
+00:04:50.240 --> 00:04:51.660
+Eugenia Sol Piñeiro: esta partición.
+
+37
+00:04:51.840 --> 00:04:57.690
+Eugenia Sol Piñeiro: Como paréntesis, también la pueden encontrar como train valued test, como si acá hubiese
+
+38
+00:04:57.840 --> 00:05:01.530
+Eugenia Sol Piñeiro: otro conjunto que es el de validación o válida.
+
+39
+00:05:02.860 --> 00:05:03.700
+Eugenia Sol Piñeiro: Ahí
+
+40
+00:05:06.980 --> 00:05:17.610
+Eugenia Sol Piñeiro: que se suele usar cuando tenemos conjuntos de datos más grandes. Por lo pronto, pueden hacer una partición train test para, por ejemplo, el trabajo práctico. Pero sepan que existe este conjunto de entrenamiento, que lo que se hace es
+
+41
+00:05:17.750 --> 00:05:20.530
+Eugenia Sol Piñeiro: entrenar con el training set.
+
+42
+00:05:20.760 --> 00:05:25.290
+Eugenia Sol Piñeiro: Cuando varío los hiperparámetros de mi modelo uso el Valid Set
+
+43
+00:05:25.810 --> 00:05:32.549
+Eugenia Sol Piñeiro: y con el testing set. Lo uso después para evaluar el método con datos nuevos datos que nunca vio.
+
+44
+00:05:32.910 --> 00:05:42.109
+Eugenia Sol Piñeiro: En este caso evalúo mi red neuronal a ver qué tanto puede generalizar, qué tanto puede aprender data nueva. Cuando me llega una muestra nueva para usar mi modelo, que ya está entrenado.
+
+45
+00:05:42.750 --> 00:05:45.169
+Eugenia Sol Piñeiro: entonces lo comento para que
+
+46
+00:05:45.360 --> 00:05:52.630
+Eugenia Sol Piñeiro: conozcan de su existencia. También pueden usar la partición Trainbally Test si alguien quiere, pero por lo pronto no es necesario porque tienen un conjunto de datos bastante chico.
+
+47
+00:05:52.840 --> 00:05:53.980
+Eugenia Sol Piñeiro: Y
+
+48
+00:05:54.740 --> 00:06:14.489
+Eugenia Sol Piñeiro: esto suele ser, por ejemplo, una partición de 80 por 100 para Trainingy Valid y 20 por 100 para test. Entonces, por ejemplo, después de este 80 por 100 dejo, una parte más chica para val y el resto para test, o puedo tener 80 10 10. Y así es como la mayor cantidad de muestras van al conjunto entrenamiento.
+
+49
+00:06:17.960 --> 00:06:21.880
+Eugenia Sol Piñeiro: Bien, Entonces, hasta ahora dividimos nuestro conjunto de datos.
+
+50
+00:06:22.740 --> 00:06:30.230
+Eugenia Sol Piñeiro: Ahora, ¿cómo sé si esa división de mi conjunto de datos es apropiada.
+
+51
+00:06:30.640 --> 00:06:33.520
+Eugenia Sol Piñeiro: ¿qué me puede pasar si les ocurre algo
+
+52
+00:06:34.470 --> 00:06:38.679
+Eugenia Sol Piñeiro: que me puede pasar o bájenlo si quieren, al caso uso del del trabajo práctico.
+
+53
+00:06:40.190 --> 00:06:45.189
+Eugenia Sol Piñeiro: com, ¿Cómo lo parto así en Trainingyvallid o Training Test.
+
+54
+00:06:50.370 --> 00:06:56.070
+NICOLÁS KORON: Quizás te queda un set sesgado hacia un lado y otro Así.
+
+55
+00:06:56.070 --> 00:06:56.700
+Eugenia Sol Piñeiro: De y.
+
+56
+00:06:56.700 --> 00:06:57.960
+NICOLÁS KORON: Test en otro mundo.
+
+57
+00:06:58.810 --> 00:07:01.599
+Eugenia Sol Piñeiro: Bien, ¿a qué te referís con sesgado hacia.
+
+58
+00:07:01.600 --> 00:07:10.349
+NICOLÁS KORON: Y quizás, si mi sed es todo el entrenamiento tiene mucho fraude y poco no fraude. Después.
+
+59
+00:07:10.540 --> 00:07:12.540
+NICOLÁS KORON: identificar no fraudes.
+
+60
+00:07:13.200 --> 00:07:20.749
+Eugenia Sol Piñeiro: Bien perfecto. En ese caso se llama que el conjunto de datos está desbalanceado.
+
+61
+00:07:20.940 --> 00:07:25.439
+Eugenia Sol Piñeiro: Es decir, tengo que tener justamente un balance entre mis clases. Tengo que tener
+
+62
+00:07:26.530 --> 00:07:37.419
+Eugenia Sol Piñeiro: aproximadamente la misma cantidad de distribución entre train y test de fraude y no fraude. Si yo entreno sólo con fraude, después testeo, solo con no fraude.
+
+63
+00:07:37.710 --> 00:07:46.299
+Eugenia Sol Piñeiro: Jamás va a aprender, que es el no fraude. Se entiende porque nunca le di muestras de ese conjunto de datos, entonces tengo que tener cuidado con el balanCEO de clases.
+
+64
+00:07:49.450 --> 00:07:52.509
+Eugenia Sol Piñeiro: Así que perfecto. El ejemplo bien
+
+65
+00:07:52.980 --> 00:08:06.169
+Eugenia Sol Piñeiro: genial. Vamos a ver distintos métodos. Entonces, para hacerlo, vamos a evaluar primero con la matriz de confusión. Queremos saber qué es. Vamos a ver después las métricas. Y por último, vamos a ver cómo se diseña 1 de estos experimentos para poder evaluar la performance del modelo.
+
+66
+00:08:07.330 --> 00:08:09.180
+Eugenia Sol Piñeiro: Entonces, ¿qué es la matriz de confusión?
+
+67
+00:08:10.860 --> 00:08:15.210
+Eugenia Sol Piñeiro: Básicamente es una tabla que me va a permitir evaluar el desempeño de mi modelo
+
+68
+00:08:16.130 --> 00:08:21.569
+Eugenia Sol Piñeiro: y, además de darme una forma de visualizarlo, no porque es una forma sencilla de visualizar este tipo de métricas
+
+69
+00:08:21.720 --> 00:08:26.749
+Eugenia Sol Piñeiro: y saber cómo es que el modelo comete algún error a la hora de clasificar.
+
+70
+00:08:26.920 --> 00:08:28.250
+Eugenia Sol Piñeiro: Sabes qué significa.
+
+71
+00:08:29.190 --> 00:08:34.860
+Eugenia Sol Piñeiro: Voy a tener en cada columna la predicción, es decir, lo que dijo el modelo.
+
+72
+00:08:35.610 --> 00:08:41.109
+Eugenia Sol Piñeiro: Y en cada fila la etiqueta real, lo que había en el sentido
+
+73
+00:08:41.390 --> 00:08:48.360
+Eugenia Sol Piñeiro: de yo. Tengo mis etiquetas, por ejemplo, ustedes, en vez de positivo y negativo, tienen fraude, no fraude.
+
+74
+00:08:49.190 --> 00:08:56.669
+Eugenia Sol Piñeiro: Entonces, por ejemplo, voy a tener mis verdaderos positivos o true positive que van a hacer
+
+75
+00:08:56.780 --> 00:09:03.039
+Eugenia Sol Piñeiro: las muestras que el modelo clasificó como positivo y realmente eran positivas.
+
+76
+00:09:03.220 --> 00:09:12.659
+Eugenia Sol Piñeiro: Después voy a tener los false negative o los falsos negativos, que son las muestras que el modelo clasificó como negativo, pero en realidad eran positivas. Es decir, se equivocó
+
+77
+00:09:13.100 --> 00:09:26.969
+Eugenia Sol Piñeiro: y después la inversa, no los que el modelo dijo que eran positivos, pero eran negativos, y los que eran negativos y efectivamente eran negativos. Es decir, lo que quiero hacer es maximizar la cantidad de muestras que me quedan en la diagonal.
+
+78
+00:09:27.070 --> 00:09:39.580
+Eugenia Sol Piñeiro: porque son las que están bien, no son las que realmente eran positivas. Y el modelo me dijo que lo eran y las que realmente eran negativas. Y el modelo dijo que lo eran entonces necesito maximizar estas y minimizar lo más posible los falsos.
+
+79
+00:09:40.440 --> 00:09:42.520
+Eugenia Sol Piñeiro: En este caso falto, negativo y falso positivo
+
+80
+00:09:44.850 --> 00:09:57.730
+Eugenia Sol Piñeiro: ejemplo. Supongamos que tenemos un modelo de clasificación que quiere distinguir entre perros y gatos. Tiene la etiqueta. Supongamos que le damos demuestras imágenes de perros y gatos y voy a tener 15 perros y 12 gatos.
+
+81
+00:09:57.870 --> 00:10:02.030
+Eugenia Sol Piñeiro: Entonces, después de clasificar, se obtiene la siguiente matriz de confusión.
+
+82
+00:10:03.170 --> 00:10:05.849
+Eugenia Sol Piñeiro: ¿Cómo la interpretan? ¿qué dice esta matriz.
+
+83
+00:10:21.610 --> 00:10:24.039
+Eugenia Sol Piñeiro: este 11, que significa, por ejemplo.
+
+84
+00:10:30.130 --> 00:10:33.430
+SANTIAGO SANCHEZ MAROSTICA: Entiendo que son 11 perros que los interpreto como perros.
+
+85
+00:10:35.420 --> 00:10:36.650
+Eugenia Sol Piñeiro: Bien. Y el 4.
+
+86
+00:10:37.410 --> 00:10:39.300
+SANTIAGO SANCHEZ MAROSTICA: Once perros que interpretó como gatos.
+
+87
+00:10:40.510 --> 00:10:43.409
+Eugenia Sol Piñeiro: Bien perfecto, o sea, se equivocó en 4 perros.
+
+88
+00:10:44.260 --> 00:10:58.340
+Eugenia Sol Piñeiro: Fíjense que la fila debería sumar 15, porque en total tenía 15 perros, de los cuales 11 clasifico bien, 4 mal. Bueno, y análogamente para los gatos. ¿no? Pero la idea es que la diagonal me quede con la mayor cantidad de muestras posible.
+
+89
+00:10:58.680 --> 00:11:00.190
+Eugenia Sol Piñeiro: Entonces, ¿de qué me va a servir esto
+
+90
+00:11:01.290 --> 00:11:10.619
+Eugenia Sol Piñeiro: ahora? Vamos a ver que las métricas se van a definir a través de este concepto de falso. Positivo, falso, negativo, true positive tru negativo.
+
+91
+00:11:13.430 --> 00:11:14.400
+Eugenia Sol Piñeiro: Ahí
+
+92
+00:11:14.560 --> 00:11:22.759
+Eugenia Sol Piñeiro: teníamos el caso en el que teníamos 2 clases, No, por ejemplo, fraude, no fraude, tener clasificación binaria, pero
+
+93
+00:11:23.410 --> 00:11:36.319
+Eugenia Sol Piñeiro: esto quizás lo necesitamos extender en el caso de que tengamos n clases, se puede hacer una matriz de confusión, multiclase que lo que hace es ver justamente en qué clase se equivocó y te da información.
+
+94
+00:11:36.590 --> 00:11:39.079
+Eugenia Sol Piñeiro: no únicamente en cantidad
+
+95
+00:11:39.530 --> 00:11:46.950
+Eugenia Sol Piñeiro: de de muestras en las que se equivocó, sino en cuáles. Entonces, por ejemplo, supóngase que tenemos la clase del 1 al 5.
+
+96
+00:11:47.660 --> 00:11:53.279
+Eugenia Sol Piñeiro: En este caso me dice: la clase real. Era 1. Y
+
+97
+00:11:53.450 --> 00:11:56.280
+Eugenia Sol Piñeiro: en la predicción, le acertó a 7,
+
+98
+00:11:56.660 --> 00:11:58.580
+Eugenia Sol Piñeiro: ¿no? Y así, por ejemplo, acá
+
+99
+00:11:58.790 --> 00:12:02.800
+Eugenia Sol Piñeiro: este 1 significa que se equivocó el 3 con el 2,
+
+100
+00:12:03.140 --> 00:12:07.429
+Eugenia Sol Piñeiro: El modelo, la clase real era 3, y hay una que la clasificó como 2.
+
+101
+00:12:08.860 --> 00:12:18.410
+Eugenia Sol Piñeiro: Si bien me da esto de la cantidad de muestras en la que se confundió, quizás es relevante para mi caso, que se equivocó el 3 con el 2,
+
+102
+00:12:18.500 --> 00:12:30.449
+Eugenia Sol Piñeiro: que quizás eran clases que son similares y no se equivocó. No sé el 3 con el 5 que por ahí dan clases que eran muy distintas. Entonces también me da información en Okay se equivocó. Pero ¿dónde
+
+103
+00:12:31.180 --> 00:12:33.510
+Eugenia Sol Piñeiro: entonces te da un poquito más de
+
+104
+00:12:33.710 --> 00:12:36.159
+Eugenia Sol Piñeiro: información para poder interpretar los resultados?
+
+105
+00:12:36.380 --> 00:12:44.530
+Eugenia Sol Piñeiro: De nuevo? Es lo mismo. Se va a maximizar la diagonal y todo el resto que van a ser los falsos, negativos y falsos positivos. Quiero que sean 0 o lo más cercano a 0 posible.
+
+106
+00:12:44.980 --> 00:12:47.179
+Eugenia Sol Piñeiro: pero se puede extender a multi clase.
+
+107
+00:12:48.220 --> 00:12:54.289
+Eugenia Sol Piñeiro: Entonces, una vez que tenemos la matriz de confusión, vamos a definir nuestras métricas
+
+108
+00:12:57.290 --> 00:13:00.680
+Eugenia Sol Piñeiro: que vamos a ver estas métricas como métricas estándar.
+
+109
+00:13:00.870 --> 00:13:02.949
+Eugenia Sol Piñeiro: ¿por qué vamos a ver las estándar? Porque
+
+110
+00:13:03.200 --> 00:13:10.140
+Eugenia Sol Piñeiro: dependiendo qué métrica nosotros usemos? Puede parecer que el modelo performance mejor que lo que en realidad performance.
+
+111
+00:13:10.210 --> 00:13:28.850
+Eugenia Sol Piñeiro: Entonces, estas son métricas que se conocen. Son conocidas y se usan, digamos, en general en los artículos, investigación en la industria y demás, entonces son comparables en términos de si tenemos mismo dataced y modelos, Pero se pueden comparar estas métricas? Ya están definidas y tienen una forma para calcularla.
+
+112
+00:13:28.910 --> 00:13:45.690
+Eugenia Sol Piñeiro: ¿por qué aclaro esto? Porque a veces, por ejemplo, definen alguna métrica, ustedes por su cuenta y la llaman precision o precisión, la precisión del modelo. Y esta precisión es una métrica estándar que se conoce como se calcula, entonces cuidado con eso que ya están definidas, Digamos
+
+113
+00:13:46.160 --> 00:13:57.969
+Eugenia Sol Piñeiro: entonces sabe cómo calcularlas y demás podés crear tu propia métrica. ¿sí? Y tienes tu propia forma de avalar los resultados, siempre y cuando tenga sentido y esté bien justificada, ¿no?
+
+114
+00:13:58.450 --> 00:14:00.920
+Eugenia Sol Piñeiro: Pero por lo pronto, estas sirven para comparar.
+
+115
+00:14:02.760 --> 00:14:05.400
+Eugenia Sol Piñeiro: Bien, vamos a tener primero a Kieracy.
+
+116
+00:14:06.100 --> 00:14:07.450
+Eugenia Sol Piñeiro: ¿a qué hora sí va a hacer.
+
+117
+00:14:08.640 --> 00:14:16.520
+Eugenia Sol Piñeiro: Voy a hacer un paréntesis ante eso. Esta clase esta va a ser. Es como un trabalenguas de el falso positivo, el falso negativo te lo puedo sentir tu negativo. Así que téngame paciencia.
+
+118
+00:14:16.650 --> 00:14:23.900
+Eugenia Sol Piñeiro: pero cualquier cosa me frenan. Vamos a tener a kiografía, que es los verdaderos
+
+119
+00:14:24.000 --> 00:14:34.839
+Eugenia Sol Piñeiro: sobre todas las muestras. Básicamente es true positive Mastro negative sobre la suma de la cantidad total de filas que tenga el conjunto de datos.
+
+120
+00:14:35.070 --> 00:14:36.100
+Eugenia Sol Piñeiro: Me muestras.
+
+121
+00:14:37.180 --> 00:14:45.259
+Eugenia Sol Piñeiro: Entonces, aquí, Brasil representa la exactitud del modelo. Son todas las muestras que están bien clasificadas.
+
+122
+00:14:45.630 --> 00:14:52.789
+Eugenia Sol Piñeiro: Entonces, cuanto más cercano a 1 sea mi métrica, mejor no es el porcentaje de casos que el modelo acertó
+
+123
+00:14:53.490 --> 00:14:56.330
+Eugenia Sol Piñeiro: Ahora, ¿A qué hora, si tiene un problema
+
+124
+00:14:58.190 --> 00:14:59.979
+Eugenia Sol Piñeiro: que vamos a ver, vamos a ver un ejemplo.
+
+125
+00:15:01.100 --> 00:15:07.789
+Eugenia Sol Piñeiro: supóngase que tengo un conjunto de datos y tengo 1 000 pacientes. No
+
+126
+00:15:08.630 --> 00:15:17.690
+Eugenia Sol Piñeiro: tengo pacientes y quiero clasificar si tienen o no cierta enfermedad, entonces tengo, por ejemplo.
+
+127
+00:15:19.540 --> 00:15:24.990
+Eugenia Sol Piñeiro: muestras en mi conjunto de datos de 990 pacientes que no poseen la enfermedad
+
+128
+00:15:26.000 --> 00:15:36.030
+Eugenia Sol Piñeiro: y 10 pacientes que tienen la enfermedad. ¿qué le pasa a este conjunto de datos Si ya lo ven así? Lo hice bastante extremo, ¿no? Pero que ¿cuál es el problema?
+
+129
+00:15:36.440 --> 00:15:37.889
+Eugenia Sol Piñeiro: Ya desde el vamos.
+
+130
+00:15:50.200 --> 00:15:55.209
+Eugenia Sol Piñeiro: Hay pocos ejemplos de pacientes enfermos, bien buenísimos. Está desbalanceado.
+
+131
+00:15:55.810 --> 00:16:06.710
+Eugenia Sol Piñeiro: Entonces, bueno, sigo con mi conjunto de datos. No hago nada al respecto, lo cual está mal, pero no vamos a hacer nada al respecto y vamos a calcular la matriz de confusión. Entonces voy a tener
+
+132
+00:16:07.500 --> 00:16:12.200
+Eugenia Sol Piñeiro: mi matriz de confusión con los que el modelo dijo que estaban enfermos.
+
+133
+00:16:12.840 --> 00:16:22.899
+Eugenia Sol Piñeiro: los que dijo que no tenían la enfermedad, los que tenían la enfermedad, los que dijo que no tenían la enfermedad. Y como está tan sesgado mi modelo a decir que no tiene la enfermedad.
+
+134
+00:16:23.060 --> 00:16:33.929
+Eugenia Sol Piñeiro: Tengo un modelo que lo que hace es clasificar a todos como que listo. Nadie tiene la enfermedad, porque es lo que más aprendió entonces. Estas muestras no llegó ni a aprenderlas siquiera. Entonces, la matriz de conjunción me da esto.
+
+135
+00:16:34.440 --> 00:16:37.230
+Eugenia Sol Piñeiro: El modelo dice que nadie tiene la enfermedad.
+
+136
+00:16:37.730 --> 00:16:39.319
+Eugenia Sol Piñeiro: Entonces esto va a ser 0.
+
+137
+00:16:39.470 --> 00:16:43.550
+Eugenia Sol Piñeiro: Esto va a ser 10 y esto 990.
+
+138
+00:16:43.670 --> 00:16:50.150
+Eugenia Sol Piñeiro: ¿qué significa el modelo? Dice que no tiene la enfermedad. Pero efectivamente, estos 10 sí la tenían
+
+139
+00:16:50.500 --> 00:16:55.379
+Eugenia Sol Piñeiro: y dice que 990 no tienen la enfermedad que está bien, ¿no? Porque son estos.
+
+140
+00:16:56.250 --> 00:17:02.180
+Eugenia Sol Piñeiro: Pero ¿qué pasa con esta diagonal que me queda en 0? ¿cuánto me da aquí? Urassic acá
+
+141
+00:17:08.319 --> 00:17:16.300
+Eugenia Sol Piñeiro: 99 por 100. Bien, el 99 por 100 es flor de resultado, no, o sea buenísimo si tenemos 99 por 100.
+
+142
+00:17:16.520 --> 00:17:17.430
+Eugenia Sol Piñeiro: Entonces.
+
+143
+00:17:17.740 --> 00:17:33.250
+Eugenia Sol Piñeiro: ¿para qué lo hice? Tan extremo cuidado con este tipo de cosas, Porque aquí era, si tiene esta desventaja de que si tengo mi conjunto de datos desbalanceado, quizás me da una métrica que no es representativa realmente los resultados. De hecho, es un modelo que funciona horriblemente mal. Lo único que dice es listo. Nadie tiene la enfermedad
+
+144
+00:17:33.250 --> 00:17:38.909
+Eugenia Sol Piñeiro: y ya está la está clasificando mal. Todas las muestras de la clase con pacientes que realmente tienen la enfermedad
+
+145
+00:17:39.060 --> 00:17:45.140
+Eugenia Sol Piñeiro: encima. Imagínense medicina decir a alguien que no tiene la enfermedad que necesita hacer un tratamiento.
+
+146
+00:17:45.430 --> 00:17:48.399
+Eugenia Sol Piñeiro: Y Y bueno, ya desde luego, funciona mal.
+
+147
+00:17:49.810 --> 00:17:58.779
+Eugenia Sol Piñeiro: Bien, Entonces, por esto también tenemos otras métricas que quizás tenemos que combinarlas o usar más
+
+148
+00:17:59.700 --> 00:18:07.260
+Eugenia Sol Piñeiro: Si tenemos un conjunto desbalanceado, sería mejor sacar no enfermos para que los enfermos representen más porcentaje.
+
+149
+00:18:07.430 --> 00:18:11.769
+Eugenia Sol Piñeiro: Sería mejor sacar non from. Bueno, hay distintas técnicas
+
+150
+00:18:12.240 --> 00:18:23.200
+Eugenia Sol Piñeiro: la que estás mencionando ahí es sacar no enfermos hacer under sampling se llama, o sea, eliminar muestras de las que de los no enfermos, no estás diciendo.
+
+151
+00:18:25.520 --> 00:18:31.219
+Eugenia Sol Piñeiro: Okay, una es esa opción. ¿qué desventaja tiene perdés? Un montón de data? ¿no?
+
+152
+00:18:32.250 --> 00:18:39.770
+Eugenia Sol Piñeiro: Bueno, otra es hacer oversampling, que es la inversa, que es aumentar la cantidad de muestras de pacientes que realmente, tienen.
+
+153
+00:18:41.350 --> 00:18:42.210
+Eugenia Sol Piñeiro: por ejemplo.
+
+154
+00:18:42.310 --> 00:18:54.880
+Eugenia Sol Piñeiro: es intentar balancearlo. Hay distintas técnicas, 2 son esas. Depende del caso de uso. A veces no podés conseguir nueva data, de hecho, también otra técnica es generar la data de forma artificial con algún otro modelo generativo.
+
+155
+00:18:54.930 --> 00:19:06.889
+Eugenia Sol Piñeiro: Ya vamos a ver por deep learning pp 5 y demás, pero depende del caso de uso podes hacer una o la otra. A veces te conviene eliminar información y listo, pero en este caso tendrías solo 10 muestras
+
+156
+00:19:07.070 --> 00:19:08.089
+Eugenia Sol Piñeiro: de cada 1.
+
+157
+00:19:08.290 --> 00:19:13.510
+Eugenia Sol Piñeiro: E este caso es muy extremo, ¿no? Pero tendrías muy poquitas con 10 muestras. No puedes hacer ningún análisis que sea robusto.
+
+158
+00:19:13.970 --> 00:19:21.220
+Eugenia Sol Piñeiro: Entonces ahí, por lo general te vas al otro lado, que es de generar, data de forma artificial o intentar conseguir muestras de algún de alguna otra parte, no
+
+159
+00:19:21.870 --> 00:19:23.540
+Eugenia Sol Piñeiro: para aumentar el conjunto de datos.
+
+160
+00:19:23.810 --> 00:19:26.380
+Eugenia Sol Piñeiro: Pero sí viene ahí el el aporte.
+
+161
+00:19:30.450 --> 00:19:31.370
+Eugenia Sol Piñeiro: Bien
+
+162
+00:19:32.240 --> 00:19:40.099
+Eugenia Sol Piñeiro: tenemos precisión ¿Qué hace precisión? Va a medir los verdaderos positivos sobre todos los que realmente me dieron positivo.
+
+163
+00:19:40.370 --> 00:19:47.939
+Eugenia Sol Piñeiro: o sea, trupositive sobre los que eran positivos. En serio versus los que
+
+164
+00:19:48.680 --> 00:19:52.770
+Eugenia Sol Piñeiro: el modelo dice que son positivos, pero no son positivos.
+
+165
+00:19:53.270 --> 00:20:04.579
+Eugenia Sol Piñeiro: Ok, o sea, ¿va a medir quizás la la capacidad del modelo para evitar que las negativas se etiqueten con positivas. O sea, qué porcentaje de lo que le dije
+
+166
+00:20:04.730 --> 00:20:08.849
+Eugenia Sol Piñeiro: que es la clase positiva, realmente son positivas.
+
+167
+00:20:09.010 --> 00:20:13.049
+Eugenia Sol Piñeiro: entonces este se enfoca justamente más en el lado de los positivos.
+
+168
+00:20:14.140 --> 00:20:23.080
+Eugenia Sol Piñeiro: Después vamos a tener Ricault que va a agarrar los verdaderos positivos, pero acá entran en juego los falsos negativos, o sea, van a ser
+
+169
+00:20:23.670 --> 00:20:28.699
+Eugenia Sol Piñeiro: los R que realmente eran positivos sobre todos los que son positivos.
+
+170
+00:20:29.740 --> 00:20:36.390
+Eugenia Sol Piñeiro: Entonces la diferencia, los que realmente son positivos, porque si sos un falso negativo, entonces es porque eras positivo.
+
+171
+00:20:36.990 --> 00:20:38.729
+Eugenia Sol Piñeiro: claro, positivos acertados.
+
+172
+00:20:39.700 --> 00:20:40.740
+Eugenia Sol Piñeiro: Entonces
+
+173
+00:20:40.940 --> 00:20:50.329
+Eugenia Sol Piñeiro: me informa qué cantidad el modelo puede identificar qué porcentaje de la clase positiva, el modelo es capaz de identificar.
+
+174
+00:20:52.770 --> 00:21:00.529
+Eugenia Sol Piñeiro: Entonces se suelen combinar por ahí podés evaluar, bueno, a qué hora, si y precision. O quiero hacer una curva de precisión y recal
+
+175
+00:21:00.570 --> 00:21:18.899
+Eugenia Sol Piñeiro: y empezar a evaluar ese tipo de cosas. O quizás para mi caso de uso, me conviene esta métrica porque mide los falsos negativos y, en mi caso, un falso negativo es muy importante por esta y esta cosa, entonces 1 suele justificar y dirigir las métricas con cierto criterio, dependiendo del caso de uso también.
+
+176
+00:21:19.620 --> 00:21:24.680
+Eugenia Sol Piñeiro: y a veces por lo general se ponen las 4 y fin, pero cada una tiene una interpretación distinta.
+
+177
+00:21:25.320 --> 00:21:34.700
+Eugenia Sol Piñeiro: Después tenemos e Juan Escort, que básicamente es una media ponderada con los 2, no de precisión y ricol, o sea, 2 por precisión, por ricole sobre precisión más rico.
+
+178
+00:21:34.850 --> 00:21:39.439
+Eugenia Sol Piñeiro: no que es es equilibrar un poco los falsos positivos y los falsos negativos.
+
+179
+00:21:44.200 --> 00:21:56.819
+Eugenia Sol Piñeiro: Después vamos a tener la tasa de verdaderos positivos, que es la misma que vimos antes. No propositive sobre tu positiva. También se puede pensar así como la tasa de los que realmente eran positivos y la tasa de falsos positivos, que es
+
+180
+00:21:57.070 --> 00:22:01.499
+Eugenia Sol Piñeiro: falsos, positivos sobre falsos positivos más trunegativos.
+
+181
+00:22:01.870 --> 00:22:11.559
+Eugenia Sol Piñeiro: Los que dijo que eran positivos bien hasta acá métricas estándar.
+
+182
+00:22:11.940 --> 00:22:17.000
+Eugenia Sol Piñeiro: Cualquier librería, la calcula son muy fáciles de calcular igual también. O sea, fíjense que
+
+183
+00:22:18.020 --> 00:22:27.810
+Eugenia Sol Piñeiro: es una cuenta bastante sencilla. La idea es cómo la interpretamos bajándola a nuestro caso de uso. Así que ojo con eso. En su caso, tienen que definir. Bueno, que es un true positive
+
+184
+00:22:28.250 --> 00:22:31.230
+Eugenia Sol Piñeiro: En el caso de fraude. ¿qué significa ser true positive.
+
+185
+00:22:44.760 --> 00:22:46.850
+Eugenia Sol Piñeiro: fraude. Gra fraude. Bien.
+
+186
+00:22:48.100 --> 00:22:55.679
+Eugenia Sol Piñeiro: bueno. Y así van a definir las 4 no falls negatic que es false, positive trunegative trusive. Así definen las 4
+
+187
+00:22:56.290 --> 00:22:59.630
+Eugenia Sol Piñeiro: Hay casos donde es un poco más difícil de definir. De hecho, vamos a ver
+
+188
+00:23:00.020 --> 00:23:03.130
+Eugenia Sol Piñeiro: otro más por el Tp 4.
+
+189
+00:23:03.810 --> 00:23:10.049
+Eugenia Sol Piñeiro: Pero en este caso tenemos sencillo. Tenemos un problema de clasificación, y es el problema donde es más sencillo definir este tipo de métricas.
+
+190
+00:23:10.320 --> 00:23:14.220
+Eugenia Sol Piñeiro: Así que usen las para volar la performance del modelo.
+
+191
+00:23:15.020 --> 00:23:21.580
+Eugenia Sol Piñeiro: Ahora, ¿cómo lo hacemos? ¿cómo agregamos todo este análisis a no este procedimiento
+
+192
+00:23:21.910 --> 00:23:28.500
+Eugenia Sol Piñeiro: para experimentar. Entonces voy a tener mis 2 conjuntos de datos, el de train y el de test.
+
+193
+00:23:29.120 --> 00:23:40.080
+Eugenia Sol Piñeiro: Entonces voy a definir mi cantidad de épocas defino todos los super parámetros, en este caso de mi red neuronal. Voy a calcular los pesos usando el conjunto de entrenamiento, el de test, Lo tengo separado.
+
+194
+00:23:40.410 --> 00:23:43.619
+Eugenia Sol Piñeiro: Voy a clasificar todos los datos de mi conjunto de train
+
+195
+00:23:43.770 --> 00:23:47.500
+Eugenia Sol Piñeiro: usando los pesos que yo encontré, y voy a calcular las métricas.
+
+196
+00:23:47.770 --> 00:23:54.149
+Eugenia Sol Piñeiro: Entonces, por ejemplo, yo puedo calcular cuál es la quiurasy en función de las épocas. Entonces, a medida que subo. Las épocas
+
+197
+00:23:54.340 --> 00:24:04.490
+Eugenia Sol Piñeiro: debería aumentar el a quiuracy no entre más entreno y modelo más capacidad. Le doy para aprender mejor. Debería ser mi a que hubiera sido mi precisión o mi recal.
+
+198
+00:24:06.000 --> 00:24:13.709
+Eugenia Sol Piñeiro: Y esto lo voy a hacer tanto para el training set como para el testing set al final. Entonces voy a poder comparar cuál es
+
+199
+00:24:13.830 --> 00:24:20.440
+Eugenia Sol Piñeiro: la métrica en función de las épocas para train y cuál es la métrica en función de las épocas para test
+
+200
+00:24:20.560 --> 00:24:22.670
+Eugenia Sol Piñeiro: y después comparar las 2.
+
+201
+00:24:23.370 --> 00:24:33.100
+Eugenia Sol Piñeiro: Ahora vamos a ver por qué la comparamos, pero hasta acá se entendió cómo diseñar el experimento. O sea, ustedes ya van a entrenar su red, La van a evaluar con una métrica en train, y después la van a evaluar en test.
+
+202
+00:24:33.710 --> 00:24:39.200
+Eugenia Sol Piñeiro: Pero vamos a comparar dudas hasta acá
+
+203
+00:24:45.250 --> 00:24:56.510
+Eugenia Sol Piñeiro: 1 va variando los parámetros no, así como puede ser en función de las épocas, puede ser en función de la tasa de aprendizaje. Por ejemplo, voy variando la tasa de aprendizaje y veo como me da el
+
+204
+00:24:59.280 --> 00:25:01.100
+Eugenia Sol Piñeiro: o en función del M, C, E,
+
+205
+00:25:03.320 --> 00:25:14.910
+Eugenia Sol Piñeiro: o sea, M. C, en función de las épocas o arquiura. Si en función de las épocas deberían ser inversas, no a menor. M. C. E mayor a quiura, sí debería tener. En función de las épocas.
+
+206
+00:25:20.150 --> 00:25:23.430
+Eugenia Sol Piñeiro: vamos a ver un par de gráficos si quedan un poquito más claro.
+
+207
+00:25:24.470 --> 00:25:27.180
+Eugenia Sol Piñeiro: Pero vamos a ver el concepto de over fitting
+
+208
+00:25:28.260 --> 00:25:31.690
+Eugenia Sol Piñeiro: ¿Qué significa sobreajuste o overffiting en inglés.
+
+209
+00:25:32.610 --> 00:25:36.279
+Eugenia Sol Piñeiro: Supóngase que tenemos este conjunto de datos.
+
+210
+00:25:36.560 --> 00:25:43.829
+Eugenia Sol Piñeiro: ¿qué decir esta esta distribución medio extraña y lo que quiero hacer es justamente ajustarla con mi modelo.
+
+211
+00:25:44.410 --> 00:25:49.370
+Eugenia Sol Piñeiro: entonces lo justo así directamente, entonces ya
+
+212
+00:25:49.520 --> 00:25:53.930
+Eugenia Sol Piñeiro: en este caso lo estoy ajustando con, por ejemplo, un percepción lineal
+
+213
+00:25:54.060 --> 00:25:58.489
+Eugenia Sol Piñeiro: y ya directamente, el error en el training set
+
+214
+00:25:58.670 --> 00:26:02.530
+Eugenia Sol Piñeiro: es muy alto o mía. Kiracy es muy baja
+
+215
+00:26:02.910 --> 00:26:08.990
+Eugenia Sol Piñeiro: en mi training set, entonces en este caso se llama que tengo underfeeting, o sea.
+
+216
+00:26:09.890 --> 00:26:12.390
+Eugenia Sol Piñeiro: no está aprendiendo nada, entonces
+
+217
+00:26:12.820 --> 00:26:31.920
+Eugenia Sol Piñeiro: es un problema que es un poco más sencillo de resolver en el sentido de que quizás tengo que cambiar el modelo por ahí. Acá Una regresión lineal no se ajusta. No es data lineal por ahí. Necesito usar un perceptrón no lineal porque mi data es no lineal. Entonces lo cambio, o quizás estoy usando muy poquitas épocas. Y tengo que aumentar la cantidad de épocas.
+
+218
+00:26:32.070 --> 00:26:42.260
+Eugenia Sol Piñeiro: o necesito, no sé, bajar la tasa de aprendizaje, o por ahí tengo muy poquita data por ahí. Lo entrené únicamente con estos puntos.
+
+219
+00:26:44.560 --> 00:26:50.549
+Eugenia Sol Piñeiro: ¿no? Y después para test, me vinieron estos puntos y no los puedo. No los puedo fitear.
+
+220
+00:26:50.680 --> 00:26:53.420
+Eugenia Sol Piñeiro: entonces se llama que es under fitting.
+
+221
+00:26:56.370 --> 00:27:00.040
+Eugenia Sol Piñeiro: Bien, ahora tenemos el otro extremo
+
+222
+00:27:00.670 --> 00:27:15.469
+Eugenia Sol Piñeiro: que se lo llama over fitting. Entonces Digo, bueno, genial, ya cambié de modelo ajuste. Los hiper parámetros aumente la cantidad de neuronas. Aumenté la cantidad de capas. Tengo un modelo súper complejo con un montón de parámetros y se ajusta
+
+223
+00:27:15.840 --> 00:27:19.899
+Eugenia Sol Piñeiro: perfectamente a mi conjunto de datos. Tengo un Feed perfecto.
+
+224
+00:27:20.620 --> 00:27:24.140
+Eugenia Sol Piñeiro: Ahora, ¿qué pasa si bien un dato nuevo.
+
+225
+00:27:24.410 --> 00:27:40.680
+Eugenia Sol Piñeiro: porque la idea es que yo entrene mi modelo con la data que tengo, pero después aplicarlo a nueva data, no, o sea, usarlo en momento de diferencia que se llama eso que yo ya tengo. Mi modelo entrenado. Okay, por ejemplo, llega un nuevo paciente y tiene la enfermedad o no la tiene, o cuál es la probabilidad de que tenga esa enfermedad.
+
+226
+00:27:40.950 --> 00:27:45.049
+Eugenia Sol Piñeiro: Entonces tengo que usar el modelo que ya está entrenado Es como
+
+227
+00:27:45.270 --> 00:27:54.479
+Eugenia Sol Piñeiro: que se aprendió todos los detalles del tenis set, pero después no puede generalizar. No tiene capacidad de generalización a nuevos datos.
+
+228
+00:27:55.520 --> 00:28:06.179
+Eugenia Sol Piñeiro: Por ejemplo, cuando estudiás para un parcial de un ejercicio de matemática, te lo estudias tal cual, con exactamente esos mismos números. Y después te cambian número y ya no sabes qué hacer.
+
+229
+00:28:06.760 --> 00:28:12.539
+Eugenia Sol Piñeiro: Entonces le está pasando eso al modelo como que se aprendió de memoria los datos de Train y después no puede generalizar
+
+230
+00:28:15.370 --> 00:28:16.850
+Eugenia Sol Piñeiro: más formalmente.
+
+231
+00:28:17.770 --> 00:28:25.349
+Eugenia Sol Piñeiro: Se puede decir que en el ejercicio que siempre toman y no nos toman bueno un poco así.
+
+232
+00:28:25.560 --> 00:28:26.980
+Eugenia Sol Piñeiro: Y
+
+233
+00:28:27.680 --> 00:28:40.079
+Eugenia Sol Piñeiro: básicamente, o sea, el el modelo lo está performando muy, muy bien en Train, o sea, tu métrica de Train, está buenísima. Pero cuando lo evalúas en test le va súper mal, Entonces ahí es cuando tenés over fitting.
+
+234
+00:28:40.700 --> 00:28:56.439
+Eugenia Sol Piñeiro: Términos más teóricos es el efecto de sobre entrenar un algoritmo de aprendizaje, en su caso, una red neuronal con datos para los que lo los que se conoce, el resultado deseado, entonces clasifico muy bien el train. Pero no podemos generalizar nuevos datos, o sea, clasifican muy mal en test.
+
+235
+00:28:58.040 --> 00:29:00.780
+Eugenia Sol Piñeiro: Entonces, ¿qué es lo que se tiene que evaluar
+
+236
+00:29:02.360 --> 00:29:06.499
+Eugenia Sol Piñeiro: estudio de parciales viejos? Están ahí en el chat, ok.
+
+237
+00:29:06.640 --> 00:29:16.119
+Eugenia Sol Piñeiro: ¿Qué es lo que 1 tiene que evaluar ejemplo. Este es el gráfico que les decía de a qué horas en función de épocas. Idealmente, me debería quedar algo así. Donde yo tengo
+
+238
+00:29:16.940 --> 00:29:21.160
+Eugenia Sol Piñeiro: justamente aquí. Ahora, sí que va de 0 a 1 para train. Y para test.
+
+239
+00:29:21.310 --> 00:29:26.050
+Eugenia Sol Piñeiro: O sea, tengo que evaluar las 2 en test. Es más ruidoso en Train, quizá le va un poco mejor
+
+240
+00:29:26.500 --> 00:29:28.690
+Eugenia Sol Piñeiro: y en función de las épocas, entonces
+
+241
+00:29:28.890 --> 00:29:34.570
+Eugenia Sol Piñeiro: más o menos están llegando los 2 a 0. 85 009,
+
+242
+00:29:34.890 --> 00:29:38.349
+Eugenia Sol Piñeiro: o sea, están bastante similares, y este es el caso ideal.
+
+243
+00:29:38.770 --> 00:29:41.540
+Eugenia Sol Piñeiro: Ahora el problema es cuando empieza a pasar esto.
+
+244
+00:29:42.330 --> 00:29:46.159
+Eugenia Sol Piñeiro: donde me está yendo muy bien en tren, y ya la brecha
+
+245
+00:29:46.510 --> 00:29:49.490
+Eugenia Sol Piñeiro: que hay entre training y Test.
+
+246
+00:29:50.010 --> 00:29:54.590
+Eugenia Sol Piñeiro: Esto que tengo Acá esta diferencia es muy grande.
+
+247
+00:29:54.960 --> 00:29:57.590
+Eugenia Sol Piñeiro: Ahí es cuando empiezo a tener sobreajuste.
+
+248
+00:29:57.950 --> 00:30:02.150
+Eugenia Sol Piñeiro: De hecho, puede pasar incluso que esto venga más, acá. No más así.
+
+249
+00:30:02.690 --> 00:30:10.269
+Eugenia Sol Piñeiro: Esto a veces es. Es, es muy notorio o incluso quizás puede venir muy bien en las primeras épocas
+
+250
+00:30:10.920 --> 00:30:13.079
+Eugenia Sol Piñeiro: y después empieza a caer así.
+
+251
+00:30:14.210 --> 00:30:15.150
+Eugenia Sol Piñeiro: Entonces
+
+252
+00:30:15.940 --> 00:30:28.620
+Eugenia Sol Piñeiro: bueno, hizo muy exagerado, ¿no? Pero empieza a caer. Entonces se dice que el modelo tiene sobre ajuste, perdió capacidad de generalización, tiene overhiting, es decir, le va muy bien en Train. Le va muy mal en texto.
+
+253
+00:30:29.530 --> 00:30:44.590
+Eugenia Sol Piñeiro: Entonces, para eso comparamos esa brecha, así como se compara el a qurasy. También se puede comparar, por ejemplo, el M C e o la pérdida del modelo puede incluso graficar la pérdida en función de las épocas para train y para test, y evaluar esa brecha.
+
+254
+00:30:44.700 --> 00:30:49.349
+Eugenia Sol Piñeiro: Solo que el gráfico les va a quedar invertido, ¿no? O sea, les va a quedar algo así.
+
+255
+00:30:51.180 --> 00:30:57.339
+Eugenia Sol Piñeiro: Eso es para test. Y en Train le va mejor, ¿no? Porque esto es el error. Y quiero que entre mejor.
+
+256
+00:30:57.800 --> 00:31:01.230
+Eugenia Sol Piñeiro: entre más chico, mejor, no. Por ejemplo.
+
+257
+00:31:04.260 --> 00:31:09.500
+Eugenia Sol Piñeiro: podés predecir antes de entrenarlo. Si va a suceder eso, o solo te enteras cuando haces la comparación?
+
+258
+00:31:10.540 --> 00:31:16.859
+Eugenia Sol Piñeiro: Bueno, o sea, depende
+
+259
+00:31:17.050 --> 00:31:25.649
+Eugenia Sol Piñeiro: por lo general, no sabes hasta que lo entrenás. Pero por ejemplo, una de las causas es cuando tenés clases desbalanceadas. Entonces, ya desde el vamos.
+
+260
+00:31:25.900 --> 00:31:31.100
+Eugenia Sol Piñeiro: tu hipótesis sería. Tengo las clases de balanceada, Seguramente tenga sobre ajuste.
+
+261
+00:31:31.410 --> 00:31:33.790
+Eugenia Sol Piñeiro: Lo lo vas y efectivamente lo ves. Por ejemplo.
+
+262
+00:31:35.300 --> 00:31:44.810
+Eugenia Sol Piñeiro: o particioné muy mal mi conjunto en training test y en test, tengo muy poquitos datos, y es probable que le vaya muy mal y que tenga
+
+263
+00:31:45.610 --> 00:31:46.590
+Eugenia Sol Piñeiro: en
+
+264
+00:31:47.240 --> 00:31:53.259
+Eugenia Sol Piñeiro: hasta que no experimentas, no lo ves. Pero bueno, ya más o menos te te vas, te vas dando cuenta, según tu data
+
+265
+00:31:53.390 --> 00:31:56.310
+Eugenia Sol Piñeiro: de que lo podés tener. Entonces, por ejemplo.
+
+266
+00:31:56.490 --> 00:32:02.640
+Eugenia Sol Piñeiro: si ya sabes que tus clases están muy desbalanceadas ya y directamente balancealo, porque es es muy probable que tengas un ajuste
+
+267
+00:32:04.610 --> 00:32:10.790
+Eugenia Sol Piñeiro: que. Bueno, acá. Hay otro ejemplo también con precisión, donde la brecha más grande,
+
+268
+00:32:10.930 --> 00:32:22.200
+Eugenia Sol Piñeiro: Pero sí, en general se evalúa. Eso puede ser los en función de épocas, precisión en función de épocas M C, en función de las épocas, o sea. La idea es ver en Train y en test
+
+269
+00:32:22.340 --> 00:32:28.900
+Eugenia Sol Piñeiro: cuál es esa brecha? Si tengo válid se ven, train Valued y test que me.
+
+270
+00:32:29.670 --> 00:32:30.910
+Eugenia Sol Piñeiro: Y así lo veo evaluando.
+
+271
+00:32:31.630 --> 00:32:35.370
+Eugenia Sol Piñeiro: Acá. Está un poco lo que ahí mencionaba Nicolás. Recién
+
+272
+00:32:35.980 --> 00:32:45.139
+Eugenia Sol Piñeiro: que puede ser por distintas cosas. No una que mira, te haces, no esté balanceado. Entonces es obvio que hay alguna clase que quizás no va a aprender o va a aprender peor.
+
+273
+00:32:45.910 --> 00:32:57.329
+Eugenia Sol Piñeiro: Me puede pasar que tenga pocos jun pocos registros en el conjunto de entrenamiento. Quizás tengo en el conjunto de datos mucho ruido. Entonces después, cuando intentas generalizar, no puede porque entrenemos mucho ruido, quizás.
+
+274
+00:32:57.860 --> 00:33:02.149
+Eugenia Sol Piñeiro: Entonces, bueno, estas cosas se pueden ir solucionando.
+
+275
+00:33:02.510 --> 00:33:15.870
+Eugenia Sol Piñeiro: Hay otras técnicas que son más de regularización que vamos a ver un poquito la clase que viene también para mitigar el sobreajuste. Y ahora vamos a ver una más de que está más orientada a como particiono mi conjunto de datos.
+
+276
+00:33:16.380 --> 00:33:19.279
+Eugenia Sol Piñeiro: ¿a qué voy con esto? No se queden con que
+
+277
+00:33:19.830 --> 00:33:25.730
+Eugenia Sol Piñeiro: Okay. Si tengo grafiting, es porque no está balanceado, O sea, no, Quizás está balanceado y tienes un setting
+
+278
+00:33:25.860 --> 00:33:28.250
+Eugenia Sol Piñeiro: que después vamos a ver más técnicas.
+
+279
+00:33:31.310 --> 00:33:33.870
+Eugenia Sol Piñeiro: dudas hasta Acá vamos Bien.
+
+280
+00:33:41.720 --> 00:33:45.990
+Eugenia Sol Piñeiro: Bien, vamos a ver la partición treintas.
+
+281
+00:33:46.460 --> 00:33:50.389
+Eugenia Sol Piñeiro: Como se dice, mi partición es apropiada. Primero habíamos dicho que
+
+282
+00:33:51.640 --> 00:34:11.559
+Eugenia Sol Piñeiro: ya lo mencionaron, ¿no? ¿pero ¿qué pasa si, por ejemplo, en su conjunto de datos tenían al principio de forma ordenada todas las muestras de no fraude. Y al final todas las de fraude, o sea, cuando haces el 30, este split te quedan todas las de fraude en test y ninguna en Train. Entonces no queremos eso. Queremos que estén balanceadas
+
+283
+00:34:11.840 --> 00:34:23.829
+Eugenia Sol Piñeiro: y suponiendo que ya estén balanceadas. Además, okay y cómo lo particiono. Tengo una muestra suficientemente representativa de cada clase en cada conjunto, o necesito hacer algo más.
+
+284
+00:34:24.540 --> 00:34:26.379
+Eugenia Sol Piñeiro: Entonces 1 de los métodos
+
+285
+00:34:26.830 --> 00:34:31.180
+Eugenia Sol Piñeiro: que no es el único, pero es 1 de los que vamos a ver. Bienvenidos a investigar más
+
+286
+00:34:31.310 --> 00:34:35.320
+Eugenia Sol Piñeiro: para mitigar sobre ajuste. Es validación ca cruzada.
+
+287
+00:34:35.530 --> 00:34:37.770
+Eugenia Sol Piñeiro: Okay Fold Cross Validation.
+
+288
+00:34:39.320 --> 00:34:40.370
+Eugenia Sol Piñeiro: ¿qué es esto?
+
+289
+00:34:40.670 --> 00:34:41.750
+Eugenia Sol Piñeiro: Vamos a tener?
+
+290
+00:34:43.429 --> 00:34:45.750
+Eugenia Sol Piñeiro: Este es mi conjunto de datos
+
+291
+00:34:46.000 --> 00:34:49.060
+Eugenia Sol Piñeiro: amarillo. Es con lo que voy a entrenar.
+
+292
+00:34:49.560 --> 00:34:51.279
+Eugenia Sol Piñeiro: Este va a ser el tren.
+
+293
+00:34:52.889 --> 00:34:56.719
+Eugenia Sol Piñeiro: Entonces voy a dividir mi conjunto de datos en partes iguales.
+
+294
+00:34:58.440 --> 00:35:06.239
+Eugenia Sol Piñeiro: En particular, este k partes iguales. Es lo que voy a definir en mi k folk cros variation, digamos, el parámetro del algoritmo.
+
+295
+00:35:06.450 --> 00:35:14.400
+Eugenia Sol Piñeiro: Entonces voy a dividir en test. Entonces la primera iteración va a ser la parte
+
+296
+00:35:14.610 --> 00:35:18.470
+Eugenia Sol Piñeiro: 0, no la parte K: Después voy a tomar
+
+297
+00:35:18.610 --> 00:35:28.259
+Eugenia Sol Piñeiro: la siguiente parte cita como test. Y el resto como trains en la próxima iteración. Voy a mover mi conjunto de test a esta partecita, y el resto lo voy a usar como train.
+
+298
+00:35:28.400 --> 00:35:33.880
+Eugenia Sol Piñeiro: Y así sucesivamente con mis k partes en cada iteración. En este caso voy a tener
+
+299
+00:35:34.090 --> 00:35:45.309
+Eugenia Sol Piñeiro: 5 partes iguales en donde yo dividí mi mi conjunto en test, y voy probando con esos distintos conjuntos de test a lo largo de las iteraciones.
+
+300
+00:35:47.810 --> 00:35:49.379
+Eugenia Sol Piñeiro: ¿qué puede pasar acá?
+
+301
+00:35:49.520 --> 00:35:55.560
+Eugenia Sol Piñeiro: Esto me asegura. Digamos que todos los datos fueron usados alguna al menos alguna vez para training y para test.
+
+302
+00:35:57.470 --> 00:36:03.490
+Eugenia Sol Piñeiro: Ahora hay distintas variaciones de de Cross Validation, una. No sé si
+
+303
+00:36:03.800 --> 00:36:12.039
+Eugenia Sol Piñeiro: ya conocen, pero es Live One Out Cross Validation, que lo que se hace es que el test tenga solo un conjunto de datos.
+
+304
+00:36:12.160 --> 00:36:22.129
+Eugenia Sol Piñeiro: Entonces se deja por un conjunto de datos, tenga solo una muestra, el conjunto de datos de test. Entonces se deja todo como tenset, y solo 1 para test
+
+305
+00:36:22.470 --> 00:36:31.719
+Eugenia Sol Piñeiro: es mucho más profundo y detallado, porque tendría muchísimas partes, o sea, la totalidad de muestras que tengo y tiene muchísimo costo computacional. ¿no? Entonces
+
+306
+00:36:31.850 --> 00:36:41.640
+Eugenia Sol Piñeiro: te da un poco más de análisis, pero te dice: trade off de. Es muy costoso hacer. Y dependiendo el caso, quizás ni siquiera vale la pena. Después hay otro
+
+307
+00:36:42.420 --> 00:36:44.949
+Eugenia Sol Piñeiro: que es la versión Stratifid
+
+308
+00:36:45.690 --> 00:36:53.250
+Eugenia Sol Piñeiro: acrovalidation que lo que hace es justamente que a la hora de particionar te quede balanceado, te quedas estratificado por clase.
+
+309
+00:36:53.800 --> 00:37:01.759
+Eugenia Sol Piñeiro: entonces no únicamente probás distintos conjuntos, sino que además ya está balanceado, y el algoritmo ya directamente se encarga de balanceártelo
+
+310
+00:37:02.320 --> 00:37:03.140
+Eugenia Sol Piñeiro: ¿
+
+311
+00:37:03.280 --> 00:37:08.310
+Eugenia Sol Piñeiro: O sea, como alternativas. Vamos a ver ahora el básico. Pero de nuevo, si quieren probar los otros bienvenidos.
+
+312
+00:37:08.790 --> 00:37:10.420
+Eugenia Sol Piñeiro: ¿qué se hace?
+
+313
+00:37:10.830 --> 00:37:11.899
+Eugenia Sol Piñeiro: Voy a tener
+
+314
+00:37:12.840 --> 00:37:28.580
+Eugenia Sol Piñeiro: por cada alteración, voy a entrenar, supongo, lo que ya vimos, ¿no? O sea, voy a entrenar con el J, decimos conjunto, o sea la parte amarilla que digamos en la parte anterior. Voy a evaluar el método usando como testing set la parte que me separé,
+
+315
+00:37:28.940 --> 00:37:32.840
+Eugenia Sol Piñeiro: voy a calcular alguna métrica de performance y modelo.
+
+316
+00:37:33.270 --> 00:37:35.699
+Eugenia Sol Piñeiro: Y voy a seguir iterando.
+
+317
+00:37:36.450 --> 00:37:44.790
+Eugenia Sol Piñeiro: Entonces, después, tomo la partición 30 con las mejores métricas Y así empiezo a valorar la capacidad de generalización de la red neuronal.
+
+318
+00:37:44.920 --> 00:37:45.710
+Eugenia Sol Piñeiro: entonces
+
+319
+00:37:46.120 --> 00:37:58.279
+Eugenia Sol Piñeiro: evita este sesgo que puedo llegar a tener al al dividir mi trade y, por ejemplo, también, si lo ya lo hago estratificado desde el principio, ya está balanceado.
+
+320
+00:37:58.430 --> 00:38:00.950
+Eugenia Sol Piñeiro: entonces mitiga el sobreajuste
+
+321
+00:38:01.110 --> 00:38:08.270
+Eugenia Sol Piñeiro: quiere decir que lo elimina por completo o no, por lo general lo mitiga y funciona un poquito mejor Si se hace esto
+
+322
+00:38:09.760 --> 00:38:15.039
+Eugenia Sol Piñeiro: bien, resumen de todo lo que vimos
+
+323
+00:38:16.120 --> 00:38:22.160
+Eugenia Sol Piñeiro: cuando tengo error alto en Train. Entonces tengo under fitting. ¿qué tenía que hacer? Acá?
+
+324
+00:38:23.850 --> 00:38:25.829
+Eugenia Sol Piñeiro: ¿qué aplico, acá. ¿qué puedo cambiar
+
+325
+00:38:37.510 --> 00:38:41.950
+Eugenia Sol Piñeiro: Okay, tamaño de la red, épocas, bien
+
+326
+00:38:42.050 --> 00:38:44.819
+Eugenia Sol Piñeiro: o sea, ajustarías hiper parámetros, ¿no?
+
+327
+00:38:46.670 --> 00:38:51.660
+Eugenia Sol Piñeiro: Si tenés under fitting, o sea tenés un error alto en tradingset, porque puede ser.
+
+328
+00:38:52.660 --> 00:38:53.780
+Eugenia Sol Piñeiro: Esa es la pregunta.
+
+329
+00:38:56.620 --> 00:39:08.760
+Eugenia Sol Piñeiro: Cambiar funciones okay, Bien, o sea, por ejemplo, si tenés algo, no sé, data no lineal, y estás usando data lineal. Y por ahí no, no se ajusta tenés under Feetting.
+
+330
+00:39:09.480 --> 00:39:15.380
+Eugenia Sol Piñeiro: Ahora, ¿qué pasa si tengo un error alto en testing se que tengo verfiting. ¿qué puedo hacer?
+
+331
+00:39:23.730 --> 00:39:25.600
+Eugenia Sol Piñeiro: Cambiar los conjuntos.
+
+332
+00:39:26.140 --> 00:39:35.170
+Eugenia Sol Piñeiro: Te referís a balancear, variar la división. Okay bien Cro Validation puede ser bien
+
+333
+00:39:37.340 --> 00:39:42.189
+Eugenia Sol Piñeiro: bien y caso ideal. Tengo error bajo en todo. Así que tengo un buen modelo.
+
+334
+00:39:42.400 --> 00:39:45.990
+Eugenia Sol Piñeiro: ¿qué es lo que queremos obtener? No.
+
+335
+00:39:46.200 --> 00:39:58.849
+Eugenia Sol Piñeiro: Ahora, ¿Por qué hago todo este hilo de pensamiento? Porque la idea, cuando 1 experimenta es que justamente por estas cosas, no de Bueno, agrego todo ya desde al principio y fin que de lo que tenga que ver si no
+
+336
+00:39:59.190 --> 00:40:16.099
+Eugenia Sol Piñeiro: intentar seguir cierto hilo. No digo que tengo mi conjunto de datos, hago un eda básico, un análisis exploratorio de mi conjunto de datos. Veo, si está balanceado, intento estratificar para particionar mi conjunto de training, test
+
+337
+00:40:16.260 --> 00:40:27.670
+Eugenia Sol Piñeiro: calculo, el error en training. Y me da bien. Okay. Bueno, vamos a calcular el de test Uy me dio mal el de test, tendré over fitting y quizá puedo aplicar esta técnica para mitigar overfitting, o sea, que siga un hilo de
+
+338
+00:40:27.680 --> 00:40:37.049
+Eugenia Sol Piñeiro: pensamiento y no que sea una fuerza bruta de variar todo, no de de Okay. Le agrego época, Leo capas areo, neurona.
+
+339
+00:40:55.840 --> 00:40:59.910
+Rodrigo Ramele: En este momento estamos teniendo dificultades técnicas.
+
+340
+00:41:14.410 --> 00:41:27.010
+Rodrigo Ramele: Yo Euge, con lo que me queda de vos, porque estoy hecho pelota. Te estaba haciendo, como el audio técnico de un agente viste que que te dice. En este momento. Tenemos dificultades técnicas.
+
+341
+00:41:29.090 --> 00:41:34.230
+Eugenia Sol Piñeiro: Perdone que es lo malo de tener auriculares Bluetooth y se me quedó. Pero bueno. Ahora estoy con el cabello
+
+342
+00:41:36.100 --> 00:41:41.830
+Eugenia Sol Piñeiro: suele suele durar la la semana de clases y después se muere, no lo cargue. Bueno.
+
+343
+00:41:42.520 --> 00:41:49.720
+Eugenia Sol Piñeiro: me olvidé que estaba diciendo, Bueno, en cuestión tienen que seguir el hilo del experimento para evaluar en general el
+
+344
+00:41:50.150 --> 00:41:53.280
+Eugenia Sol Piñeiro: el proyecto que estén evaluando el problema que estén resolviendo.
+
+345
+00:41:54.050 --> 00:41:58.970
+Eugenia Sol Piñeiro: Así que dudas hasta acá porque ahora nos vamos a ir a ver el enunciado del T. P.
+
+346
+00:42:06.510 --> 00:42:13.850
+Rodrigo Ramele: Lautaro. Te pensaste que el anuncio que había hecho era automático de
+
+347
+00:42:14.040 --> 00:42:20.539
+Rodrigo Ramele: del campo. Podría decir, aprovecho un poco justo. Euge, un bocado ahí.
+
+348
+00:42:20.680 --> 00:42:30.229
+Rodrigo Ramele: Lo que explico en relación a Al Al cómo cambia el valor de como el 99 por 100 cuando las clases están balanceadas, eso se llama chance level.
+
+349
+00:42:30.550 --> 00:42:40.140
+Rodrigo Ramele: que es el chanes level de un clasificador binario, un clasificador binario, que toma una decisión binaria. Ustedes piensen que la peor situación que le puede pasar
+
+350
+00:42:40.310 --> 00:42:44.999
+Rodrigo Ramele: de un clasificador binario es que tenga una curasic del 50 por 100,
+
+351
+00:42:45.250 --> 00:42:47.569
+Rodrigo Ramele: porque eso significa que están tirando una moneda
+
+352
+00:42:47.900 --> 00:43:02.199
+Rodrigo Ramele: que es lo mismo que tiene una moneda. Si ustedes ponen un random a tirar? Bueno, va va a obtener eso? Va a obtener el 50 por 100. Por eso ese nivel que es el nivel de Charles Legel es el que corresponde a algo Random. Se calcula súper fácil y tiene que ver
+
+353
+00:43:02.200 --> 00:43:15.630
+Rodrigo Ramele: el cálculo de cómo de cómo se obtiene sale. Puede haber muchas formas, pero sale una, que es el máximo de las 2 cantidades de la cantidad de elementos de los 2 conjuntos dividido, lo la cantidad total de elementos.
+
+354
+00:43:15.630 --> 00:43:28.439
+Rodrigo Ramele: Y con eso el chanes Level se va acercando. En el ejemplo que contó Euge. 99 por 100 es el Charles Level cuando está súper desbalanceado, es decir, es el valor de chance. Entonces ahí es donde eso lo primero que le quería decir después.
+
+355
+00:43:29.180 --> 00:43:46.019
+Rodrigo Ramele: Lo segundo es que hay muchos casos donde las métricas, las métricas son métricas que buscan directamente a lo que se obtiene de la materia de confusión o y digamos sobre todo cálculos que salen de la materia de confusión. Cuando la clasificación es
+
+356
+00:43:46.290 --> 00:43:58.239
+Rodrigo Ramele: una clasificación binaria o en multiclases, pero discreta Después, cuando 1 pasa a regresión a un cálculo de regresión, va a obtener valores como el Ms similares, que que va a dar como un un nivel de error
+
+357
+00:43:58.380 --> 00:44:08.350
+Rodrigo Ramele: como un nivel numérico horror, pero siempre es importante tratar de tener el insight de qué es lo que lo que se está esperando que haga la.
+
+358
+00:44:08.590 --> 00:44:12.080
+Rodrigo Ramele: digamos, el modelo que ustedes hicieron en relación al output que genera.
+
+359
+00:44:12.220 --> 00:44:26.949
+Rodrigo Ramele: Entonces, por ejemplo, si ustedes tienen tienen que hacer una un opu que genere imágenes que son parecidas en imágenes, por ejemplo, al blanco y negro, que tienen que ser parecidas a imágenes de orígenes. A veces está bueno considerar cuántos pixeles, por ejemplo, Pifia.
+
+360
+00:44:27.170 --> 00:44:30.530
+Rodrigo Ramele: Lo que ustedes están generando es lo que debería obtener originalmente.
+
+361
+00:44:30.660 --> 00:44:37.739
+Rodrigo Ramele: Entonces eso tiene mucho más información que la información de a veces de la lectura, porque el está diciendo exactamente
+
+362
+00:44:37.880 --> 00:44:47.249
+Rodrigo Ramele: bueno en que se está equivocando. Y hay algo que es muy comprensible desde el de la la propia fenomenología del del problema que ustedes están operando.
+
+363
+00:44:47.390 --> 00:45:03.079
+Rodrigo Ramele: Eso sirve mucho y después especificar en general es ese tipo de métricas y después, finalmente, y una métrica, nosotros con no contamos, pero que se usa. Se usa mucho. Sobre todo, se usa mucho más en Machine Learning. Creo que Machiner, en la en aprendizaje automático, la ven que son las curvas rock
+
+364
+00:45:03.320 --> 00:45:12.780
+Rodrigo Ramele: que las curvas rocas están buenas porque las curvas rock muestran un poco la relación entre los los falsos positivos y los falsos. Los falsos negativos en relación a
+
+365
+00:45:13.740 --> 00:45:17.130
+Rodrigo Ramele: cuál es el poder discriminador que tiene
+
+366
+00:45:17.430 --> 00:45:31.960
+Rodrigo Ramele: el modelo que ustedes hacen. No, nosotros lo hablamos porque en general, curvas rock no se usan mucho en aprendizajes neuronales neuronales. No se usan tanto, pero sí en aprendizaje automático, este y también son una métrica adicional a las curvas rocas
+
+367
+00:45:32.580 --> 00:45:33.160
+Rodrigo Ramele: en el.
+
+368
+00:45:33.160 --> 00:45:38.920
+Eugenia Sol Piñeiro: Sí, quizás más para este problema de clasificación, igual podría estar bueno ahora que lo lo decís Rodríguez.
+
+369
+00:45:38.920 --> 00:45:41.399
+Rodrigo Ramele: Sí. Por ahí nos fuimos a llegar en el.
+
+370
+00:45:41.820 --> 00:45:48.890
+Eugenia Sol Piñeiro: En un momento de la grabación, si alguien está viendo la grabación, yo dije la curva precisión ricol. Y después, dije, ah, no vemos si vale esta curva.
+
+371
+00:45:48.890 --> 00:45:49.420
+Rodrigo Ramele: Claro.
+
+372
+00:45:49.420 --> 00:45:57.180
+Eugenia Sol Piñeiro: Pero pero el que la quiere investigar es esto. Perre rock se llama, de hecho, en la materia de Lel Lens, las usamos
+
+373
+00:45:57.450 --> 00:46:00.309
+Eugenia Sol Piñeiro: para el evaluar un clasificador.
+
+374
+00:46:01.290 --> 00:46:04.350
+Rodrigo Ramele: Sí, por ahí lo podemos agregar a esta clase. Entonces, ¿qué van a aportar.
+
+375
+00:46:06.010 --> 00:46:06.760
+Eugenia Sol Piñeiro: Bien.
+
+376
+00:46:07.100 --> 00:46:12.049
+Eugenia Sol Piñeiro: Bueno, eso las dejo por acá igual escritas
+
+377
+00:46:12.180 --> 00:46:15.419
+Eugenia Sol Piñeiro: según lo que quiere investigar, Pero na de nuevo, son más de
+
+378
+00:46:15.770 --> 00:46:18.780
+Eugenia Sol Piñeiro: ya lo ve. Mail, también. Lo del clasificador. También se puede usar
+
+379
+00:46:20.180 --> 00:46:32.370
+Eugenia Sol Piñeiro: Bien, buenísimo. Rodri. Gracias. Vamos a ver dónde estaba. Acá Van a ver el enunciado que se habrán visto
+
+380
+00:46:33.120 --> 00:46:42.710
+Eugenia Sol Piñeiro: en un momento, dice: acá una vez seleccionado 1 de los perceptrones, deben proceder a realizar Un estudio de generalización se refiere a esto. No deber hay sobre ajuste.
+
+381
+00:46:42.840 --> 00:46:45.889
+Eugenia Sol Piñeiro: Tiene capacidad de generalización, la red o no.
+
+382
+00:46:48.560 --> 00:46:52.069
+Eugenia Sol Piñeiro: por ejemplo. Entonces, qué métricas de evaluación van a seleccionar y por qué
+
+383
+00:46:52.480 --> 00:47:08.340
+Eugenia Sol Piñeiro: pueden ser las que dimos hoy estándar, quizás usar alguna estándar o hablar de no sé, está desbalanceado o no mi conjunto. Entonces, altura, si no la elijo porque está desbalanceado o uso esta métrica que me sirve un poco más o además de precisión complemento con
+
+384
+00:47:08.680 --> 00:47:13.970
+Eugenia Sol Piñeiro: una métrica que investigué y parece que sirve para este caso, uso Entonces.
+
+385
+00:47:14.730 --> 00:47:27.059
+Eugenia Sol Piñeiro: después, ¿qué estrategia utilizaron para manipular el conjunto de datos durante la generalización. ¿cómo creen que se elige el mejor conjunto de entrenamiento está también relacionado con lo que vimos hoy mucho más. No voy a decir
+
+386
+00:47:27.240 --> 00:47:36.099
+Eugenia Sol Piñeiro: cuál es el mejor modelo que obtuvieron. Bueno, esto está de la mano con todo lo que vimos hoy, no ¿Cómo puedo comparar el mejor modelo
+
+387
+00:47:36.500 --> 00:47:50.839
+Eugenia Sol Piñeiro: variando hiper parámetros y probando las métricas que vimos hoy, por ejemplo, lo mismo acá no quería aclarar antes.
+
+388
+00:47:51.190 --> 00:47:56.449
+Eugenia Sol Piñeiro: Hay una parte que dicen que no es necesario dividir el conjunto entecnitest
+
+389
+00:47:56.720 --> 00:48:08.369
+Eugenia Sol Piñeiro: como aclaración al principio simplemente para para que ustedes se enfoquen más en esta parte de observan under fitting, observan saturación de las capacidades. Esto quiere decir que
+
+390
+00:48:08.480 --> 00:48:17.900
+Eugenia Sol Piñeiro: ¿qué pasa si, por ejemplo, no sé, me da la quiebra así así, y ya está se estanca y no varía. No varía. No varía si ahí ya está. No hay muchas de las épocas.
+
+391
+00:48:18.080 --> 00:48:22.120
+Eugenia Sol Piñeiro: se satura o no converge. Hay underfetting.
+
+392
+00:48:22.770 --> 00:48:27.999
+Eugenia Sol Piñeiro: Tengo error bajo o alto en training. Este tipo de cosas tienen que evaluar.
+
+393
+00:48:28.330 --> 00:48:29.530
+Eugenia Sol Piñeiro: Y
+
+394
+00:48:34.170 --> 00:48:38.109
+Eugenia Sol Piñeiro: estoy viendo si me olvidé de aclarar algo más del enunciado por el enunciado. Ya lo vieron.
+
+395
+00:48:38.460 --> 00:48:42.139
+Eugenia Sol Piñeiro: pero son cosas específicas de la clase de hoy
+
+396
+00:48:44.060 --> 00:48:48.049
+Eugenia Sol Piñeiro: en la librería de Zakin Leand tiene el 30. Este split.
+
+397
+00:48:51.540 --> 00:48:53.720
+Eugenia Sol Piñeiro: o sea la de Cyc Id Lend. ¿cuál
+
+398
+00:48:53.820 --> 00:49:01.009
+Eugenia Sol Piñeiro: si quieren manden por el discord específicamente, cuál y la vemos. Pero para hacer el 30, este split
+
+399
+00:49:01.470 --> 00:49:05.890
+Eugenia Sol Piñeiro: no pasa nada. La idea es que apliquen ustedes la red neuronal desde 0.
+
+400
+00:49:07.670 --> 00:49:12.209
+Eugenia Sol Piñeiro: ¿vale el 30. 30. Este split es hacer un Split. Nada más
+
+401
+00:49:27.450 --> 00:49:33.029
+Eugenia Sol Piñeiro: bueno. La idea del Crossvalidation es que lo codeen ustedes para que entiendan un poco mejor la implementación.
+
+402
+00:49:34.170 --> 00:49:52.589
+Eugenia Sol Piñeiro: Si quieren pueden probar el Stratifi, o sea, implementar el básico al menos a mano a mano. Seguramente estén usando Covinications, Pero por lo menos para entender cómo funciona. Crossvalidation y después iterar sobre alguna Stratify o el deep webnout con alguna librería, sí, pero el básico intente codearlo ustedes
+
+403
+00:49:52.820 --> 00:49:53.930
+Eugenia Sol Piñeiro: es sencillo.
+
+404
+00:50:00.190 --> 00:50:08.360
+Eugenia Sol Piñeiro: Bien, fijensé que en el resto de los ejercicios tienen que vivir en Trainy Text, ¿
+
+405
+00:50:14.700 --> 00:50:19.109
+Eugenia Sol Piñeiro: Lo habíamos escrito en una parte, en una aclaración de que era necesario.
+
+406
+00:50:22.740 --> 00:50:23.950
+Eugenia Sol Piñeiro: Okay Es
+
+407
+00:50:27.350 --> 00:50:28.610
+Eugenia Sol Piñeiro: bien, Acá
+
+408
+00:50:29.670 --> 00:50:34.579
+Eugenia Sol Piñeiro: Acá está esta aclaración? Me refería el estudio se realiza utilizando todas las muestras del conjunto de datos.
+
+409
+00:50:35.850 --> 00:50:54.870
+Eugenia Sol Piñeiro: A eso se refiere que no es necesario que digan en traini test para estos puntos para los siguientes sí. ¿por qué? Porque el objetivo de este ejercicio en realidad es que vean un poco el underfetting o intentar ver cómo se resuelve el problema y después vamos complejizándolo y que lo vayan haciendo de forma iterativa, simplemente por eso
+
+410
+00:50:54.990 --> 00:50:57.010
+Eugenia Sol Piñeiro: el que lo quiera dividir lo divide.
+
+411
+00:50:57.300 --> 00:51:01.869
+Eugenia Sol Piñeiro: No es necesario acá ya para evaluar la capacidad de generalización. Sí,
+
+412
+00:51:03.780 --> 00:51:14.420
+Eugenia Sol Piñeiro: ese fue, digamos, el punto de los ejercicios, dudas del T P ya efectivamente pueden hacer Todo
+
+413
+00:51:26.470 --> 00:51:32.640
+Eugenia Sol Piñeiro: esto. También está relacionado con la clase. Hoy hagan un eda, como yo digo eda entiendo a qué me refiero.
+
+414
+00:51:33.130 --> 00:51:37.220
+Eugenia Sol Piñeiro: Exploratory datta análisis.
+
+415
+00:51:38.340 --> 00:51:47.159
+Eugenia Sol Piñeiro: ejemplo, hacer algún box plot de las fitures que tengo ver si tengo que normalizar si tengo que estandarizar
+
+416
+00:51:48.650 --> 00:51:52.999
+Eugenia Sol Piñeiro: o si tengo que reescalar dentro de un intervalo según mi función de activación, Eso lo tienen que saber.
+
+417
+00:51:54.120 --> 00:51:57.800
+Eugenia Sol Piñeiro: ¿ No, el
+
+418
+00:52:01.220 --> 00:52:01.980
+Eugenia Sol Piñeiro: Esto
+
+419
+00:52:08.560 --> 00:52:18.419
+Eugenia Sol Piñeiro: da. Eso se suele hacer mucho antes de arrancar todo. Yo exploro cómo es mi conjunto de datos. Está balanceado o no
+
+420
+00:52:18.710 --> 00:52:30.329
+Eugenia Sol Piñeiro: hay alguna feature que es redundante o no. Eso ya lo vamos a ver un poco más adelante. Pero ahora la idea es que quizás vean la distribución de los datos, por ejemplo, fijarse si tienen que estandarizar si tienen que normalizar
+
+421
+00:52:30.670 --> 00:52:31.690
+Eugenia Sol Piñeiro: y demás.
+
+422
+00:52:35.870 --> 00:52:38.620
+Eugenia Sol Piñeiro: Cuando yo digo estandarizar versus normalizar
+
+423
+00:52:42.060 --> 00:52:47.410
+Eugenia Sol Piñeiro: o reescalar en realidad para que se entiende.
+
+424
+00:52:55.090 --> 00:53:02.900
+Eugenia Sol Piñeiro: O sea, ustedes en este trabajo, tienen una función de activación que está acotada a un intervalo.
+
+425
+00:53:04.740 --> 00:53:15.280
+Eugenia Sol Piñeiro: Entonces tienen que re escalar su data a ese intervalo, que no es lo mismo que estandarizar. Estandarizar es restar la media de un conjunto de datos y dividir por el desvío estándar
+
+426
+00:53:16.680 --> 00:53:23.809
+Eugenia Sol Piñeiro: es que esto por lo aclaro, por lo general hacemos más hincapié en el Tp 4 porque lo tienen que hacer con estandarización.
+
+427
+00:53:24.020 --> 00:53:27.259
+Eugenia Sol Piñeiro: Y es distinto lo que hacen el T. P. Tres acá tienen que reescalar. Básicamente.
+
+428
+00:53:27.900 --> 00:53:30.319
+Eugenia Sol Piñeiro: el intervalo de la función.
+
+429
+00:53:31.720 --> 00:53:34.450
+Eugenia Sol Piñeiro: Así que ojo con eso. Es parte de este estudio.
+
+430
+00:53:37.180 --> 00:53:40.430
+Eugenia Sol Piñeiro: pero les estoy dando muchas pistas. Ya está dudas.
+
+431
+00:53:42.400 --> 00:53:45.819
+Eugenia Sol Piñeiro: La red puede aprender solo al reescalado normalización.
+
+432
+00:53:46.890 --> 00:53:53.269
+Eugenia Sol Piñeiro: ¿a qué te referís Bueno, buenísimo lo
+
+433
+00:53:53.930 --> 00:53:56.590
+Eugenia Sol Piñeiro: está bien. Si lo debatieron la la clase anterior ¿Es eso
+
+434
+00:54:10.220 --> 00:54:13.359
+Eugenia Sol Piñeiro: no claro. En este caso no es necesario estandarizar.
+
+435
+00:54:15.870 --> 00:54:21.589
+Eugenia Sol Piñeiro: pero, por ejemplo, no es lo mismo. Si tu función de activación va de menos 1 a 1 o de 0 a 1.
+
+436
+00:54:23.430 --> 00:54:28.410
+Eugenia Sol Piñeiro: Por ahí usan la tangente hiperbólica, o por ahí usan la otra, la logística.
+
+437
+00:54:34.890 --> 00:54:39.110
+Eugenia Sol Piñeiro: estandarizar, o sea, lo lo del desvío y la media.
+
+438
+00:54:39.750 --> 00:54:42.790
+Eugenia Sol Piñeiro: No me asegura que queden dentro de un intervalo.
+
+439
+00:54:51.160 --> 00:54:52.520
+Eugenia Sol Piñeiro: Tiene esa diferencia.
+
+440
+00:54:59.540 --> 00:55:02.479
+Eugenia Sol Piñeiro: Sí, ahí Rodriguez de lo del apunte está en el apunte también
+
+441
+00:55:06.430 --> 00:55:09.510
+Eugenia Sol Piñeiro: viendo es lo de las últimas diapos de la P, P, T, No.
+
+442
+00:55:10.810 --> 00:55:19.310
+Eugenia Sol Piñeiro: Bueno, sí se los anoté, acá que por lo general lo vemos en el último. T. P: Vamos a verlo si quieren, rápido, es esta parte, básicamente lo que tienen que hacer.
+
+443
+00:55:19.510 --> 00:55:25.359
+Eugenia Sol Piñeiro: El midmax Switure Stalling se llama minima X que esto te asegura que quede dentro de un intervalo.
+
+444
+00:55:26.080 --> 00:55:40.020
+Eugenia Sol Piñeiro: Ejemplo, si lo hago así, de esta forma me queda dentro del 0 y 1 no. O sea, tengo mi conjunto de ras de datos, le resto el mínimo y divido sobre el máximo o menos el mínimo. Y estos son los parámetros del conjunto de del intervalo, en donde quiero que estén.
+
+445
+00:55:40.180 --> 00:55:46.790
+Eugenia Sol Piñeiro: en este caso, si B es 0 y A es 1, Me quedan los datos entre 0 y 1,
+
+446
+00:55:49.930 --> 00:55:51.829
+Eugenia Sol Piñeiro: por ejemplo, no este Fisher Stalling.
+
+447
+00:55:52.000 --> 00:55:56.400
+Eugenia Sol Piñeiro: Yo pensé que ya lo habían visto la clase pasada. Vamos a verlo, y
+
+448
+00:55:56.510 --> 00:56:05.240
+Eugenia Sol Piñeiro: este es el que tendrían que aplicar. Ahora piensen bien cómo reescalar y por qué deberían escalar o por qué no.
+
+449
+00:56:07.140 --> 00:56:17.940
+Eugenia Sol Piñeiro: Y son todos tipos de normalización. Y es mejor que los normalicemos nosotros de antemano. En vez de dejar que lo aprenda la red o el objetivo es hacer ambas y mostrarla competitiva. No lo lo hacen de antemano.
+
+450
+00:56:18.840 --> 00:56:21.299
+Eugenia Sol Piñeiro: dependiendo de su función de activación.
+
+451
+00:56:25.140 --> 00:56:27.709
+Eugenia Sol Piñeiro: No, no, no es mostrar la comparativa hoy.
+
+452
+00:56:30.860 --> 00:56:35.700
+Eugenia Sol Piñeiro: Esto se llamas de Tp. Cuatro. Pero estandarización
+
+453
+00:56:35.850 --> 00:56:45.459
+Eugenia Sol Piñeiro: lo que pasa es que yo tengo un conjunto de datos, y lo que se hace es agarrar la media de mi conjunto de datos y el desvío estándar, y resto la media y divido sobre el desvío.
+
+454
+00:56:50.370 --> 00:56:57.879
+Eugenia Sol Piñeiro: ¿qué pasa si hay un máximo tan grande y en aulayer no pierde el rendimiento del modelo, porque puede enmascarar valores medios.
+
+455
+00:56:58.950 --> 00:57:15.879
+Eugenia Sol Piñeiro: sí, también, o sea, por lo Generalmente, los onliners son cosas que se analizan y se hace algo con los onliners o los dropeo, por ejemplo, porque me me modifican o me me empeora la performance del modelo, entonces una opción es eliminar. Sí, considero que es un Layer y justificar, porque considero que son un Layer.
+
+456
+00:57:28.400 --> 00:57:33.210
+Eugenia Sol Piñeiro: Bien, entonces
+
+457
+00:57:34.230 --> 00:57:41.009
+Eugenia Sol Piñeiro: estandarización me sirve más cuando, por ejemplo, mis variables del conjunto de entrenamiento tienen distintas unidades de medida
+
+458
+00:57:42.310 --> 00:57:58.030
+Eugenia Sol Piñeiro: que me puede llegar a pasar. No sé, supóngase que tengo una variable medida en milímetros y otra en metros, entonces es obvio que la de metros va a tener valores en sí, valores numéricos mucho más grandes. Entonces yo no quiero que mi modelo esté sesgado solo porque el valor es más grande.
+
+459
+00:57:58.490 --> 00:58:09.499
+Eugenia Sol Piñeiro: o sea, necesito tener las 2 variables, Pero no quiero que me influya en general si el valor está medido en miles o en décimas.
+
+460
+00:58:09.910 --> 00:58:12.070
+Eugenia Sol Piñeiro: sino que las quiero querer comparar entonces
+
+461
+00:58:12.300 --> 00:58:28.530
+Eugenia Sol Piñeiro: estandarizo mis variables para que queden todas dentro de la misma escala, pero no necesariamente es un intervalo acotado, como si me genera el Mic Max Scalling, O sea, me puede quedar entre, no sé, menos 3 y 2, Pero todas me quedan entre menos 3 y 2,
+
+462
+00:58:33.090 --> 00:58:37.319
+Eugenia Sol Piñeiro: acá Hay un ejemplo. Supóngase que tengo todas estas clases.
+
+463
+00:58:37.460 --> 00:58:40.029
+Eugenia Sol Piñeiro: Fijensé que acá la clase H
+
+464
+00:58:41.770 --> 00:58:49.670
+Eugenia Sol Piñeiro: toma valores mucho más grandes que el resto de las clases. Entonces, por ejemplo, esta la I, la E, la F no se llegan a apreciar.
+
+465
+00:58:51.260 --> 00:59:00.439
+Eugenia Sol Piñeiro: ¿no? Fíjense que esta llega a va de 0 a 3 500 y el resto de las fichas que yo tengo van de, no sé, por ejemplo, esta Quizás va de 0 a 50,
+
+466
+00:59:00.710 --> 00:59:03.439
+Eugenia Sol Piñeiro: no sé, no se llega a apreciar Entonces, estandarizar
+
+467
+00:59:03.890 --> 00:59:07.490
+Eugenia Sol Piñeiro: me genera esto. Fíjense que van de 2 a 3.
+
+468
+00:59:07.920 --> 00:59:13.320
+Eugenia Sol Piñeiro: Y ahora sí, puedes llegar a apreciar cuál es la distribución de todas las fichas porque quedaban todas dentro del mismo intervalo.
+
+469
+00:59:14.250 --> 00:59:18.800
+Eugenia Sol Piñeiro: No con me asegura que la media sea 0 y el desvío estándar sea 1.
+
+470
+00:59:21.250 --> 00:59:25.940
+Eugenia Sol Piñeiro: Y esto es en general otra forma de normalizar, que es quizás la más escuchada.
+
+471
+00:59:26.430 --> 00:59:37.119
+Eugenia Sol Piñeiro: Por ejemplo, lo habrán visto en análisis matemático, métodos numéricos o cualquier otra materia más matemática. Pero es normalizar un vector en sentido de dividir por la norma del vector.
+
+472
+00:59:37.230 --> 00:59:45.130
+Eugenia Sol Piñeiro: Entonces a esto se lo conoce como Unite Length Skaling, que es, agarro mi vector, lo divido por la norma. La norma 2.
+
+473
+00:59:45.970 --> 00:59:53.459
+Eugenia Sol Piñeiro: ¿qué quiero aclarar con esto es que todo son formas de normalizar. Tiene distintos nombres y sirven para distintas cosas, no
+
+474
+00:59:54.390 --> 01:00:02.500
+Eugenia Sol Piñeiro: ahora, por lo menos enfóquense en esta. Vamos a volver a retomar esto mismo en unas clases la semana que viene, o la otra.
+
+475
+01:00:19.750 --> 01:00:25.949
+Eugenia Sol Piñeiro: bien hasta acá la clase, dudas del enunciado de qué es lo que tienen que hacer en esta parte.
+
+476
+01:00:44.630 --> 01:00:54.739
+Eugenia Sol Piñeiro: Lo que se espera del trabajo es un poco eso no que vayan siguiendo cierto hilo de experimentación. Vayan variando. Los parámetros, evalúen las métricas
+
+477
+01:00:54.910 --> 01:01:01.299
+Eugenia Sol Piñeiro: justifiquen porque lo variaron. De esa forma que esperaban. Conseguir qué resultados esperaban conseguir si variaban. Eso
+
+478
+01:01:03.420 --> 01:01:06.140
+Eugenia Sol Piñeiro: son por ahora todos perceptrones simples.
+
+479
+01:01:09.210 --> 01:01:10.460
+Eugenia Sol Piñeiro: ¿a qué te referís
+
+480
+01:01:19.190 --> 01:01:20.710
+Eugenia Sol Piñeiro: al ejercicio, 1.
+
+481
+01:01:24.000 --> 01:01:29.889
+NICOLÁS CANZONIERI: O sea, lo podría sí, No me acordaba bien de la consigna, pero.
+
+482
+01:01:30.590 --> 01:01:37.419
+Eugenia Sol Piñeiro: No me asustaste. En un momento, yo dije, pará por ahí, no la pusiste la consigna, pero sí, sí, sí, ya acá. Entra multicapa.
+
+483
+01:01:41.380 --> 01:01:42.390
+NICOLÁS CANZONIERI: Okay Okay.
+
+484
+01:01:42.390 --> 01:01:46.059
+Eugenia Sol Piñeiro: Hasta dónde vieron con marina, el enunciado, el enunciado. Lo vieron.
+
+485
+01:01:50.290 --> 01:01:52.090
+NICOLÁS CANZONIERI: Sí me parece que sí.
+
+486
+01:01:53.680 --> 01:01:54.250
+Eugenia Sol Piñeiro: Sí o qué.
+
+487
+01:01:54.250 --> 01:01:56.429
+NICOLÁS CANZONIERI: Yo, como que no me acordaba. Por eso era la duda.
+
+488
+01:01:56.980 --> 01:01:59.880
+Eugenia Sol Piñeiro: está bien. Tranqui: Sí, Sí, el ejercicio ya es como multicapa
+
+489
+01:02:02.440 --> 01:02:05.030
+Eugenia Sol Piñeiro: de nuevo. Ahí por eso también
+
+490
+01:02:05.160 --> 01:02:17.649
+Eugenia Sol Piñeiro: es un poco. Esto lo que les decía no. Como mínimo, tienen que analizar cómo variar. La tasa de aprendizaje variantes de arquitectura es qué pasa si aumenta las capas o bajo las capas o aumenta la cantidad de neuronas en una capa
+
+491
+01:02:18.360 --> 01:02:24.260
+Eugenia Sol Piñeiro: mecanismo de optimización. Vimos varios. Tienen la clase de A, D a M de Eta. Adaptativo. R. M. C. Pro.
+
+492
+01:02:24.500 --> 01:02:27.339
+Eugenia Sol Piñeiro: Hay un montón de cosas para explorar.
+
+493
+01:02:27.520 --> 01:02:36.409
+Eugenia Sol Piñeiro: Entonces por eso también me refería a a que no sea como un fuerza bruta de probar todo contra todo, sino seguir cierto, hilo de experimentación e intentar justificar por qué
+
+494
+01:02:36.560 --> 01:02:40.150
+Eugenia Sol Piñeiro: tomé esa decisión a la hora de implementar este tipo de red.
+
+495
+01:02:42.040 --> 01:02:45.250
+Eugenia Sol Piñeiro: si no, Además, se van a volver locos de la cantidad de cosas que hay para probar.
+

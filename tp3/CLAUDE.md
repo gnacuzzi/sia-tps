@@ -12,7 +12,8 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
   El registro real está en `docs/resultados-validacion.md`.
 - Conservar la codificación bipolar y el orden de muestras del enunciado.
 - Las teóricas están en `docs/`. Las transcripciones, si están disponibles
-  localmente, viven en `docs/transcripciones/` y no deben versionarse.
+  localmente, viven en `docs/transcripciones/`. Por pedido del equipo se
+  versionan las de clases 12.2 y 13; las anteriores siguen excluidas de Git.
   Consultar `docs/material-clases.md` para ubicar cada tema y las diferencias
   de notación. Se contrastaron las fórmulas de validación con las clases.
 - Documentar decisiones y separar cálculos ilustrativos de resultados medidos,

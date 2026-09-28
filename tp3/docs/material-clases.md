@@ -1,14 +1,17 @@
 # Clases del TP3: referencias para trabajar
 
-Los cinco PDFs están directamente en `docs/`, como pidió el equipo. Las tres
-transcripciones se conservaron localmente en `docs/transcripciones/` y se
-excluyeron de Git por pedido del equipo. Se copiaron sin modificar
+Los ocho PDFs de clase están directamente en `docs/`, como pidió el equipo.
+Las tres transcripciones anteriores se conservaron localmente en
+`docs/transcripciones/` y se excluyeron de Git por pedido del equipo.
+El 28 de septiembre se incorporaron las clases 12.1, 12.2 y 13 y, por nuevo
+pedido del equipo, se versionaron las transcripciones de 12.2 y 13.
+Se copiaron sin modificar
 el contenido de los adjuntos y se comprobó igualdad de bytes.
 Los acentos de los nombres de PDF se guardaron en forma Unicode compuesta;
 se conservó la extensión `.PDF` del archivo de multicapa.
 
 Las referencias a páginas usan la numeración física del PDF, comenzando en 1.
-Se revisó el texto de los cinco PDFs y se inspeccionaron visualmente las
+En la primera incorporación se revisó el texto de los cinco PDFs y se inspeccionaron visualmente las
 diapositivas con fórmulas de perceptrón simple, lineal/no lineal y multicapa.
 Las transcripciones se consultaron en los pasajes sobre actualización,
 inicialización, bias, alcance del TP y aprendizaje/generalización; no se
@@ -23,6 +26,11 @@ corrigió su texto ni se hizo una edición completa de ellas.
 | [Perceptrón simple escalón](Clase10.1-Perceptrón%20Simple%20Escalón.pdf) | Excitación, activación, bias y regla de Rosenblatt | Páginas 15, 30, 33–34, 42–45 |
 | [Perceptrón lineal y no lineal](Clase10.2-PerceptrónLinealyNoLineal.pdf) | Identidad, error cuadrático, derivadas, online, tanh y logística | Páginas 8, 12–14, 19–26 |
 | [Perceptrón multicapa](Clase11-PerceptrónMulticapa.PDF) | Forward, regla de la cadena, backpropagation, modos de entrenamiento e inicialización | Páginas 13, 38–58; bias en 63–70 |
+| [Optimización: extras](Clase12.1-Optimizacion.pdf) | Momentum, eta adaptativo, RMSProp y Adam | Páginas 5–13 |
+| [Métricas y sobreajuste](Clase12.2MétricasySobreajuste.pdf) | Matriz de confusión, accuracy, precision, recall, F1, TPR/FPR, diagnóstico y escalado | Páginas 10–16, 19–30 y 32–36 |
+| [Regularización](Clase13-Regularizacion.pdf) | Capacidad, early stopping, data augmentation y penalización L2 | Páginas 8–14, 15–18 y 19–25 |
+| [Transcripción de clase 12.2](transcripciones/Clase12.2MétricasySobreajuste.vtt) | EDA, particiones, desbalance y decisiones justificadas para el TP | Complemento explicativo |
+| [Transcripción de clase 13](transcripciones/Clase13-Regularizacion.vtt) | Diagnóstico antes de regularizar y separación training/validation/test | Complemento explicativo |
 | Transcripción de clase 7 (solo local) | Intuición de optimización, gradiente y tasa de aprendizaje | Complemento explicativo |
 | Transcripción de clase 10 (solo local) | Online, ajuste de funciones, destilación y diferencia entre aprendizaje y generalización | Complemento explicativo |
 | Transcripción de clase 11 (solo local) | Bias separado, simetría, análisis de resultados y uso de train/validación/test | Complemento explicativo |
@@ -30,6 +38,7 @@ corrigió su texto ni se hizo una edición completa de ellas.
 Los PDFs de clase 10 dicen «Primer Cuatrimestre 2026» en la portada; el de
 clase 11 y la consigna corresponden al segundo. Se usa el material que envió
 el equipo, sin cambiar portadas ni sustituir archivos por otras versiones.
+La portada de clase 13 también indica primer cuatrimestre de 2026.
 
 ## Qué se mantiene y qué se aclaró en el apunte
 
@@ -79,3 +88,35 @@ Las reglas ya están implementadas y contrastadas con cuentas manuales y
 gradientes numéricos. Ver [implementación](implementacion.md) y
 [resultados de validación](resultados-validacion.md). La selección de modelos
 e hiperparámetros para los datasets reales sigue pendiente.
+
+## Criterios incorporados con las clases 12 y 13
+
+Se leyó el texto de los tres PDFs nuevos y se revisaron visualmente las
+fórmulas de optimización, métricas, escalado y L2. Las transcripciones
+complementan las diapositivas; sus errores de reconocimiento no se toman
+como fórmulas ni se corrigen en los archivos originales.
+
+- **Separar training, validation y test.** Training ajusta pesos; validation
+  permite comparar configuraciones y observar las curvas durante el desarrollo;
+  test se reserva para la evaluación final. La clase 13 lo aclara para los
+  ejercicios 2 y 3. El loader actual solo separa training/test: falta validation.
+- **Analizar antes de transformar.** Revisar distribuciones, escalas, balance,
+  faltantes, outliers y variables problemáticas sobre training. Min-max y
+  estandarización tienen propósitos distintos (clase 12.2, páginas 32–35);
+  no se elige una transformación sin justificarla con esos datos. Sus parámetros
+  deberán calcularse con training y reutilizarse en validation/test.
+- **Mantener las convenciones de clase.** En la matriz de confusión las filas
+  representan clases reales y las columnas predicciones; TPR coincide con
+  recall. Accuracy sola puede ocultar el desbalance (clase 12.2, páginas 10–16
+  y explicación oral).
+- **Comparar optimizadores de manera controlada.** La clase 12.1 desarrolla
+  Momentum, eta adaptativo, RMSProp y Adam. Antes de implementar se registrarán
+  la variante elegida y sus hiperparámetros; por ejemplo, RMSProp coloca epsilon
+  dentro de la raíz en la página 8, mientras Adam lo coloca fuera en 12–13.
+- **Diagnosticar antes de regularizar.** Las curvas de training/validation
+  permiten distinguir problemas de ajuste y generalización. Early stopping,
+  data augmentation y L2 son alternativas de clase 13 ante sobreajuste;
+  no se incorporan automáticamente ni reemplazan estudiar la convergencia.
+
+Estas son pautas para las siguientes etapas. En esta incorporación no se
+implementaron preprocesamiento, nuevas métricas, optimizadores ni regularización.

@@ -5,6 +5,9 @@ Por pedido del equipo, toda decisión debe explicar **qué**, **por qué** y
 Este registro se actualiza junto con los cambios. Una elección didáctica no
 debe presentarse como requisito de la cátedra ni como resultado experimental.
 
+Las secciones conservan la evolución del trabajo: los estados de revisiones
+posteriores reemplazan los pendientes de las etapas iniciales.
+
 ## Organización y alcance
 
 | Decisión | Motivo | Aplicación y estado |
@@ -183,3 +186,13 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Mantener imágenes en `float32` y etiquetas como enteros | Coincidir con el loader recibido y posponer la codificación hasta definir la salida de la red | Aplicada; formas verificadas contra los cuatro CSV reales |
 | No normalizar, estandarizar ni codificar durante la carga | Esas transformaciones deben decidirse después del análisis de los datos | Aplicada; los loaders validan estructura y finitud pero conservan valores |
 | No usar test para seleccionar configuraciones | Test debe representar la evaluación final | Vigente; al no existir validation, el procedimiento de selección deberá resolverse sin consultar repetidamente test |
+
+## Clases 12 y 13 y revisión del plan (28 de septiembre de 2026)
+
+| Decisión | Motivo | Aplicación y estado |
+|---|---|---|
+| Incorporar los tres PDFs y las dos transcripciones recibidas | Completar el material que sustenta las siguientes etapas | Copias exactas en `docs/` y `docs/transcripciones/`; índice actualizado en `material-clases.md` |
+| Versionar únicamente las nuevas transcripciones de clases 12.2 y 13 | El pedido actual incluye esos adjuntos y reemplaza la exclusión previa para ellos | Excepciones explícitas en `.gitignore`; las transcripciones anteriores siguen excluidas |
+| Trabajar de a un punto y revisarlo antes de continuar | Pedido del equipo para comprender y justificar cada paso | Primero se vuelve a comprobar el motor con los casos de validación |
+| Incorporar validation antes del análisis y los experimentos | El plan actual pide tres particiones y reserva test para el final | Pendiente del punto 2; reemplaza la elección anterior de implementar solo training/test |
+| Justificar preprocesamiento y regularización con evidencia | Seguir el hilo experimental de clases 12.2 y 13 | EDA sobre training antes de transformar; regularización solo ante un diagnóstico de sobreajuste; todavía no implementados |
