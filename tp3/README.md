@@ -61,16 +61,15 @@ PYTHONPATH=src python3 -m sia_tp3 --config configs/validation.json --output outp
 `src/sia_tp3/models.py` y `training.py` son el motor reutilizable; no conocen
 AND, XOR, fraude ni dígitos. `validation.py` crea los casos sintéticos y usa
 esa misma API. Las redes admiten múltiples entradas y salidas, y permiten
-guardar y cargar parámetros. La preparación de los datasets reales todavía
-no fue implementada.
+guardar y cargar parámetros. `data.py` carga los datasets reales y conserva
+una separación estricta entre training y test, sin crear validation.
 
 ## Continuación del TP
 
-1. Revisar las cuentas y resultados junto con el código.
-2. Preparar los datos del ejercicio de fraude y comparar el perceptrón lineal
-   y no lineal usando el mismo motor.
-3. Preparar dígitos, particiones de desarrollo y las variantes de entrenamiento
-   exigidas por los ejercicios 2 y 3. Reservar el test para evaluación final.
+1. Analizar los datos de training y decidir si necesitan transformaciones.
+2. Implementar las métricas y variantes de entrenamiento obligatorias.
+3. Resolver fraude y dígitos sin utilizar los conjuntos de test para elegir
+   parámetros o hiperparámetros.
 
 Los datasets recibidos están en `data/`, conservando sus nombres originales.
 Hay diferencias de nombres respecto del enunciado, documentadas en el README

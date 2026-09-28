@@ -169,3 +169,17 @@ fallos de la configuración inicial y limitaciones de la validación.
 - Los cambios se separan en material/datos, motor y tests, resultados y
   gráficos, y documentación visual. Se respeta el estilo de commits y las
   identidades de coautoría humana que ya aparecen en el historial.
+
+## Carga y separación training/test
+
+| Decisión | Motivo | Aplicación y estado |
+|---|---|---|
+| Implementar solamente training y test, sin validation | Pedido explícito del usuario para esta etapa | Aplicada en `src/sia_tp3/data.py`; no existe una tercera partición |
+| Usar 20 % de fraude como test y semilla 0 por defecto | Disponer de una partición reproducible y configurable cuando solo existe un CSV | Aplicada; 6000 filas de training y 1500 de test |
+| Estratificar fraude mediante `flagged_fraud` | Conservar aproximadamente el desbalance original en ambos subconjuntos | Aplicada únicamente al reparto; la columna no entra en `X` ni es objetivo del modelo y solo se devuelve para test |
+| Entrenar fraude contra `big_model_fraud_probability` | Es el objetivo de destilación indicado por la documentación | Aplicada; `y_train` y `y_test` tienen una salida continua |
+| Usar `digits_test.csv` completo como test externo | Es el conjunto que la consigna reserva para medir generalización | Aplicada; no se extraen muestras de ese archivo para training |
+| Concatenar `more_digits.csv` únicamente al training del ejercicio 3 | Aislar el efecto de disponer de más datos sin alterar el test | Aplicada mediante `additional_train_path` opcional |
+| Mantener imágenes en `float32` y etiquetas como enteros | Coincidir con el loader recibido y posponer la codificación hasta definir la salida de la red | Aplicada; formas verificadas contra los cuatro CSV reales |
+| No normalizar, estandarizar ni codificar durante la carga | Esas transformaciones deben decidirse después del análisis de los datos | Aplicada; los loaders validan estructura y finitud pero conservan valores |
+| No usar test para seleccionar configuraciones | Test debe representar la evaluación final | Vigente; al no existir validation, el procedimiento de selección deberá resolverse sin consultar repetidamente test |

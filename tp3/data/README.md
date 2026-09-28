@@ -22,16 +22,26 @@ En fraude, `big_model_fraud_probability` contiene la probabilidad estimada por
 BigModel y será el objetivo de la destilación. `flagged_fraud` contiene la
 etiqueta real obtenida de reportes: la documentación prohíbe usarla durante el
 entrenamiento. No debe incluirse como entrada ni como objetivo de entrenamiento.
-Su uso posterior para evaluación y elección de umbral requiere definir primero
-el protocolo de generalización.
+El loader nuevo la usa para preservar aproximadamente la proporción de clases
+al separar los datos y solo devuelve sus valores de test para la futura
+evaluación final.
 
 Los CSV de dígitos tienen columnas `label` e `image`. El loader suministrado
 interpreta `image` con `ast.literal_eval`, la convierte a `float32` y propone
-reconstruir imágenes de 28 × 28. Se conserva como material provisto; todavía
-no fue integrado ni ejecutado. Su ejemplo usa una ruta relativa a la carpeta
-de trabajo y requiere NumPy, pandas y Matplotlib.
+reconstruir imágenes de 28 × 28. Se conserva como material provisto. El loader
+integrado en `src/sia_tp3/data.py` hace la misma deserialización sin depender de
+pandas, comprueba que cada imagen tenga 784 píxeles y mantiene
+`digits_test.csv` separado.
 
-Hasta ahora se revisaron encabezados, documentación y loader, y se contaron
-registros. No se hizo aún el análisis exploratorio de valores faltantes,
-rangos, duplicados, balance de clases o dimensiones de todas las imágenes.
-Los datos no se transformaron ni se dividieron en subconjuntos.
+Se implementó únicamente una separación training/test, sin validation:
+
+- fraude: 6000 muestras de training y 1500 de test con la configuración por
+  defecto (`test_fraction=0.2`, `seed=0`);
+- ejercicio 2: 12449 imágenes de `digits.csv` para training y las 2497 de
+  `digits_test.csv` para test;
+- ejercicio 3: 28190 imágenes de `digits.csv` más `more_digits.csv` para
+  training y el mismo test externo de 2497 imágenes.
+
+Todavía no se aplicaron normalización, estandarización, codificación de las
+etiquetas ni análisis exploratorio. El test queda reservado: no debe emplearse
+para escoger parámetros o hiperparámetros.

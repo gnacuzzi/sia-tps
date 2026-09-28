@@ -143,7 +143,41 @@ model.save('xor.npz')
 restored = MultilayerPerceptron.load('xor.npz')
 ```
 
+## Carga y separación de los datasets reales
+
+`data.py` expone dos loaders sin aplicar todavía transformaciones:
+
+```python
+from pathlib import Path
+from sia_tp3 import load_digits_train_test, load_fraud_train_test
+
+data_dir = Path('data')
+
+fraud = load_fraud_train_test(data_dir / 'fraud_dataset.csv',
+                              test_fraction=0.2, seed=0)
+
+digits_exercise_2 = load_digits_train_test(
+    data_dir / 'digits.csv', data_dir / 'digits_test.csv')
+
+digits_exercise_3 = load_digits_train_test(
+    data_dir / 'digits.csv', data_dir / 'digits_test.csv',
+    additional_train_path=data_dir / 'more_digits.csv')
+```
+
+En fraude, `X_train` y `X_test` contienen las nueve variables de entrada y
+`y_train`/`y_test` contienen la probabilidad de BigModel con forma `(N, 1)`.
+`flagged_fraud` no aparece entre las entradas ni como objetivo; se usa para
+estratificar el split y solo se expone como `flagged_fraud_test` para la futura
+evaluación final. La semilla vuelve reproducible la partición.
+
+En dígitos, las imágenes quedan como matrices `float32` de forma `(N, 784)` y
+las etiquetas como enteros de forma `(N,)`. `digits_test.csv` se carga siempre
+como test externo. Para el ejercicio 3, el archivo adicional se concatena solo
+al training. La codificación de las diez salidas se decidirá junto con el
+modelo y no forma parte de la carga.
+
 Las arquitecturas y técnicas base corresponden a clases 10.1, 10.2 y 11.
-Los optimizadores adicionales, mini-batch, preprocesamiento, particiones y
-métricas de los ejercicios obligatorios siguen pendientes. No se utilizó
-`digits_test.csv` para ninguna elección de este desarrollo.
+Los optimizadores adicionales, mini-batch, preprocesamiento y métricas de los
+ejercicios obligatorios siguen pendientes. Se implementó training/test sin
+validation por decisión explícita del usuario. No se utilizó `digits_test.csv`
+para ninguna elección de este desarrollo.
