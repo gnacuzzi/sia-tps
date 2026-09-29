@@ -5,7 +5,8 @@
 | Archivo | Responsabilidad |
 |---|---|
 | `src/sia_tp3/models.py` | Perceptrón simple, red multicapa, activaciones, forward, Rosenblatt, backpropagation y guardado/carga |
-| `src/sia_tp3/training.py` | Entrenamiento online y métricas al terminar cada época, sin conocer el dataset |
+| `src/sia_tp3/optimizers.py` | Descenso básico, Momentum, eta adaptativo, RMSProp y Adam |
+| `src/sia_tp3/training.py` | Entrenamiento online, mini-batch o batch y métricas al terminar cada época, sin conocer el dataset |
 | `src/sia_tp3/metrics.py` | Matriz de confusión y métricas estándar de clasificación globales, por clase y macro |
 | `src/sia_tp3/validation.py` | Datos sintéticos de la consigna, configuración y evidencia de las corridas |
 | `configs/validation.json` | Arquitecturas, inicialización, semillas, tasas, orden y criterios de aceptación |
@@ -87,9 +88,35 @@ Es algebraicamente equivalente al apunte, que usa el signo de corrección
 
 El MSE registrado promedia sobre muestras y salidas: `MSE = 2L/K`.
 En la validación todas las redes tienen una salida, por lo que `MSE = 2L`.
-El gradiente de una muestra se usa para cada actualización online; calcular
-un gradiente sobre varias muestras también sirve para comprobarlo numéricamente,
-pero `fit` por ahora entrena solamente online.
+`fit` calcula el gradiente medio del grupo usado en cada actualización. Con
+`batch_size=1` entrena online; con un valor intermedio usa mini-batches; con
+`batch_size=len(X)` o `None` usa todo training como un batch. Esta decisión es
+independiente del optimizador: el lote decide **con qué muestras se calcula el
+gradiente** y el optimizador decide **cómo ese gradiente modifica los parámetros**.
+
+## Optimizadores de clase 12.1
+
+Todos actualizan pesos y bias; ambos son parámetros aprendibles. Se mantienen
+las fórmulas y la ubicación de epsilon mostradas en clase:
+
+| Clase | Actualización implementada | Estado que conserva |
+|---|---|---|
+| `GradientDescent` | $\theta\leftarrow\theta-\eta g_t$ | Ninguno |
+| `Momentum` | $\Delta\theta_t=-\eta g_t+\alpha\Delta\theta_{t-1}$ | Cambio anterior |
+| `AdaptiveLearningRate` | Suma $a$ a eta tras K disminuciones consecutivas; resta una fracción $b\eta$ tras K aumentos | Loss anterior y rachas |
+| `RMSProp` | $S_t=\gamma S_{t-1}+(1-\gamma)g_t^2$; divide por $\sqrt{S_t+\epsilon}$ | Promedio de gradientes cuadrados |
+| `Adam` | Momentos primero y segundo con corrección $1-\beta_1^t$ y $1-\beta_2^t$ | Ambos momentos y cantidad de pasos |
+
+Adam usa los valores de referencia de la diapositiva como defaults:
+`eta=0.001`, `beta1=0.9`, `beta2=0.999` y `epsilon=1e-8`. En RMSProp se exigen
+`gamma` y `epsilon`, y en eta adaptativo se exigen incremento, fracción de
+reducción y paciencia, porque la clase explica la estrategia pero no impone
+una única configuración para el TP.
+
+El perceptrón escalón conserva la regla de Rosenblatt online. No acepta estos
+optimizadores basados en gradientes ni lotes mayores que uno porque el escalón
+no tiene la derivada que necesitan; las comparaciones corresponden a los
+modelos diferenciables.
 
 ## Entrenamiento y reproducibilidad
 
@@ -158,6 +185,21 @@ model.save('xor.npz')
 restored = MultilayerPerceptron.load('xor.npz')
 ```
 
+Para cambiar optimizador y modalidad sin cambiar el modelo:
+
+```python
+from sia_tp3 import Adam
+
+optimizer = Adam()  # usa los valores de referencia de clase
+history = fit(model, X, y, optimizer=optimizer, batch_size=2,
+              max_epochs=10000, target_mse=0.001,
+              shuffle=True, seed=0)
+```
+
+No se pasa `learning_rate` junto con `optimizer`: la tasa pertenece al objeto
+optimizador. Cada corrida debe crear una instancia nueva para no compartir
+Momentum o momentos acumulados entre modelos.
+
 ## Carga y separación de los datasets reales
 
 `data.py` expone los dos loaders. Fraude se estandariza después del split;
@@ -196,8 +238,8 @@ como test externo. Para el ejercicio 3, el archivo adicional se concatena solo
 al training. La codificación de las diez salidas se decidirá junto con el
 modelo y no forma parte de la carga.
 
-Las arquitecturas y técnicas base corresponden a clases 10.1, 10.2 y 11.
-Los optimizadores adicionales, mini-batch, preprocesamiento y métricas de los
-ejercicios obligatorios siguen pendientes. Se implementó training/test sin
-validation por decisión explícita del usuario. No se utilizó `digits_test.csv`
-para ninguna elección de este desarrollo.
+Las arquitecturas y técnicas base corresponden a clases 10.1, 10.2 y 11; los
+optimizadores corresponden a clase 12.1. Siguen pendientes la configuración y
+comparación experimental para cada ejercicio obligatorio. Se implementó
+training/test sin validation por decisión explícita del usuario. No se utilizó
+`digits_test.csv` para ninguna elección de este desarrollo.

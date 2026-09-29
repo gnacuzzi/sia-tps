@@ -83,7 +83,7 @@ Todas estas elecciones están aplicadas **al apunte**, no a un programa de entre
 | Explicitar error total, error por muestra y MSE | Evitar mezclar gradientes, tolerancias o escalas de tasa de aprendizaje | Aplicada: $E=\sum E_\mu=(N/2)\operatorname{MSE}$ |
 | Mantener online para la primera validación | Es el algoritmo de clase 10.2 y permite cotejar una muestra a mano | Aplicada al desarrollo; batch/mini-batch no seleccionados para experimentos |
 | Mantener bias separado y por neurona | Hace visible cada actualización y permite desplazar las activaciones | Aplicada a las fórmulas; clase 11 permite separar pesos y bias |
-| No agregar optimizadores por el solo hecho de aparecer en clase | El objetivo actual es entender y verificar las reglas básicas | Momentum, AdaGrad y Adam siguen pendientes de selección y justificación |
+| No agregar optimizadores por el solo hecho de aparecer en clase | En esa etapa el objetivo era entender y verificar las reglas básicas | Decisión histórica de la validación inicial; luego el equipo pidió implementar Momentum, eta adaptativo, RMSProp y Adam. La selección sigue pendiente |
 | No copiar el pseudocódigo literalmente donde alterna convenciones | Debemos respetar la consigna y mantener coherencia matemática | Diferencias documentadas; originales preservados |
 
 Se confirmó que las reglas de Rosenblatt, lineal, tanh y backpropagation del
@@ -300,3 +300,18 @@ detectaron columnas constantes.
 | Marcar divisiones por cero como indefinidas | No confundir ausencia de evidencia con rendimiento igual a cero o uno | Se devuelve `NaN` para la métrica afectada y el promedio macro usa sólo valores definidos |
 | Mantener la conversión de salidas fuera de las métricas | Poder comparar umbrales de fraude sin reimplementar fórmulas y usar `argmax` en dígitos | Las funciones reciben únicamente clases reales y predichas |
 | Exponer recall y TPR | La consigna pide ambos nombres aunque representan la misma fórmula | Ambos campos contienen el mismo valor y se prueba esa igualdad |
+
+## Punto 6: optimizadores y frecuencia de actualización
+
+| Decisión | Motivo | Aplicación y estado |
+|---|---|---|
+| Implementar descenso básico, Momentum, eta adaptativo, RMSProp y Adam | Son las variantes desarrolladas en clase 12.1 y el equipo decidió disponer de todas antes de elegir cuáles comparar | Aplicada en `optimizers.py`; todavía no se eligió una ganadora para los ejercicios |
+| Separar optimizador de tamaño de lote | Responden preguntas diferentes: el lote forma el gradiente y el optimizador transforma ese gradiente en un cambio de parámetros | `fit` recibe cualquier `Optimizer` y un `batch_size` independiente |
+| Hacer configurables online, mini-batch y batch | La modalidad es una variable experimental que debe probarse, no quedar fijada al implementar el optimizador | `batch_size=1` es online, un valor intermedio es mini-batch y `None` o la cantidad total de muestras es batch |
+| Promediar los gradientes dentro de cada lote | Evita que el tamaño del paso crezca sólo por incluir más muestras y coincide con la loss media del motor | `_gradients` divide por la cantidad de muestras del lote antes de actualizar |
+| Mantener Rosenblatt exclusivamente online y con descenso básico | El escalón no tiene la derivada requerida por Momentum, RMSProp o Adam; inventar una extensión mezclaría algoritmos no presentados | `fit` rechaza otro optimizador o `batch_size` mayor que uno para activación `step` |
+| Usar en Adam los valores de referencia de la diapositiva | Clase 12.1 sí presenta `eta=0.001`, `beta1=0.9`, `beta2=0.999` y `epsilon=1e-8` | Son defaults explícitos y pueden modificarse por experimento |
+| Exigir los hiperparámetros no fijados por clase | Momentum, RMSProp y eta adaptativo requieren elecciones que no deben quedar escondidas como si fueran obligatorias | `alpha`, `gamma`, `epsilon`, incremento, reducción y paciencia se pasan al construir cada optimizador |
+| Interpretar “consistentemente” como K épocas consecutivas | La diapositiva propone parametrizar la consistencia, pero no fija una única regla | Eta adaptativo compara loss de épocas contiguas y usa `patience=K`; suma `increase_by` o multiplica por `1-decrease_fraction` |
+| Conservar epsilon dentro de la raíz en RMSProp y fuera en Adam | Es la diferencia escrita en las fórmulas de clase y altera el cálculo | Cubierta por cuentas manuales en `test_optimizers.py` |
+| No seleccionar todavía optimizador ni tamaño de lote final | La implementación no aporta evidencia de cuál generaliza o converge mejor en cada dataset | Pendiente de experimentos controlados sobre training; test continúa reservado |

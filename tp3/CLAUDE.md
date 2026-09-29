@@ -39,3 +39,8 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
 - Punto 5: `metrics.py` recibe clases enteras reales/predichas y no elige umbral
   ni aplica `argmax`. Matriz con filas reales/columnas predichas; métricas
   one-vs-rest por clase y macro; divisiones indefinidas se expresan como `NaN`.
+- Punto 6: `optimizers.py` implementa descenso básico, Momentum, eta adaptativo,
+  RMSProp y Adam según clase 12.1. `fit` mantiene independiente `batch_size`:
+  1 online, intermedio mini-batch y `None`/N batch. Rosenblatt escalón permanece
+  online con descenso básico. La implementación no selecciona todavía la mejor
+  combinación para fraude o dígitos.

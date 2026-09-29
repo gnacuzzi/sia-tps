@@ -72,8 +72,7 @@ loader aplica esos mismos parámetros a training y test.
 ## Continuación del TP
 
 1. Usar la estandarización de fraude ya implementada y mantener dígitos en `[0,1]`.
-2. Usar las métricas de clasificación implementadas y completar las variantes
-   de entrenamiento obligatorias.
+2. Comparar las variantes de optimización y tamaño de lote ya implementadas.
 3. Resolver fraude y dígitos sin utilizar los conjuntos de test para elegir
    parámetros o hiperparámetros.
 
@@ -119,3 +118,11 @@ ausente, como el 8 en training, no desaparezca del informe.
 La conversión a clase queda fuera del módulo: fraude aplicará el umbral que se
 decida posteriormente y dígitos usará `argmax`. Las divisiones sin denominador
 se informan como `NaN`, porque esa métrica no puede evaluarse con esas muestras.
+
+## Optimización (punto 6)
+
+El motor incluye descenso básico, Momentum, eta adaptativo, RMSProp y Adam con
+las fórmulas de clase 12.1. La forma de actualización se configura por separado:
+`batch_size=1` es online, un valor intermedio es mini-batch y `batch_size=None`
+o la cantidad total de muestras es batch. Implementarlos no decide cuál usar;
+esa comparación controlada sigue pendiente para cada ejercicio obligatorio.

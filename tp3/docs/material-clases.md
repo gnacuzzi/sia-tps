@@ -77,9 +77,9 @@ La portada de clase 13 también indica primer cuatrimestre de 2026.
 - La consigna y la explicación de clase 11 reservan `digits_test.csv` para
   evaluación final. Los ajustes de pesos y de hiperparámetros se hacen usando
   particiones del conjunto de desarrollo, no el test final.
-- Optimización incluye momentum, AdaGrad y Adam. Que aparezcan en clase no
-  significa que ya se hayan seleccionado o implementado. Antes de comparar
-  optimizadores se documentará su fórmula exacta y sus hiperparámetros.
+- Optimización incluye Momentum, eta adaptativo, RMSProp y Adam. Ya están
+  implementados con sus fórmulas de clase, pero eso no selecciona cuál usar:
+  todavía deben compararse junto con la frecuencia de actualización.
 - La clase 11 pide analizar las curvas de pérdida y explicar las decisiones
   propias. No basta con presentar un número final sin discutir convergencia
   ni justificar las alternativas comparadas.
@@ -113,13 +113,14 @@ como fórmulas ni se corrigen en los archivos originales.
   recall. Accuracy sola puede ocultar el desbalance (clase 12.2, páginas 10–16
   y explicación oral).
 - **Comparar optimizadores de manera controlada.** La clase 12.1 desarrolla
-  Momentum, eta adaptativo, RMSProp y Adam. Antes de implementar se registrarán
-  la variante elegida y sus hiperparámetros; por ejemplo, RMSProp coloca epsilon
-  dentro de la raíz en la página 8, mientras Adam lo coloca fuera en 12–13.
+  Momentum, eta adaptativo, RMSProp y Adam. La implementación conserva que
+  RMSProp coloca epsilon dentro de la raíz (página 8), mientras Adam lo coloca
+  fuera (páginas 12–13); la selección experimental sigue pendiente.
 - **Diagnosticar antes de regularizar.** Las curvas de training/validation
   permiten distinguir problemas de ajuste y generalización. Early stopping,
   data augmentation y L2 son alternativas de clase 13 ante sobreajuste;
   no se incorporan automáticamente ni reemplazan estudiar la convergencia.
 
-Estas son pautas para las siguientes etapas. En esta incorporación no se
-implementaron preprocesamiento, nuevas métricas, optimizadores ni regularización.
+Estas pautas guiaron la implementación posterior de preprocesamiento, métricas
+y optimizadores. La regularización y los experimentos obligatorios siguen
+pendientes y no se incorporarán sin un diagnóstico que los justifique.
