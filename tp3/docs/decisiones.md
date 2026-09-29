@@ -178,7 +178,7 @@ fallos de la configuración inicial y limitaciones de la validación.
 
 | Decisión | Motivo | Aplicación y estado |
 |---|---|---|
-| Implementar solamente training y test, sin validation | Pedido explícito del usuario para esta etapa | Aplicada en `src/sia_tp3/data.py`; no existe una tercera partición |
+| Mantener los loaders con training y test, sin un tercer dataset permanente | Pedido explícito del usuario para la etapa de carga y preferencia por no agregar una partición fija | Aplicada en `src/sia_tp3/data.py`; no existe un tercer archivo o retorno de validation |
 | Usar 20 % de fraude como test y semilla 0 por defecto | Disponer de una partición reproducible y configurable cuando solo existe un CSV | Aplicada; 6000 filas de training y 1500 de test |
 | Estratificar fraude mediante `flagged_fraud` | Conservar aproximadamente el desbalance original en ambos subconjuntos | Aplicada únicamente al reparto; la columna no entra en `X` ni es objetivo del modelo y solo se devuelve para test |
 | Entrenar fraude contra `big_model_fraud_probability` | Es el objetivo de destilación indicado por la documentación | Aplicada; `y_train` y `y_test` tienen una salida continua |
@@ -186,7 +186,7 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Concatenar `more_digits.csv` únicamente al training del ejercicio 3 | Aislar el efecto de disponer de más datos sin alterar el test | Aplicada mediante `additional_train_path` opcional |
 | Mantener imágenes en `float32` y etiquetas como enteros | Coincidir con el loader recibido y posponer la codificación hasta definir la salida de la red | Aplicada; formas verificadas contra los cuatro CSV reales |
 | Posponer inicialmente normalización, estandarización y codificación | Esas transformaciones debían decidirse después del análisis de los datos | Aplicada durante los puntos 1–3; reemplazada para fraude por la decisión del punto 4 |
-| No usar test para seleccionar configuraciones | Test debe representar la evaluación final | Vigente; al no existir validation, el procedimiento de selección deberá resolverse sin consultar repetidamente test |
+| No usar test para seleccionar configuraciones | Test debe representar la evaluación final | Vigente; la selección futura usará validation temporal derivada de training |
 
 ## Clases 12 y 13 y revisión del plan (28 de septiembre de 2026)
 
@@ -195,7 +195,8 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Incorporar los tres PDFs y las dos transcripciones recibidas | Completar el material que sustenta las siguientes etapas | Copias exactas en `docs/` y `docs/transcripciones/`; índice actualizado en `material-clases.md` |
 | Versionar únicamente las nuevas transcripciones de clases 12.2 y 13 | El pedido actual incluye esos adjuntos y reemplaza la exclusión previa para ellos | Excepciones explícitas en `.gitignore`; las transcripciones anteriores siguen excluidas |
 | Trabajar de a un punto y revisarlo antes de continuar | Pedido del equipo para comprender y justificar cada paso | Primero se vuelve a comprobar el motor con los casos de validación |
-| Mantener training/test sin validation en esta etapa | Decisión explícita previa, ratificada por el equipo al revisar el avance | Vigente. Se rectifica la anotación anterior que presentaba incorporar validation como un cambio acordado; no lo era. Se continúa con el punto 3 |
+| Mantener training/test durante carga y EDA | Decisión explícita previa, ratificada por el equipo al revisar el avance | Decisión histórica y aplicada a esas etapas; no se reescriben el EDA ni sus resultados |
+| Incorporar validation temporal para los experimentos | Permite elegir hiperparámetros, diagnosticar generalización y fijar umbrales sin consultar repetidamente test | Aplicada en `experiments.py`: se deriva reproduciblemente de training, expone sus índices y no modifica los CSV ni el contrato de los loaders anteriores. Falta integrarla en cada runner experimental |
 | Justificar preprocesamiento y regularización con evidencia | Seguir el hilo experimental de clases 12.2 y 13 | EDA sobre training antes de transformar; regularización solo ante un diagnóstico de sobreajuste; todavía no implementados |
 | Mantener el motor y la configuración de validación actuales | La nueva ejecución pasó los 38 tests y las 15 corridas sin cambios | Punto 1 verificado; se recargaron los 15 modelos y se reprodujeron sus métricas; evidencia en `resultados-validacion.md` |
 

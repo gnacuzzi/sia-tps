@@ -99,9 +99,9 @@ como fórmulas ni se corrigen en los archivos originales.
 - **Distinguir training, validation y test.** Training ajusta pesos; validation
   permite comparar configuraciones y observar las curvas durante el desarrollo;
   test se reserva para la evaluación final. La clase 13 lo aclara para los
-  ejercicios 2 y 3. El equipo decidió trabajar con training/test sin validation
-  en esta etapa. Esa decisión está vigente en `decisiones.md`: la referencia
-  de clase no implica haber acordado cambiar el loader ni condiciona el EDA.
+  ejercicios 2 y 3. Los loaders mantienen training/test, pero el equipo decidió
+  derivar validation temporalmente desde training durante los experimentos.
+  Esto no modifica los CSV ni el EDA ya realizado y mantiene test reservado.
 - **Analizar antes de transformar.** Revisar distribuciones, escalas, balance,
   faltantes, outliers y variables problemáticas sobre training. Min-max y
   estandarización tienen propósitos distintos (clase 12.2, páginas 32–35);

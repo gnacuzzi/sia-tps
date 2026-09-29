@@ -14,6 +14,7 @@ Sistemas de Inteligencia Artificial, ITBA, segundo cuatrimestre de 2026.
 - [Implementación y API reutilizable](docs/implementacion.md).
 - [Resultados de validación y gráficos de entrenamiento](docs/resultados-validacion.md).
 - [Análisis exploratorio de training: hallazgos y decisiones pendientes](docs/eda-training.md).
+- [Plan experimental: prioridades, validation temporal e iteraciones](docs/plan-experimental.md).
 
 Seguimos la organización de los TPs anteriores: una carpeta independiente
 por TP, documentación en español y material fuente dentro de `docs/`.
@@ -68,6 +69,13 @@ guardar y cargar parámetros. `data.py` carga los datasets reales y conserva
 una separación estricta entre training y test, sin crear validation. Para
 fraude, `preprocessing.py` ajusta la estandarización sólo con training y el
 loader aplica esos mismos parámetros a training y test.
+
+Para los ejercicios se aprobó crear validation temporalmente desde training,
+sin modificar los CSV ni convertirlo en un tercer retorno permanente del
+loader. Los helpers reproducibles están implementados en `experiments.py`; aún
+falta integrarlos en los runners de los tres ejercicios. Test seguirá cerrado
+hasta elegir y congelar cada configuración. El protocolo completo está en
+[el plan experimental](docs/plan-experimental.md).
 
 ## Continuación del TP
 

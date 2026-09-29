@@ -7,6 +7,7 @@
 | `src/sia_tp3/models.py` | Perceptrón simple, red multicapa, activaciones, forward, Rosenblatt, backpropagation y guardado/carga |
 | `src/sia_tp3/optimizers.py` | Descenso básico, Momentum, eta adaptativo, RMSProp y Adam |
 | `src/sia_tp3/training.py` | Entrenamiento online, mini-batch o batch y métricas al terminar cada época, sin conocer el dataset |
+| `src/sia_tp3/experiments.py` | Validation temporal reproducible para fraude y dígitos sin cambiar los loaders training/test |
 | `src/sia_tp3/metrics.py` | Matriz de confusión y métricas estándar de clasificación globales, por clase y macro |
 | `src/sia_tp3/validation.py` | Datos sintéticos de la consigna, configuración y evidencia de las corridas |
 | `configs/validation.json` | Arquitecturas, inicialización, semillas, tasas, orden y criterios de aceptación |
@@ -238,8 +239,33 @@ como test externo. Para el ejercicio 3, el archivo adicional se concatena solo
 al training. La codificación de las diez salidas se decidirá junto con el
 modelo y no forma parte de la carga.
 
+## Validation temporal para experimentos
+
+`load_fraud_experiment_split` y `load_digits_experiment_split` conservan el
+test externo y derivan training/validation del conjunto de desarrollo. Ambos
+devuelven los índices internos para registrar exactamente la partición.
+
+En fraude se leen primero los valores crudos, se reserva test, se separa
+validation y sólo entonces se ajusta `Standardizer` con training interno. Sus
+parámetros se reutilizan en validation y test. `flagged_fraud` sólo participa
+en la estratificación y queda disponible para evaluar umbrales en validation y
+test; nunca aparece en las entradas ni como objetivo entrenable.
+
+```python
+from sia_tp3 import load_fraud_experiment_split
+
+data = load_fraud_experiment_split(
+    'data/fraud_dataset.csv',
+    test_fraction=0.2,
+    validation_fraction=0.2,
+    test_seed=0,
+    validation_seed=0,
+)
+```
+
 Las arquitecturas y técnicas base corresponden a clases 10.1, 10.2 y 11; los
 optimizadores corresponden a clase 12.1. Siguen pendientes la configuración y
-comparación experimental para cada ejercicio obligatorio. Se implementó
-training/test sin validation por decisión explícita del usuario. No se utilizó
-`digits_test.csv` para ninguna elección de este desarrollo.
+comparación experimental para cada ejercicio obligatorio. Los loaders mantienen
+training/test; `experiments.py` deriva validation temporal de training para los
+futuros runners. No se utilizó `digits_test.csv` para ninguna elección de este
+desarrollo.

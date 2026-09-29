@@ -26,7 +26,10 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
   `flagged_fraud` no puede usarse para entrenar, según esa documentación.
 - No comenzar opcionales antes de completar los ejercicios obligatorios.
 - Punto 3: EDA en `scripts/analyze_training.py`, informe en `docs/eda-training.md`.
-  Se mantiene training/test sin validation por decisión del equipo. El EDA
+  El EDA mantiene training/test y no se recalcula. Para los futuros experimentos
+  se aprobó derivar validation temporalmente desde training, sin cambiar los
+  CSV ni el retorno actual de los loaders. La división está implementada en
+  `experiments.py`; falta usarla en los runners de cada ejercicio. El EDA
   calcula estadísticas sólo sobre training; usa entradas de test únicamente
   para detectar solapamientos exactos. Ese control no usa etiquetas ni métricas
   de test; se conserva la estratificación de fraude ya decidida.

@@ -2,6 +2,9 @@
 
 from .data import (DigitTrainTest, FraudTrainTest, load_digits_train_test,
                    load_fraud_train_test)
+from .experiments import (DigitExperimentSplit, FraudExperimentSplit,
+                          load_digits_experiment_split,
+                          load_fraud_experiment_split)
 from .metrics import (ClassMetrics, ClassificationReport, classification_metrics,
                       confusion_matrix)
 from .models import MultilayerPerceptron, Perceptron
@@ -12,7 +15,9 @@ from .training import fit
 
 __all__ = [
     "DigitTrainTest",
+    "DigitExperimentSplit",
     "FraudTrainTest",
+    "FraudExperimentSplit",
     "ClassMetrics",
     "ClassificationReport",
     "Adam",
@@ -28,5 +33,7 @@ __all__ = [
     "confusion_matrix",
     "fit",
     "load_digits_train_test",
+    "load_digits_experiment_split",
     "load_fraud_train_test",
+    "load_fraud_experiment_split",
 ]

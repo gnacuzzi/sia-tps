@@ -49,21 +49,22 @@ class DigitTrainTest:
     y_test: np.ndarray
 
 
-def _test_count(sample_count: int, test_fraction: float) -> int:
+def _split_count(sample_count: int, fraction: float, fraction_name: str) -> int:
     if sample_count < 2:
-        raise ValueError("se necesitan al menos dos muestras para separar training y test")
-    if not np.isfinite(test_fraction) or not 0 < test_fraction < 1:
-        raise ValueError("test_fraction debe estar entre 0 y 1")
-    return min(sample_count - 1, max(1, int(round(sample_count * test_fraction))))
+        raise ValueError("se necesitan al menos dos muestras para separar datos")
+    if not np.isfinite(fraction) or not 0 < fraction < 1:
+        raise ValueError(f"{fraction_name} debe estar entre 0 y 1")
+    return min(sample_count - 1, max(1, int(round(sample_count * fraction))))
 
 
 def _stratified_indices(labels: np.ndarray, test_fraction: float,
-                        seed: int) -> Tuple[np.ndarray, np.ndarray]:
+                        seed: int, *,
+                        fraction_name: str = "test_fraction") -> Tuple[np.ndarray, np.ndarray]:
     """Separar índices preservando aproximadamente la proporción de cada clase."""
     if isinstance(seed, bool) or not isinstance(seed, (int, np.integer)) or seed < 0:
         raise ValueError("seed debe ser un entero no negativo")
     labels = np.asarray(labels)
-    wanted_test = _test_count(len(labels), test_fraction)
+    wanted_test = _split_count(len(labels), test_fraction, fraction_name)
     classes, counts = np.unique(labels, return_counts=True)
     if len(classes) < 2 or np.any(counts < 2):
         raise ValueError("cada clase necesita al menos dos muestras para estratificar")
@@ -86,7 +87,7 @@ def _stratified_indices(labels: np.ndarray, test_fraction: float,
         choice = candidates[np.argmax(per_class[candidates] - exact[candidates])]
         per_class[choice] -= 1
     if per_class.sum() != wanted_test:
-        raise ValueError("test_fraction incompatible con la estratificación solicitada")
+        raise ValueError(f"{fraction_name} incompatible con la estratificación solicitada")
 
     rng = np.random.default_rng(seed)
     train_parts, test_parts = [], []
@@ -98,15 +99,8 @@ def _stratified_indices(labels: np.ndarray, test_fraction: float,
             rng.permutation(np.concatenate(test_parts)))
 
 
-def load_fraud_train_test(path, *, test_fraction: float = 0.2,
-                          seed: int = 0) -> FraudTrainTest:
-    """Cargar, separar y estandarizar fraude sin usar estadísticas de test.
-
-    El objetivo de entrenamiento es la probabilidad producida por BigModel.
-    ``flagged_fraud`` interviene solamente para conservar su proporción al separar
-    los datos y se expone únicamente para la evaluación final de test. La media
-    y el desvío se calculan con training y luego se aplican a ambos conjuntos.
-    """
+def _load_fraud_file(path):
+    """Leer fraude crudo para que cada protocolo decida cuándo estandarizar."""
     path = Path(path)
     with path.open(newline="") as file:
         reader = csv.DictReader(file)
@@ -131,6 +125,19 @@ def load_fraud_train_test(path, *, test_fraction: float = 0.2,
         raise ValueError("las probabilidades de BigModel deben estar entre 0 y 1")
     if not np.isin(flagged, [0, 1]).all():
         raise ValueError("flagged_fraud debe contener solamente 0 y 1")
+    return X, y, flagged
+
+
+def load_fraud_train_test(path, *, test_fraction: float = 0.2,
+                          seed: int = 0) -> FraudTrainTest:
+    """Cargar, separar y estandarizar fraude sin usar estadísticas de test.
+
+    El objetivo de entrenamiento es la probabilidad producida por BigModel.
+    ``flagged_fraud`` interviene solamente para conservar su proporción al separar
+    los datos y se expone únicamente para la evaluación final de test. La media
+    y el desvío se calculan con training y luego se aplican a ambos conjuntos.
+    """
+    X, y, flagged = _load_fraud_file(path)
 
     train_indices, test_indices = _stratified_indices(flagged, test_fraction, seed)
     X_train, X_test = X[train_indices], X[test_indices]
