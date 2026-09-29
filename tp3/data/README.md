@@ -46,8 +46,10 @@ Se implementó únicamente una separación training/test, sin validation:
   training y el mismo test externo de 2497 imágenes.
 
 El [análisis exploratorio de training](../docs/eda-training.md) está realizado
-para fraude y `digits.csv`. Todavía no se aplicaron normalización,
-estandarización ni codificación de las etiquetas. El test queda reservado:
+para fraude y `digits.csv`. A partir de ese análisis, el loader estandariza las
+nueve entradas de fraude con la media y el desvío de training; aplica los mismos
+parámetros a test y deja sin transformar el objetivo y las etiquetas. Los
+píxeles de dígitos se conservan en `[0,1]`. El test queda reservado:
 no debe emplearse para escoger parámetros o hiperparámetros. Sus entradas se
 usan únicamente en un control de integridad que comprueba si existen muestras
 exactamente repetidas entre training y test. Ese control no utiliza etiquetas,

@@ -145,7 +145,8 @@ restored = MultilayerPerceptron.load('xor.npz')
 
 ## Carga y separación de los datasets reales
 
-`data.py` expone dos loaders sin aplicar todavía transformaciones:
+`data.py` expone los dos loaders. Fraude se estandariza después del split;
+dígitos conserva los píxeles recibidos en `[0,1]`:
 
 ```python
 from pathlib import Path
@@ -164,11 +165,15 @@ digits_exercise_3 = load_digits_train_test(
     additional_train_path=data_dir / 'more_digits.csv')
 ```
 
-En fraude, `X_train` y `X_test` contienen las nueve variables de entrada y
-`y_train`/`y_test` contienen la probabilidad de BigModel con forma `(N, 1)`.
+En fraude, `X_train` y `X_test` contienen las nueve variables de entrada
+estandarizadas con la media y el desvío calculados exclusivamente sobre
+training. `y_train`/`y_test` contienen la probabilidad de BigModel con forma
+`(N, 1)` y conservan su escala original.
 `flagged_fraud` no aparece entre las entradas ni como objetivo; se usa para
 estratificar el split y solo se expone como `flagged_fraud_test` para la futura
-evaluación final. La semilla vuelve reproducible la partición.
+evaluación final. La semilla vuelve reproducible la partición. El objeto
+`fraud.standardizer` permite transformar entradas futuras y guardar sus
+parámetros mediante `save`; debe conservarse junto con el modelo entrenado.
 
 En dígitos, las imágenes quedan como matrices `float32` de forma `(N, 784)` y
 las etiquetas como enteros de forma `(N,)`. `digits_test.csv` se carga siempre

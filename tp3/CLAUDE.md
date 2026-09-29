@@ -32,3 +32,7 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
   de test; se conserva la estratificación de fraude ya decidida.
   `flagged_fraud` se usa únicamente para estratificar y contar clases. Se decidió
   conservar variables, outliers y píxeles constantes en esta etapa.
+- Punto 4: `load_fraud_train_test` estandariza las nueve entradas después del
+  split. `Standardizer` se ajusta sólo con `X_train` y transforma también
+  `X_test` con esos parámetros; objetivos y etiquetas quedan intactos. Dígitos
+  conserva sus píxeles en `[0,1]`.

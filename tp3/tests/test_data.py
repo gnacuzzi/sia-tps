@@ -3,7 +3,8 @@ import csv
 import numpy as np
 import pytest
 
-from sia_tp3 import load_digits_train_test, load_fraud_train_test
+from sia_tp3 import Standardizer, load_digits_train_test, load_fraud_train_test
+from sia_tp3.data import FRAUD_FEATURES, _stratified_indices
 
 
 FRAUD_FIELDS = [
@@ -45,9 +46,45 @@ def test_fraud_loads_reproducible_stratified_train_test(tmp_path):
     assert first.y_test.shape == (2, 1)
     np.testing.assert_array_equal(first.X_train, second.X_train)
     np.testing.assert_array_equal(first.X_test, second.X_test)
+    np.testing.assert_allclose(first.X_train.mean(axis=0), 0, atol=1e-12)
+    np.testing.assert_allclose(first.X_train.std(axis=0), 1, atol=1e-12)
     np.testing.assert_array_equal(np.sort(first.flagged_fraud_test), [0, 1])
     assert "flagged_fraud" not in first.feature_names
     assert "big_model_fraud_probability" not in first.feature_names
+
+
+def test_fraud_standardization_fits_only_training_and_preserves_targets(tmp_path):
+    path = tmp_path / "fraud.csv"
+    _write_fraud(path)
+    data = load_fraud_train_test(path, test_fraction=0.2, seed=7)
+
+    raw_X = np.asarray([[index + offset for offset in range(len(FRAUD_FEATURES))]
+                        for index in range(10)], dtype=np.float64)
+    raw_y = np.arange(10, dtype=np.float64).reshape(-1, 1) / 10
+    labels = np.arange(10) % 2
+    train, test = _stratified_indices(labels, 0.2, 7)
+    expected_mean = raw_X[train].mean(axis=0)
+    expected_std = raw_X[train].std(axis=0, ddof=0)
+
+    np.testing.assert_allclose(data.standardizer.mean, expected_mean)
+    np.testing.assert_allclose(data.standardizer.scale, expected_std)
+    np.testing.assert_allclose(data.X_train, (raw_X[train] - expected_mean) / expected_std)
+    np.testing.assert_allclose(data.X_test, (raw_X[test] - expected_mean) / expected_std)
+    np.testing.assert_array_equal(data.y_train, raw_y[train])
+    np.testing.assert_array_equal(data.y_test, raw_y[test])
+
+
+def test_standardizer_handles_constants_and_can_be_saved(tmp_path):
+    scaler = Standardizer.fit([[1, 10], [1, 20]], ["constant", "variable"])
+    np.testing.assert_array_equal(scaler.scale, [1, 5])
+    np.testing.assert_allclose(scaler.transform([[1, 30]]), [[0, 3]])
+
+    path = tmp_path / "standardizer.npz"
+    scaler.save(path)
+    restored = Standardizer.load(path)
+    np.testing.assert_array_equal(restored.mean, scaler.mean)
+    np.testing.assert_array_equal(restored.scale, scaler.scale)
+    assert restored.feature_names == scaler.feature_names
 
 
 @pytest.mark.parametrize("test_fraction", [0, 1, -0.1, float("nan")])

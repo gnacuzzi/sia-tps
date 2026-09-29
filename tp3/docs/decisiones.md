@@ -185,7 +185,7 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Usar `digits_test.csv` completo como test externo | Es el conjunto que la consigna reserva para medir generalización | Aplicada; no se extraen muestras de ese archivo para training |
 | Concatenar `more_digits.csv` únicamente al training del ejercicio 3 | Aislar el efecto de disponer de más datos sin alterar el test | Aplicada mediante `additional_train_path` opcional |
 | Mantener imágenes en `float32` y etiquetas como enteros | Coincidir con el loader recibido y posponer la codificación hasta definir la salida de la red | Aplicada; formas verificadas contra los cuatro CSV reales |
-| No normalizar, estandarizar ni codificar durante la carga | Esas transformaciones deben decidirse después del análisis de los datos | Aplicada; los loaders validan estructura y finitud pero conservan valores |
+| Posponer inicialmente normalización, estandarización y codificación | Esas transformaciones debían decidirse después del análisis de los datos | Aplicada durante los puntos 1–3; reemplazada para fraude por la decisión del punto 4 |
 | No usar test para seleccionar configuraciones | Test debe representar la evaluación final | Vigente; al no existir validation, el procedimiento de selección deberá resolverse sin consultar repetidamente test |
 
 ## Clases 12 y 13 y revisión del plan (28 de septiembre de 2026)
@@ -273,3 +273,18 @@ dependan de los hallazgos se justificarán al revisarlos con el equipo.
   constantes como referencia inicial. No se borraron, imputaron, balancearon
   ni transformaron datos; no se incorporaron ejemplos adicionales ni se
   evaluaron modelos.
+
+## Punto 4: preprocesamiento
+
+| Decisión | Motivo | Aplicación y estado |
+|---|---|---|
+| Estandarizar las nueve entradas de fraude | Sus escalas originales son muy diferentes y pueden producir actualizaciones desbalanceadas durante el entrenamiento | Aplicada en `data.py` mediante `Standardizer` |
+| Ajustar el estandarizador sólo con `X_train` | Evitar que la distribución de test se filtre al entrenamiento | La separación ocurre antes del ajuste; `X_test` se transforma con la media y el desvío de training |
+| No transformar `big_model_fraud_probability` ni `flagged_fraud` | La primera ya es una probabilidad en `[0,1]` y la segunda no es entrenable | Ambas salidas conservan sus valores originales |
+| Mantener los píxeles de dígitos en `[0,1]` | Ya están reescalados; volver a dividir por 255 reduciría incorrectamente su magnitud | El loader de dígitos permanece sin cambios |
+| Conservar variables, candidatos IQR y los 97 píxeles constantes | No hay evidencia experimental que justifique eliminarlos | No se filtran columnas ni filas durante el preprocesamiento |
+| Guardar los parámetros del estandarizador | Las entradas futuras deben recibir exactamente la misma transformación que training | `Standardizer.save/load` persiste medias, desvíos y orden de variables sin pickle |
+
+Si una columna de training fuera constante, su escala se guarda como 1 para
+centrarla en cero sin dividir por cero. En el dataset real de fraude no se
+detectaron columnas constantes.

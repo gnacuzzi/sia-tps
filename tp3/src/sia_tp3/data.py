@@ -8,6 +8,8 @@ from typing import Optional, Tuple
 
 import numpy as np
 
+from .preprocessing import Standardizer
+
 
 FRAUD_TARGET = "big_model_fraud_probability"
 FRAUD_LABEL = "flagged_fraud"
@@ -26,7 +28,7 @@ FRAUD_FEATURES = (
 
 @dataclass(frozen=True)
 class FraudTrainTest:
-    """Datos de fraude; ``flagged_fraud`` queda separado de lo entrenable."""
+    """Fraude estandarizado; ``flagged_fraud`` queda fuera de lo entrenable."""
 
     X_train: np.ndarray
     y_train: np.ndarray
@@ -34,6 +36,7 @@ class FraudTrainTest:
     y_test: np.ndarray
     flagged_fraud_test: np.ndarray
     feature_names: Tuple[str, ...]
+    standardizer: Standardizer
 
 
 @dataclass(frozen=True)
@@ -97,11 +100,12 @@ def _stratified_indices(labels: np.ndarray, test_fraction: float,
 
 def load_fraud_train_test(path, *, test_fraction: float = 0.2,
                           seed: int = 0) -> FraudTrainTest:
-    """Cargar fraude y crear un split estratificado por la etiqueta real.
+    """Cargar, separar y estandarizar fraude sin usar estadísticas de test.
 
     El objetivo de entrenamiento es la probabilidad producida por BigModel.
     ``flagged_fraud`` interviene solamente para conservar su proporción al separar
-    los datos y se expone únicamente para la evaluación final de test.
+    los datos y se expone únicamente para la evaluación final de test. La media
+    y el desvío se calculan con training y luego se aplican a ambos conjuntos.
     """
     path = Path(path)
     with path.open(newline="") as file:
@@ -129,13 +133,16 @@ def load_fraud_train_test(path, *, test_fraction: float = 0.2,
         raise ValueError("flagged_fraud debe contener solamente 0 y 1")
 
     train_indices, test_indices = _stratified_indices(flagged, test_fraction, seed)
+    X_train, X_test = X[train_indices], X[test_indices]
+    standardizer = Standardizer.fit(X_train, FRAUD_FEATURES)
     return FraudTrainTest(
-        X_train=X[train_indices],
+        X_train=standardizer.transform(X_train),
         y_train=y[train_indices],
-        X_test=X[test_indices],
+        X_test=standardizer.transform(X_test),
         y_test=y[test_indices],
         flagged_fraud_test=flagged[test_indices],
         feature_names=FRAUD_FEATURES,
+        standardizer=standardizer,
     )
 
 

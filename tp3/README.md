@@ -65,11 +65,13 @@ PYTHONPATH=src python3 -m sia_tp3 --config configs/validation.json --output outp
 AND, XOR, fraude ni dígitos. `validation.py` crea los casos sintéticos y usa
 esa misma API. Las redes admiten múltiples entradas y salidas, y permiten
 guardar y cargar parámetros. `data.py` carga los datasets reales y conserva
-una separación estricta entre training y test, sin crear validation.
+una separación estricta entre training y test, sin crear validation. Para
+fraude, `preprocessing.py` ajusta la estandarización sólo con training y el
+loader aplica esos mismos parámetros a training y test.
 
 ## Continuación del TP
 
-1. Revisar el EDA de training ya realizado y acordar las transformaciones del punto 4.
+1. Usar la estandarización de fraude ya implementada y mantener dígitos en `[0,1]`.
 2. Implementar las métricas y variantes de entrenamiento obligatorias.
 3. Resolver fraude y dígitos sin utilizar los conjuntos de test para elegir
    parámetros o hiperparámetros.
@@ -93,3 +95,14 @@ exactos entre particiones; no usa sus etiquetas, distribuciones ni métricas, y
 no abre los datos adicionales. Mantiene training/test sin validation y no
 aplica preprocesamiento. La evidencia versionada está en
 [`docs/eda-training/`](docs/eda-training/resumen.md).
+
+## Preprocesamiento (punto 4)
+
+`load_fraud_train_test` separa primero los datos, calcula una media y un desvío
+por cada una de las nueve entradas usando sólo `X_train`, y aplica esos mismos
+parámetros a `X_train` y `X_test`. El objetivo BigModel y `flagged_fraud` no se
+transforman. El `Standardizer` devuelto en `data.standardizer` puede guardarse
+como NPZ junto con el futuro modelo para reproducir exactamente las predicciones.
+
+Los dígitos conservan sus píxeles en el rango original `[0,1]`; no se dividen
+nuevamente por 255 ni se estandarizan en esta etapa.

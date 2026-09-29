@@ -190,16 +190,17 @@ semilla 0, y sus filas quedan registradas. La clase 8 aparece como «Sin muestra
 
 | Evidencia | Decisión o pendiente |
 |---|---|
-| Escalas muy diferentes en fraude | Estandarización o min-max, según la activación y la comparación que se acuerde; parámetros calculados sólo con training |
-| Píxeles ya en `[0,1]` | Mantener su rango o justificar otro; evitar una segunda división por 255 |
+| Escalas muy diferentes en fraude | **Decisión posterior al EDA:** estandarizar las nueve entradas con parámetros calculados sólo con training |
+| Píxeles ya en `[0,1]` | **Decisión posterior al EDA:** mantener el rango y evitar una segunda división por 255 |
 | Candidatos IQR plausibles y sin errores semánticos detectados | **Decisión:** conservarlos; no hay evidencia para eliminar filas |
 | 97 píxeles constantes y variables tabulares con poca asociación lineal | **Decisión:** mantener las nueve variables de fraude y los 784 píxeles como referencia inicial |
 | Ausencia del 8 y escasez del 5 | Documentar el límite y estudiar resultados por clase al implementar métricas; el análisis de datos adicionales queda para su etapa |
 
-No se imputaron, eliminaron, balancearon ni transformaron datos. La decisión
-de conservar todas las entradas puede revisarse después sólo si los
-experimentos aportan nueva evidencia. No se eligió modelo, activación, umbral,
-optimizador ni regularización.
+El EDA no imputó, eliminó, balanceó ni transformó sus datos fuente. La
+estandarización posterior está implementada en el loader de fraude y no cambia
+los CSV originales. La decisión de conservar todas las entradas puede revisarse
+después sólo si los experimentos aportan nueva evidencia. No se eligió modelo,
+activación, umbral, optimizador ni regularización.
 
 ## Reproducción y controles
 
