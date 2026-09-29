@@ -288,3 +288,15 @@ dependan de los hallazgos se justificarán al revisarlos con el equipo.
 Si una columna de training fuera constante, su escala se guarda como 1 para
 centrarla en cero sin dividir por cero. En el dataset real de fraude no se
 detectaron columnas constantes.
+
+## Punto 5: métricas de clasificación
+
+| Decisión | Motivo | Aplicación y estado |
+|---|---|---|
+| Usar filas reales y columnas predichas en la matriz | Mantener la convención explícita de la clase 12.2 | Aplicada en `metrics.py` |
+| Calcular métricas one-vs-rest por clase | Extender TP, TN, FP y FN al problema multiclase de dígitos | Aplicada para precision, recall, F1, TPR y FPR |
+| Informar accuracy global y promedios macro | Accuracy sola puede ocultar clases minoritarias; macro da igual peso a cada clase evaluable | Aplicada en `ClassificationReport` |
+| Exigir la lista completa de clases | Evitar que clases ausentes, especialmente el 8, desaparezcan de la matriz | `labels` es obligatorio y también valida predicciones desconocidas |
+| Marcar divisiones por cero como indefinidas | No confundir ausencia de evidencia con rendimiento igual a cero o uno | Se devuelve `NaN` para la métrica afectada y el promedio macro usa sólo valores definidos |
+| Mantener la conversión de salidas fuera de las métricas | Poder comparar umbrales de fraude sin reimplementar fórmulas y usar `argmax` en dígitos | Las funciones reciben únicamente clases reales y predichas |
+| Exponer recall y TPR | La consigna pide ambos nombres aunque representan la misma fórmula | Ambos campos contienen el mismo valor y se prueba esa igualdad |

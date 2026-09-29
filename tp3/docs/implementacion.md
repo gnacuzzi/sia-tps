@@ -6,6 +6,7 @@
 |---|---|
 | `src/sia_tp3/models.py` | Perceptrón simple, red multicapa, activaciones, forward, Rosenblatt, backpropagation y guardado/carga |
 | `src/sia_tp3/training.py` | Entrenamiento online y métricas al terminar cada época, sin conocer el dataset |
+| `src/sia_tp3/metrics.py` | Matriz de confusión y métricas estándar de clasificación globales, por clase y macro |
 | `src/sia_tp3/validation.py` | Datos sintéticos de la consigna, configuración y evidencia de las corridas |
 | `configs/validation.json` | Arquitecturas, inicialización, semillas, tasas, orden y criterios de aceptación |
 | `scripts/plot_validation.py` | Gráficos a partir de resultados guardados, sin volver a entrenar |
@@ -15,6 +16,20 @@ El código de AND/XOR no está dentro de las neuronas: los modelos reciben matri
 Para fraude y dígitos se reutilizan `Perceptron`, `MultilayerPerceptron` y `fit`.
 Lo que cambiará será la preparación de los datos, la arquitectura, los
 hiperparámetros y el protocolo de evaluación.
+
+## Métricas de clasificación
+
+`classification_metrics` implementa las convenciones de la clase 12.2: filas
+reales, columnas predichas y cálculo one-vs-rest para cada clase. Devuelve
+accuracy global y precision, recall, F1, TPR y FPR por clase; TPR y recall son
+deliberadamente iguales. Los promedios macro dan el mismo peso a cada clase
+evaluable, independientemente de cuántas muestras tenga.
+
+La lista `labels` es obligatoria. De ese modo una clase ausente en los datos,
+como el 8 en training, conserva su fila y columna y sus métricas sin denominador
+quedan como `NaN` en lugar de aparentar un resultado válido. El módulo recibe
+clases enteras: el umbral de fraude y el `argmax` de dígitos pertenecen al
+protocolo de cada ejercicio y no quedan ocultos dentro de las métricas.
 
 ## Contrato de los datos
 

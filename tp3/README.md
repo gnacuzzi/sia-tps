@@ -72,7 +72,8 @@ loader aplica esos mismos parámetros a training y test.
 ## Continuación del TP
 
 1. Usar la estandarización de fraude ya implementada y mantener dígitos en `[0,1]`.
-2. Implementar las métricas y variantes de entrenamiento obligatorias.
+2. Usar las métricas de clasificación implementadas y completar las variantes
+   de entrenamiento obligatorias.
 3. Resolver fraude y dígitos sin utilizar los conjuntos de test para elegir
    parámetros o hiperparámetros.
 
@@ -106,3 +107,15 @@ como NPZ junto con el futuro modelo para reproducir exactamente las predicciones
 
 Los dígitos conservan sus píxeles en el rango original `[0,1]`; no se dividen
 nuevamente por 255 ni se estandarizan en esta etapa.
+
+## Métricas de clasificación (punto 5)
+
+`classification_metrics(y_true, y_pred, labels=...)` recibe clases enteras ya
+decididas y devuelve matriz de confusión, accuracy, precision, recall, F1, TPR
+y FPR por clase, además de promedios macro. Las filas de la matriz son clases
+reales y las columnas son predicciones; `labels` es explícito para que una clase
+ausente, como el 8 en training, no desaparezca del informe.
+
+La conversión a clase queda fuera del módulo: fraude aplicará el umbral que se
+decida posteriormente y dígitos usará `argmax`. Las divisiones sin denominador
+se informan como `NaN`, porque esa métrica no puede evaluarse con esas muestras.

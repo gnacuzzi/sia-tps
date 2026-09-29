@@ -36,3 +36,6 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
   split. `Standardizer` se ajusta sólo con `X_train` y transforma también
   `X_test` con esos parámetros; objetivos y etiquetas quedan intactos. Dígitos
   conserva sus píxeles en `[0,1]`.
+- Punto 5: `metrics.py` recibe clases enteras reales/predichas y no elige umbral
+  ni aplica `argmax`. Matriz con filas reales/columnas predichas; métricas
+  one-vs-rest por clase y macro; divisiones indefinidas se expresan como `NaN`.
