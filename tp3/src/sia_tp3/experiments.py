@@ -12,6 +12,17 @@ from .preprocessing import Standardizer
 
 
 @dataclass(frozen=True)
+class FraudLearningData:
+    """Todas las muestras de fraude para comparar capacidad de aprendizaje."""
+
+    X: np.ndarray
+    y: np.ndarray
+    source_indices: np.ndarray
+    feature_names: Tuple[str, ...]
+    standardizer: Standardizer
+
+
+@dataclass(frozen=True)
 class FraudExperimentSplit:
     """Training/validation temporales y test externo para fraude."""
 
@@ -50,6 +61,24 @@ def _temporary_validation_indices(labels, validation_fraction: float,
     return _stratified_indices(
         labels, validation_fraction, seed,
         fraction_name="validation_fraction",
+    )
+
+
+def load_fraud_learning_data(path) -> FraudLearningData:
+    """Estandarizar y devolver las muestras completas para la primera comparación.
+
+    Esta etapa no estudia generalización: lineal y no lineal se entrenan con las
+    mismas filas para analizar aprendizaje, underfitting y saturación. Por eso
+    el estandarizador también se ajusta con el conjunto completo.
+    """
+    X, y, _ = _load_fraud_file(path)
+    standardizer = Standardizer.fit(X, FRAUD_FEATURES)
+    return FraudLearningData(
+        X=standardizer.transform(X),
+        y=y,
+        source_indices=np.arange(len(X)),
+        feature_names=FRAUD_FEATURES,
+        standardizer=standardizer,
     )
 
 

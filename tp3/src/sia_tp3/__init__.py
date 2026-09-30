@@ -3,7 +3,9 @@
 from .data import (DigitTrainTest, FraudTrainTest, load_digits_train_test,
                    load_fraud_train_test)
 from .experiments import (DigitExperimentSplit, FraudExperimentSplit,
+                          FraudLearningData,
                           load_digits_experiment_split,
+                          load_fraud_learning_data,
                           load_fraud_experiment_split)
 from .metrics import (ClassMetrics, ClassificationReport, classification_metrics,
                       confusion_matrix)
@@ -18,6 +20,7 @@ __all__ = [
     "DigitExperimentSplit",
     "FraudTrainTest",
     "FraudExperimentSplit",
+    "FraudLearningData",
     "ClassMetrics",
     "ClassificationReport",
     "Adam",
@@ -35,5 +38,6 @@ __all__ = [
     "load_digits_train_test",
     "load_digits_experiment_split",
     "load_fraud_train_test",
+    "load_fraud_learning_data",
     "load_fraud_experiment_split",
 ]

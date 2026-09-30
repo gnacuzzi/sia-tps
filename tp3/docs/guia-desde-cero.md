@@ -53,8 +53,8 @@ correcciones hacen que su error disminuya y sus predicciones mejoren.
    de actualización.
 7. Diagnosticar underfitting, overfitting y generalización con las corridas
    reales.
-8. Implementar la validation temporal ya acordada para seleccionar
-   configuraciones sin mirar test repetidamente.
+8. Integrar la validation temporal ya implementada en los runners que
+   seleccionarán configuraciones sin mirar test repetidamente.
 
 La distinción importante es esta:
 
@@ -565,6 +565,12 @@ X_test:  1500 filas × 9 entradas
 y_test:  1500 filas × 1 probabilidad
 ```
 
+Esto describe el loader con split y la futura etapa de generalización. La
+comparación inicial exigida por el ejercicio 1 usa otro helper:
+`load_fraud_learning_data` toma las **7500 filas** del CSV como training para
+los dos perceptrones y no crea validation ni test. Después de elegir lineal o
+no lineal se vuelve al protocolo separado mostrado arriba.
+
 ### Dígitos
 
 [`load_digits_train_test`](../src/sia_tp3/data.py) mantiene archivos separados:
@@ -584,10 +590,11 @@ El EDA es mirar los datos antes de decidir tratamientos. No entrena la red.
 
 ### Hallazgos de fraude
 
-- 6000 transacciones de training.
-- 695 casos con `flagged_fraud=1`, equivalentes a 11,58 %.
+- El EDA se hizo sobre las 7500 transacciones del CSV completo, igual que la
+  etapa inicial de aprendizaje del ejercicio 1.
+- 869 casos con `flagged_fraud=1`, equivalentes a 11,59 %.
 - No se encontraron faltantes, infinitos ni duplicados exactos.
-- No hay inputs repetidos exactamente entre training y test.
+- No hay inputs repetidos dentro del dataset.
 - Las nueve variables tienen escalas muy diferentes.
 - Los candidatos a outlier por IQR no son automáticamente errores.
 

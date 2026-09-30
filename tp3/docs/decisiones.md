@@ -179,7 +179,7 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Decisión | Motivo | Aplicación y estado |
 |---|---|---|
 | Mantener los loaders con training y test, sin un tercer dataset permanente | Pedido explícito del usuario para la etapa de carga y preferencia por no agregar una partición fija | Aplicada en `src/sia_tp3/data.py`; no existe un tercer archivo o retorno de validation |
-| Usar 20 % de fraude como test y semilla 0 por defecto | Disponer de una partición reproducible y configurable cuando solo existe un CSV | Aplicada; 6000 filas de training y 1500 de test |
+| Usar 20 % de fraude como test y semilla 0 por defecto en el protocolo de generalización | Disponer de una partición reproducible y configurable cuando solo existe un CSV | Aplicada después de la comparación inicial que usa las 7500 filas juntas; produce 6000 filas de training y 1500 de test |
 | Estratificar fraude mediante `flagged_fraud` | Conservar aproximadamente el desbalance original en ambos subconjuntos | Aplicada únicamente al reparto; la columna no entra en `X` ni es objetivo del modelo y solo se devuelve para test |
 | Entrenar fraude contra `big_model_fraud_probability` | Es el objetivo de destilación indicado por la documentación | Aplicada; `y_train` y `y_test` tienen una salida continua |
 | Usar `digits_test.csv` completo como test externo | Es el conjunto que la consigna reserva para medir generalización | Aplicada; no se extraen muestras de ese archivo para training |
@@ -195,18 +195,19 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Incorporar los tres PDFs y las dos transcripciones recibidas | Completar el material que sustenta las siguientes etapas | Copias exactas en `docs/` y `docs/transcripciones/`; índice actualizado en `material-clases.md` |
 | Versionar únicamente las nuevas transcripciones de clases 12.2 y 13 | El pedido actual incluye esos adjuntos y reemplaza la exclusión previa para ellos | Excepciones explícitas en `.gitignore`; las transcripciones anteriores siguen excluidas |
 | Trabajar de a un punto y revisarlo antes de continuar | Pedido del equipo para comprender y justificar cada paso | Primero se vuelve a comprobar el motor con los casos de validación |
-| Mantener training/test durante carga y EDA | Decisión explícita previa, ratificada por el equipo al revisar el avance | Decisión histórica y aplicada a esas etapas; no se reescriben el EDA ni sus resultados |
+| Analizar las 7500 transacciones en el EDA de fraude | La consigna actualizada pide usar todas las muestras en la primera etapa de aprendizaje | Aplicado; el EDA fue recalculado y el split queda para el protocolo posterior de generalización |
 | Incorporar validation temporal para los experimentos | Permite elegir hiperparámetros, diagnosticar generalización y fijar umbrales sin consultar repetidamente test | Aplicada en `experiments.py`: se deriva reproduciblemente de training, expone sus índices y no modifica los CSV ni el contrato de los loaders anteriores. Falta integrarla en cada runner experimental |
 | Justificar preprocesamiento y regularización con evidencia | Seguir el hilo experimental de clases 12.2 y 13 | EDA sobre training antes de transformar; regularización solo ante un diagnóstico de sobreajuste; todavía no implementados |
 | Mantener el motor y la configuración de validación actuales | La nueva ejecución pasó los 38 tests y las 15 corridas sin cambios | Punto 1 verificado; se recargaron los 15 modelos y se reprodujeron sus métricas; evidencia en `resultados-validacion.md` |
 
 ## Punto 3: análisis de training
 
-Se mantiene la partición ya implementada: fraude con 20 % de test, semilla 0
-y estratificación; dígitos con `digits.csv` como training y `digits_test.csv`
-como test externo. No se introduce validation. Los estadísticos y gráficos se
-limitan a training; de test sólo se comparan los inputs exactos, sin usar sus
-etiquetas ni métricas en ese control.
+En fraude, el EDA usa las 7500 transacciones sin split porque coincide con la
+primera etapa de aprendizaje del ejercicio 1. En dígitos, `digits.csv` sigue
+siendo training y `digits_test.csv` el test externo. No se introduce validation
+en el EDA porque no se comparan modelos; los experimentos posteriores sí usan
+la validation temporal implementada en `experiments.py`. Sólo para dígitos se
+comparan inputs exactos entre training y test, sin usar etiquetas ni métricas.
 El punto 3 del plan es el EDA; no debe confundirse con el ejercicio 3 de la
 consigna, que incorpora los datos adicionales.
 
@@ -222,10 +223,10 @@ están en `eda-training.md` y los artefactos reproducibles en `eda-training/`.
 | EDA-2 | Formato y herramientas | Script Python con NumPy/Matplotlib, tablas CSV e informe Markdown con gráficos; reutilizar las herramientas y organización del TP | Notebook con código y explicación | Aplicado en `scripts/analyze_training.py` |
 | EDA-3 | Descripción de distribuciones y escalas | Tipos, unidades, faltantes, no finitos, cantidad de valores distintos, mínimo/máximo, media, mediana, desvío, cuartiles y percentiles 1/99; histogramas y boxplots. En dígitos: conteos por clase, rango de píxeles y ejemplos de imágenes | Resumen reducido a rangos, cuartiles, histogramas y balance | Aplicado en `scripts/analyze_training.py` |
 | EDA-4 | Criterio para señalar outliers numéricos | Regla del boxplot: valores fuera de [Q1 − 1,5×IQR; Q3 + 1,5×IQR], con IQR = Q3 − Q1; revisar el significado de cada variable. Son candidatos, no errores confirmados ni una regla para eliminar registros o píxeles | Sólo percentiles y gráficos sin regla de outliers | Aplicado en `scripts/analyze_training.py` |
-| EDA-5 | Balance real de fraude | Contar `flagged_fraud` sólo en las filas de training para describir proporciones, sin incorporarlo a entradas/objetivos ni usarlo para seleccionar variables. El loader público sólo expone sus valores de test; el script accede a training exclusivamente para este conteo descriptivo. Analizar BigModel como probabilidad continua, sin fijar umbral | Mantener la etiqueta real oculta y describir sólo la distribución de probabilidades de BigModel; no llamarla balance de clases reales | Aplicado en `scripts/analyze_training.py` |
+| EDA-5 | Balance real de fraude | Contar `flagged_fraud` en las 7500 filas sólo para describir proporciones, sin incorporarlo a entradas/objetivos ni usarlo para seleccionar variables. Analizar BigModel como probabilidad continua, sin fijar umbral | Mantener la etiqueta real oculta y describir sólo la distribución de probabilidades de BigModel; no llamarla balance de clases reales | Aplicado en `scripts/analyze_training.py` |
 | EDA-6 | Diagnóstico de variables problemáticas | Revisar constantes, duplicados exactos, valores incompatibles con su significado y correlaciones lineales entre entradas y con BigModel. Correlación baja no implica irrelevancia. En dígitos: píxeles constantes e imágenes duplicadas, sin matriz de 784×784 | Calidad básica y constantes; posponer correlaciones | Aplicado en `scripts/analyze_training.py` |
 | EDA-7 | Qué hacer ante hallazgos | Registrar evidencia y alternativas; decidir los tratamientos en el punto 4. Conservar originales y no imputar, eliminar, reescalar, balancear ni crear variables durante el EDA | Revisar y decidir el tratamiento de cada hallazgo antes de continuar el análisis | Aplicado en `scripts/analyze_training.py` |
-| EDA-8 | Comprobar duplicados exactos entre training y test | Detectar data leakage sin utilizar test para ajustar el modelo; se comparan únicamente los vectores de entrada y no se interpretan etiquetas, distribuciones ni métricas de test | Posponer cualquier apertura de test hasta la evaluación final | Confirmado en la revisión y aplicado; no se encontraron solapamientos |
+| EDA-8 | Comprobar duplicados exactos entre training y test de dígitos | Detectar data leakage sin utilizar test para ajustar el modelo; se comparan únicamente los vectores de imagen y no se interpretan etiquetas, distribuciones ni métricas de test. En fraude no corresponde este control durante el EDA porque no hay split | Posponer cualquier apertura de test hasta la evaluación final | Confirmado en la revisión y aplicado; no se encontraron solapamientos en dígitos |
 | EDA-9 | Conservar todas las entradas y candidatos IQR | Los outliers observados pueden ser casos reales y los 97 píxeles constantes sólo describen bordes sin variación; no hay evidencia de que eliminarlos mejore el modelo | Eliminar outliers, variables de baja correlación o píxeles constantes antes de entrenar | Confirmado en la revisión; se mantienen las nueve entradas de fraude y los 784 píxeles |
 
 Base de las decisiones: consigna, página 4 (explorar documentación, rangos y
@@ -238,10 +239,9 @@ dependan de los hallazgos se justificarán al revisarlos con el equipo.
 
 ### Aplicación y resultados del punto 3
 
-- Se reutiliza `_stratified_indices` para conservar exactamente el reparto de
-  fraude. La etiqueta real completa sólo determina ese reparto; las entradas y
-  probabilidades se convierten y analizan únicamente para las 6000 filas de
-  training. La API pública de carga y el motor no cambian.
+- Fraude convierte y analiza las entradas y probabilidades de las 7500 filas.
+  La etiqueta real se lee únicamente para el conteo descriptivo; no entra en
+  las correlaciones ni en el entrenamiento. La API pública y el motor no cambian.
 - Dígitos usa `_load_digit_file` con `digits.csv`. De `digits_test.csv` sólo
   convierte los vectores de imagen para compararlos exactamente con training;
   no interpreta sus etiquetas ni calcula estadísticas. No abre
@@ -256,11 +256,11 @@ dependan de los hallazgos se justificarán al revisarlos con el equipo.
   imágenes por clase, muestreadas con semilla 0, con sus filas registradas.
   Estas son convenciones de cálculo y visualización, no hiperparámetros de
   entrenamiento ni requisitos atribuidos a la cátedra.
-- Se verificaron 6000 transacciones y 12449 imágenes de training. No se
+- Se verificaron 7500 transacciones y 12449 imágenes de training. No se
   detectaron faltantes/NaN, infinitos ni duplicados exactos en esos conjuntos.
-  Tampoco aparecieron entradas exactas compartidas entre training y test en
-  fraude o dígitos. No hay alertas en los controles semánticos implementados.
-- Fraude: 695 etiquetas positivas (11,58 %) y escalas muy diferentes entre
+  Tampoco aparecieron imágenes exactas compartidas entre training y test de
+  dígitos. No hay alertas en los controles semánticos implementados.
+- Fraude: 869 etiquetas positivas (11,59 %) y escalas muy diferentes entre
   variables. Las probabilidades de BigModel se describen como valores
   continuos; no se fija un umbral ni se comparan con la etiqueta real.
 - Dígitos: clase 8 ausente, 271 muestras del 5, píxeles ya en [0,1] y 97 píxeles
@@ -279,9 +279,10 @@ dependan de los hallazgos se justificarán al revisarlos con el equipo.
 
 | Decisión | Motivo | Aplicación y estado |
 |---|---|---|
-| Estandarizar las nueve entradas de fraude | Sus escalas originales son muy diferentes y pueden producir actualizaciones desbalanceadas durante el entrenamiento | Aplicada en `data.py` mediante `Standardizer` |
+| Estandarizar las nueve entradas de fraude | Sus escalas originales son muy diferentes y pueden producir actualizaciones desbalanceadas durante el entrenamiento. La clase 13 distingue este caso del min-max usado para adecuar una salida al intervalo de su activación | Aplicada en `data.py` mediante `Standardizer` |
 | Ajustar el estandarizador sólo con `X_train` | Evitar que la distribución de test se filtre al entrenamiento | La separación ocurre antes del ajuste; `X_test` se transforma con la media y el desvío de training |
 | No transformar `big_model_fraud_probability` ni `flagged_fraud` | La primera ya es una probabilidad en `[0,1]` y la segunda no es entrenable | Ambas salidas conservan sus valores originales |
+| No aplicar min-max adicional al objetivo del modelo logístico | La logística tiene imagen `(0,1)` y `big_model_fraud_probability` ya pertenece a `[0,1]`; no hay que cambiar su intervalo | El modelo aprende directamente las probabilidades provistas por BigModel. Si se eligiera `tanh`, esta decisión debería revisarse porque su imagen es `(-1,1)` |
 | Mantener los píxeles de dígitos en `[0,1]` | Ya están reescalados; volver a dividir por 255 reduciría incorrectamente su magnitud | El loader de dígitos permanece sin cambios |
 | Conservar variables, candidatos IQR y los 97 píxeles constantes | No hay evidencia experimental que justifique eliminarlos | No se filtran columnas ni filas durante el preprocesamiento |
 | Guardar los parámetros del estandarizador | Las entradas futuras deben recibir exactamente la misma transformación que training | `Standardizer.save/load` persiste medias, desvíos y orden de variables sin pickle |
@@ -316,3 +317,17 @@ detectaron columnas constantes.
 | Interpretar “consistentemente” como K épocas consecutivas | La diapositiva propone parametrizar la consistencia, pero no fija una única regla | Eta adaptativo compara loss de épocas contiguas y usa `patience=K`; suma `increase_by` o multiplica por `1-decrease_fraction` |
 | Conservar epsilon dentro de la raíz en RMSProp y fuera en Adam | Es la diferencia escrita en las fórmulas de clase y altera el cálculo | Cubierta por cuentas manuales en `test_optimizers.py` |
 | No seleccionar todavía optimizador ni tamaño de lote final | La implementación no aporta evidencia de cuál generaliza o converge mejor en cada dataset | Pendiente de experimentos controlados sobre training; test continúa reservado |
+
+## Infraestructura del baseline de fraude
+
+| Decisión | Motivo | Aplicación y estado |
+|---|---|---|
+| Registrar MSE de validation dentro de `fit` | Medir ambas curvas con exactamente los mismos pesos al final de cada época | Aplicada mediante `validation_data`; validation no genera gradientes ni interviene en el criterio de convergencia |
+| Comparar primero activación lineal y logística | El ejercicio exige perceptrón lineal y no lineal; logística conserva una salida compatible con probabilidades | La corrida `output/fraud-baseline-01` queda sólo como sanidad histórica porque utilizó un split |
+| Usar descenso básico como baseline | Comenzar con la actualización más directa antes de atribuir diferencias a optimizadores avanzados | Utilizado en la corrida de sanidad; no se lo selecciona todavía como optimizador final |
+| Mantener los hiperparámetros en JSON | Revisarlos y modificarlos sin esconder decisiones dentro del runner | La sanidad usó eta 0,01, mini-batch 32, máximo 500 épocas, inicialización 0,5 y semillas 0; son valores iniciales, no una configuración final aprobada |
+| Usar `target_mse=0` en la corrida de sanidad | Obtener la curva completa hasta el máximo en vez de detenerla con una tolerancia aún no justificada | La sanidad recorrió las 500 épocas; cero no constituye un objetivo realista ni una conclusión experimental |
+| Separar aprendizaje de generalización en el ejercicio 1 | El enunciado y la aclaración de clase indican que la comparación de capacidad usa todas las muestras; la manipulación de datos corresponde a la etapa posterior | `protocol=learning` usa las 7500 filas del CSV, sin validation/test; `protocol=generalization` exige un solo modelo seleccionado y recién entonces divide los datos |
+| No evaluar generalización durante la comparación inicial | Underfitting y saturación se observan mediante el error de training; sin muestras separadas no se concluye overfitting ni generalización | El modo `learning` guarda únicamente historial y predicciones de training |
+| Limitar la primera etapa a lo obligatorio del ejercicio 1 | El enunciado exige comenzar comparando el perceptrón lineal y el no lineal respecto del aprendizaje; no exige una grilla completa de todos los hiperparámetros para este ejercicio | Primero se hará una comparación controlada con iguales condiciones de entrenamiento. Los valores del JSON son un punto de partida modificable, no candidatos que deban cruzarse todos desde el inicio |
+| Graficar desde historiales guardados | Separar entrenamiento de análisis y evitar repetir una corrida para cambiar una figura | `plot_fraud_experiment.py` genera las curvas completas normal y logarítmica; muestra sólo training en aprendizaje y agrega validation en generalización |

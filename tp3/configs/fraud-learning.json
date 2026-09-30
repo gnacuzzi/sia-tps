@@ -1,0 +1,27 @@
+{
+  "protocol": "learning",
+  "models": [
+    {
+      "name": "linear",
+      "activation": "linear",
+      "beta": 1.0,
+      "init_scale": 0.5
+    },
+    {
+      "name": "logistic",
+      "activation": "logistic",
+      "beta": 1.0,
+      "init_scale": 0.5
+    }
+  ],
+  "training": {
+    "optimizer": "gradient_descent",
+    "learning_rate": 0.01,
+    "batch_size": 32,
+    "max_epochs": 500,
+    "target_mse": 0.0,
+    "shuffle": true,
+    "model_seed": 0,
+    "shuffle_seed": 0
+  }
+}

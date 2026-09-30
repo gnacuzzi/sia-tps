@@ -1,4 +1,4 @@
-"""Comprobar estadísticos y aislamiento de training con datos pequeños."""
+"""Comprobar estadísticos y alcance del EDA con datos pequeños."""
 
 import csv
 import importlib.util
@@ -9,7 +9,7 @@ import pytest
 
 pytest.importorskip("matplotlib", reason="el EDA requiere el extra plot")
 
-from sia_tp3.data import FRAUD_FEATURES, FRAUD_LABEL, FRAUD_TARGET, _stratified_indices
+from sia_tp3.data import FRAUD_FEATURES, FRAUD_LABEL, FRAUD_TARGET
 
 
 spec = importlib.util.spec_from_file_location(
@@ -44,9 +44,8 @@ def test_train_test_overlap_uses_only_inputs():
                           test_rows_in_shared_groups=1)
 
 
-def test_fraud_eda_uses_existing_split_without_parsing_test_features(tmp_path):
+def test_fraud_eda_reads_every_row(tmp_path):
     labels = np.array([0, 1] * 5)
-    training, test = _stratified_indices(labels, 0.2, 0)
     path = tmp_path / "fraud.csv"
     names = list(FRAUD_FEATURES) + [FRAUD_TARGET, FRAUD_LABEL]
     with path.open("w", newline="") as file:
@@ -55,14 +54,12 @@ def test_fraud_eda_uses_existing_split_without_parsing_test_features(tmp_path):
         for index, label in enumerate(labels):
             row = {name: index + 1 for name in FRAUD_FEATURES}
             row.update({FRAUD_TARGET: index / 10, FRAUD_LABEL: label})
-            if index in test:
-                row["amount_usd"] = "NO LEER NI ANALIZAR TEST"
             writer.writerow(row)
-    indices, values, observed = eda.fraud_training(path)
-    np.testing.assert_array_equal(indices, training)
-    np.testing.assert_array_equal(values[:, 0], training + 1)
-    np.testing.assert_array_equal(observed, labels[training])
-    assert values.shape == (8, 10)  # Nueve entradas y BigModel; sin etiqueta real.
+    indices, values, observed = eda.fraud_data(path)
+    np.testing.assert_array_equal(indices, np.arange(10))
+    np.testing.assert_array_equal(values[:, 0], np.arange(1, 11))
+    np.testing.assert_array_equal(observed, labels)
+    assert values.shape == (10, 10)  # Nueve entradas y BigModel; sin etiqueta real.
 
 
 def test_digit_eda_reads_only_test_inputs_and_ignores_test_labels(tmp_path, monkeypatch):

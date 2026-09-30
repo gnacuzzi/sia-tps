@@ -113,9 +113,10 @@ por diferencias finitas y el caso negativo de XOR con perceptrón escalón.
 Para repetir la comprobación, usar los comandos de instalación y ejecución
 del [README](../README.md), eligiendo una carpeta de salida nueva.
 
-El punto 1 queda verificado para estos casos y semillas. La inspección del
-punto 2 confirmó que los loaders actuales separan training/test sin validation,
-por decisión explícita del equipo registrada en `decisiones.md`. Se mantiene
-esa decisión y se continúa con el EDA de training del punto 3. Esta revisión
-no entrenó ni evaluó modelos
-sobre el test final de fraude o dígitos.
+El punto 1 queda verificado para estos casos y semillas. En ese momento, la
+inspección del punto 2 confirmó que los loaders separaban training/test sin una
+partición fija de validation, y con ese alcance se continuó al EDA del punto 3.
+Posteriormente se decidió mantener intacto ese contrato y agregar en
+`experiments.py` una validation temporal derivada de training para seleccionar
+configuraciones sin consultar test. Esta revisión histórica no entrenó ni
+evaluó modelos sobre el test final de fraude o dígitos.

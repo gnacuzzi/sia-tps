@@ -8,10 +8,12 @@
 | `src/sia_tp3/optimizers.py` | Descenso básico, Momentum, eta adaptativo, RMSProp y Adam |
 | `src/sia_tp3/training.py` | Entrenamiento online, mini-batch o batch y métricas al terminar cada época, sin conocer el dataset |
 | `src/sia_tp3/experiments.py` | Validation temporal reproducible para fraude y dígitos sin cambiar los loaders training/test |
+| `src/sia_tp3/fraud_experiment.py` | Configuración, ejecución y artefactos del baseline del ejercicio 1 |
 | `src/sia_tp3/metrics.py` | Matriz de confusión y métricas estándar de clasificación globales, por clase y macro |
 | `src/sia_tp3/validation.py` | Datos sintéticos de la consigna, configuración y evidencia de las corridas |
 | `configs/validation.json` | Arquitecturas, inicialización, semillas, tasas, orden y criterios de aceptación |
 | `scripts/plot_validation.py` | Gráficos a partir de resultados guardados, sin volver a entrenar |
+| `scripts/plot_fraud_experiment.py` | Curvas completas, logarítmicas y ampliadas de training/validation para fraude |
 | `tests/` | Cuentas manuales, gradientes numéricos, persistencia, determinismo y aprendizaje |
 
 El código de AND/XOR no está dentro de las neuronas: los modelos reciben matrices.
@@ -201,6 +203,24 @@ No se pasa `learning_rate` junto con `optimizer`: la tasa pertenece al objeto
 optimizador. Cada corrida debe crear una instancia nueva para no compartir
 Momentum o momentos acumulados entre modelos.
 
+`fit` acepta además `validation_data=(X_validation, y_validation)`. Esas
+muestras se predicen al terminar cada época y agregan `validation_mse` al
+historial, pero no generan gradientes, no actualizan parámetros y no participan
+del criterio de convergencia:
+
+```python
+history = fit(
+    model, X_train, y_train,
+    learning_rate=0.01,
+    batch_size=32,
+    max_epochs=500,
+    target_mse=0,
+    shuffle=True,
+    seed=0,
+    validation_data=(X_validation, y_validation),
+)
+```
+
 ## Carga y separación de los datasets reales
 
 `data.py` expone los dos loaders. Fraude se estandariza después del split;
@@ -262,6 +282,35 @@ data = load_fraud_experiment_split(
     validation_seed=0,
 )
 ```
+
+## Runner del ejercicio de fraude
+
+`configs/fraud-learning.json` declara el protocolo `learning`: compara lineal y
+logístico entrenando ambos con las 7500 muestras, sin crear validation ni test.
+El runner también admite el protocolo `generalization`, pero exige exactamente
+un modelo ya seleccionado y recién allí crea las tres particiones.
+
+El comando para la comparación obligatoria es:
+
+```bash
+python scripts/run_fraud_experiment.py \
+  --config configs/fraud-learning.json \
+  --data data/fraud_dataset.csv \
+  --output output/fraud-learning-01
+```
+
+Los gráficos se generan después, leyendo los historiales sin volver a entrenar:
+
+```bash
+python scripts/plot_fraud_experiment.py output/fraud-learning-01
+```
+
+El script guarda las curvas completas en escala normal y logarítmica y un CSV
+de diagnóstico. En `learning` grafica sólo training; en `generalization` agrega
+validation. Nunca vuelve a entrenar para producir una figura.
+
+Los valores del JSON son una propuesta para revisar, no resultados ni una
+selección final.
 
 Las arquitecturas y técnicas base corresponden a clases 10.1, 10.2 y 11; los
 optimizadores corresponden a clase 12.1. Siguen pendientes la configuración y

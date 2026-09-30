@@ -7,14 +7,12 @@ La documentación de fraude se conserva en `../docs/fraud_dataset_documentation.
 
 | Archivo recibido | Nombre en la consigna | Uso previsto |
 |---|---|---|
-| `fraud_dataset.csv` | `transactions.csv` | Ejercicio 1, fraude |
+| `fraud_dataset.csv` | `fraud_dataset.csv` | Ejercicio 1, fraude |
 | `digits.csv` | `digits.csv` | Ejercicio 2, ajuste de parámetros e hiperparámetros |
 | `digits_test.csv` | `digits_test.csv` | Evaluación final de generalización, ejercicios 2 y 3 |
-| `more_digits.csv` | `more_data_digits.csv` | Ejercicio 3, datos adicionales |
+| `more_digits.csv` | `more_digits.csv` | Ejercicio 3, datos adicionales |
 
-Las correspondencias de nombres distintos son inferencias por contenido y por
-el conjunto de archivos recibido, no equivalencias declaradas en el PDF.
-Se conservan los nombres originales para no ocultar esa diferencia.
+Los nombres coinciden con la versión actualizada de la consigna.
 
 ## Documentación relevante
 
@@ -22,11 +20,12 @@ En fraude, `big_model_fraud_probability` contiene la probabilidad estimada por
 BigModel y será el objetivo de la destilación. `flagged_fraud` contiene la
 etiqueta real obtenida de reportes: la documentación prohíbe usarla durante el
 entrenamiento. No debe incluirse como entrada ni como objetivo de entrenamiento.
-El loader nuevo la usa para preservar aproximadamente la proporción de clases
-al separar los datos y solo devuelve sus valores de test para la futura
-evaluación final.
-El script de EDA, por acuerdo posterior del equipo, accede a las etiquetas
-de las filas de training únicamente para contar el balance de clases. No
+El loader de generalización la usa para preservar aproximadamente la proporción
+de clases al separar los datos y solo devuelve sus valores de test para la
+evaluación final. El loader de aprendizaje inicial usa las 7500 muestras sin
+separarlas.
+El script de EDA accede a las etiquetas de todas las filas únicamente para
+contar el balance de clases. No
 cambia la API del loader ni las usa en correlaciones o selección de variables.
 
 Los CSV de dígitos tienen columnas `label` e `image`. El loader suministrado
@@ -36,22 +35,24 @@ integrado en `src/sia_tp3/data.py` hace la misma deserialización sin depender d
 pandas, comprueba que cada imagen tenga 784 píxeles y mantiene
 `digits_test.csv` separado.
 
-Se implementó únicamente una separación training/test, sin validation:
+Se implementaron dos protocolos para fraude y uno para dígitos:
 
-- fraude: 6000 muestras de training y 1500 de test con la configuración por
-  defecto (`test_fraction=0.2`, `seed=0`);
+- aprendizaje inicial de fraude: las 7500 muestras juntas, sin validation/test;
+- generalización de fraude: split configurable y validation temporal, después
+  de seleccionar el tipo de perceptrón;
 - ejercicio 2: 12449 imágenes de `digits.csv` para training y las 2497 de
   `digits_test.csv` para test;
 - ejercicio 3: 28190 imágenes de `digits.csv` más `more_digits.csv` para
   training y el mismo test externo de 2497 imágenes.
 
-El [análisis exploratorio de training](../docs/eda-training.md) está realizado
-para fraude y `digits.csv`. A partir de ese análisis, el loader estandariza las
-nueve entradas de fraude con la media y el desvío de training; aplica los mismos
-parámetros a test y deja sin transformar el objetivo y las etiquetas. Los
+El [análisis exploratorio](../docs/eda-training.md) usa las 7500 transacciones
+de fraude y `digits.csv`. En aprendizaje, las nueve entradas de fraude se
+estandarizan con parámetros de las 7500 muestras; en generalización se ajustan
+sólo con training y luego se aplican a validation/test. El objetivo y las
+etiquetas no se transforman. Los
 píxeles de dígitos se conservan en `[0,1]`. El test queda reservado:
 no debe emplearse para escoger parámetros o hiperparámetros. Sus entradas se
 usan únicamente en un control de integridad que comprueba si existen muestras
 exactamente repetidas entre training y test. Ese control no utiliza etiquetas,
-distribuciones ni métricas de test; se conserva la estratificación de fraude
-ya definida.
+distribuciones ni métricas de test. En el EDA de fraude no hay test porque esa
+etapa describe el CSV completo.

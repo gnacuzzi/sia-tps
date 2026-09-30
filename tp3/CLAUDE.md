@@ -26,14 +26,15 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
   `flagged_fraud` no puede usarse para entrenar, según esa documentación.
 - No comenzar opcionales antes de completar los ejercicios obligatorios.
 - Punto 3: EDA en `scripts/analyze_training.py`, informe en `docs/eda-training.md`.
-  El EDA mantiene training/test y no se recalcula. Para los futuros experimentos
-  se aprobó derivar validation temporalmente desde training, sin cambiar los
-  CSV ni el retorno actual de los loaders. La división está implementada en
-  `experiments.py`; falta usarla en los runners de cada ejercicio. El EDA
-  calcula estadísticas sólo sobre training; usa entradas de test únicamente
-  para detectar solapamientos exactos. Ese control no usa etiquetas ni métricas
-  de test; se conserva la estratificación de fraude ya decidida.
-  `flagged_fraud` se usa únicamente para estratificar y contar clases. Se decidió
+  El EDA de fraude analiza las 7500 muestras, igual que la comparación inicial,
+  sin validation/test. Para los futuros experimentos
+  Después de seleccionar el perceptrón, la generalización deriva validation
+  temporalmente desde training. Ambos protocolos están implementados en
+  `experiments.py`; falta integrar validation en los runners de dígitos. En
+  dígitos el EDA usa entradas de test únicamente para detectar solapamientos
+  exactos. Ese control no usa etiquetas ni métricas de test.
+  `flagged_fraud` se usa únicamente para contar clases en el EDA y para
+  estratificar el protocolo posterior de generalización. Se decidió
   conservar variables, outliers y píxeles constantes en esta etapa.
 - Punto 4: `load_fraud_train_test` estandariza las nueve entradas después del
   split. `Standardizer` se ajusta sólo con `X_train` y transforma también
@@ -47,3 +48,9 @@ Aplican las reglas generales del `CLAUDE.md` de la raíz.
   1 online, intermedio mini-batch y `None`/N batch. Rosenblatt escalón permanece
   online con descenso básico. La implementación no selecciona todavía la mejor
   combinación para fraude o dígitos.
+- Ejercicio de fraude: `configs/fraud-learning.json` declara una comparación
+  lineal/logística con todas las muestras. `fraud_experiment.py` separa los
+  protocolos `learning` y `generalization`; este último exige un único modelo
+  seleccionado y mantiene test reservado. La corrida histórica
+  `output/fraud-baseline-01` fue una sanidad con split y no responde por sí sola
+  la comparación inicial exigida.

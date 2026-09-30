@@ -70,12 +70,22 @@ una separación estricta entre training y test, sin crear validation. Para
 fraude, `preprocessing.py` ajusta la estandarización sólo con training y el
 loader aplica esos mismos parámetros a training y test.
 
-Para los ejercicios se aprobó crear validation temporalmente desde training,
-sin modificar los CSV ni convertirlo en un tercer retorno permanente del
-loader. Los helpers reproducibles están implementados en `experiments.py`; aún
-falta integrarlos en los runners de los tres ejercicios. Test seguirá cerrado
-hasta elegir y congelar cada configuración. El protocolo completo está en
+En la primera comparación de fraude, lineal y logístico entrenan con las 7500
+muestras porque allí sólo se estudian aprendizaje, underfitting y saturación.
+Después de seleccionar uno, el modo de generalización deriva validation
+temporal y reserva test. Para dígitos, validation se deriva de `digits.csv` y
+`digits_test.csv` permanece cerrado. El protocolo completo está en
 [el plan experimental](docs/plan-experimental.md).
+
+La comparación inicial de fraude se ejecuta desde `tp3/` con:
+
+```bash
+python scripts/run_fraud_experiment.py \
+  --config configs/fraud-learning.json \
+  --data data/fraud_dataset.csv \
+  --output output/fraud-learning-01
+python scripts/plot_fraud_experiment.py output/fraud-learning-01
+```
 
 ## Continuación del TP
 
@@ -84,9 +94,8 @@ hasta elegir y congelar cada configuración. El protocolo completo está en
 3. Resolver fraude y dígitos sin utilizar los conjuntos de test para elegir
    parámetros o hiperparámetros.
 
-Los datasets recibidos están en `data/`, conservando sus nombres originales.
-Hay diferencias de nombres respecto del enunciado, documentadas en el README
-de datos. Los ocho PDFs de clase están en `docs/`. Se versionan las
+Los datasets recibidos están en `data/` y sus nombres coinciden con la consigna
+actualizada. Los ocho PDFs de clase están en `docs/`. Se versionan las
 transcripciones de clases 12.2 y 13; las anteriores permanecen locales.
 
 ## Análisis de training (punto 3)
@@ -97,11 +106,11 @@ python scripts/analyze_training.py --output output/eda-nueva
 
 Requiere el extra `plot` y una carpeta de salida nueva o vacía. Genera tablas
 CSV, seis gráficos, un resumen Markdown y configuración/versiones/hashes en
-JSON. Usa el split vigente de fraude (test 20 %, semilla 0) y `digits.csv` para
-los estadísticos. Sólo lee las entradas de test para comprobar duplicados
-exactos entre particiones; no usa sus etiquetas, distribuciones ni métricas, y
-no abre los datos adicionales. Mantiene training/test sin validation y no
-aplica preprocesamiento. La evidencia versionada está en
+JSON. Usa las 7500 filas de fraude y `digits.csv` para los estadísticos. Sólo en
+dígitos lee las entradas del test externo para comprobar duplicados exactos;
+no usa sus etiquetas, distribuciones ni métricas, y no abre los datos
+adicionales. La validation temporal corresponde a los experimentos de modelado
+posteriores. No aplica preprocesamiento. La evidencia versionada está en
 [`docs/eda-training/`](docs/eda-training/resumen.md).
 
 ## Preprocesamiento (punto 4)

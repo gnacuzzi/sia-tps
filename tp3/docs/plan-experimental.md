@@ -5,12 +5,15 @@ analizar correctamente los tres ejercicios obligatorios; las variantes
 opcionales sólo se habilitan cuando ayudan a responder una pregunta concreta o
 cuando las curvas muestran un problema que las justifica.
 
-## 1. Protocolo acordado: validation temporal
+## 1. Protocolo acordado: aprendizaje antes de generalización
 
-Los loaders públicos continúan entregando **training y test**. No se crea un
-tercer CSV ni se modifica el test externo. Al comenzar cada experimento, el
-runner separará reproduciblemente una parte de training como **validation
-temporal**:
+El ejercicio 1 tiene dos etapas distintas. Primero se compara la capacidad del
+perceptrón lineal y no lineal usando **las 7500 muestras de fraude para
+entrenar**, tal como aclaran el enunciado y la clase. En esa etapa no existe
+validation ni test: sólo se estudian aprendizaje, underfitting y saturación.
+
+Después de seleccionar el tipo de perceptrón comienza la generalización. Recién
+allí se separan reproduciblemente training interno, validation temporal y test:
 
 ```text
 datos de desarrollo del loader
@@ -27,13 +30,18 @@ proporción para poder repetir exactamente cada corrida. Significa que validatio
 se deriva del training para los experimentos y no pasa a ser un archivo fuente
 independiente.
 
+En los ejercicios 2 y 3, `digits_test.csv` ya viene separado y validation se
+deriva de `digits.csv`. No se crea un tercer CSV ni se modifican los originales.
+
 Reglas obligatorias:
 
+- [x] Usar las 7500 muestras de fraude para la comparación inicial de los dos
+  perceptrones.
 - [ ] Verificar que test no elija arquitectura, learning rate, optimizador,
-  épocas ni umbral durante las corridas.
+  épocas ni umbral durante la generalización.
 - [ ] Verificar que todas las configuraciones comparadas usen la misma
   partición interna.
-- [x] En fraude, hacer la división interna **antes** de ajustar el
+- [x] En la generalización de fraude, hacer la división interna **antes** de ajustar el
    estandarizador. Media y desvío se calculan sólo con training interno y luego
    se aplican a validation y test.
 - [x] En dígitos, dividir `digits.csv`; `digits_test.csv` nunca aporta ejemplos a
@@ -51,7 +59,18 @@ Estado de implementación del protocolo:
 - [x] Aplicar a validation y test los parámetros aprendidos de training interno.
 - [x] Mantener `digits_test.csv` fuera de la división temporal.
 - [x] Cubrir reproducción, disjunción y ausencia de leakage con tests.
-- [ ] Integrar estos helpers en los runners de los ejercicios 1, 2 y 3.
+- [x] Integrar los dos protocolos de fraude en el runner del ejercicio 1.
+- [ ] Integrar validation temporal en los runners de los ejercicios 2 y 3.
+
+Infraestructura del baseline del ejercicio 1:
+
+- [x] Extender `fit` para registrar MSE de validation sin entrenar con ella.
+- [x] Crear `configs/fraud-learning.json` con valores visibles y editables.
+- [x] Crear el modo `learning`, que no divide las 7500 muestras.
+- [x] Conservar el modo `generalization` para después de seleccionar el modelo.
+- [x] Crear gráficos de las curvas completas sin volver a entrenar.
+- [ ] Revisar y aprobar en equipo la configuración propuesta.
+- [x] Ejecutar la primera corrida de sanidad.
 
 ## 2. Método para no generar millones de corridas
 
@@ -60,7 +79,8 @@ seguirá un embudo:
 
 1. [ ] **Sanidad:** una configuración comprueba que el pipeline y el modelo funcionan.
 2. [ ] **Comparaciones obligatorias:** se cambia una dimensión por vez.
-3. [ ] **Diagnóstico:** se interpretan curvas de training y validation.
+3. [ ] **Diagnóstico:** se interpretan las curvas disponibles; sólo hay
+   validation en las etapas de generalización.
 4. [ ] **Corrección:** se modifica únicamente lo relacionado con el problema visto.
 5. [ ] **Finalistas:** se prueban las pocas combinaciones prometedoras y sus
    interacciones.
@@ -68,9 +88,9 @@ seguirá un embudo:
 7. [ ] **Congelamiento:** se elige con validation y se registra toda la configuración.
 8. [ ] **Test final:** se abre una vez y no se vuelve a ajustar el modelo.
 
-En todas las corridas se deben guardar configuración, semilla, índices de la
-partición, loss de training y validation por época, métricas, cantidad de
-épocas, criterio de finalización y tiempo de entrenamiento.
+En todas las corridas se deben guardar configuración, semilla, muestras usadas,
+loss disponibles por época, métricas, cantidad de épocas, criterio de
+finalización y tiempo de entrenamiento.
 
 ## 3. Cómo leer las curvas
 
@@ -87,6 +107,12 @@ No se aplicará regularización porque “suele ayudar”. Primero debe existir
 evidencia de overfitting. Tampoco se aumentará capacidad si la loss todavía
 desciende: en ese caso puede faltar convergencia, no neuronas.
 
+En la primera etapa de fraude sólo existe la curva de training. Allí hay
+evidencia de underfitting o saturación si el error queda alto y estable aun
+cuando la optimización ya convergió, especialmente si el otro perceptrón logra
+un error claramente menor sobre exactamente las mismas 7500 muestras. Sin datos
+separados no se diagnostica overfitting ni generalización.
+
 ## 4. Ejercicio 1: fraude con perceptrón simple
 
 ### 4.1 Preguntas obligatorias
@@ -98,21 +124,19 @@ desciende: en ese caso puede faltar convergencia, no neuronas.
 - [ ] ¿Qué estrategia de datos y métricas se utiliza?
 - [ ] ¿Qué modelo y qué umbral de fraude se recomiendan?
 
-### 4.2 Preparar los datos — obligatorio
+### 4.2 Preparar los datos — obligatorio y separado por etapa
 
-- [x] Mantener el test actual reservado en el helper de partición.
-- [x] Separar temporalmente el training actual en training interno y validation,
-  estratificando mediante `flagged_fraud` para conservar aproximadamente el
-  desbalance en ambos.
-- [x] Ajustar `Standardizer` sólo con el training interno.
-- [x] Transformar validation y test con esos mismos parámetros.
+- [x] En aprendizaje, usar las 7500 muestras y ajustar el `Standardizer` con las
+  7500 porque todas pertenecen a training.
+- [x] En generalización, separar training interno, validation y test,
+  estratificando mediante `flagged_fraud`.
+- [x] En generalización, ajustar `Standardizer` sólo con training interno y
+  aplicar sus parámetros a validation y test.
 - [ ] Entrenar contra `big_model_fraud_probability`.
 - [x] No incorporar `flagged_fraud` a las entradas ni al objetivo entrenable.
 
-El loader actual estandariza antes de que exista esta división interna. Por eso
-el runner de fraude deberá poder obtener las entradas sin estandarizar, dividir
-y recién entonces ajustar el `Standardizer`; dividir la matriz ya estandarizada
-filtraría estadísticas de validation.
+Los modos son explícitos en la configuración para impedir que una comparación
+de aprendizaje se confunda con un estudio de generalización.
 
 ### 4.3 Comparar capacidad lineal y no lineal — obligatorio
 
@@ -120,10 +144,10 @@ Primera comparación controlada:
 
 - [ ] Perceptrón lineal.
 - [ ] Perceptrón no lineal con una activación compatible con probabilidades.
-- [ ] Mismo split, semilla, inicialización comparable, optimizador, batch y máximo
-  de épocas;
+- [x] Las mismas 7500 muestras, semilla, inicialización comparable, optimizador,
+  batch y máximo de épocas.
 - [ ] MSE contra la probabilidad de BigModel como medida primaria de aprendizaje.
-- [ ] Curvas de training y validation.
+- [ ] Curvas completas de training.
 
 Decisiones:
 
@@ -131,15 +155,15 @@ Decisiones:
   optimización antes de declarar underfitting.
 - [ ] Si queda alta y estable, revisar capacidad o activación.
 - [ ] Si el lineal queda alto y el no lineal baja, continuar con el no lineal.
-- [ ] Si ambos son equivalentes en validation, preferir el modelo más simple salvo
+- [ ] Si ambos son equivalentes en training, preferir el modelo más simple salvo
   que otra métrica relevante lo contradiga.
 
-### 4.4 Afinar el entrenamiento — obligatorio y acotado
+### 4.4 Afinar el entrenamiento — sólo si el diagnóstico lo requiere
 
-Para ambos modelos se probará una cantidad pequeña de learning rates que cubra
-un valor bajo, uno intermedio y uno alto razonable. Las épocas se elegirán con
-las curvas, no sólo comparando el último número. Los finalistas se repetirán con
-varias semillas.
+Si una curva sigue bajando, oscila o diverge, se ajustarán épocas o learning
+rate antes de atribuir el resultado a la capacidad del perceptrón. No se hará
+una grilla de hiperparámetros si la comparación inicial ya converge de forma
+estable.
 
 Momentum, eta adaptativo, RMSProp, Adam y los tres tamaños de lote quedan como
 variantes secundarias en este ejercicio. Se prueban si descenso básico no
@@ -148,7 +172,9 @@ completa desde el comienzo.
 
 ### 4.5 Elegir modelo y umbral — obligatorio
 
-El modelo se elige con validation considerando:
+El tipo de perceptrón se selecciona por su potencial de aprendizaje con las
+7500 muestras. Después, su configuración de generalización se elige con
+validation considerando:
 
 - [ ] MSE de training y validation.
 - [ ] Distancia entre ambas curvas.

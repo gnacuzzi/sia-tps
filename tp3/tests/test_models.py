@@ -105,6 +105,26 @@ def test_reproducible_fit_and_history_are_measured_after_epoch():
     assert histories[0][-1]['mse'] == pytest.approx(np.mean((models[0].predict(X) - X) ** 2))
 
 
+def test_validation_is_measured_without_changing_training():
+    X = np.array([[-1.0], [0.0], [1.0]])
+    validation_X = np.array([[-0.5], [0.5]])
+    models = [Perceptron(1, activation='linear', seed=7) for _ in range(2)]
+    options = dict(learning_rate=0.1, max_epochs=3, target_mse=0,
+                   shuffle=True, seed=9)
+    without_validation = fit(models[0], X, X, **options)
+    with_validation = fit(
+        models[1], X, X, validation_data=(validation_X, validation_X), **options)
+
+    for first, second in zip(models[0].weights + models[0].biases,
+                             models[1].weights + models[1].biases):
+        np.testing.assert_array_equal(first, second)
+    assert [row['mse'] for row in without_validation] == [
+        row['mse'] for row in with_validation]
+    assert all(row['validation_mse'] is None for row in without_validation)
+    assert with_validation[-1]['validation_mse'] == pytest.approx(
+        np.mean((models[1].predict(validation_X) - validation_X) ** 2))
+
+
 def test_step_cannot_solve_xor_and_does_not_report_convergence():
     X = np.array([[-1, 1], [1, -1], [-1, -1], [1, 1]])
     y = np.array([[1], [1], [-1], [-1]])
