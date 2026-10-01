@@ -230,3 +230,6 @@ output/
 # Resultados de los ejercicios 2 y 3; publicar solo los resultados finales.
 /tp3/docs/ejercicio2/results/**/model-*.npz
 /tp3/docs/ejercicio2/results/**/*-predictions.csv
+
+# Corridas crudas del ejercicio 2; conservar sólo los análisis agregados.
+/tp3/docs/ejercicio2/results/[0-9][0-9]*/

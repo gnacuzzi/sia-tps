@@ -1,0 +1,38 @@
+{
+  "protocol": "search",
+  "fold_count": 5,
+  "fold_index": 2,
+  "fold_seed": 0,
+  "checkpoints": [25, 50, 100, 200],
+  "runs": [
+    {
+      "name": "batch-32-lr-001",
+      "stage": "rmsprop-batch-finalists-cross-validation",
+      "architecture": [784, 64, 10],
+      "activations": ["tanh", "logistic"],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "rmsprop", "learning_rate": 0.01, "gamma": 0.9, "epsilon": 1e-8},
+      "batch_size": 32,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-64-lr-001",
+      "stage": "rmsprop-batch-finalists-cross-validation",
+      "architecture": [784, 64, 10],
+      "activations": ["tanh", "logistic"],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "rmsprop", "learning_rate": 0.01, "gamma": 0.9, "epsilon": 1e-8},
+      "batch_size": 64,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}
+

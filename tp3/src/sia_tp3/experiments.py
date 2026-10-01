@@ -76,6 +76,35 @@ def _temporary_validation_indices(labels, validation_fraction: float,
     )
 
 
+def _stratified_fold_indices(labels, fold_count: int, seed: int):
+    """Construir folds disjuntos cuya unión contiene todo development."""
+    if type(fold_count) is not int or fold_count < 2:
+        raise ValueError("fold_count debe ser un entero mayor o igual a dos")
+    if type(seed) is not int or seed < 0:
+        raise ValueError("fold_seed debe ser un entero no negativo")
+    labels = np.asarray(labels)
+    classes, counts = np.unique(labels, return_counts=True)
+    if len(classes) < 2 or np.any(counts < fold_count):
+        raise ValueError("cada clase necesita al menos fold_count muestras")
+
+    rng = np.random.default_rng(seed)
+    validation_parts = [[] for _ in range(fold_count)]
+    for label in classes:
+        shuffled = rng.permutation(np.flatnonzero(labels == label))
+        for fold_index, part in enumerate(np.array_split(shuffled, fold_count)):
+            validation_parts[fold_index].append(part)
+
+    all_indices = np.arange(len(labels))
+    folds = []
+    for parts in validation_parts:
+        validation = rng.permutation(np.concatenate(parts))
+        in_validation = np.zeros(len(labels), dtype=bool)
+        in_validation[validation] = True
+        training = rng.permutation(all_indices[~in_validation])
+        folds.append((training, validation))
+    return folds
+
+
 def load_fraud_learning_data(path) -> FraudLearningData:
     """Estandarizar y devolver las muestras completas para la primera comparación.
 
@@ -167,6 +196,30 @@ def load_digits_development_split(
 
     train_indices, validation_indices = _temporary_validation_indices(
         y_development, validation_fraction, validation_seed)
+    return DigitDevelopmentSplit(
+        X_train=X_development[train_indices],
+        y_train=y_development[train_indices],
+        X_validation=X_development[validation_indices],
+        y_validation=y_development[validation_indices],
+        train_indices=train_indices,
+        validation_indices=validation_indices,
+    )
+
+
+def load_digits_development_fold(
+        train_path, *, fold_count: int, fold_index: int, fold_seed: int = 0,
+        additional_train_path: Optional[Path] = None) -> DigitDevelopmentSplit:
+    """Cargar un fold estratificado de development sin abrir test externo."""
+    if type(fold_index) is not int or not 0 <= fold_index < fold_count:
+        raise ValueError("fold_index debe pertenecer a [0, fold_count)")
+    X_development, y_development = _load_digit_file(train_path)
+    if additional_train_path is not None:
+        additional_X, additional_y = _load_digit_file(additional_train_path)
+        X_development = np.concatenate([X_development, additional_X])
+        y_development = np.concatenate([y_development, additional_y])
+
+    folds = _stratified_fold_indices(y_development, fold_count, fold_seed)
+    train_indices, validation_indices = folds[fold_index]
     return DigitDevelopmentSplit(
         X_train=X_development[train_indices],
         y_train=y_development[train_indices],

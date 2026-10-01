@@ -1,0 +1,65 @@
+{
+  "protocol": "search",
+  "fold_count": 5,
+  "fold_index": 0,
+  "fold_seed": 0,
+  "checkpoints": [25, 50, 100, 200],
+  "runs": [
+    {
+      "name": "arch-64-adam-lr-001",
+      "stage": "cross-validation-finalists",
+      "architecture": [784, 64, 10],
+      "activations": ["tanh", "logistic"],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "arch-64-rmsprop-lr-001",
+      "stage": "cross-validation-finalists",
+      "architecture": [784, 64, 10],
+      "activations": ["tanh", "logistic"],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "rmsprop", "learning_rate": 0.01, "gamma": 0.9, "epsilon": 1e-8},
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "arch-128-adam-lr-0003",
+      "stage": "cross-validation-finalists",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.003, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "arch-128-rmsprop-lr-001",
+      "stage": "cross-validation-finalists",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "rmsprop", "learning_rate": 0.01, "gamma": 0.9, "epsilon": 1e-8},
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}

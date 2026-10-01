@@ -1,0 +1,3 @@
+metric,mean_difference,sd_difference,adam_wins,ties,rmsprop_wins
+macro_f1_adam_minus_rmsprop,0.0009070238296201794,0.005204401760776239,3,0,2
+digit_5_f1_adam_minus_rmsprop,-0.013379529359228749,0.04074818024803677,2,2,1

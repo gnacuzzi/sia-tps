@@ -3,7 +3,7 @@ import csv
 import numpy as np
 import pytest
 
-from sia_tp3 import (load_digits_experiment_split,
+from sia_tp3 import (load_digits_development_fold, load_digits_experiment_split,
                      load_fraud_experiment_split)
 from sia_tp3.data import FRAUD_FEATURES
 
@@ -120,6 +120,27 @@ def test_digits_additional_data_enters_development_not_test(tmp_path):
     assert 2 in data.y_train
     assert 2 in data.y_validation
     np.testing.assert_array_equal(data.y_test, [8, 9])
+
+
+def test_digit_folds_are_stratified_disjoint_and_exhaustive(tmp_path):
+    train = tmp_path / "digits.csv"
+    labels = np.repeat([0, 1, 2], 10)
+    _write_digits(train, labels)
+
+    folds = [load_digits_development_fold(
+        train, fold_count=5, fold_index=index, fold_seed=17)
+        for index in range(5)]
+
+    validation_sets = [set(fold.validation_indices) for fold in folds]
+    assert set.union(*validation_sets) == set(range(30))
+    assert sum(len(indices) for indices in validation_sets) == 30
+    for fold in folds:
+        assert not set(fold.train_indices) & set(fold.validation_indices)
+        np.testing.assert_array_equal(np.bincount(fold.y_validation), [2, 2, 2])
+    repeated = load_digits_development_fold(
+        train, fold_count=5, fold_index=2, fold_seed=17)
+    np.testing.assert_array_equal(
+        folds[2].validation_indices, repeated.validation_indices)
 
 
 @pytest.mark.parametrize("validation_fraction", [0, 1, -0.1, float("nan")])

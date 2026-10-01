@@ -1,0 +1,2 @@
+development_samples,test_samples,development_macro_f1,test_accuracy,test_macro_f1,test_digit_5_f1,test_mse,training_seconds,test_macro_f1_without_8,test_accuracy_without_8,digit_8_support,digit_8_predicted,digit_8_f1
+12449,2497,0.9968157795133491,0.8654385262314778,0.8192775054809408,0.8796296296296297,0.01997576901946429,13.543683208999997,0.9103083394232676,0.958740017746229,243,0,0.0

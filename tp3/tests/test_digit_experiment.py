@@ -83,6 +83,17 @@ def test_config_accepts_unique_repeat_seeds(tmp_path):
     assert load_digit_search_config(path)["repeat_seeds"] == [0, 1, 2, 3, 4]
 
 
+def test_config_accepts_cross_validation_fold(tmp_path):
+    config = _small_config()
+    del config["validation_fraction"]
+    del config["validation_seed"]
+    config.update(fold_count=5, fold_index=3, fold_seed=17)
+    path = tmp_path / "fold.json"
+    path.write_text(json.dumps(config))
+    loaded = load_digit_search_config(path)
+    assert (loaded["fold_count"], loaded["fold_index"], loaded["fold_seed"]) == (5, 3, 17)
+
+
 def test_search_uses_only_development_and_saves_epoch_metrics(tmp_path):
     data = tmp_path / "digits.csv"
     _write_digits(data)

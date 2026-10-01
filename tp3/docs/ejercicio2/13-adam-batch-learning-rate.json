@@ -1,0 +1,143 @@
+{
+  "protocol": "search",
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "checkpoints": [25, 50, 100, 200],
+  "runs": [
+    {
+      "name": "batch-32-lr-0001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.001, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 32, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-32-lr-0003",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.003, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 32, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-32-lr-001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 32, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-64-lr-0001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.001, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 64, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-64-lr-0003",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.003, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 64, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-64-lr-001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 64, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-128-lr-0001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.001, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 128, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-128-lr-0003",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.003, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 128, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-128-lr-001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 128, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-256-lr-0001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.001, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 256, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-256-lr-0003",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.003, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 256, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-256-lr-001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 256, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-512-lr-0001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.001, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 512, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-512-lr-0003",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.003, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 512, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    },
+    {
+      "name": "batch-512-lr-001",
+      "stage": "adam-batch-learning-rate",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"], "beta": 1.0, "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 512, "max_epochs": 200, "model_seed": 0,
+      "shuffle_seed": 0, "shuffle": true
+    }
+  ]
+}

@@ -12,7 +12,8 @@ from time import perf_counter
 
 import numpy as np
 
-from .experiments import load_digits_development_split
+from .experiments import (load_digits_development_fold,
+                          load_digits_development_split)
 from .metrics import classification_metrics
 from .models import MultilayerPerceptron
 from .optimizers import (Adam, AdaptiveLearningRate, GradientDescent, Momentum,
@@ -25,6 +26,10 @@ CONFIG_KEYS = {
     "protocol", "validation_fraction", "validation_seed", "checkpoints", "runs"
 }
 REPEATED_CONFIG_KEYS = CONFIG_KEYS | {"repeat_seeds"}
+FOLD_CONFIG_KEYS = {
+    "protocol", "fold_count", "fold_index", "fold_seed", "checkpoints", "runs"
+}
+REPEATED_FOLD_CONFIG_KEYS = FOLD_CONFIG_KEYS | {"repeat_seeds"}
 RUN_KEYS = {
     "name", "stage", "architecture", "activations", "beta", "init_scale",
     "optimizer", "batch_size", "max_epochs", "model_seed", "shuffle_seed",
@@ -116,15 +121,25 @@ def load_digit_search_config(path):
     """Validar el plan antes de crear salidas o cargar imágenes."""
     config = json.loads(Path(path).read_text())
     if (not isinstance(config, dict)
-            or frozenset(config) not in {frozenset(CONFIG_KEYS),
-                                         frozenset(REPEATED_CONFIG_KEYS)}):
+            or frozenset(config) not in {
+                frozenset(CONFIG_KEYS), frozenset(REPEATED_CONFIG_KEYS),
+                frozenset(FOLD_CONFIG_KEYS),
+                frozenset(REPEATED_FOLD_CONFIG_KEYS)}):
         raise ValueError("campos globales inválidos en la configuración")
     if config["protocol"] != "search":
         raise ValueError("este runner sólo admite protocol=search")
-    _finite_number(config["validation_fraction"], "validation_fraction")
-    if not 0 < config["validation_fraction"] < 1:
-        raise ValueError("validation_fraction debe estar entre 0 y 1")
-    _seed(config["validation_seed"], "validation_seed")
+    if "fold_count" in config:
+        if type(config["fold_count"]) is not int or config["fold_count"] < 2:
+            raise ValueError("fold_count debe ser un entero mayor o igual a dos")
+        if (type(config["fold_index"]) is not int
+                or not 0 <= config["fold_index"] < config["fold_count"]):
+            raise ValueError("fold_index debe pertenecer a [0, fold_count)")
+        _seed(config["fold_seed"], "fold_seed")
+    else:
+        _finite_number(config["validation_fraction"], "validation_fraction")
+        if not 0 < config["validation_fraction"] < 1:
+            raise ValueError("validation_fraction debe estar entre 0 y 1")
+        _seed(config["validation_seed"], "validation_seed")
     if "repeat_seeds" in config:
         repeat_seeds = config["repeat_seeds"]
         if (not isinstance(repeat_seeds, list) or not repeat_seeds
@@ -318,15 +333,23 @@ def _prepare_output(config, data_path, output):
 
 
 def run_digit_search(config, data_path, output, *, stages=None):
-    """Ejecutar corridas sobre un holdout de development; test no es argumento."""
+    """Ejecutar corridas sobre una partición de development sin abrir test."""
     if config["protocol"] != "search":
         raise ValueError("run_digit_search requiere protocol=search")
     data_path, output = _prepare_output(config, data_path, output)
-    split = load_digits_development_split(
-        data_path,
-        validation_fraction=config["validation_fraction"],
-        validation_seed=config["validation_seed"],
-    )
+    if "fold_count" in config:
+        split = load_digits_development_fold(
+            data_path,
+            fold_count=config["fold_count"],
+            fold_index=config["fold_index"],
+            fold_seed=config["fold_seed"],
+        )
+    else:
+        split = load_digits_development_split(
+            data_path,
+            validation_fraction=config["validation_fraction"],
+            validation_seed=config["validation_seed"],
+        )
     np.savez_compressed(
         output / "split-indices.npz",
         train=split.train_indices,

@@ -1,0 +1,22 @@
+{
+  "protocol": "search",
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "checkpoints": [1, 2, 3, 5, 10, 15],
+  "runs": [
+    {
+      "name": "online-lr-0001-extended",
+      "stage": "adam-online-extension",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.001, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "batch_size": 1,
+      "max_epochs": 15,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}
