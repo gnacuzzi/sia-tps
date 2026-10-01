@@ -363,6 +363,14 @@ El protocolo separa explícitamente selección y evaluación final:
 5. Una vez cerrada la configuración se reentrena con las 6000 muestras, se  
    ajusta allí el estandarizador y se evalúa test una sola vez.
 
+Este protocolo no se eligió porque k-fold sea universalmente superior. En este
+problema evita depender de un único corte, mantiene 4800 filas para entrenar y
+deja 1200 para validar con 139 fraudes en cada vuelta. Es un compromiso
+razonable entre estabilidad y costo: un holdout usaría cada fila una sola vez,
+mientras leave-one-out exigiría 6000 entrenamientos. Los resultados de las
+vueltas y la justificación completa del inciso b están en
+[el informe principal](../ejercicio1.md#b-qué-estrategia-se-utilizó-para-manipular-el-conjunto-de-datos).
+
 La partición, los cinco folds y las 1500 filas reservadas quedaron registrados  
 en `reserved-indices.npz`. `selection.json` se creó antes de que existiera  
 `final-test.json`, de modo que la configuración final no depende del resultado  

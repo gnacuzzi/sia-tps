@@ -3,6 +3,12 @@
 Respuestas paso a paso del ejercicio 1. Todos los números provienen de corridas
 reales.
 
+> **Para la presentación:** antes de explicar los modelos, incluir una síntesis
+> del [análisis exploratorio de `fraud_dataset.csv`](eda-training.md). Allí se
+> documentan la composición y el significado de las columnas, sus rangos y
+> distribuciones, el desbalance, los controles de limpieza, los candidatos a
+> outlier y la evidencia que justificó estandarizar las nueve entradas.
+
 ## 1. Función de activación no lineal
 
 Se usa la **logística** con β = 1, tal como se define en clase 10.2:
@@ -269,35 +275,41 @@ MSE al final de las 500 épocas:
 
 Qué muestran:
 
-- **No hay overfitting.** En todas las vueltas la curva de validation baja
-  junto con la de training y termina a la misma altura. El MSE medio de
-  validation (0,01102) es prácticamente igual al de training (0,01095) y al
-  que se obtuvo entrenando con las 7500 filas (0,0109). Con diez parámetros y
-  4800 transacciones, el modelo no tiene capacidad para memorizar los datos.
-- **La partición influye poco.** El MSE de training casi no cambia entre
-  vueltas (desvío de 0,00014): cualquier combinación de cuatro bloques enseña
-  lo mismo. El de validation varía más (entre 0,0103 y 0,0119), porque depende
-  de qué transacciones tocaron en el bloque evaluado: el bloque B resultó el
-  más difícil de predecir y el D el más fácil.
-- **Por eso un único corte no alcanza.** Si se hubiera separado una sola vez,
-  el error informado podría haber sido cualquiera entre 0,0103 y 0,0119
-  según la suerte del corte. El promedio de las cinco vueltas es una
-  estimación más confiable.
+- **No aparece evidencia clara de overfitting en estas curvas.** En todas las
+  vueltas la curva de validation baja junto con la de training y termina a una
+  altura parecida. El MSE medio de validation (0,01102) es muy cercano al de
+  training (0,01095) y al obtenido con las 7500 filas (0,0109). Esto es
+  compatible con un modelo de baja capacidad frente a la cantidad de datos,
+  aunque no demuestra que el sobreajuste sea imposible bajo cualquier otra
+  configuración.
+- **El resultado es robusto frente a la partición.** El MSE de training casi no
+  cambia entre vueltas (desvío de 0,00014), lo que sugiere que las distintas
+  combinaciones de cuatro bloques permiten aprender un ajuste muy parecido.
+  El de validation varía más (entre 0,0103 y 0,0119). Como en cada vuelta
+  cambian a la vez las muestras de training y el bloque evaluado, no se puede
+  atribuir toda esa diferencia a una sola de las dos partes; sí se puede
+  concluir que un único corte habría dado una estimación dependiente del azar.
+- **Un único corte habría dado menos evidencia.** En estas vueltas, el error
+  informado por una sola partición habría quedado entre 0,0103 y 0,0119. El
+  promedio y el desvío de las cinco vueltas permiten informar tanto el
+  rendimiento típico como su variación entre particiones.
 
 #### ¿Cómo se elige el mejor conjunto de entrenamiento?
 
-El k-fold muestra que no hay un conjunto de entrenamiento que sea mejor que
-los otros: los cinco llegan al mismo error de training y las diferencias de
-validation se explican por el bloque evaluado, no por el bloque usado para
-entrenar. Elegir la vuelta 4 por tener el menor MSE de validation sería elegir
-el bloque más fácil, y ese número sería una estimación optimista.
+El k-fold no busca elegir una de las cinco vueltas como «el mejor conjunto».
+Los errores de training son muy parecidos y ninguna combinación demuestra ser
+consistentemente superior: cada una se evalúa sobre un bloque diferente, por
+lo que sus MSE de validation no son comparables como si hubieran rendido el
+mismo examen. Elegir la vuelta 4 sólo porque obtuvo el menor MSE sería
+seleccionar simultáneamente una partición y su bloque de evaluación a partir
+del resultado más favorable, produciendo una estimación optimista.
 
-El mejor conjunto de entrenamiento es entonces uno **representativo y lo más
-grande posible**: estratificado, con la misma proporción de fraude que los
-datos reales, y con todas las filas disponibles. Por eso el modelo final se
-entrena con las 6000 transacciones de desarrollo, y el k-fold se usa para
-estimar cuánto error esperar y verificar que la partición no sesga el
-resultado. Recién después se evalúa una única vez con el test reservado.
+Una vez elegidos los hiperparámetros, el conjunto final de entrenamiento debe
+ser **representativo y lo más grande posible** sin incorporar test. Por eso el
+modelo final se entrena con las 6000 transacciones de desarrollo. El k-fold se
+usa para comparar configuraciones y estimar cuánto error esperar bajo varias
+particiones; no para descartar 1200 filas ni para elegir una vuelta afortunada.
+Recién después se evalúa una única vez con el test reservado.
 
 ### c) ¿Cuál es el mejor modelo para presentar al cliente?
 
@@ -422,8 +434,8 @@ separa las clases: en 42 de los 44 errores BigModel asignó una probabilidad
 entre 0,73 y 0,93.
 
 **Imitación de BigModel:** MSE de test = **0,01053**. Está dentro de lo que
-anticipaba el 5-fold (0,01102 ± 0,00056), lo que confirma que la estimación de
-generalización era confiable.
+anticipaba el 5-fold (0,01102 ± 0,00056), por lo que el resultado final es
+consistente con la estimación de generalización obtenida durante validation.
 
 **Detección de fraude con umbral 0,89:**
 

@@ -55,6 +55,18 @@ class DigitExperimentSplit:
     validation_indices: np.ndarray
 
 
+@dataclass(frozen=True)
+class DigitDevelopmentSplit:
+    """Training/validation derivados sin abrir el test externo."""
+
+    X_train: np.ndarray
+    y_train: np.ndarray
+    X_validation: np.ndarray
+    y_validation: np.ndarray
+    train_indices: np.ndarray
+    validation_indices: np.ndarray
+
+
 def _temporary_validation_indices(labels, validation_fraction: float,
                                   seed: int):
     """Separar índices internos sin modificar ni consultar el test reservado."""
@@ -123,6 +135,30 @@ def load_digits_experiment_split(
         validation_seed: int = 0,
         additional_train_path: Optional[Path] = None) -> DigitExperimentSplit:
     """Derivar validation de los archivos de desarrollo y preservar test externo."""
+    development = load_digits_development_split(
+        train_path,
+        validation_fraction=validation_fraction,
+        validation_seed=validation_seed,
+        additional_train_path=additional_train_path,
+    )
+    X_test, y_test = _load_digit_file(test_path)
+    return DigitExperimentSplit(
+        X_train=development.X_train,
+        y_train=development.y_train,
+        X_validation=development.X_validation,
+        y_validation=development.y_validation,
+        X_test=X_test,
+        y_test=y_test,
+        train_indices=development.train_indices,
+        validation_indices=development.validation_indices,
+    )
+
+
+def load_digits_development_split(
+        train_path, *, validation_fraction: float = 0.2,
+        validation_seed: int = 0,
+        additional_train_path: Optional[Path] = None) -> DigitDevelopmentSplit:
+    """Derivar training/validation sin recibir ni abrir un archivo de test."""
     X_development, y_development = _load_digit_file(train_path)
     if additional_train_path is not None:
         additional_X, additional_y = _load_digit_file(additional_train_path)
@@ -131,14 +167,11 @@ def load_digits_experiment_split(
 
     train_indices, validation_indices = _temporary_validation_indices(
         y_development, validation_fraction, validation_seed)
-    X_test, y_test = _load_digit_file(test_path)
-    return DigitExperimentSplit(
+    return DigitDevelopmentSplit(
         X_train=X_development[train_indices],
         y_train=y_development[train_indices],
         X_validation=X_development[validation_indices],
         y_validation=y_development[validation_indices],
-        X_test=X_test,
-        y_test=y_test,
         train_indices=train_indices,
         validation_indices=validation_indices,
     )

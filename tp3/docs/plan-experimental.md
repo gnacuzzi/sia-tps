@@ -12,43 +12,47 @@ perceptrón lineal y no lineal usando **las 7500 muestras de fraude para
 entrenar**, tal como aclaran el enunciado y la clase. En esa etapa no existe
 validation ni test: sólo se estudian aprendizaje, underfitting y saturación.
 
-Después de seleccionar el tipo de perceptrón comienza la generalización. Recién
-allí se separan reproduciblemente training interno, validation temporal y test:
+Después de seleccionar el tipo de perceptrón comienza la generalización. El
+protocolo finalmente usado para fraude reserva test y aplica 5-fold
+estratificado sobre development:
 
 ```text
-datos de desarrollo del loader
-            |
-            +---- training interno: ajusta pesos y transformaciones
-            |
-            +---- validation temporal: compara configuraciones y umbrales
-
-test del loader: permanece cerrado hasta congelar la configuración
+7500 transacciones
+        |
+        +---- test reservado: 1500; evaluación final
+        |
+        +---- development: 6000
+                    |
+                    +---- 5 folds de 1200
+                          cada vuelta: 4800 training + 1200 validation
 ```
 
-La palabra “temporal” no significa improvisada: se guardarán semilla, índices y
-proporción para poder repetir exactamente cada corrida. Significa que validation
-se deriva del training para los experimentos y no pasa a ser un archivo fuente
-independiente.
+El helper de validation temporal implementado anteriormente sigue disponible
+como infraestructura para hacer un único holdout reproducible. No fue el
+protocolo definitivo del ejercicio 1: k-fold reduce la dependencia de una sola
+partición, y el estandarizador se vuelve a ajustar dentro de cada vuelta.
 
 En los ejercicios 2 y 3, `digits_test.csv` ya viene separado y validation se
-deriva de `digits.csv`. No se crea un tercer CSV ni se modifican los originales.
+deriva de `digits.csv`. Antes de sus runners debe decidirse si conviene un
+holdout estratificado o k-fold según el costo del MLP; no se crea un tercer CSV
+ni se modifican los originales.
 
 Reglas obligatorias:
 
 - [x] Usar las 7500 muestras de fraude para la comparación inicial de los dos
   perceptrones.
-- [ ] Verificar que test no elija arquitectura, learning rate, optimizador,
+- [x] Verificar en el ejercicio 1 que test no elija arquitectura, learning rate, optimizador,
   épocas ni umbral durante la generalización.
-- [ ] Verificar que todas las configuraciones comparadas usen la misma
-  partición interna.
+- [x] Verificar que todas las configuraciones de fraude comparadas usen las
+  mismas particiones internas.
 - [x] En la generalización de fraude, hacer la división interna **antes** de ajustar el
    estandarizador. Media y desvío se calculan sólo con training interno y luego
    se aplican a validation y test.
 - [x] En dígitos, dividir `digits.csv`; `digits_test.csv` nunca aporta ejemplos a
    training o validation.
-- [ ] Evaluar test una sola vez por modelo final ya congelado.
-- [x] Implementar la división temporal en `experiments.py`; los runners de cada
-   ejercicio deberán reutilizarla en lugar de crear otra partición.
+- [x] Evaluar test de fraude con modelo y umbral ya congelados.
+- [x] Implementar el holdout temporal en `experiments.py` como una alternativa
+  reutilizable, sin imponerlo a todos los runners.
 
 Estado de implementación del protocolo:
 
@@ -59,8 +63,9 @@ Estado de implementación del protocolo:
 - [x] Aplicar a validation y test los parámetros aprendidos de training interno.
 - [x] Mantener `digits_test.csv` fuera de la división temporal.
 - [x] Cubrir reproducción, disjunción y ausencia de leakage con tests.
-- [x] Integrar los dos protocolos de fraude en el runner del ejercicio 1.
-- [ ] Integrar validation temporal en los runners de los ejercicios 2 y 3.
+- [x] Integrar aprendizaje y generalización de fraude; el análisis final de
+  generalización usa el runner extendido con 5-fold.
+- [ ] Elegir e integrar el protocolo de validation de los ejercicios 2 y 3.
 
 Infraestructura del baseline del ejercicio 1:
 
@@ -117,22 +122,23 @@ separados no se diagnostica overfitting ni generalización.
 
 ### 4.1 Preguntas obligatorias
 
-- [ ] ¿El perceptrón lineal aprende a aproximar la probabilidad de BigModel?
-- [ ] ¿El perceptrón no lineal aprende mejor?
-- [ ] ¿Alguno muestra underfitting o saturación de capacidad?
-- [ ] ¿Cuál tiene mejor potencial de generalización?
-- [ ] ¿Qué estrategia de datos y métricas se utiliza?
-- [ ] ¿Qué modelo y qué umbral de fraude se recomiendan?
+- [x] ¿El perceptrón lineal aprende a aproximar la probabilidad de BigModel?
+- [x] ¿El perceptrón no lineal aprende mejor?
+- [x] ¿Alguno muestra underfitting o saturación de capacidad?
+- [x] ¿Cuál tiene mejor potencial de generalización?
+- [x] ¿Qué estrategia de datos y métricas se utiliza?
+- [x] ¿Qué modelo y qué umbral de fraude se recomiendan?
 
 ### 4.2 Preparar los datos — obligatorio y separado por etapa
 
 - [x] En aprendizaje, usar las 7500 muestras y ajustar el `Standardizer` con las
   7500 porque todas pertenecen a training.
-- [x] En generalización, separar training interno, validation y test,
-  estratificando mediante `flagged_fraud`.
-- [x] En generalización, ajustar `Standardizer` sólo con training interno y
-  aplicar sus parámetros a validation y test.
-- [ ] Entrenar contra `big_model_fraud_probability`.
+- [x] En generalización, reservar test y formar cinco folds estratificados con
+  development mediante `flagged_fraud`.
+- [x] En cada vuelta, ajustar `Standardizer` sólo con los cuatro folds de
+  training y aplicarlo al fold de validation; reajustarlo con development para
+  el modelo final y aplicarlo sin recalcular a test.
+- [x] Entrenar contra `big_model_fraud_probability`.
 - [x] No incorporar `flagged_fraud` a las entradas ni al objetivo entrenable.
 
 Los modos son explícitos en la configuración para impedir que una comparación
@@ -142,21 +148,21 @@ de aprendizaje se confunda con un estudio de generalización.
 
 Primera comparación controlada:
 
-- [ ] Perceptrón lineal.
-- [ ] Perceptrón no lineal con una activación compatible con probabilidades.
+- [x] Perceptrón lineal.
+- [x] Perceptrón no lineal con una activación compatible con probabilidades.
 - [x] Las mismas 7500 muestras, semilla, inicialización comparable, optimizador,
   batch y máximo de épocas.
-- [ ] MSE contra la probabilidad de BigModel como medida primaria de aprendizaje.
-- [ ] Curvas completas de training.
+- [x] MSE contra la probabilidad de BigModel como medida primaria de aprendizaje.
+- [x] Curvas completas de training.
 
-Decisiones:
+Resultados del diagnóstico:
 
-- [ ] Si la loss sigue bajando al alcanzar el máximo, aumentar épocas o mejorar la
-  optimización antes de declarar underfitting.
-- [ ] Si queda alta y estable, revisar capacidad o activación.
-- [ ] Si el lineal queda alto y el no lineal baja, continuar con el no lineal.
-- [ ] Si ambos son equivalentes en training, preferir el modelo más simple salvo
-  que otra métrica relevante lo contradiga.
+- [x] Se comprobó que las curvas habían convergido antes de interpretar sus
+  mesetas.
+- [x] Se identificó un piso de error considerablemente mayor para el modelo
+  lineal.
+- [x] Se eligió el perceptrón logístico para la etapa de generalización por su
+  mejor capacidad de aproximación sobre los mismos datos.
 
 ### 4.4 Afinar el entrenamiento — sólo si el diagnóstico lo requiere
 
@@ -165,10 +171,11 @@ rate antes de atribuir el resultado a la capacidad del perceptrón. No se hará
 una grilla de hiperparámetros si la comparación inicial ya converge de forma
 estable.
 
-Momentum, eta adaptativo, RMSProp, Adam y los tres tamaños de lote quedan como
-variantes secundarias en este ejercicio. Se prueban si descenso básico no
-converge bien o si permiten responder mejor la comparación, no como una grilla
-completa desde el comienzo.
+La extensión profundizó este control comparando descenso básico, Momentum, eta
+adaptativo, RMSProp y Adam; varios learning rates; tamaños de lote; épocas y
+semillas. Esas pruebas no cambian la capacidad estructural del perceptrón, pero
+permitieron comprobar que la meseta observada no se explicaba simplemente por
+una mala elección de optimización.
 
 ### 4.5 Elegir modelo y umbral — obligatorio
 
@@ -176,20 +183,23 @@ El tipo de perceptrón se selecciona por su potencial de aprendizaje con las
 7500 muestras. Después, su configuración de generalización se elige con
 validation considerando:
 
-- [ ] MSE de training y validation.
-- [ ] Distancia entre ambas curvas.
-- [ ] Estabilidad entre semillas.
-- [ ] Épocas y costo hasta converger.
+- [x] MSE de training y validation.
+- [x] Distancia entre ambas curvas.
+- [x] Estabilidad entre semillas.
+- [x] Épocas y costo hasta converger.
 
 Después, sin reentrenar para cada umbral, se convierten sus probabilidades de
 validation en fraude/no fraude y se calculan matriz de confusión, accuracy,
 precision, recall/TPR, F1 y FPR para distintos umbrales.
 
-- [ ] Recall insuficiente: considerar bajar el umbral.
-- [ ] FPR demasiado alto: considerar subirlo.
-- [ ] Accuracy alta con recall malo: no alcanza para recomendar el umbral.
-- [ ] Buena imitación de BigModel pero mala detección real: analizar la relación
-  entre BigModel y `flagged_fraud`; no atribuirlo automáticamente a TinyModel.
+- [x] Se examinó cómo bajar el umbral aumenta el recall y también puede aumentar
+  los falsos positivos.
+- [x] Se examinó cómo subirlo reduce falsos positivos a costa de dejar pasar más
+  fraudes.
+- [x] El umbral se eligió con predicciones out-of-fold y métricas sobre
+  `flagged_fraud`, sin apoyarse sólo en accuracy.
+- [x] Se distinguió entre imitar la probabilidad de BigModel y clasificar la
+  etiqueta real de fraude.
 
 La recomendación debe explicitar el compromiso entre dejar pasar un fraude y
 bloquear una operación legítima. Modelo, transformación, hiperparámetros y
@@ -210,8 +220,10 @@ y analizar las variantes realizadas.
 
 ### 5.2 Preparar los datos — obligatorio
 
-- [x] Dividir temporalmente `digits.csv` en training interno y validation,
-  estratificando las clases disponibles.
+- [x] Disponer de un helper para dividir `digits.csv` en un holdout estratificado
+  reproducible si se elige ese protocolo.
+- [ ] Elegir y documentar para el ejercicio 2 si se usará ese holdout o k-fold,
+  considerando el costo de entrenar el multicapa.
 - [x] Mantener los píxeles en `[0,1]`.
 - [ ] Definir la codificación de las diez salidas.
 - [x] Mantener `digits_test.csv` fuera de la división temporal.
@@ -332,17 +344,17 @@ con el ejercicio 2.
 
 | Estado | Variante | Dónde se exige o necesita |
 |---|---|---|
-| [ ] | Perceptrón lineal vs. no lineal | Ejercicio 1 |
-| [ ] | Aprendizaje, generalización, métricas y umbral | Ejercicio 1 |
+| [x] | Perceptrón lineal vs. no lineal | Ejercicio 1 |
+| [x] | Aprendizaje, generalización, métricas y umbral | Ejercicio 1 |
 | [ ] | Learning rate | Ejercicio 2 |
 | [ ] | Arquitectura | Ejercicio 2 |
 | [ ] | Mecanismo de optimización | Ejercicio 2 |
-| [ ] | Curvas por época | Diagnóstico de los tres ejercicios |
+| [x] | Curvas por época | Aplicado en ejercicio 1; pendiente en 2 y 3 |
 | [ ] | Incorporar datos nuevos y aislar su efecto | Ejercicio 3 |
 | [ ] | Comparar ejercicios 2 y 3 | Ejercicio 3 |
 | [ ] | Accuracy mayor o igual al 98 % | Ejercicio 3 |
-| [x] | Implementar validation temporal | Protocolo común |
-| [ ] | Usar validation para seleccionar y abrir test al final | Protocolo común |
+| [x] | Implementar holdout reproducible | Alternativa disponible del protocolo común |
+| [x] | Usar validation para seleccionar y abrir test al final | Aplicado en ejercicio 1; pendiente en 2 y 3 |
 
 ### Importantes pero secundarias
 
@@ -377,7 +389,8 @@ explicar un comportamiento; no se cruzan todas desde el comienzo.
 - [ ] Robustez frente a ruido.
 - [ ] Métodos de interpretabilidad.
 - [ ] Comparación extensa de inicializaciones.
-- [ ] K-fold en lugar del holdout temporal fijo.
+- [ ] Evaluar si k-fold se justifica para los MLP de ejercicios 2 y 3 frente al
+  costo menor de un holdout estratificado.
 - [ ] Múltiples estrategias de data augmentation.
 
 Los opcionales no comienzan hasta que estén resueltos los requisitos del

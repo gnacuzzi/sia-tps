@@ -42,19 +42,20 @@ correcciones hacen que su error disminuya y sus predicciones mejoren.
 10. Descenso básico, Momentum, eta adaptativo, RMSProp y Adam.
 11. Entrenamiento configurable online, mini-batch o batch.
 
-### Todavía no está resuelto
+### Estado actual
 
-1. Entrenar y comparar los modelos obligatorios de fraude.
-2. Elegir el umbral final de fraude.
-3. Entrenar el clasificador de dígitos del ejercicio 2.
-4. Incorporar `more_digits.csv` y resolver el ejercicio 3.
-5. Comparar las variantes de optimización ya implementadas.
-6. Realizar los experimentos de hiperparámetros, arquitectura, épocas y forma
-   de actualización.
-7. Diagnosticar underfitting, overfitting y generalización con las corridas
-   reales.
-8. Integrar la validation temporal ya implementada en los runners que
-   seleccionarán configuraciones sin mirar test repetidamente.
+El ejercicio 1 ya compara los perceptrones, estudia aprendizaje y
+generalización, selecciona hiperparámetros con 5-fold, congela un umbral con
+predicciones out-of-fold y evalúa test al final. Siguen pendientes:
+
+1. Entrenar el clasificador de dígitos del ejercicio 2.
+2. Incorporar `more_digits.csv` y resolver el ejercicio 3.
+3. Realizar en los MLP los experimentos obligatorios de learning rate,
+   arquitectura y optimización.
+4. Diagnosticar convergencia, underfitting, overfitting y generalización en los
+   ejercicios 2 y 3.
+5. Elegir para esos ejercicios entre el holdout estratificado ya implementado
+   y k-fold, considerando que k-fold multiplica el costo de cada configuración.
 
 La distinción importante es esta:
 
@@ -156,16 +157,15 @@ Este es el mapa más importante de toda la guía:
 ```mermaid
 flowchart TD
     A[CSV original] --> B[Validar estructura y valores]
-    B --> C[Separar training y test]
-    C --> D[Analizar solamente training]
-    D --> E[Definir preprocesamiento]
-    E --> F[Ajustar transformación con training]
-    F --> G[Transformar training]
-    F --> H[Transformar test con los mismos parámetros]
-    G --> I[Entrenar y elegir configuración]
-    I --> J[Modelo final]
-    H --> K[Evaluación final]
-    J --> K
+    B --> C[Reservar test]
+    C --> D[Development]
+    D --> E[Training y validation: holdout o k-fold]
+    E --> F[Ajustar transformación sólo con training de cada vuelta]
+    F --> G[Entrenar y comparar con validation]
+    G --> H[Congelar configuración]
+    H --> I[Reentrenar con todo development]
+    I --> J[Aplicar a test la transformación de development]
+    J --> K[Evaluación final]
 ```
 
 Dos reglas salen de este diagrama:
@@ -174,11 +174,11 @@ Dos reglas salen de este diagrama:
 2. **Test sí se prepara:** recibe la misma transformación aprendida con
    training para que el modelo reciba datos en la escala esperada.
 
-El protocolo acordado mantiene los loaders con training/test y deriva una
-validation temporal desde training al ejecutar los experimentos. Así se pueden
-comparar hiperparámetros sin mirar test. La partición guardará semilla e índices
-para ser reproducible. Los helpers ya están implementados en `experiments.py`;
-falta integrarlos en los runners de los ejercicios.
+Los loaders mantienen development/test. `experiments.py` puede derivar un
+holdout estratificado y reproducible, pero no obliga a usar un único corte. El
+ejercicio 1 terminó usando 5-fold estratificado para comparar hiperparámetros y
+obtener predicciones out-of-fold. Para los ejercicios 2 y 3 se elegirá holdout
+o k-fold antes de implementar sus runners, sin mirar `digits_test.csv`.
 
 ## 6. Dónde está cada cosa en el repositorio
 
@@ -189,7 +189,8 @@ falta integrarlos en los runners de los ejercicios.
 | [`data.py`](../src/sia_tp3/data.py) | Cómo se cargan y separan fraude y dígitos. |
 | [`preprocessing.py`](../src/sia_tp3/preprocessing.py) | Cómo se calculan y reutilizan media y desvío. |
 | [`metrics.py`](../src/sia_tp3/metrics.py) | Cómo se construyen la matriz de confusión y las métricas. |
-| [`experiments.py`](../src/sia_tp3/experiments.py) | Cómo se deriva validation temporal sin contaminar test. |
+| [`experiments.py`](../src/sia_tp3/experiments.py) | Cómo se deriva un holdout reproducible sin contaminar test. |
+| [`analyze_fraud_generalization_extension.py`](../scripts/analyze_fraud_generalization_extension.py) | Cómo el ejercicio 1 aplica 5-fold, selección escalonada, semillas y umbral out-of-fold. |
 | [`validation.py`](../src/sia_tp3/validation.py) | Cómo se armaron los casos recomendados para validar el motor. |
 | [`analyze_training.py`](../scripts/analyze_training.py) | Cómo se generó el EDA sin entrenar modelos. |
 | [`decisiones.md`](decisiones.md) | Registro formal de qué elegimos, por qué y qué alternativa descartamos. |
@@ -565,11 +566,18 @@ X_test:  1500 filas × 9 entradas
 y_test:  1500 filas × 1 probabilidad
 ```
 
-Esto describe el loader con split y la futura etapa de generalización. La
-comparación inicial exigida por el ejercicio 1 usa otro helper:
+Esto describe la capacidad de hacer un holdout reproducible que ofrece el
+loader; no significa que ése haya sido el protocolo final del ejercicio 1. La
+comparación inicial de aprendizaje usa otro helper:
 `load_fraud_learning_data` toma las **7500 filas** del CSV como training para
-los dos perceptrones y no crea validation ni test. Después de elegir lineal o
-no lineal se vuelve al protocolo separado mostrado arriba.
+los dos perceptrones y no crea validation ni test.
+
+Para estudiar generalización se reservaron las mismas 1500 filas de test, pero
+las 6000 restantes se evaluaron con **5-fold estratificado**, no mediante un
+único holdout. En cada vuelta se entrenó con 4800 filas, se validó con 1200 y se
+ajustó el `Standardizer` exclusivamente con las 4800 de training. Después de
+elegir configuración y umbral sin mirar test, el modelo final se reentrenó con
+las 6000 filas de desarrollo.
 
 ### Dígitos
 
@@ -799,7 +807,7 @@ se puede justificar por separado.
 
 | Tema | Decisión actual | Por qué |
 |---|---|---|
-| Particiones | Loaders training/test y validation temporal en experimentos. | Permite seleccionar sin contaminar test y sin crear otro CSV. |
+| Particiones | Loaders development/test; holdout disponible y 5-fold usado en el ejercicio 1. | Permite seleccionar sin contaminar test; el protocolo del MLP sigue abierto. |
 | Test | Reservarlo para evaluar generalización. | Evitar elegir un modelo que sólo funciona en ese conjunto. |
 | Fraude: objetivo | Imitar `big_model_fraud_probability`. | Es lo requerido para TinyModel. |
 | Fraude: etiqueta real | No usar `flagged_fraud` para entrenar. | La documentación lo prohíbe. |

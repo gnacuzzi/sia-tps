@@ -226,3 +226,7 @@ output/
 /tp3/docs/transcripciones/*
 !/tp3/docs/transcripciones/Clase12.2MétricasySobreajuste.vtt
 !/tp3/docs/transcripciones/Clase13-Regularizacion.vtt
+
+# Resultados de los ejercicios 2 y 3; publicar solo los resultados finales.
+/tp3/docs/ejercicio2/results/**/model-*.npz
+/tp3/docs/ejercicio2/results/**/*-predictions.csv

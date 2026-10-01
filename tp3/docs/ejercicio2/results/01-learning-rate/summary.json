@@ -1,0 +1,38 @@
+[
+  {
+    "run": "gd-lr-0001",
+    "stage": "learning-rate",
+    "status": "complete",
+    "best_epoch": 200,
+    "validation_macro_f1_present": 0.38936242687668493,
+    "validation_accuracy": 0.5293172690763053,
+    "validation_mse": 0.0640711900024641,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 31200,
+    "seconds": 6.003182333
+  },
+  {
+    "run": "gd-lr-001",
+    "stage": "learning-rate",
+    "status": "complete",
+    "best_epoch": 199,
+    "validation_macro_f1_present": 0.7976384853339773,
+    "validation_accuracy": 0.8887550200803213,
+    "validation_mse": 0.018907393584934998,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 31044,
+    "seconds": 6.0028503749999995
+  },
+  {
+    "run": "gd-lr-01",
+    "stage": "learning-rate",
+    "status": "complete",
+    "best_epoch": 136,
+    "validation_macro_f1_present": 0.9046328855302472,
+    "validation_accuracy": 0.9285140562248996,
+    "validation_mse": 0.01202336498868086,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 21216,
+    "seconds": 6.008175957999999
+  }
+]

@@ -7,7 +7,7 @@
 | `src/sia_tp3/models.py` | Perceptrón simple, red multicapa, activaciones, forward, Rosenblatt, backpropagation y guardado/carga |
 | `src/sia_tp3/optimizers.py` | Descenso básico, Momentum, eta adaptativo, RMSProp y Adam |
 | `src/sia_tp3/training.py` | Entrenamiento online, mini-batch o batch y métricas al terminar cada época, sin conocer el dataset |
-| `src/sia_tp3/experiments.py` | Validation temporal reproducible para fraude y dígitos sin cambiar los loaders training/test |
+| `src/sia_tp3/experiments.py` | Holdout estratificado reproducible para fraude y dígitos sin cambiar los loaders development/test |
 | `src/sia_tp3/fraud_experiment.py` | Configuración, ejecución y artefactos del baseline del ejercicio 1 |
 | `src/sia_tp3/metrics.py` | Matriz de confusión y métricas estándar de clasificación globales, por clase y macro |
 | `src/sia_tp3/validation.py` | Datos sintéticos de la consigna, configuración y evidencia de las corridas |
@@ -259,11 +259,19 @@ como test externo. Para el ejercicio 3, el archivo adicional se concatena solo
 al training. La codificación de las diez salidas se decidirá junto con el
 modelo y no forma parte de la carga.
 
-## Validation temporal para experimentos
+## Holdout temporal disponible para experimentos
 
 `load_fraud_experiment_split` y `load_digits_experiment_split` conservan el
 test externo y derivan training/validation del conjunto de desarrollo. Ambos
 devuelven los índices internos para registrar exactamente la partición.
+
+Estos helpers implementan **un único corte reproducible**. Son infraestructura
+disponible, no el protocolo obligatorio de todos los ejercicios. El análisis
+final de generalización del ejercicio 1 usa test reservado más 5-fold
+estratificado mediante `scripts/analyze_fraud_generalization_extension.py`;
+allí el estandarizador se ajusta nuevamente dentro de cada fold. Para los
+ejercicios 2 y 3 todavía debe elegirse entre holdout y k-fold según el costo de
+entrenar el MLP.
 
 En fraude se leen primero los valores crudos, se reserva test, se separa
 validation y sólo entonces se ajusta `Standardizer` con training interno. Sus
@@ -288,7 +296,9 @@ data = load_fraud_experiment_split(
 `configs/fraud-learning.json` declara el protocolo `learning`: compara lineal y
 logístico entrenando ambos con las 7500 muestras, sin crear validation ni test.
 El runner también admite el protocolo `generalization`, pero exige exactamente
-un modelo ya seleccionado y recién allí crea las tres particiones.
+un modelo ya seleccionado y recién allí crea las tres particiones. Ese modo fue
+el baseline inicial de holdout; no debe confundirse con el protocolo 5-fold
+usado en el informe final del ejercicio 1.
 
 El comando para la comparación obligatoria es:
 
@@ -313,8 +323,9 @@ Los valores del JSON son una propuesta para revisar, no resultados ni una
 selección final.
 
 Las arquitecturas y técnicas base corresponden a clases 10.1, 10.2 y 11; los
-optimizadores corresponden a clase 12.1. Siguen pendientes la configuración y
-comparación experimental para cada ejercicio obligatorio. Los loaders mantienen
-training/test; `experiments.py` deriva validation temporal de training para los
-futuros runners. No se utilizó `digits_test.csv` para ninguna elección de este
-desarrollo.
+optimizadores corresponden a clase 12.1. El ejercicio 1 ya realizó su selección
+experimental con 5-fold. Siguen pendientes la configuración y comparación de
+los ejercicios 2 y 3. Los loaders mantienen development/test y
+`experiments.py` ofrece un holdout para sus futuros runners; también puede
+implementarse k-fold si su costo se justifica. No se utilizó `digits_test.csv`
+para ninguna elección de este desarrollo.

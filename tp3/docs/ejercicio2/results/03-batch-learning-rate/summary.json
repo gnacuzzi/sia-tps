@@ -1,0 +1,110 @@
+[
+  {
+    "run": "batch-32-lr-03",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 50,
+    "validation_macro_f1_present": 0.9203763797835963,
+    "validation_accuracy": 0.9385542168674699,
+    "validation_mse": 0.010504079391274505,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 15600,
+    "seconds": 7.801608834
+  },
+  {
+    "run": "batch-32-lr-1",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 168,
+    "validation_macro_f1_present": 0.933792649854181,
+    "validation_accuracy": 0.948995983935743,
+    "validation_mse": 0.010197999091042501,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 52416,
+    "seconds": 8.089982250000002
+  },
+  {
+    "run": "batch-32-lr-3",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 19,
+    "validation_macro_f1_present": 0.925342958434767,
+    "validation_accuracy": 0.9457831325301205,
+    "validation_mse": 0.009993600243096094,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 5928,
+    "seconds": 7.713130708999998
+  },
+  {
+    "run": "batch-64-lr-03",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 135,
+    "validation_macro_f1_present": 0.9213195725301228,
+    "validation_accuracy": 0.9417670682730924,
+    "validation_mse": 0.010650160545166392,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 21060,
+    "seconds": 5.951427291999998
+  },
+  {
+    "run": "batch-64-lr-1",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 78,
+    "validation_macro_f1_present": 0.9242493220028766,
+    "validation_accuracy": 0.9429718875502008,
+    "validation_mse": 0.010231424638703721,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 12168,
+    "seconds": 6.043893333
+  },
+  {
+    "run": "batch-64-lr-3",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 106,
+    "validation_macro_f1_present": 0.926179229655725,
+    "validation_accuracy": 0.9453815261044177,
+    "validation_mse": 0.009953506203923776,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 16536,
+    "seconds": 6.135318040999998
+  },
+  {
+    "run": "batch-128-lr-03",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 197,
+    "validation_macro_f1_present": 0.9152438808884145,
+    "validation_accuracy": 0.9357429718875502,
+    "validation_mse": 0.011139702256955122,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 15366,
+    "seconds": 4.554073707999997
+  },
+  {
+    "run": "batch-128-lr-1",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 157,
+    "validation_macro_f1_present": 0.9239229941392451,
+    "validation_accuracy": 0.9413654618473896,
+    "validation_mse": 0.010884277638387691,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 12246,
+    "seconds": 4.643778250000004
+  },
+  {
+    "run": "batch-128-lr-3",
+    "stage": "batch-learning-rate",
+    "status": "complete",
+    "best_epoch": 100,
+    "validation_macro_f1_present": 0.9273572707370824,
+    "validation_accuracy": 0.9449799196787149,
+    "validation_mse": 0.009955282570972732,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 7800,
+    "seconds": 4.663746833000005
+  }
+]

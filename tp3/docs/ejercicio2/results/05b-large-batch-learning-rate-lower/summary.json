@@ -1,0 +1,26 @@
+[
+  {
+    "run": "batch-512-lr-025",
+    "stage": "large-batch-learning-rate-lower",
+    "status": "complete",
+    "best_epoch": 505,
+    "validation_macro_f1_present": 0.9056113618768984,
+    "validation_accuracy": 0.9317269076305221,
+    "validation_mse": 0.011614254153448206,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 10100,
+    "seconds": 11.464662332999998
+  },
+  {
+    "run": "batch-1024-lr-025",
+    "stage": "large-batch-learning-rate-lower",
+    "status": "complete",
+    "best_epoch": 1193,
+    "validation_macro_f1_present": 0.9068751345380637,
+    "validation_accuracy": 0.9317269076305221,
+    "validation_mse": 0.011462177462628268,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 11930,
+    "seconds": 21.484763250000004
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "development_path": "data/digits.csv",
+  "development_sha256": "11271dbc12a3a8db967f6c2708e55ae1918d69186e81d91c53c24e305fc5d3f4",
+  "test_opened": false
+}

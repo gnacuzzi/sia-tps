@@ -13,6 +13,7 @@ def fit(model: MultilayerPerceptron, X, y, *, learning_rate: Optional[float] = N
         optimizer: Optional[Optimizer] = None, batch_size: Optional[int] = 1,
         validation_data: Optional[Tuple[object, object]] = None,
         require_bipolar_accuracy: bool = False,
+        epoch_metrics: Optional[Callable] = None,
         progress: Optional[Callable[[dict], None]] = None):
     """Entrenar por lotes y medir training/validation al final de cada época."""
     X, y = model.validate_data(X, y)
@@ -67,6 +68,8 @@ def fit(model: MultilayerPerceptron, X, y, *, learning_rate: Optional[float] = N
         if not np.isfinite(mse):
             raise FloatingPointError("entrenamiento divergente: MSE no finito")
         validation_mse = None
+        validation_predictions = None
+        validation_y = None
         if validation is not None:
             validation_X, validation_y = validation
             validation_predictions = model.predict(validation_X)
@@ -80,6 +83,16 @@ def fit(model: MultilayerPerceptron, X, y, *, learning_rate: Optional[float] = N
         converged = mse <= target_mse and (accuracy is None or accuracy == 1.0)
         row = {"epoch": epoch, "mse": mse, "validation_mse": validation_mse,
                "accuracy": accuracy, "converged": converged}
+        if epoch_metrics is not None:
+            extra_metrics = epoch_metrics(
+                y, predictions, validation_y, validation_predictions)
+            if not isinstance(extra_metrics, dict):
+                raise TypeError("epoch_metrics debe devolver un diccionario")
+            repeated = set(row) & set(extra_metrics)
+            if repeated:
+                raise ValueError(
+                    f"epoch_metrics intentó sobrescribir métricas: {sorted(repeated)}")
+            row.update(extra_metrics)
         history.append(row)
         if progress:
             progress(row.copy())

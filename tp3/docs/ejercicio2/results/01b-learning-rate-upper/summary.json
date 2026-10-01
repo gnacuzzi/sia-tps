@@ -1,0 +1,26 @@
+[
+  {
+    "run": "gd-lr-03",
+    "stage": "learning-rate-upper",
+    "status": "complete",
+    "best_epoch": 135,
+    "validation_macro_f1_present": 0.9213195725301228,
+    "validation_accuracy": 0.9417670682730924,
+    "validation_mse": 0.010650160545166392,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 21060,
+    "seconds": 6.076765917000001
+  },
+  {
+    "run": "gd-lr-1",
+    "stage": "learning-rate-upper",
+    "status": "complete",
+    "best_epoch": 78,
+    "validation_macro_f1_present": 0.9242493220028766,
+    "validation_accuracy": 0.9429718875502008,
+    "validation_mse": 0.010231424638703721,
+    "parameter_count": 25450,
+    "updates_at_best_epoch": 12168,
+    "seconds": 6.216059124999999
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "run": "arch-16",
+    "stage": "architecture-width",
+    "status": "complete",
+    "best_epoch": 83,
+    "validation_macro_f1_present": 0.9170299127098526,
+    "validation_accuracy": 0.9329317269076305,
+    "validation_mse": 0.011503484198733593,
+    "parameter_count": 12730,
+    "updates_at_best_epoch": 12948,
+    "seconds": 4.821380625
+  },
+  {
+    "run": "arch-64",
+    "stage": "architecture-width",
+    "status": "complete",
+    "best_epoch": 182,
+    "validation_macro_f1_present": 0.9340279185473008,
+    "validation_accuracy": 0.9473895582329317,
+    "validation_mse": 0.010456588598535686,
+    "parameter_count": 50890,
+    "updates_at_best_epoch": 28392,
+    "seconds": 7.195082042000001
+  }
+]

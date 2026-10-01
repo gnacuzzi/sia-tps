@@ -118,5 +118,7 @@ inspección del punto 2 confirmó que los loaders separaban training/test sin un
 partición fija de validation, y con ese alcance se continuó al EDA del punto 3.
 Posteriormente se decidió mantener intacto ese contrato y agregar en
 `experiments.py` una validation temporal derivada de training para seleccionar
-configuraciones sin consultar test. Esta revisión histórica no entrenó ni
-evaluó modelos sobre el test final de fraude o dígitos.
+configuraciones sin consultar test. Esa utilidad implementa un holdout; el
+informe final del ejercicio 1 adoptó después test reservado más 5-fold
+estratificado. Esta revisión histórica no entrenó ni evaluó modelos sobre el
+test final de fraude o dígitos.

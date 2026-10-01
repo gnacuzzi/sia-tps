@@ -1,0 +1,229 @@
+{
+  "protocol": "search",
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "checkpoints": [
+    50,
+    100,
+    200,
+    300
+  ],
+  "runs": [
+    {
+      "name": "batch-256-lr-05",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.5
+      },
+      "batch_size": 256,
+      "max_epochs": 300,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-256-lr-1",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 1.0
+      },
+      "batch_size": 256,
+      "max_epochs": 300,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-256-lr-2",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 2.0
+      },
+      "batch_size": 256,
+      "max_epochs": 300,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-512-lr-05",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.5
+      },
+      "batch_size": 512,
+      "max_epochs": 600,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-512-lr-1",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 1.0
+      },
+      "batch_size": 512,
+      "max_epochs": 600,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-512-lr-2",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 2.0
+      },
+      "batch_size": 512,
+      "max_epochs": 600,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-1024-lr-05",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.5
+      },
+      "batch_size": 1024,
+      "max_epochs": 1200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-1024-lr-1",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 1.0
+      },
+      "batch_size": 1024,
+      "max_epochs": 1200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "batch-1024-lr-2",
+      "stage": "large-batch-learning-rate",
+      "architecture": [
+        784,
+        32,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 2.0
+      },
+      "batch_size": 1024,
+      "max_epochs": 1200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}

@@ -86,8 +86,9 @@ La portada de clase 13 también indica primer cuatrimestre de 2026.
 
 Las reglas ya están implementadas y contrastadas con cuentas manuales y
 gradientes numéricos. Ver [implementación](implementacion.md) y
-[resultados de validación](resultados-validacion.md). La selección de modelos
-e hiperparámetros para los datasets reales sigue pendiente.
+[resultados de validación](resultados-validacion.md). El ejercicio 1 ya
+seleccionó modelo e hiperparámetros; esa selección sigue pendiente para los
+ejercicios 2 y 3.
 
 ## Criterios incorporados con las clases 12 y 13
 
@@ -99,9 +100,11 @@ como fórmulas ni se corrigen en los archivos originales.
 - **Distinguir training, validation y test.** Training ajusta pesos; validation
   permite comparar configuraciones y observar las curvas durante el desarrollo;
   test se reserva para la evaluación final. La clase 13 lo aclara para los
-  ejercicios 2 y 3. Los loaders mantienen training/test, pero el equipo decidió
-  derivar validation temporalmente desde training durante los experimentos.
-  Esto no modifica los CSV ni el EDA ya realizado y mantiene test reservado.
+  ejercicios 2 y 3. Los loaders mantienen training/test. El repositorio ofrece
+  un holdout temporal derivado de training; para el ejercicio 1 se terminó
+  usando 5-fold estratificado sobre development. Esto no modifica los CSV ni el
+  EDA ya realizado y mantiene test reservado. El protocolo de los ejercicios 2
+  y 3 todavía debe decidirse según el costo experimental.
 - **Analizar antes de transformar.** Revisar distribuciones, escalas, balance,
   faltantes, outliers y variables problemáticas sobre training. Min-max y
   estandarización tienen propósitos distintos (clase 12.2, páginas 32–35);
@@ -115,7 +118,8 @@ como fórmulas ni se corrigen en los archivos originales.
 - **Comparar optimizadores de manera controlada.** La clase 12.1 desarrolla
   Momentum, eta adaptativo, RMSProp y Adam. La implementación conserva que
   RMSProp coloca epsilon dentro de la raíz (página 8), mientras Adam lo coloca
-  fuera (páginas 12–13); la selección experimental sigue pendiente.
+  fuera (páginas 12–13). Ya se compararon para fraude; falta la comparación
+  obligatoria del clasificador de dígitos.
 - **Diagnosticar antes de regularizar.** Las curvas de training/validation
   permiten distinguir problemas de ajuste y generalización. Early stopping,
   data augmentation y L2 son alternativas de clase 13 ante sobreajuste;

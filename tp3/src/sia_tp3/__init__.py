@@ -2,8 +2,9 @@
 
 from .data import (DigitTrainTest, FraudTrainTest, load_digits_train_test,
                    load_fraud_train_test)
-from .experiments import (DigitExperimentSplit, FraudExperimentSplit,
+from .experiments import (DigitDevelopmentSplit, DigitExperimentSplit, FraudExperimentSplit,
                           FraudLearningData,
+                          load_digits_development_split,
                           load_digits_experiment_split,
                           load_fraud_learning_data,
                           load_fraud_experiment_split)
@@ -17,6 +18,7 @@ from .training import fit
 
 __all__ = [
     "DigitTrainTest",
+    "DigitDevelopmentSplit",
     "DigitExperimentSplit",
     "FraudTrainTest",
     "FraudExperimentSplit",
@@ -36,6 +38,7 @@ __all__ = [
     "confusion_matrix",
     "fit",
     "load_digits_train_test",
+    "load_digits_development_split",
     "load_digits_experiment_split",
     "load_fraud_train_test",
     "load_fraud_learning_data",
