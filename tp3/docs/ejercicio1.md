@@ -87,10 +87,32 @@ BigModel tendría MSE 0,0915.
   residual (RMSE ≈ 0,10, unos 10 puntos de probabilidad en promedio) que no
   desaparece aunque se cambie el learning rate.
 
+### Vista de los modelos sobre la primera componente principal
+
+Para visualizar el ajuste se proyectan las nueve entradas estandarizadas sobre
+PC1, la dirección que concentra más variación, y se recorren los modelos
+entrenados dejando las otras ocho componentes en su valor medio.
+
+![Datos y modelos entrenados sobre PC1](ejercicio1-extension/results/pc1-models.png)
+
+Los puntos grises son las probabilidades reales producidas por BigModel; la
+recta y la curva usan los pesos efectivamente aprendidos por los perceptrones
+con η = 0,01. El lineal no respeta el rango de una probabilidad y representa
+peor la tendencia acotada. El logístico la acompaña mejor, pero una única curva
+rígida no alcanza a cubrir toda la dispersión observada.
+
+PC1 explica 26,2 % de la variación de las entradas, por lo que esta figura es
+un corte interpretativo y no la representación completa de las predicciones en
+nueve dimensiones. Por sí sola no demuestra underfitting; es evidencia visual
+consistente con el error residual y la meseta de las curvas de aprendizaje.
+
 La evidencia de que es underfitting y no falta de entrenamiento: con η = 0,001
 y η = 0,01 cada modelo termina en **el mismo** MSE de training (y la logística
 también con 0,1), y ese valor ya no baja con más épocas. Si el problema
 fuera de optimización, cambiar η o entrenar más debería reducir el error.
+El [estudio extendido](ejercicio1-extension/ejercicio1-extension.md) refuerza este diagnóstico:
+cinco optimizadores, seis tamaños de batch y cinco semillas tampoco encuentran
+un piso inferior para el logístico.
 
 ## b) ¿Se observa saturación de las capacidades?
 

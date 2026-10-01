@@ -1,0 +1,58 @@
+{
+  "configuration": {
+    "optimizer": "gradient_descent",
+    "learning_rate": 0.1,
+    "batch_size": 128,
+    "max_epochs": 44,
+    "model_seed": 0,
+    "shuffle_seed": 0,
+    "selection_metric": "mean cross-validation MSE over five folds and five seeds",
+    "validation_mse": 0.011026947448807785,
+    "validation_seed_std": 8.313519116673864e-07,
+    "validation_fold_std_mean": 0.00048785675370952106,
+    "selection_rule": "one-standard-error equivalence; then estimated time to stable epoch, tail stability, seed stability and mean validation MSE"
+  },
+  "threshold": 0.884,
+  "development_samples": 6000,
+  "test_samples": 1500,
+  "development_mse": 0.010962498924977682,
+  "test_mse": 0.010528423404245655,
+  "classification": {
+    "confusion_matrix": [
+      [
+        1303,
+        23
+      ],
+      [
+        22,
+        152
+      ]
+    ],
+    "accuracy": 0.97,
+    "precision": 0.8685714285714285,
+    "recall": 0.8735632183908046,
+    "f1": 0.8710601719197708,
+    "tpr": 0.8735632183908046,
+    "fpr": 0.017345399698340876
+  },
+  "big_model_at_0_85": {
+    "confusion_matrix": [
+      [
+        1326,
+        0
+      ],
+      [
+        0,
+        174
+      ]
+    ],
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "tpr": 1.0,
+    "fpr": 0.0
+  },
+  "training_seconds": 0.06387237499999998,
+  "test_evaluations": 1
+}

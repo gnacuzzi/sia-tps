@@ -1,0 +1,92 @@
+{
+  "selection_source": "out-of-fold predictions from development only",
+  "selection_metric": "mean F1 over five seeds",
+  "coarse_seed_zero_optimum": 0.885,
+  "fine_search_start": 0.855,
+  "fine_search_stop": 0.915,
+  "fine_search_step": 0.001,
+  "threshold": 0.884,
+  "metrics_mean_over_seeds": {
+    "threshold": 0.884,
+    "seeds": 5,
+    "accuracy_mean": 0.9707333333333332,
+    "accuracy_std": 8.164965809276361e-05,
+    "precision_mean": 0.8824782955353078,
+    "precision_std": 0.0013582758657991953,
+    "recall_mean": 0.862158273381295,
+    "recall_std": 0.0014097782692277143,
+    "f1_mean": 0.8721978761764927,
+    "f1_std": 0.0003335141020333486,
+    "tpr_mean": 0.862158273381295,
+    "tpr_std": 0.0014097782692277143,
+    "fpr_mean": 0.015042412818096134,
+    "fpr_std": 0.00021982853514968163
+  },
+  "seed_zero_confusion_matrix": [
+    [
+      5226,
+      79
+    ],
+    [
+      97,
+      598
+    ]
+  ],
+  "seed_zero_metrics": {
+    "seed": 0,
+    "threshold": 0.884,
+    "accuracy": 0.9706666666666667,
+    "precision": 0.8833087149187593,
+    "recall": 0.860431654676259,
+    "f1": 0.8717201166180758,
+    "tpr": 0.860431654676259,
+    "fpr": 0.014891611687087653,
+    "true_negative": 5226,
+    "false_positive": 79,
+    "false_negative": 97,
+    "true_positive": 598
+  },
+  "per_seed_optima": [
+    {
+      "seed": 0,
+      "best_threshold": 0.883,
+      "best_f1": 0.8725418790968682,
+      "precision": 0.883480825958702,
+      "recall": 0.8618705035971223,
+      "fpr": 0.014891611687087653
+    },
+    {
+      "seed": 1,
+      "best_threshold": 0.886,
+      "best_f1": 0.8725418790968682,
+      "precision": 0.883480825958702,
+      "recall": 0.8618705035971223,
+      "fpr": 0.014891611687087653
+    },
+    {
+      "seed": 2,
+      "best_threshold": 0.883,
+      "best_f1": 0.8727272727272727,
+      "precision": 0.8823529411764706,
+      "recall": 0.8633093525179856,
+      "fpr": 0.015080113100848256
+    },
+    {
+      "seed": 3,
+      "best_threshold": 0.884,
+      "best_f1": 0.8725418790968682,
+      "precision": 0.883480825958702,
+      "recall": 0.8618705035971223,
+      "fpr": 0.014891611687087653
+    },
+    {
+      "seed": 4,
+      "best_threshold": 0.885,
+      "best_f1": 0.8725418790968682,
+      "precision": 0.883480825958702,
+      "recall": 0.8618705035971223,
+      "fpr": 0.014891611687087653
+    }
+  ],
+  "test_was_evaluated_when_frozen": false
+}

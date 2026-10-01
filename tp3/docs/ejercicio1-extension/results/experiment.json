@@ -1,0 +1,95 @@
+{
+  "activation": "logistic",
+  "beta": 1.0,
+  "init_scale": 0.5,
+  "shuffle": true,
+  "target_mse": 0.0,
+  "learning_rates": [
+    0.0001,
+    0.001,
+    0.01,
+    0.1
+  ],
+  "optimizer_learning_rates": {
+    "gradient_descent": [
+      0.001,
+      0.01,
+      0.1
+    ],
+    "momentum": [
+      0.001,
+      0.01,
+      0.1
+    ],
+    "adaptive": [
+      0.001,
+      0.01,
+      0.1
+    ],
+    "rmsprop": [
+      0.0001,
+      0.001,
+      0.01
+    ],
+    "adam": [
+      0.0001,
+      0.001,
+      0.01
+    ]
+  },
+  "optimizer_parameters": {
+    "momentum": {
+      "alpha": 0.9
+    },
+    "adaptive": {
+      "increase_by": 0.0001,
+      "decrease_fraction": 0.5,
+      "patience": 10
+    },
+    "rmsprop": {
+      "gamma": 0.9,
+      "epsilon": 1e-08
+    },
+    "adam": {
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-08
+    }
+  },
+  "optimizer_screen_epochs": 300,
+  "optimizer_screen_batch_size": 32,
+  "batch_sizes": [
+    1,
+    8,
+    32,
+    128,
+    512,
+    null
+  ],
+  "batch_epochs": 300,
+  "extended_batch_epochs": {
+    "128": 1000,
+    "512": 2000,
+    "full": 10000
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "seed_epochs": 500,
+  "long_run_epochs": 1000,
+  "reported_epoch_checkpoints": [
+    0,
+    10,
+    25,
+    50,
+    100,
+    250,
+    500,
+    750,
+    1000
+  ]
+}

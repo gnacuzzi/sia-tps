@@ -1,0 +1,101 @@
+{
+  "experiment": {
+    "test_fraction": 0.2,
+    "test_seed": 0,
+    "folds": 5,
+    "fold_seed": 0,
+    "activation": "logistic",
+    "beta": 1.0,
+    "init_scale": 0.5,
+    "screen_epochs": 300,
+    "batch_size": 32,
+    "optimizer_learning_rates": {
+      "gradient_descent": [
+        0.001,
+        0.01,
+        0.1
+      ],
+      "momentum": [
+        0.001,
+        0.01,
+        0.1
+      ],
+      "adaptive": [
+        0.001,
+        0.01,
+        0.1
+      ],
+      "rmsprop": [
+        0.0001,
+        0.001,
+        0.01
+      ],
+      "adam": [
+        0.0001,
+        0.001,
+        0.01
+      ]
+    },
+    "optimizer_parameters": {
+      "momentum": {
+        "alpha": 0.9
+      },
+      "adaptive": {
+        "increase_by": 0.0001,
+        "decrease_fraction": 0.5,
+        "patience": 10
+      },
+      "rmsprop": {
+        "gamma": 0.9,
+        "epsilon": 1e-08
+      },
+      "adam": {
+        "beta1": 0.9,
+        "beta2": 0.999,
+        "epsilon": 1e-08
+      }
+    },
+    "optimizer_finalists": 2,
+    "batch_sizes": [
+      1,
+      8,
+      32,
+      128,
+      512,
+      null
+    ],
+    "batch_epochs": {
+      "1": 60,
+      "8": 100,
+      "32": 300,
+      "128": 600,
+      "512": 1200,
+      "full": 3000
+    },
+    "configuration_finalists": 5,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "plateau_tolerance": 0.001
+  },
+  "data_sha256": "0e0d2fdf7e6c294b7b8ea2e80452a270f1fad1de02edee9cc25f6eec2ab4c707",
+  "development_samples": 6000,
+  "test_samples_reserved_and_not_evaluated": 1500,
+  "selection": {
+    "optimizer": "gradient_descent",
+    "learning_rate": 0.1,
+    "batch_size": 128,
+    "max_epochs": 44,
+    "model_seed": 0,
+    "shuffle_seed": 0,
+    "selection_metric": "mean cross-validation MSE over five folds and five seeds",
+    "validation_mse": 0.011026947448807785,
+    "validation_seed_std": 8.313519116673864e-07,
+    "validation_fold_std_mean": 0.00048785675370952106,
+    "selection_rule": "one-standard-error equivalence; then estimated time to stable epoch, tail stability, seed stability and mean validation MSE"
+  }
+}
