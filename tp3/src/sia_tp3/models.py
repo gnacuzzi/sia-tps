@@ -11,7 +11,8 @@ class MultilayerPerceptron:
     """Construir una red densa con bias y una activación por capa."""
 
     def __init__(self, architecture: Sequence[int], *, activations: Sequence[str],
-                 beta: float = 1.0, seed: int = 0, init_scale: float = 0.5):
+                 beta: float = 1.0, seed: int = 0, init_scale: float = 0.5,
+                 loss: str = "mse", l2_lambda: float = 0.0):
         self.architecture = tuple(architecture)
         self.activations = tuple(activations)
         if (len(self.architecture) < 2 or any(
@@ -20,13 +21,28 @@ class MultilayerPerceptron:
             raise ValueError("architecture debe contener al menos dos tamaños enteros positivos")
         if len(self.activations) != len(self.architecture) - 1:
             raise ValueError("se necesita una activación por capa de pesos")
-        if any(a not in {"step", "linear", "tanh", "logistic"} for a in self.activations):
+        if any(a not in {"step", "linear", "tanh", "logistic", "softmax"}
+               for a in self.activations):
             raise ValueError("activación desconocida")
+        if "softmax" in self.activations[:-1]:
+            raise ValueError("softmax sólo puede utilizarse en la capa de salida")
         if "step" in self.activations and (len(self.architecture) != 2 or self.architecture[-1] != 1):
             raise ValueError("escalón solo está permitido en el perceptrón simple de una salida")
         if not np.isfinite(beta) or beta <= 0 or not np.isfinite(init_scale) or init_scale < 0:
             raise ValueError("beta debe ser positivo e init_scale no negativo, ambos finitos")
+        if loss not in {"mse", "categorical_cross_entropy"}:
+            raise ValueError("función de loss desconocida")
+        if ((loss == "categorical_cross_entropy")
+                != (self.activations[-1] == "softmax")):
+            raise ValueError(
+                "softmax y categorical_cross_entropy deben utilizarse juntos")
+        if (not np.isfinite(l2_lambda) or l2_lambda < 0):
+            raise ValueError("l2_lambda debe ser no negativo y finito")
+        if self.activations[-1] == "step" and l2_lambda != 0:
+            raise ValueError("L2 no está definido para Rosenblatt con escalón")
         self.beta = float(beta)
+        self.loss_name = loss
+        self.l2_lambda = float(l2_lambda)
         rng = np.random.default_rng(seed)
         self.weights = [rng.uniform(-init_scale, init_scale, (out_size, in_size))
                         for in_size, out_size in zip(self.architecture, self.architecture[1:])]
@@ -39,6 +55,10 @@ class MultilayerPerceptron:
             return h
         if name == "tanh":
             return np.tanh(self.beta * h)
+        if name == "softmax":
+            shifted = h - np.max(h, axis=1, keepdims=True)
+            exponentials = np.exp(shifted)
+            return exponentials / exponentials.sum(axis=1, keepdims=True)
         # Logística de clase: sigmoid(2 * beta * h), evaluada sin overflow.
         return np.exp(-np.logaddexp(0.0, -2.0 * self.beta * h))
 
@@ -67,6 +87,10 @@ class MultilayerPerceptron:
             raise ValueError("y debe tener forma (muestras, salidas) y contener valores finitos")
         if self.activations[-1] == "step" and not np.isin(y, [-1, 1]).all():
             raise ValueError("el escalón requiere objetivos bipolares -1/+1")
+        if self.loss_name == "categorical_cross_entropy" and (
+                np.any(y < 0) or not np.allclose(y.sum(axis=1), 1.0)):
+            raise ValueError(
+                "categorical_cross_entropy requiere distribuciones objetivo que sumen 1")
         return X, y
 
     def _forward(self, X):
@@ -79,18 +103,35 @@ class MultilayerPerceptron:
         """Predecir una matriz (muestras, salidas) sin umbralizar activaciones suaves."""
         return self._forward(self._inputs(X))[-1]
 
-    def loss(self, X, y):
-        """Calcular la media por muestra de la mitad de la suma de errores cuadrados."""
+    def data_loss(self, X, y):
+        """Calcular sólo la pérdida sobre los datos, sin regularización."""
         X, y = self.validate_data(X, y)
-        return float(0.5 * np.mean(np.sum((self._forward(X)[-1] - y) ** 2, axis=1)))
+        predictions = self._forward(X)[-1]
+        if self.loss_name == "categorical_cross_entropy":
+            safe = np.clip(predictions, np.finfo(np.float64).tiny, 1.0)
+            return float(-np.mean(np.sum(y * np.log(safe), axis=1)))
+        return float(0.5 * np.mean(np.sum((predictions - y) ** 2, axis=1)))
+
+    def regularization_loss(self):
+        """Calcular 1/2 lambda por la suma cuadrática de los pesos, sin bias."""
+        return float(0.5 * self.l2_lambda * sum(
+            np.sum(weight ** 2) for weight in self.weights))
+
+    def loss(self, X, y):
+        """Calcular el objetivo de entrenamiento: datos más regularización L2."""
+        return self.data_loss(X, y) + self.regularization_loss()
 
     def _gradients(self, X, y):
         outputs = self._forward(X)
-        delta = ((outputs[-1] - y) *
-                 self._derivative(outputs[-1], self.activations[-1]))
+        if self.loss_name == "categorical_cross_entropy":
+            delta = outputs[-1] - y
+        else:
+            delta = ((outputs[-1] - y) *
+                     self._derivative(outputs[-1], self.activations[-1]))
         dw, db = [None] * len(self.weights), [None] * len(self.weights)
         for layer in range(len(self.weights) - 1, -1, -1):
             dw[layer] = delta.T @ outputs[layer] / len(X)
+            dw[layer] += self.l2_lambda * self.weights[layer]
             db[layer] = delta.mean(axis=0)
             if layer:
                 delta = ((delta @ self.weights[layer]) *
@@ -125,7 +166,9 @@ class MultilayerPerceptron:
     def save(self, path):
         """Guardar arquitectura, activaciones, beta, pesos y bias sin pickle."""
         metadata = json.dumps({"architecture": self.architecture,
-                               "activations": self.activations, "beta": self.beta})
+                               "activations": self.activations, "beta": self.beta,
+                               "loss": self.loss_name,
+                               "l2_lambda": self.l2_lambda})
         arrays = {"metadata": np.array(metadata)}
         arrays.update({f"w{i}": w for i, w in enumerate(self.weights)})
         arrays.update({f"b{i}": b for i, b in enumerate(self.biases)})

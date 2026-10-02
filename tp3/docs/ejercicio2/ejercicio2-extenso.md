@@ -1183,6 +1183,34 @@ para modificar el modelo.
 
 ![Curvas del entrenamiento final](results/analysis-01-02/final-training-curves.png)
 
+#### Diagnóstico de las oscilaciones finales
+
+Aunque la tendencia general del MSE es descendente, el historial crudo muestra
+excursiones breves alrededor de las épocas 72–73, 98, 144–145 y 179–180. Los
+picos existen en los valores registrados y no son un error de renderizado; la
+escala logarítmica amplifica su apariencia. En los mismos puntos macro-F1 baja
+unas milésimas, pero se recupera inmediatamente, de modo que no hay divergencia
+sostenida.
+
+El entrenamiento final usa Adam con learning rate constante `0,003`,
+mini-batches de 128 y shuffle. Cuando los gradientes ya son pequeños, el
+optimizador continúa actualizando los parámetros y el estado al final de una
+época puede quedar temporalmente desplazado por el orden de los últimos
+mini-batches. La recuperación posterior y la tendencia de la media móvil son
+compatibles con excursiones dentro de una región de bajo error, no con una
+ruptura del aprendizaje.
+
+![Detalle de estabilidad del entrenamiento final](results/analysis-01-02/final-training-stability.png)
+
+La curva revela una limitación real: la solución no converge a un punto fijo
+tan limpiamente como sería deseable. Un schedule decreciente de learning rate
+podría haber reducido esas oscilaciones. Sin embargo, no corresponde modificar
+ahora la configuración ni reemplazar el resultado final, porque las 200 épocas
+se congelaron antes de abrir test y el resultado informado pertenece exactamente
+a la época 200. Cualquier reoptimización posterior con el mismo test conocido
+sería sólo un diagnóstico post hoc. Esta observación se traslada al diseño del
+ejercicio 3, donde el test permanece cerrado.
+
 El modelo alcanza macro-F1 0.9968 sobre development completo y MSE 0.000289 al
 terminar. El desempeño externo final es:
 

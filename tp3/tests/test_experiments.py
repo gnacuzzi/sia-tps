@@ -3,8 +3,9 @@ import csv
 import numpy as np
 import pytest
 
-from sia_tp3 import (load_digits_development_fold, load_digits_experiment_split,
-                     load_fraud_experiment_split)
+from sia_tp3 import (load_digits_development_fold, load_digits_development_split,
+                     load_digits_experiment_split, load_fraud_experiment_split)
+from sia_tp3.digit_development import load_unique_digit_development
 from sia_tp3.data import FRAUD_FEATURES
 
 
@@ -120,6 +121,45 @@ def test_digits_additional_data_enters_development_not_test(tmp_path):
     assert 2 in data.y_train
     assert 2 in data.y_validation
     np.testing.assert_array_equal(data.y_test, [8, 9])
+
+
+def test_digit_development_deduplicates_sources_before_split(tmp_path):
+    train = tmp_path / "digits.csv"
+    more = tmp_path / "more_digits.csv"
+    labels = np.repeat([0, 1], 4)
+    _write_digits(train, labels)
+    _write_digits(more, labels)
+
+    unique = load_unique_digit_development(train, more)
+    assert len(unique.X) == 8
+    assert unique.extra_copies == 8
+    np.testing.assert_array_equal(unique.primary_rows, np.arange(2, 10))
+    np.testing.assert_array_equal(unique.additional_rows, np.arange(2, 10))
+
+    split = load_digits_development_split(
+        train,
+        additional_train_path=more,
+        deduplicate_inputs=True,
+        validation_fraction=0.25,
+        validation_seed=3,
+    )
+    assert len(split.X_train) == 6
+    assert len(split.X_validation) == 2
+    train_keys = {row.tobytes() for row in split.X_train}
+    validation_keys = {row.tobytes() for row in split.X_validation}
+    assert not train_keys & validation_keys
+
+
+def test_digit_development_rejects_conflicting_duplicate_labels(tmp_path):
+    train = tmp_path / "digits.csv"
+    more = tmp_path / "more_digits.csv"
+    for path, label in ((train, 0), (more, 1)):
+        with path.open("w", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=["label", "image"])
+            writer.writeheader()
+            writer.writerow({"label": label, "image": [0.5] * 784})
+    with pytest.raises(ValueError, match="etiquetas contradictorias"):
+        load_unique_digit_development(train, more)
 
 
 def test_digit_folds_are_stratified_disjoint_and_exhaustive(tmp_path):

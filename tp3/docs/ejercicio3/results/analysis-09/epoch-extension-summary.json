@@ -1,0 +1,40 @@
+[
+  {
+    "maximum_epochs": 200,
+    "validation_accuracy_mean": 0.9754285714285714,
+    "validation_accuracy_sd": 0.00110468315124278,
+    "validation_accuracy_minimum": 0.9740816326530612,
+    "validation_accuracy_maximum": 0.976938775510204,
+    "validation_macro_f1_mean": 0.9694836497209076,
+    "validation_macro_f1_sd": 0.0013535512813535782,
+    "validation_macro_f1_minimum": 0.9681919323839407,
+    "validation_macro_f1_maximum": 0.9716214568993552,
+    "digit_5_f1_mean": 0.9515878682989513,
+    "digit_5_f1_sd": 0.0020237761950968624,
+    "digit_5_f1_minimum": 0.9487179487179487,
+    "digit_5_f1_maximum": 0.954248366013072,
+    "digit_8_f1_mean": 0.9245639348729477,
+    "digit_8_f1_sd": 0.00895026731763174,
+    "digit_8_f1_minimum": 0.9107142857142857,
+    "digit_8_f1_maximum": 0.9356223175965666
+  },
+  {
+    "maximum_epochs": 300,
+    "validation_accuracy_mean": 0.9764489795918367,
+    "validation_accuracy_sd": 0.0010265123542823472,
+    "validation_accuracy_minimum": 0.9748979591836735,
+    "validation_accuracy_maximum": 0.9773469387755102,
+    "validation_macro_f1_mean": 0.97071103150516,
+    "validation_macro_f1_sd": 0.0006659068615727547,
+    "validation_macro_f1_minimum": 0.9699036376999448,
+    "validation_macro_f1_maximum": 0.9716214568993552,
+    "digit_5_f1_mean": 0.9506924517044025,
+    "digit_5_f1_sd": 0.008282059768714484,
+    "digit_5_f1_minimum": 0.9377049180327869,
+    "digit_5_f1_maximum": 0.9607843137254902,
+    "digit_8_f1_mean": 0.9295811269624835,
+    "digit_8_f1_sd": 0.008733524290906475,
+    "digit_8_f1_minimum": 0.9177489177489178,
+    "digit_8_f1_maximum": 0.9396551724137931
+  }
+]

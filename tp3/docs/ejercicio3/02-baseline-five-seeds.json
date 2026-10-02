@@ -1,0 +1,29 @@
+{
+  "protocol": "search",
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "checkpoints": [25, 50, 100, 150, 200],
+  "repeat_seeds": [0, 1, 2, 3, 4],
+  "runs": [
+    {
+      "name": "baseline-exercise2-new-data",
+      "stage": "baseline-stability",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "logistic"],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "adam",
+        "learning_rate": 0.003,
+        "beta1": 0.9,
+        "beta2": 0.999,
+        "epsilon": 1e-8
+      },
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}

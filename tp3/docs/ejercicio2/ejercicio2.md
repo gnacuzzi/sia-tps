@@ -238,6 +238,24 @@ como una alternativa eficiente: logró un F1 del 5 prácticamente idéntico con
 la mitad de parámetros y menor tiempo. Como la métrica principal era el
 macro-F1, seleccionamos Adam-128.
 
+### Aclaración sobre los mejores checkpoints
+
+Durante la búsqueda y la validación cruzada, cada corrida se entrenó hasta un
+máximo de 200 épocas y se guardó el checkpoint con mayor macro-F1 de validation
+—desempatando por menor MSE—. Por eso las tablas de selección y los resultados
+de los folds describen el **mejor checkpoint de validation** de cada corrida,
+no necesariamente su época 200. Las curvas y las mejores épocas se conservaron
+para no ocultar esa selección.
+
+Esto no significa que test haya elegido una época. Para la evaluación final se
+congelaron previamente 200 épocas a partir del comportamiento medio de los
+cinco folds: entre las épocas 161 y 200 el macro-F1 medio todavía aumentaba
+levemente, el MSE bajaba y el gap no empeoraba. Luego se entrenó una red nueva
+con todo `digits.csv`, sin validation y sin seleccionar un checkpoint, y se
+evaluó `digits_test.csv` una sola vez. Por lo tanto, los valores finales de test
+corresponden al modelo fijo de la época 200; no al mejor punto elegido mirando
+test.
+
 La configuración congelada fue:
 
 ```text
@@ -263,6 +281,32 @@ barajado con semilla 0. En esta etapa no se comparó ningún hiperparámetro. La
 `digits.csv`, sin separar validation ni elegir un checkpoint.
 
 ![Curvas del entrenamiento final](results/analysis-01-02/final-training-curves.png)
+
+### Estabilidad del entrenamiento final
+
+La curva cruda de training presenta excursiones breves del MSE alrededor de
+las épocas 72–73, 98, 144–145 y 179–180. No son un artefacto del gráfico: el
+historial numérico conserva esos aumentos y sus recuperaciones posteriores. La
+escala logarítmica los vuelve visualmente más prominentes. Durante ellos,
+macro-F1 sólo desciende unas milésimas y vuelve enseguida a su nivel anterior,
+por lo que no constituyen divergencia completa.
+
+La explicación compatible con la evidencia es que Adam, usando un learning
+rate constante de `0,003` y mini-batches barajados, continúa moviéndose dentro
+de la región de bajo error aun cuando training ya está casi ajustado. Una
+secuencia final de batches puede producir una excursión temporal y las épocas
+siguientes la corrigen. La media móvil permite observar la tendencia sin
+ocultar la curva original.
+
+![Detalle de estabilidad del entrenamiento final](results/analysis-01-02/final-training-stability.png)
+
+Esto constituye una limitación de estabilidad del entrenamiento elegido: un
+schedule decreciente habría sido una alternativa razonable para reducir las
+oscilaciones. No se modifica retroactivamente el modelo porque la configuración
+de 200 épocas ya estaba congelada y test ya fue abierto. El resultado oficial
+corresponde exactamente a la época 200, que no fue elegida como un valle de
+esta curva ni a partir de test. Este diagnóstico se conserva para mejorar el
+protocolo del ejercicio 3.
 
 | Métrica | Test |
 |---|---:|

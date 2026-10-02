@@ -7,6 +7,7 @@ import json
 import math
 import platform
 import re
+from functools import partial
 from pathlib import Path
 from time import perf_counter
 
@@ -14,6 +15,8 @@ import numpy as np
 
 from .experiments import (load_digits_development_fold,
                           load_digits_development_split)
+from .digit_augmentation import (random_translate_images,
+                                 random_translate_rotate_images)
 from .metrics import classification_metrics
 from .models import MultilayerPerceptron
 from .optimizers import (Adam, AdaptiveLearningRate, GradientDescent, Momentum,
@@ -34,6 +37,9 @@ RUN_KEYS = {
     "name", "stage", "architecture", "activations", "beta", "init_scale",
     "optimizer", "batch_size", "max_epochs", "model_seed", "shuffle_seed",
     "shuffle",
+}
+OPTIONAL_RUN_KEYS = {
+    "loss", "l2_lambda", "augmentation", "learning_rate_schedule"
 }
 OPTIMIZER_KEYS = {
     "gradient_descent": {"name", "learning_rate"},
@@ -159,7 +165,9 @@ def load_digit_search_config(path):
         raise ValueError("runs debe ser una lista no vacía")
     names = set()
     for run in runs:
-        if not isinstance(run, dict) or set(run) != RUN_KEYS:
+        if (not isinstance(run, dict)
+                or not RUN_KEYS <= set(run)
+                or set(run) - RUN_KEYS - OPTIONAL_RUN_KEYS):
             raise ValueError("campos inválidos en una corrida")
         if (not isinstance(run["name"], str)
                 or not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", run["name"])
@@ -173,17 +181,78 @@ def load_digit_search_config(path):
                 or any(type(size) is not int or size < 1 for size in architecture)
                 or architecture[0] != 784 or architecture[-1] != 10):
             raise ValueError("arquitectura de dígitos debe ser [784, ocultas..., 10]")
-        expected_activations = ["tanh"] * (len(architecture) - 2) + ["logistic"]
+        loss = run.get("loss", "mse")
+        if loss not in {"mse", "categorical_cross_entropy"}:
+            raise ValueError("loss de clasificación desconocida")
+        output_activation = (
+            "softmax" if loss == "categorical_cross_entropy" else "logistic")
+        expected_activations = ["tanh"] * (len(architecture) - 2) + [output_activation]
         if run["activations"] != expected_activations:
-            raise ValueError("las ocultas deben usar tanh y la salida logística")
+            if loss == "mse":
+                raise ValueError("las ocultas deben usar tanh y la salida logística")
+            raise ValueError(
+                "categorical_cross_entropy requiere ocultas tanh y salida softmax")
         _finite_number(run["beta"], "beta", positive=True)
         _finite_number(run["init_scale"], "init_scale", non_negative=True)
+        _finite_number(run.get("l2_lambda", 0.0), "l2_lambda", non_negative=True)
+        if "augmentation" in run:
+            augmentation = run["augmentation"]
+            if not isinstance(augmentation, dict):
+                raise ValueError("augmentation inválida")
+            name = augmentation.get("name")
+            expected_keys = ({"name", "max_shift", "probability", "seed"}
+                             if name == "translation" else {
+                                 "name", "max_shift", "translation_probability",
+                                 "max_angle_degrees", "rotation_probability", "seed"
+                             } if name == "translation_rotation" else set())
+            if not expected_keys or set(augmentation) != expected_keys:
+                raise ValueError("augmentation inválida")
+            if (type(augmentation["max_shift"]) is not int
+                    or not 1 <= augmentation["max_shift"] <= 27):
+                raise ValueError("max_shift debe ser un entero entre 1 y 27")
+            if name == "translation":
+                _fraction(augmentation["probability"],
+                          "augmentation probability", allow_one=True)
+            else:
+                _fraction(augmentation["translation_probability"],
+                          "translation probability", allow_one=True)
+                _finite_number(augmentation["max_angle_degrees"],
+                               "max_angle_degrees", positive=True)
+                if augmentation["max_angle_degrees"] > 45:
+                    raise ValueError("max_angle_degrees no puede superar 45")
+                _fraction(augmentation["rotation_probability"],
+                          "rotation probability", allow_one=True)
+            _seed(augmentation["seed"], "augmentation seed")
         _validate_optimizer(run["optimizer"])
         batch_size = run["batch_size"]
         if batch_size is not None and (type(batch_size) is not int or batch_size < 1):
             raise ValueError("batch_size debe ser un entero positivo o null")
         if type(run["max_epochs"]) is not int or run["max_epochs"] < 1:
             raise ValueError("max_epochs debe ser un entero positivo")
+        if "learning_rate_schedule" in run:
+            schedule = run["learning_rate_schedule"]
+            if not isinstance(schedule, list) or not schedule:
+                raise ValueError("learning_rate_schedule debe ser una lista no vacía")
+            starts = []
+            for phase in schedule:
+                if (not isinstance(phase, dict)
+                        or set(phase) != {"start_epoch", "learning_rate"}):
+                    raise ValueError("fase inválida en learning_rate_schedule")
+                if (type(phase["start_epoch"]) is not int
+                        or not 1 <= phase["start_epoch"] <= run["max_epochs"]):
+                    raise ValueError("start_epoch fuera del horizonte de entrenamiento")
+                _finite_number(
+                    phase["learning_rate"], "scheduled learning_rate", positive=True)
+                starts.append(phase["start_epoch"])
+            if starts != sorted(set(starts)) or starts[0] != 1:
+                raise ValueError(
+                    "learning_rate_schedule debe empezar en 1 y estar ordenado")
+            if schedule[0]["learning_rate"] != run["optimizer"]["learning_rate"]:
+                raise ValueError(
+                    "la primera tasa programada debe coincidir con el optimizador")
+            if run["optimizer"]["name"] == "adaptive":
+                raise ValueError(
+                    "learning_rate_schedule no se combina con eta adaptativo")
         if checkpoints[-1] > run["max_epochs"]:
             raise ValueError("ningún checkpoint puede superar max_epochs")
         _seed(run["model_seed"], "model_seed")
@@ -204,6 +273,8 @@ def _expanded_runs(config):
             repeated["name"] = f"{run['name']}-seed-{seed}"
             repeated["model_seed"] = seed
             repeated["shuffle_seed"] = seed
+            if "augmentation" in repeated:
+                repeated["augmentation"] = dict(repeated["augmentation"], seed=seed)
             expanded.append(repeated)
     return expanded
 
@@ -314,7 +385,8 @@ def _restore(model, state):
         target[...] = value
 
 
-def _prepare_output(config, data_path, output):
+def _prepare_output(config, data_path, output, *, additional_data_path=None,
+                    deduplicate_inputs=False):
     output = Path(output)
     if output.exists() and any(output.iterdir()):
         raise ValueError("output debe ser una carpeta nueva o vacía")
@@ -324,31 +396,51 @@ def _prepare_output(config, data_path, output):
     (output / "environment.json").write_text(json.dumps(
         {"python": platform.python_version(), "numpy": np.__version__},
         indent=2) + "\n")
-    (output / "data-source.json").write_text(json.dumps(
-        {"development_path": str(data_path),
-         "development_sha256": hashlib.sha256(data_path.read_bytes()).hexdigest(),
-         "test_opened": False},
-        indent=2) + "\n")
-    return data_path, output
+    source = {
+        "development_path": str(data_path),
+        "development_sha256": hashlib.sha256(data_path.read_bytes()).hexdigest(),
+        "test_opened": False,
+    }
+    if additional_data_path is not None:
+        additional_data_path = Path(additional_data_path)
+        source.update({
+            "additional_development_path": str(additional_data_path),
+            "additional_development_sha256": hashlib.sha256(
+                additional_data_path.read_bytes()).hexdigest(),
+            "deduplicate_inputs": deduplicate_inputs,
+        })
+    (output / "data-source.json").write_text(
+        json.dumps(source, indent=2) + "\n")
+    return data_path, additional_data_path, output
 
 
-def run_digit_search(config, data_path, output, *, stages=None):
+def run_digit_search(config, data_path, output, *, stages=None,
+                     additional_data_path=None, deduplicate_inputs=False):
     """Ejecutar corridas sobre una partición de development sin abrir test."""
     if config["protocol"] != "search":
         raise ValueError("run_digit_search requiere protocol=search")
-    data_path, output = _prepare_output(config, data_path, output)
+    if deduplicate_inputs and additional_data_path is None:
+        raise ValueError("deduplicate_inputs requiere additional_data_path")
+    data_path, additional_data_path, output = _prepare_output(
+        config, data_path, output,
+        additional_data_path=additional_data_path,
+        deduplicate_inputs=deduplicate_inputs)
     if "fold_count" in config:
         split = load_digits_development_fold(
             data_path,
             fold_count=config["fold_count"],
             fold_index=config["fold_index"],
             fold_seed=config["fold_seed"],
+            additional_train_path=additional_data_path,
+            deduplicate_inputs=deduplicate_inputs,
         )
     else:
         split = load_digits_development_split(
             data_path,
             validation_fraction=config["validation_fraction"],
             validation_seed=config["validation_seed"],
+            additional_train_path=additional_data_path,
+            deduplicate_inputs=deduplicate_inputs,
         )
     np.savez_compressed(
         output / "split-indices.npz",
@@ -381,26 +473,54 @@ def run_digit_search(config, data_path, output, *, stages=None):
             beta=run["beta"],
             seed=run["model_seed"],
             init_scale=run["init_scale"],
+            loss=run.get("loss", "mse"),
+            l2_lambda=run.get("l2_lambda", 0.0),
         )
         model.save(folder / "model-initial.npz")
-        best = {"metric": -np.inf, "validation_mse": np.inf,
+        augmentation = run.get("augmentation")
+        schedule = {
+            phase["start_epoch"]: phase["learning_rate"]
+            for phase in run.get("learning_rate_schedule", [])
+        }
+        if augmentation is None:
+            batch_transform = None
+        elif augmentation["name"] == "translation":
+            batch_transform = partial(
+                random_translate_images,
+                max_shift=augmentation["max_shift"],
+                probability=augmentation["probability"],
+            )
+        else:
+            batch_transform = partial(
+                random_translate_rotate_images,
+                max_shift=augmentation["max_shift"],
+                translation_probability=augmentation["translation_probability"],
+                max_angle_degrees=augmentation["max_angle_degrees"],
+                rotation_probability=augmentation["rotation_probability"],
+            )
+        best = {"metric": -np.inf, "validation_loss": np.inf,
+                "validation_mse": np.inf,
                 "epoch": None, "state": None}
 
         def progress(row):
             metric = row["validation_macro_f1_present"]
             better = (metric > best["metric"] or (
                 metric == best["metric"]
-                and row["validation_mse"] < best["validation_mse"]))
+                and row["validation_loss"] < best["validation_loss"]))
             if better:
                 best.update({
                     "metric": metric,
                     "validation_mse": row["validation_mse"],
+                    "validation_loss": row["validation_loss"],
                     "epoch": row["epoch"],
                     "state": [array.copy() for array in model.weights + model.biases],
                 })
             if row["epoch"] in config["checkpoints"] or row["epoch"] == 0:
                 print(
                     f"{run['name']} época={row['epoch']} "
+                    f"learning_rate={row['learning_rate']:.6g} "
+                    f"train_loss={row['loss']:.6g} "
+                    f"validation_loss={row['validation_loss']:.6g} "
                     f"train_mse={row['mse']:.6g} "
                     f"validation_mse={row['validation_mse']:.6g} "
                     f"validation_macro_f1={metric:.6g}",
@@ -420,6 +540,10 @@ def run_digit_search(config, data_path, output, *, stages=None):
                 shuffle=run["shuffle"],
                 seed=run["shuffle_seed"],
                 validation_data=(split.X_validation, validation_targets),
+                batch_transform=batch_transform,
+                batch_transform_seed=(None if augmentation is None
+                                      else augmentation["seed"]),
+                learning_rate_schedule=schedule,
                 epoch_metrics=_epoch_metrics(present_labels),
                 progress=progress,
             )
@@ -432,6 +556,7 @@ def run_digit_search(config, data_path, output, *, stages=None):
                 "status": "divergent", "best_epoch": None,
                 "validation_macro_f1_present": None,
                 "validation_accuracy": None, "validation_mse": None,
+                "validation_loss": None,
                 "parameter_count": parameter_count(run["architecture"]),
                 "updates_at_best_epoch": None, "seconds": elapsed,
             })
@@ -478,6 +603,7 @@ def run_digit_search(config, data_path, output, *, stages=None):
             "validation_macro_f1_present": validation_values["macro_f1_present"],
             "validation_accuracy": validation_values["accuracy"],
             "validation_mse": best["validation_mse"],
+            "validation_loss": best["validation_loss"],
             "parameter_count": parameter_count(run["architecture"]),
             "updates_at_best_epoch": best["epoch"] * updates_per_epoch,
             "seconds": elapsed,
@@ -494,13 +620,19 @@ def main():
     parser.add_argument("--data", type=Path, required=True,
                         help="digits.csv; el modo search no acepta digits_test.csv")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--additional-data", type=Path,
+                        help="segundo CSV de development, por ejemplo more_digits.csv")
+    parser.add_argument("--deduplicate-inputs", action="store_true",
+                        help="eliminar imágenes idénticas antes de separar")
     parser.add_argument("--stage", action="append",
                         help="Ejecutar sólo este stage; puede repetirse")
     args = parser.parse_args()
     try:
         config = load_digit_search_config(args.config)
         run_digit_search(
-            config, args.data, args.output, stages=args.stage)
+            config, args.data, args.output, stages=args.stage,
+            additional_data_path=args.additional_data,
+            deduplicate_inputs=args.deduplicate_inputs)
     except (ValueError, OSError, FloatingPointError, json.JSONDecodeError) as error:
         parser.exit(2, f"Error: {error}\n")
     return 0

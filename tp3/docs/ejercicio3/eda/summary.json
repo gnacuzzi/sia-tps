@@ -1,0 +1,369 @@
+{
+  "metadata": {
+    "seed": 0,
+    "python": "3.9.6",
+    "numpy": "2.0.2",
+    "matplotlib": "3.9.4",
+    "sha256": {
+      "digits.csv": "11271dbc12a3a8db967f6c2708e55ae1918d69186e81d91c53c24e305fc5d3f4",
+      "more_digits.csv": "e0d401943cdf210c03f2bf31fefa299d0c6c7d9dc0bf8c88b65341a75fa2ce22",
+      "digits_test.csv": "56e2ca2d55a7a646fa8883a0c85b8138bbc2b4536438c60cb6bcab02f57f8e55"
+    },
+    "test_labels_read": false
+  },
+  "quality": [
+    {
+      "dataset": "digits.csv",
+      "rows": 12449,
+      "pixels_per_image": 784,
+      "dtype": "float32",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "mean": 0.12856833701808879,
+      "std": 0.3064379734492672,
+      "zero_fraction": 0.8126987701659506,
+      "unique_pixel_values": 256,
+      "blank_images": 0,
+      "constant_images": 0,
+      "constant_pixels": 97,
+      "absent_classes": [
+        8
+      ]
+    },
+    {
+      "dataset": "more_digits.csv",
+      "rows": 15741,
+      "pixels_per_image": 784,
+      "dtype": "float32",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "mean": 0.1292576650392736,
+      "std": 0.3070033961108707,
+      "zero_fraction": 0.8113983824900267,
+      "unique_pixel_values": 256,
+      "blank_images": 0,
+      "constant_images": 0,
+      "constant_pixels": 93,
+      "absent_classes": []
+    }
+  ],
+  "class_balance": [
+    {
+      "dataset": "digits.csv",
+      "class": 0,
+      "count": 1480,
+      "fraction": 0.1188850510081131
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 1,
+      "count": 1685,
+      "fraction": 0.13535223712748012
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 2,
+      "count": 1489,
+      "fraction": 0.11960800064262189
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 3,
+      "count": 1532,
+      "fraction": 0.12306209334083058
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 4,
+      "count": 1460,
+      "fraction": 0.11727849626476022
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 5,
+      "count": 271,
+      "fraction": 0.02176881677243152
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 6,
+      "count": 1479,
+      "fraction": 0.11880472327094546
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 7,
+      "count": 1566,
+      "fraction": 0.1257932364045305
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 8,
+      "count": 0,
+      "fraction": 0.0
+    },
+    {
+      "dataset": "digits.csv",
+      "class": 9,
+      "count": 1487,
+      "fraction": 0.1194473451682866
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 0,
+      "count": 1776,
+      "fraction": 0.11282637697732037
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 1,
+      "count": 2022,
+      "fraction": 0.1284543548694492
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 2,
+      "count": 1787,
+      "fraction": 0.11352518899688711
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 3,
+      "count": 1839,
+      "fraction": 0.11682866399847532
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 4,
+      "count": 1752,
+      "fraction": 0.11130169620735658
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 5,
+      "count": 542,
+      "fraction": 0.03443237405501556
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 6,
+      "count": 1775,
+      "fraction": 0.11276284861190522
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 7,
+      "count": 1879,
+      "fraction": 0.11936979861508164
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 8,
+      "count": 585,
+      "fraction": 0.037164093767867355
+    },
+    {
+      "dataset": "more_digits.csv",
+      "class": 9,
+      "count": 1784,
+      "fraction": 0.11333460390064164
+    }
+  ],
+  "internal_duplicates": {
+    "digits.csv": {
+      "duplicate_input_groups": 0,
+      "duplicate_input_rows": 0,
+      "extra_input_copies": 0,
+      "conflicting_label_groups": 0
+    },
+    "more_digits.csv": {
+      "duplicate_input_groups": 0,
+      "duplicate_input_rows": 0,
+      "extra_input_copies": 0,
+      "conflicting_label_groups": 0
+    }
+  },
+  "between_sources": {
+    "shared_input_groups": 3689,
+    "old_rows_in_shared_groups": 3689,
+    "new_rows_in_shared_groups": 3689,
+    "shared_groups_with_label_conflict": 0,
+    "unique_input_groups_in_union": 24501,
+    "union_rows_before_deduplication": 28190,
+    "extra_input_copies_in_union": 3689
+  },
+  "test_input_overlap": [
+    {
+      "dataset": "digits.csv",
+      "shared_input_groups": 0,
+      "development_rows_in_shared_groups": 0,
+      "test_rows_in_shared_groups": 0
+    },
+    {
+      "dataset": "more_digits.csv",
+      "shared_input_groups": 0,
+      "development_rows_in_shared_groups": 0,
+      "test_rows_in_shared_groups": 0
+    },
+    {
+      "dataset": "union_unique_inputs",
+      "shared_input_groups": 0,
+      "development_rows_in_shared_groups": 0,
+      "test_rows_in_shared_groups": 0
+    }
+  ],
+  "class_mean_comparison": [
+    {
+      "class": 0,
+      "digits_count": 1480,
+      "more_digits_count": 1776,
+      "mean_image_rmse": 0.005026956361611581,
+      "mean_image_mean_absolute_difference": 0.0028730214113838254
+    },
+    {
+      "class": 1,
+      "digits_count": 1685,
+      "more_digits_count": 2022,
+      "mean_image_rmse": 0.003951850587410733,
+      "mean_image_mean_absolute_difference": 0.001889677735939621
+    },
+    {
+      "class": 2,
+      "digits_count": 1489,
+      "more_digits_count": 1787,
+      "mean_image_rmse": 0.006888207114912314,
+      "mean_image_mean_absolute_difference": 0.004178975201871798
+    },
+    {
+      "class": 3,
+      "digits_count": 1532,
+      "more_digits_count": 1839,
+      "mean_image_rmse": 0.006274146549685523,
+      "mean_image_mean_absolute_difference": 0.003476388623381526
+    },
+    {
+      "class": 4,
+      "digits_count": 1460,
+      "more_digits_count": 1752,
+      "mean_image_rmse": 0.007836497342916008,
+      "mean_image_mean_absolute_difference": 0.004395390596487706
+    },
+    {
+      "class": 5,
+      "digits_count": 271,
+      "more_digits_count": 542,
+      "mean_image_rmse": 0.01569478326339541,
+      "mean_image_mean_absolute_difference": 0.008904373611079456
+    },
+    {
+      "class": 6,
+      "digits_count": 1479,
+      "more_digits_count": 1775,
+      "mean_image_rmse": 0.008086753889356929,
+      "mean_image_mean_absolute_difference": 0.004375261162943081
+    },
+    {
+      "class": 7,
+      "digits_count": 1566,
+      "more_digits_count": 1879,
+      "mean_image_rmse": 0.006342747721527772,
+      "mean_image_mean_absolute_difference": 0.003640519742640947
+    },
+    {
+      "class": 8,
+      "digits_count": 0,
+      "more_digits_count": 585,
+      "mean_image_rmse": "",
+      "mean_image_mean_absolute_difference": ""
+    },
+    {
+      "class": 9,
+      "digits_count": 1487,
+      "more_digits_count": 1784,
+      "mean_image_rmse": 0.005956460724533167,
+      "mean_image_mean_absolute_difference": 0.0029353429883373287
+    }
+  ],
+  "union_class_balance": [
+    {
+      "class": 0,
+      "only_digits": 1019,
+      "shared": 461,
+      "only_more_digits": 1315,
+      "unique_union_count": 2795,
+      "unique_union_fraction": 0.11407697644994082
+    },
+    {
+      "class": 1,
+      "only_digits": 1190,
+      "shared": 495,
+      "only_more_digits": 1527,
+      "unique_union_count": 3212,
+      "unique_union_fraction": 0.13109668993102322
+    },
+    {
+      "class": 2,
+      "only_digits": 1030,
+      "shared": 459,
+      "only_more_digits": 1328,
+      "unique_union_count": 2817,
+      "unique_union_fraction": 0.11497489898371495
+    },
+    {
+      "class": 3,
+      "only_digits": 1056,
+      "shared": 476,
+      "only_more_digits": 1363,
+      "unique_union_count": 2895,
+      "unique_union_fraction": 0.1181584425125505
+    },
+    {
+      "class": 4,
+      "only_digits": 1036,
+      "shared": 424,
+      "only_more_digits": 1328,
+      "unique_union_count": 2788,
+      "unique_union_fraction": 0.11379127382555813
+    },
+    {
+      "class": 5,
+      "only_digits": 243,
+      "shared": 28,
+      "only_more_digits": 514,
+      "unique_union_count": 785,
+      "unique_union_fraction": 0.03203950859148606
+    },
+    {
+      "class": 6,
+      "only_digits": 1050,
+      "shared": 429,
+      "only_more_digits": 1346,
+      "unique_union_count": 2825,
+      "unique_union_fraction": 0.11530141626872373
+    },
+    {
+      "class": 7,
+      "only_digits": 1090,
+      "shared": 476,
+      "only_more_digits": 1403,
+      "unique_union_count": 2969,
+      "unique_union_fraction": 0.12117872739888168
+    },
+    {
+      "class": 8,
+      "only_digits": 0,
+      "shared": 0,
+      "only_more_digits": 585,
+      "unique_union_count": 585,
+      "unique_union_fraction": 0.02387657646626668
+    },
+    {
+      "class": 9,
+      "only_digits": 1046,
+      "shared": 441,
+      "only_more_digits": 1343,
+      "unique_union_count": 2830,
+      "unique_union_fraction": 0.1155054895718542
+    }
+  ]
+}

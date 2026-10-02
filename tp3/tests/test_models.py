@@ -105,6 +105,28 @@ def test_reproducible_fit_and_history_are_measured_after_epoch():
     assert histories[0][-1]['mse'] == pytest.approx(np.mean((models[0].predict(X) - X) ** 2))
 
 
+def test_fit_applies_piecewise_learning_rate_schedule():
+    X = np.array([[-1.0], [0.0], [1.0]])
+    model = Perceptron(1, activation="linear", seed=7)
+    history = fit(
+        model, X, X, learning_rate=0.2, max_epochs=3, target_mse=0,
+        shuffle=False, seed=9,
+        learning_rate_schedule={1: 0.1, 3: 0.01},
+    )
+    assert [row["learning_rate"] for row in history] == [0.2, 0.1, 0.1, 0.01]
+
+
+@pytest.mark.parametrize("schedule", [{0: 0.1}, {2: 0}, {4: 0.1}, [(1, 0.1)]])
+def test_fit_rejects_invalid_learning_rate_schedule(schedule):
+    model = Perceptron(1, activation="linear", seed=7)
+    with pytest.raises((TypeError, ValueError)):
+        fit(
+            model, [[0.0]], [[0.0]], learning_rate=0.1,
+            max_epochs=3, target_mse=0, shuffle=False, seed=9,
+            learning_rate_schedule=schedule,
+        )
+
+
 def test_validation_is_measured_without_changing_training():
     X = np.array([[-1.0], [0.0], [1.0]])
     validation_X = np.array([[-0.5], [0.5]])
@@ -153,3 +175,143 @@ def test_logistic_remains_finite_at_extreme_inputs():
 def test_multioutput_forward_shape():
     model = MultilayerPerceptron([784, 8, 10], activations=['tanh', 'logistic'])
     assert model.predict(np.zeros((2, 784))).shape == (2, 10)
+
+
+def test_softmax_probabilities_and_cross_entropy_are_stable():
+    model = MultilayerPerceptron(
+        [2, 3], activations=["softmax"],
+        loss="categorical_cross_entropy", init_scale=0)
+    model.weights[0][...] = [[1000, 0], [0, 0], [-1000, 0]]
+    probabilities = model.predict([[1, 0], [-1, 0]])
+    np.testing.assert_allclose(probabilities.sum(axis=1), 1.0)
+    assert np.isfinite(probabilities).all()
+    targets = np.array([[1, 0, 0], [0, 0, 1]])
+    assert model.loss([[1, 0], [-1, 0]], targets) == pytest.approx(0.0)
+
+
+def test_softmax_cross_entropy_gradients_match_finite_differences():
+    model = MultilayerPerceptron(
+        [3, 4, 3], activations=["tanh", "softmax"],
+        loss="categorical_cross_entropy", seed=8, init_scale=0.2)
+    rng = np.random.default_rng(5)
+    X = rng.normal(size=(4, 3))
+    y = np.eye(3)[[0, 2, 1, 2]]
+    dw, db = model.gradients(X, y)
+    epsilon = 1e-6
+    for parameter, derivative in zip(model.weights + model.biases, dw + db):
+        numeric = np.empty_like(parameter)
+        for index in np.ndindex(parameter.shape):
+            initial = parameter[index]
+            parameter[index] = initial + epsilon
+            plus = model.loss(X, y)
+            parameter[index] = initial - epsilon
+            minus = model.loss(X, y)
+            parameter[index] = initial
+            numeric[index] = (plus - minus) / (2 * epsilon)
+        np.testing.assert_allclose(derivative, numeric, atol=1e-8, rtol=1e-5)
+
+
+def test_l2_objective_and_gradients_match_finite_differences():
+    model = MultilayerPerceptron(
+        [3, 4, 3], activations=["tanh", "softmax"],
+        loss="categorical_cross_entropy", l2_lambda=0.2,
+        seed=8, init_scale=0.2)
+    rng = np.random.default_rng(5)
+    X = rng.normal(size=(4, 3))
+    y = np.eye(3)[[0, 2, 1, 2]]
+    expected_regularization = 0.1 * sum(
+        np.sum(weight ** 2) for weight in model.weights)
+    assert model.regularization_loss() == pytest.approx(expected_regularization)
+    assert model.loss(X, y) == pytest.approx(
+        model.data_loss(X, y) + expected_regularization)
+
+    dw, db = model.gradients(X, y)
+    epsilon = 1e-6
+    for parameter, derivative in zip(model.weights + model.biases, dw + db):
+        numeric = np.empty_like(parameter)
+        for index in np.ndindex(parameter.shape):
+            initial = parameter[index]
+            parameter[index] = initial + epsilon
+            plus = model.loss(X, y)
+            parameter[index] = initial - epsilon
+            minus = model.loss(X, y)
+            parameter[index] = initial
+            numeric[index] = (plus - minus) / (2 * epsilon)
+        np.testing.assert_allclose(derivative, numeric, atol=1e-8, rtol=1e-5)
+
+
+def test_zero_l2_preserves_unregularized_behavior():
+    options = dict(architecture=[2, 3, 2], activations=["tanh", "softmax"],
+                   loss="categorical_cross_entropy", seed=4)
+    default = MultilayerPerceptron(**options)
+    explicit_zero = MultilayerPerceptron(**options, l2_lambda=0.0)
+    X = np.array([[1.0, -1.0], [-0.5, 0.25]])
+    y = np.eye(2)
+    assert default.loss(X, y) == explicit_zero.loss(X, y)
+    for first, second in zip(default.gradients(X, y),
+                             explicit_zero.gradients(X, y)):
+        for first_array, second_array in zip(first, second):
+            np.testing.assert_array_equal(first_array, second_array)
+
+
+@pytest.mark.parametrize("l2_lambda", [-1, np.inf, np.nan])
+def test_invalid_l2_is_rejected(l2_lambda):
+    with pytest.raises(ValueError, match="l2_lambda"):
+        MultilayerPerceptron(
+            [2, 3], activations=["softmax"],
+            loss="categorical_cross_entropy", l2_lambda=l2_lambda)
+
+
+def test_softmax_and_cross_entropy_must_be_paired():
+    with pytest.raises(ValueError, match="deben utilizarse juntos"):
+        MultilayerPerceptron([2, 3], activations=["softmax"])
+    with pytest.raises(ValueError, match="deben utilizarse juntos"):
+        MultilayerPerceptron(
+            [2, 3], activations=["logistic"],
+            loss="categorical_cross_entropy")
+
+
+def test_softmax_cross_entropy_learns_multiclass_problem():
+    X = np.eye(3)
+    y = np.eye(3)
+    model = MultilayerPerceptron(
+        [3, 3], activations=["softmax"],
+        loss="categorical_cross_entropy", seed=2, init_scale=0.1)
+    initial_loss = model.loss(X, y)
+    history = fit(
+        model, X, y, learning_rate=0.5, batch_size=3,
+        max_epochs=100, target_mse=0, shuffle=True, seed=3)
+    assert model.loss(X, y) < initial_loss
+    np.testing.assert_array_equal(np.argmax(model.predict(X), axis=1), [0, 1, 2])
+    assert history[-1]["loss"] < history[0]["loss"]
+
+
+def test_softmax_cross_entropy_save_load_preserves_predictions(tmp_path):
+    model = MultilayerPerceptron(
+        [2, 3], activations=["softmax"],
+        loss="categorical_cross_entropy", l2_lambda=0.01, seed=4)
+    path = tmp_path / "softmax-model.npz"
+    model.save(path)
+    restored = MultilayerPerceptron.load(path)
+    assert restored.loss_name == "categorical_cross_entropy"
+    assert restored.l2_lambda == 0.01
+    np.testing.assert_array_equal(restored.predict([[1, -1]]),
+                                  model.predict([[1, -1]]))
+
+
+def test_fit_reports_regularized_training_and_unregularized_validation_loss():
+    X = np.eye(3)
+    y = np.eye(3)
+    model = MultilayerPerceptron(
+        [3, 3], activations=["softmax"],
+        loss="categorical_cross_entropy", l2_lambda=0.1,
+        seed=2, init_scale=0.1)
+    history = fit(
+        model, X, y, learning_rate=0.1, batch_size=3,
+        max_epochs=1, target_mse=0, shuffle=False, seed=3,
+        validation_data=(X, y))
+    row = history[-1]
+    assert row["regularization_loss"] > 0
+    assert row["loss"] == pytest.approx(
+        row["data_loss"] + row["regularization_loss"])
+    assert row["validation_loss"] == pytest.approx(model.data_loss(X, y))

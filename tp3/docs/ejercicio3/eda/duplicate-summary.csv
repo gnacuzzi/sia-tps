@@ -1,0 +1,4 @@
+comparison,duplicate_input_groups,duplicate_input_rows,extra_input_copies,conflicting_label_groups,shared_input_groups,old_rows_in_shared_groups,new_rows_in_shared_groups,shared_groups_with_label_conflict,unique_input_groups_in_union,union_rows_before_deduplication,extra_input_copies_in_union
+within_digits,0,0,0,0,,,,,,,
+within_more_digits,0,0,0,0,,,,,,,
+between_sources,,,,,3689,3689,3689,0,24501,28190,3689

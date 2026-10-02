@@ -1,0 +1,88 @@
+{
+  "primary_path": "data/digits.csv",
+  "primary_sha256": "11271dbc12a3a8db967f6c2708e55ae1918d69186e81d91c53c24e305fc5d3f4",
+  "additional_path": "data/more_digits.csv",
+  "additional_sha256": "e0d401943cdf210c03f2bf31fefa299d0c6c7d9dc0bf8c88b65341a75fa2ce22",
+  "test_opened": false,
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "rows_before_deduplication": 28190,
+  "extra_copies_removed": 3689,
+  "unique_development_rows": 24501,
+  "training_rows": 19601,
+  "validation_rows": 4900,
+  "conflicting_labels": 0,
+  "training_validation_overlap": 0,
+  "classes": [
+    {
+      "class": 0,
+      "total": 2795,
+      "training": 2236,
+      "validation": 559,
+      "validation_fraction": 0.2
+    },
+    {
+      "class": 1,
+      "total": 3212,
+      "training": 2570,
+      "validation": 642,
+      "validation_fraction": 0.19987546699875466
+    },
+    {
+      "class": 2,
+      "total": 2817,
+      "training": 2254,
+      "validation": 563,
+      "validation_fraction": 0.19985800496982606
+    },
+    {
+      "class": 3,
+      "total": 2895,
+      "training": 2316,
+      "validation": 579,
+      "validation_fraction": 0.2
+    },
+    {
+      "class": 4,
+      "total": 2788,
+      "training": 2230,
+      "validation": 558,
+      "validation_fraction": 0.20014347202295552
+    },
+    {
+      "class": 5,
+      "total": 785,
+      "training": 628,
+      "validation": 157,
+      "validation_fraction": 0.2
+    },
+    {
+      "class": 6,
+      "total": 2825,
+      "training": 2260,
+      "validation": 565,
+      "validation_fraction": 0.2
+    },
+    {
+      "class": 7,
+      "total": 2969,
+      "training": 2375,
+      "validation": 594,
+      "validation_fraction": 0.20006736274840015
+    },
+    {
+      "class": 8,
+      "total": 585,
+      "training": 468,
+      "validation": 117,
+      "validation_fraction": 0.2
+    },
+    {
+      "class": 9,
+      "total": 2830,
+      "training": 2264,
+      "validation": 566,
+      "validation_fraction": 0.2
+    }
+  ]
+}

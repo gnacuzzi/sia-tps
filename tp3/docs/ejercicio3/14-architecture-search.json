@@ -1,0 +1,62 @@
+{
+  "protocol": "search",
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "checkpoints": [50, 100, 150, 200, 250, 300],
+  "runs": [
+    {
+      "name": "wide-192",
+      "stage": "architecture-search",
+      "architecture": [784, 192, 10],
+      "activations": ["tanh", "softmax"],
+      "loss": "categorical_cross_entropy",
+      "l2_lambda": 0.0,
+      "augmentation": {"name": "translation_rotation", "max_shift": 1, "translation_probability": 0.5, "max_angle_degrees": 4, "rotation_probability": 0.5, "seed": 0},
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "learning_rate_schedule": [{"start_epoch": 1, "learning_rate": 0.01}, {"start_epoch": 151, "learning_rate": 0.003}, {"start_epoch": 221, "learning_rate": 0.001}],
+      "batch_size": 128,
+      "max_epochs": 300,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "wide-256",
+      "stage": "architecture-search",
+      "architecture": [784, 256, 10],
+      "activations": ["tanh", "softmax"],
+      "loss": "categorical_cross_entropy",
+      "l2_lambda": 0.0,
+      "augmentation": {"name": "translation_rotation", "max_shift": 1, "translation_probability": 0.5, "max_angle_degrees": 4, "rotation_probability": 0.5, "seed": 0},
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "learning_rate_schedule": [{"start_epoch": 1, "learning_rate": 0.01}, {"start_epoch": 151, "learning_rate": 0.003}, {"start_epoch": 221, "learning_rate": 0.001}],
+      "batch_size": 128,
+      "max_epochs": 300,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "deep-128-64",
+      "stage": "architecture-search",
+      "architecture": [784, 128, 64, 10],
+      "activations": ["tanh", "tanh", "softmax"],
+      "loss": "categorical_cross_entropy",
+      "l2_lambda": 0.0,
+      "augmentation": {"name": "translation_rotation", "max_shift": 1, "translation_probability": 0.5, "max_angle_degrees": 4, "rotation_probability": 0.5, "seed": 0},
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {"name": "adam", "learning_rate": 0.01, "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8},
+      "learning_rate_schedule": [{"start_epoch": 1, "learning_rate": 0.01}, {"start_epoch": 151, "learning_rate": 0.003}, {"start_epoch": 221, "learning_rate": 0.001}],
+      "batch_size": 128,
+      "max_epochs": 300,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}

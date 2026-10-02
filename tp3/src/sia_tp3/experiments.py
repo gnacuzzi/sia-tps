@@ -8,6 +8,7 @@ import numpy as np
 
 from .data import (FRAUD_FEATURES, _load_digit_file, _load_fraud_file,
                    _stratified_indices)
+from .digit_development import load_unique_digit_development
 from .preprocessing import Standardizer
 
 
@@ -162,13 +163,15 @@ def load_fraud_experiment_split(path, *, test_fraction: float = 0.2,
 def load_digits_experiment_split(
         train_path, test_path, *, validation_fraction: float = 0.2,
         validation_seed: int = 0,
-        additional_train_path: Optional[Path] = None) -> DigitExperimentSplit:
+        additional_train_path: Optional[Path] = None,
+        deduplicate_inputs: bool = False) -> DigitExperimentSplit:
     """Derivar validation de los archivos de desarrollo y preservar test externo."""
     development = load_digits_development_split(
         train_path,
         validation_fraction=validation_fraction,
         validation_seed=validation_seed,
         additional_train_path=additional_train_path,
+        deduplicate_inputs=deduplicate_inputs,
     )
     X_test, y_test = _load_digit_file(test_path)
     return DigitExperimentSplit(
@@ -186,10 +189,18 @@ def load_digits_experiment_split(
 def load_digits_development_split(
         train_path, *, validation_fraction: float = 0.2,
         validation_seed: int = 0,
-        additional_train_path: Optional[Path] = None) -> DigitDevelopmentSplit:
+        additional_train_path: Optional[Path] = None,
+        deduplicate_inputs: bool = False) -> DigitDevelopmentSplit:
     """Derivar training/validation sin recibir ni abrir un archivo de test."""
-    X_development, y_development = _load_digit_file(train_path)
-    if additional_train_path is not None:
+    if deduplicate_inputs and additional_train_path is None:
+        raise ValueError("deduplicate_inputs requiere additional_train_path")
+    if deduplicate_inputs:
+        development = load_unique_digit_development(
+            train_path, additional_train_path)
+        X_development, y_development = development.X, development.y
+    else:
+        X_development, y_development = _load_digit_file(train_path)
+    if additional_train_path is not None and not deduplicate_inputs:
         additional_X, additional_y = _load_digit_file(additional_train_path)
         X_development = np.concatenate([X_development, additional_X])
         y_development = np.concatenate([y_development, additional_y])
@@ -208,12 +219,20 @@ def load_digits_development_split(
 
 def load_digits_development_fold(
         train_path, *, fold_count: int, fold_index: int, fold_seed: int = 0,
-        additional_train_path: Optional[Path] = None) -> DigitDevelopmentSplit:
+        additional_train_path: Optional[Path] = None,
+        deduplicate_inputs: bool = False) -> DigitDevelopmentSplit:
     """Cargar un fold estratificado de development sin abrir test externo."""
     if type(fold_index) is not int or not 0 <= fold_index < fold_count:
         raise ValueError("fold_index debe pertenecer a [0, fold_count)")
-    X_development, y_development = _load_digit_file(train_path)
-    if additional_train_path is not None:
+    if deduplicate_inputs and additional_train_path is None:
+        raise ValueError("deduplicate_inputs requiere additional_train_path")
+    if deduplicate_inputs:
+        development = load_unique_digit_development(
+            train_path, additional_train_path)
+        X_development, y_development = development.X, development.y
+    else:
+        X_development, y_development = _load_digit_file(train_path)
+    if additional_train_path is not None and not deduplicate_inputs:
         additional_X, additional_y = _load_digit_file(additional_train_path)
         X_development = np.concatenate([X_development, additional_X])
         y_development = np.concatenate([y_development, additional_y])

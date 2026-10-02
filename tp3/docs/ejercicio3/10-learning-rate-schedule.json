@@ -1,0 +1,41 @@
+{
+  "protocol": "search",
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "checkpoints": [25, 50, 100, 150, 151, 200, 220, 221, 250, 300],
+  "runs": [
+    {
+      "name": "translation-step-decay",
+      "stage": "learning-rate-schedule",
+      "architecture": [784, 128, 10],
+      "activations": ["tanh", "softmax"],
+      "loss": "categorical_cross_entropy",
+      "l2_lambda": 0.0,
+      "augmentation": {
+        "name": "translation",
+        "max_shift": 1,
+        "probability": 0.5,
+        "seed": 0
+      },
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "adam",
+        "learning_rate": 0.01,
+        "beta1": 0.9,
+        "beta2": 0.999,
+        "epsilon": 1e-8
+      },
+      "learning_rate_schedule": [
+        {"start_epoch": 1, "learning_rate": 0.01},
+        {"start_epoch": 151, "learning_rate": 0.003},
+        {"start_epoch": 221, "learning_rate": 0.001}
+      ],
+      "batch_size": 128,
+      "max_epochs": 300,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}

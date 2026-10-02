@@ -233,3 +233,7 @@ output/
 
 # Corridas crudas del ejercicio 2; conservar sólo los análisis agregados.
 /tp3/docs/ejercicio2/results/[0-9][0-9]*/
+/tp3/docs/ejercicio3/results/[0-9][0-9]*/
+
+# Manifiesto generado por imagen; se reconstruye con prepare_development.py.
+/tp3/docs/ejercicio3/development/manifest.csv

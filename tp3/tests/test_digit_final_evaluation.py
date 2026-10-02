@@ -56,3 +56,59 @@ def test_final_config_and_evaluation_records_single_test_use(tmp_path):
     assert (output / "model-final.npz").exists()
     assert (output / "test-predictions.csv").exists()
     assert (output / "test-confusion-matrix.csv").exists()
+
+
+def test_final_config_accepts_frozen_softmax_augmentation_and_schedule(tmp_path):
+    config = _config()
+    config.update({
+        "activations": ["tanh", "softmax"],
+        "loss": "categorical_cross_entropy",
+        "l2_lambda": 0.0,
+        "augmentation": {
+            "name": "translation_rotation", "max_shift": 1,
+            "translation_probability": 0.5, "max_angle_degrees": 4,
+            "rotation_probability": 0.5, "seed": 0,
+        },
+        "learning_rate_schedule": [
+            {"start_epoch": 1, "learning_rate": 0.001},
+        ],
+    })
+    path = tmp_path / "final-softmax.json"
+    path.write_text(json.dumps(config))
+    loaded = load_final_digit_config(path)
+    assert loaded["loss"] == "categorical_cross_entropy"
+    assert loaded["augmentation"]["max_angle_degrees"] == 4
+
+
+def test_final_softmax_combines_and_deduplicates_development(tmp_path):
+    primary = tmp_path / "digits.csv"
+    additional = tmp_path / "more_digits.csv"
+    test = tmp_path / "digits_test.csv"
+    output = tmp_path / "output"
+    _write_digits(primary)
+    _write_digits(additional)
+    _write_digits(test)
+    config = _config()
+    config.update({
+        "activations": ["tanh", "softmax"],
+        "loss": "categorical_cross_entropy",
+        "l2_lambda": 0.0,
+        "augmentation": {
+            "name": "translation_rotation", "max_shift": 1,
+            "translation_probability": 0, "max_angle_degrees": 4,
+            "rotation_probability": 0, "seed": 0,
+        },
+        "learning_rate_schedule": [
+            {"start_epoch": 1, "learning_rate": 0.001},
+        ],
+    })
+
+    summary = run_final_digit_evaluation(
+        config, primary, test, output,
+        additional_development_path=additional, deduplicate_inputs=True)
+
+    assert summary["development_samples"] == 20
+    assert summary["test_digit_8_f1"] >= 0
+    source = json.loads((output / "data-source.json").read_text())
+    assert source["deduplicate_inputs"] is True
+    assert source["test_evaluations"] == 1
