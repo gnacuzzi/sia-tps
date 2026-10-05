@@ -1,0 +1,75 @@
+{
+  "protocol": "search",
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "checkpoints": [
+    25,
+    50,
+    100,
+    150,
+    200
+  ],
+  "repeat_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "runs": [
+    {
+      "name": "softmax-ce-lr-001",
+      "stage": "softmax-finalists",
+      "architecture": [
+        784,
+        64,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "softmax"
+      ],
+      "loss": "categorical_cross_entropy",
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "rmsprop",
+        "learning_rate": 0.01,
+        "gamma": 0.9,
+        "epsilon": 1e-08
+      },
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "softmax-ce-lr-003",
+      "stage": "softmax-finalists",
+      "architecture": [
+        784,
+        64,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "softmax"
+      ],
+      "loss": "categorical_cross_entropy",
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "rmsprop",
+        "learning_rate": 0.03,
+        "gamma": 0.9,
+        "epsilon": 1e-08
+      },
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}

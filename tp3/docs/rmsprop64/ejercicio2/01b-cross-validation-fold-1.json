@@ -1,0 +1,41 @@
+{
+  "protocol": "search",
+  "fold_count": 5,
+  "fold_index": 1,
+  "fold_seed": 0,
+  "checkpoints": [
+    25,
+    50,
+    100,
+    150,
+    200
+  ],
+  "runs": [
+    {
+      "name": "arch-64-rmsprop-lr-001",
+      "stage": "cross-validation-finalists",
+      "architecture": [
+        784,
+        64,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "logistic"
+      ],
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "rmsprop",
+        "learning_rate": 0.01,
+        "gamma": 0.9,
+        "epsilon": 1e-08
+      },
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "protocol": "search",
+  "validation_fraction": 0.2,
+  "validation_seed": 0,
+  "checkpoints": [
+    25,
+    50,
+    100,
+    150,
+    200
+  ],
+  "runs": [
+    {
+      "name": "translation-control",
+      "stage": "translation-search",
+      "architecture": [
+        784,
+        64,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "softmax"
+      ],
+      "loss": "categorical_cross_entropy",
+      "l2_lambda": 0.0001,
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "rmsprop",
+        "learning_rate": 0.01,
+        "gamma": 0.9,
+        "epsilon": 1e-08
+      },
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "translation-shift-1-p-05",
+      "stage": "translation-search",
+      "architecture": [
+        784,
+        64,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "softmax"
+      ],
+      "loss": "categorical_cross_entropy",
+      "l2_lambda": 0.0001,
+      "augmentation": {
+        "name": "translation",
+        "max_shift": 1,
+        "probability": 0.5,
+        "seed": 0
+      },
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "rmsprop",
+        "learning_rate": 0.01,
+        "gamma": 0.9,
+        "epsilon": 1e-08
+      },
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "translation-shift-1-p-075",
+      "stage": "translation-search",
+      "architecture": [
+        784,
+        64,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "softmax"
+      ],
+      "loss": "categorical_cross_entropy",
+      "l2_lambda": 0.0001,
+      "augmentation": {
+        "name": "translation",
+        "max_shift": 1,
+        "probability": 0.75,
+        "seed": 0
+      },
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "rmsprop",
+        "learning_rate": 0.01,
+        "gamma": 0.9,
+        "epsilon": 1e-08
+      },
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    },
+    {
+      "name": "translation-shift-2-p-05",
+      "stage": "translation-search",
+      "architecture": [
+        784,
+        64,
+        10
+      ],
+      "activations": [
+        "tanh",
+        "softmax"
+      ],
+      "loss": "categorical_cross_entropy",
+      "l2_lambda": 0.0001,
+      "augmentation": {
+        "name": "translation",
+        "max_shift": 2,
+        "probability": 0.5,
+        "seed": 0
+      },
+      "beta": 1.0,
+      "init_scale": 0.5,
+      "optimizer": {
+        "name": "rmsprop",
+        "learning_rate": 0.01,
+        "gamma": 0.9,
+        "epsilon": 1e-08
+      },
+      "batch_size": 128,
+      "max_epochs": 200,
+      "model_seed": 0,
+      "shuffle_seed": 0,
+      "shuffle": true
+    }
+  ]
+}

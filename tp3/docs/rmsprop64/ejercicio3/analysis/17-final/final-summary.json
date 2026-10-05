@@ -1,0 +1,20 @@
+{
+  "development_samples": 24501,
+  "test_samples": 2497,
+  "development_macro_f1": 1.0,
+  "test_accuracy": 0.9799759711653985,
+  "test_macro_f1": 0.9796984306368671,
+  "test_digit_5_f1": 0.972972972972973,
+  "test_digit_8_f1": 0.9643605870020965,
+  "test_loss": 0.09741989590158265,
+  "test_mse": 0.003291705084396195,
+  "training_seconds": 43.801259542,
+  "test_errors": 50,
+  "accuracy_target": 0.98,
+  "accuracy_target_reached": false,
+  "distance_to_target_percentage_points": -0.0024028834601508287,
+  "out_of_fold_accuracy": 0.9785723031712992,
+  "test_minus_out_of_fold_percentage_points": 0.14036679940993002,
+  "test_evaluations": 1,
+  "test_sha256": "56e2ca2d55a7a646fa8883a0c85b8138bbc2b4536438c60cb6bcab02f57f8e55"
+}

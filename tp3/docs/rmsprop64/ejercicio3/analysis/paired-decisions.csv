@@ -1,0 +1,9 @@
+comparacion,decision,accuracy_diff_mean,accuracy_ic95_low,accuracy_ic95_high,accuracy_semillas_mejoran,macro_f1_diff_mean,macro_f1_ic95_low,macro_f1_ic95_high,macro_f1_semillas_mejoran
+"Softmax + CE (η = 0,01) vs baseline",se conserva,0.003,-0.0012,0.0072,5,0.0033,-0.0009,0.0074,4
+L2 1e-4 vs sin L2,se conserva,0.0027,-0.0006,0.006,4,0.0066,0.0036,0.0096,5
+"Traslación p = 0,5 vs control con L2",se conserva,0.0071,0.0057,0.0085,5,0.0089,0.0055,0.0122,5
+"Con L2 vs sin L2, ambos con traslación p = 0,5",se retira L2,-0.0018,-0.005,0.0014,1,-0.0021,-0.0044,0.0002,1
+Schedule vs η constante (época 300),se conserva,0.0015,-0.0014,0.0044,4,0.0015,-0.0019,0.005,4
+Rotación ±4° vs sin rotación (época 300),se descarta,-0.0002,-0.0046,0.0042,3,-0.0006,-0.0068,0.0056,3
+96 vs 64 neuronas (época 300),se conserva 96,0.004,0.0018,0.0061,5,0.0046,0.0021,0.0071,5
+128 vs 96 neuronas (época 300),empate: se prefiere 96,0.002,-0.0025,0.0065,3,0.0031,-0.003,0.0091,4

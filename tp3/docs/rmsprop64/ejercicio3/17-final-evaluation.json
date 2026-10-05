@@ -1,0 +1,47 @@
+{
+  "protocol": "final",
+  "architecture": [
+    784,
+    96,
+    10
+  ],
+  "activations": [
+    "tanh",
+    "softmax"
+  ],
+  "loss": "categorical_cross_entropy",
+  "l2_lambda": 0.0,
+  "augmentation": {
+    "name": "translation",
+    "max_shift": 1,
+    "probability": 0.5,
+    "seed": 0
+  },
+  "beta": 1.0,
+  "init_scale": 0.5,
+  "optimizer": {
+    "name": "rmsprop",
+    "learning_rate": 0.01,
+    "gamma": 0.9,
+    "epsilon": 1e-08
+  },
+  "learning_rate_schedule": [
+    {
+      "start_epoch": 1,
+      "learning_rate": 0.01
+    },
+    {
+      "start_epoch": 151,
+      "learning_rate": 0.003
+    },
+    {
+      "start_epoch": 221,
+      "learning_rate": 0.001
+    }
+  ],
+  "batch_size": 128,
+  "epochs": 300,
+  "model_seed": 0,
+  "shuffle_seed": 0,
+  "shuffle": true
+}
