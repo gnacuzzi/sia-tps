@@ -256,8 +256,8 @@ parámetros mediante `save`; debe conservarse junto con el modelo entrenado.
 En dígitos, las imágenes quedan como matrices `float32` de forma `(N, 784)` y
 las etiquetas como enteros de forma `(N,)`. `digits_test.csv` se carga siempre
 como test externo. Para el ejercicio 3, el archivo adicional se concatena solo
-al training. La codificación de las diez salidas se decidirá junto con el
-modelo y no forma parte de la carga.
+al training. La codificación one-hot de las diez salidas pertenece al runner
+del modelo y no forma parte de la carga.
 
 ## Holdout temporal disponible para experimentos
 
@@ -269,9 +269,9 @@ Estos helpers implementan **un único corte reproducible**. Son infraestructura
 disponible, no el protocolo obligatorio de todos los ejercicios. El análisis
 final de generalización del ejercicio 1 usa test reservado más 5-fold
 estratificado mediante `scripts/analyze_fraud_generalization_extension.py`;
-allí el estandarizador se ajusta nuevamente dentro de cada fold. Para los
-ejercicios 2 y 3 todavía debe elegirse entre holdout y k-fold según el costo de
-entrenar el MLP.
+allí el estandarizador se ajusta nuevamente dentro de cada fold. En los
+ejercicios 2 y 3, el embudo de búsqueda usa holdout y los modelos congelados se
+confirman con 5-fold antes de abrir el test externo.
 
 En fraude se leen primero los valores crudos, se reserva test, se separa
 validation y sólo entonces se ajusta `Standardizer` con training interno. Sus
@@ -319,13 +319,15 @@ El script guarda las curvas completas en escala normal y logarítmica y un CSV
 de diagnóstico. En `learning` grafica sólo training; en `generalization` agrega
 validation. Nunca vuelve a entrenar para producir una figura.
 
-Los valores del JSON son una propuesta para revisar, no resultados ni una
-selección final.
+Los valores de `fraud-learning.json` son la configuración de la comparación
+inicial de aprendizaje; las selecciones finales se registran en los informes y
+artefactos posteriores.
 
 Las arquitecturas y técnicas base corresponden a clases 10.1, 10.2 y 11; los
-optimizadores corresponden a clase 12.1. El ejercicio 1 ya realizó su selección
-experimental con 5-fold. Siguen pendientes la configuración y comparación de
-los ejercicios 2 y 3. Los loaders mantienen development/test y
-`experiments.py` ofrece un holdout para sus futuros runners; también puede
-implementarse k-fold si su costo se justifica. No se utilizó `digits_test.csv`
-para ninguna elección de este desarrollo.
+optimizadores corresponden a clase 12.1. El ejercicio 1 realizó su selección
+experimental con 5-fold. Los ejercicios 2 y 3 compararon learning rate,
+arquitectura, optimizador y tamaño de lote mediante un embudo con holdout y una
+confirmación final con 5-fold. Los loaders mantienen development/test y
+`experiments.py` ofrece el holdout reutilizable; los runners específicos
+implementan la confirmación cruzada. `digits_test.csv` no intervino en ninguna
+selección y se abrió únicamente para las evaluaciones finales congeladas.

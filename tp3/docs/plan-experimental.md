@@ -1,9 +1,15 @@
 # Plan experimental de los ejercicios obligatorios
 
-Este documento organiza lo que falta del TP3. La prioridad es completar y
-analizar correctamente los tres ejercicios obligatorios; las variantes
-opcionales sólo se habilitan cuando ayudan a responder una pregunta concreta o
-cuando las curvas muestran un problema que las justifica.
+> **Estado del documento:** plan histórico. Los tres ejercicios obligatorios ya
+> fueron ejecutados y sus resultados finales están en `ejercicio1.md`,
+> `ejercicio2/ejercicio2.md` y `ejercicio3/ejercicio3-resumen.md`. Los checkboxes
+> de abajo conservan la secuencia de planificación original y no representan el
+> estado vigente del TP. La variante posterior se documenta en
+> `rmsprop64/README.md`.
+
+Este documento registra el plan con el que se organizó el TP3. Las variantes
+opcionales se habilitaron cuando ayudaban a responder una pregunta concreta o
+cuando las curvas mostraban un problema que las justificaba.
 
 ## 1. Protocolo acordado: aprendizaje antes de generalización
 
@@ -32,10 +38,10 @@ como infraestructura para hacer un único holdout reproducible. No fue el
 protocolo definitivo del ejercicio 1: k-fold reduce la dependencia de una sola
 partición, y el estandarizador se vuelve a ajustar dentro de cada vuelta.
 
-En los ejercicios 2 y 3, `digits_test.csv` ya viene separado y validation se
-deriva de `digits.csv`. Antes de sus runners debe decidirse si conviene un
-holdout estratificado o k-fold según el costo del MLP; no se crea un tercer CSV
-ni se modifican los originales.
+En los ejercicios 2 y 3, `digits_test.csv` ya viene separado. El protocolo final
+usó un holdout estratificado para el embudo de búsqueda y 5-fold para confirmar
+los modelos congelados; no se creó un tercer CSV ni se modificaron los
+originales.
 
 Reglas obligatorias:
 

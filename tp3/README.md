@@ -13,15 +13,20 @@ Sistemas de Inteligencia Artificial, ITBA, segundo cuatrimestre de 2026.
 - [Clases: índice, referencias y criterios para comenzar](docs/material-clases.md).
 - [Implementación y API reutilizable](docs/implementacion.md).
 - [Resultados de validación y gráficos de entrenamiento](docs/resultados-validacion.md).
-- [Análisis exploratorio de training: hallazgos y decisiones pendientes](docs/eda-training.md).
-- [Plan experimental: prioridades, validation temporal e iteraciones](docs/plan-experimental.md).
+- [Análisis exploratorio de los datos de training](docs/eda-training.md).
+- [Ejercicio 1: TinyModel para fraude](docs/ejercicio1.md).
+- [Ejercicio 2: clasificación de dígitos](docs/ejercicio2/ejercicio2.md).
+- [Ejercicio 3: incorporación de datos adicionales](docs/ejercicio3/ejercicio3-resumen.md).
+- [Variante RMSProp-64 de los ejercicios 2 y 3](docs/rmsprop64/README.md).
+- [Plan experimental original y trazabilidad](docs/plan-experimental.md).
 
 Seguimos la organización de los TPs anteriores: una carpeta independiente
 por TP, documentación en español y material fuente dentro de `docs/`.
 
-## Alcance actual
+## Estado actual
 
-Implementados los cuatro modelos y el ejercicio de validación de la página 2:
+El TP está implementado y documentado de punta a punta. Incluye los cuatro
+modelos base y el ejercicio de validación de la página 2:
 
 | Modelo | Caso de validación |
 |---|---|
@@ -30,14 +35,27 @@ Implementados los cuatro modelos y el ejercicio de validación de la página 2:
 | Perceptrón simple no lineal | Ajustar muestras de `y = tanh(x)` |
 | Perceptrón multicapa | XOR, arquitecturas `[2, 2, 1]` y `[2, 3, 2, 1]` |
 
-Estos ejercicios **no se presentan**, según la consigna: sirven para verificar
-las herramientas antes de trabajar con los datos de los ejercicios obligatorios.
+Estos ejercicios de validación **no se presentan**, según la consigna: sirven
+para verificar las herramientas antes de trabajar con los datos obligatorios.
 Los ejemplos del apunte y de la guía interactiva son cálculos didácticos.
 Las corridas reales están en el informe de resultados: **15/15 aprobadas**
 con la configuración final y tres semillas. También hay pruebas automatizadas
-para el motor, la carga de datos y el EDA, incluido el control de solapamiento
-exacto entre las entradas de training y test (con el extra `plot`).
-También se conservan los fallos de la configuración inicial de XOR.
+para el motor, los optimizadores, la carga y separación de datos, el EDA, las
+métricas, los experimentos de fraude y el flujo completo de dígitos.
+
+Los tres ejercicios obligatorios también están completos:
+
+| Ejercicio | Modelo o decisión final | Evaluación externa |
+|---|---|---|
+| 1. Fraude | Perceptrón logístico TinyModel; selección y umbral con 5-fold | Accuracy 97,1 %, recall 87,4 % sobre el test reservado |
+| 2. Dígitos | `[784,128,10]`, `tanh` + logística, Adam, batch 128 | Accuracy 86,54 %, macro-F1 0,8193; el 8 no aparece en development |
+| 3. Más datos | `[784,128,10]`, `tanh` + softmax, Adam, augmentation | Accuracy 97,52 %, macro-F1 0,9747 |
+
+Existe además una variante posterior que parte de RMSProp-64 en el ejercicio 2
+y termina con RMSProp-96 en el ejercicio 3. Obtuvo 97,998 % en test (2.447 de
+2.497 aciertos), un acierto menos que el mínimo necesario para alcanzar 98 %.
+Como se estudió después de abrir test con el modelo original, se documenta como
+análisis adicional y no como una selección independiente basada en test.
 
 ## Instalar y ejecutar
 
@@ -72,10 +90,11 @@ loader aplica esos mismos parámetros a training y test.
 
 En la primera comparación de fraude, lineal y logístico entrenan con las 7500
 muestras porque allí sólo se estudian aprendizaje, underfitting y saturación.
-Después de seleccionar uno, el modo de generalización deriva validation
-temporal y reserva test. Para dígitos, validation se deriva de `digits.csv` y
-`digits_test.csv` permanece cerrado. El protocolo completo está en
-[el plan experimental](docs/plan-experimental.md).
+Después de seleccionar el logístico, la etapa de generalización reserva test,
+usa 5-fold sobre development y congela el umbral con predicciones out-of-fold.
+Para dígitos, la búsqueda usa holdout y los finalistas se confirman con 5-fold;
+`digits_test.csv` permanece cerrado hasta la evaluación final. El recorrido y
+sus decisiones están documentados en los informes de cada ejercicio.
 
 La comparación inicial de fraude se ejecuta desde `tp3/` con:
 
@@ -86,13 +105,6 @@ python scripts/run_fraud_experiment.py \
   --output output/fraud-learning-01
 python scripts/plot_fraud_experiment.py output/fraud-learning-01
 ```
-
-## Continuación del TP
-
-1. Usar la estandarización de fraude ya implementada y mantener dígitos en `[0,1]`.
-2. Comparar las variantes de optimización y tamaño de lote ya implementadas.
-3. Resolver fraude y dígitos sin utilizar los conjuntos de test para elegir
-   parámetros o hiperparámetros.
 
 Los datasets recibidos están en `data/` y sus nombres coinciden con la consigna
 actualizada. Los ocho PDFs de clase están en `docs/`. Se versionan las
@@ -118,8 +130,8 @@ posteriores. No aplica preprocesamiento. La evidencia versionada está en
 `load_fraud_train_test` separa primero los datos, calcula una media y un desvío
 por cada una de las nueve entradas usando sólo `X_train`, y aplica esos mismos
 parámetros a `X_train` y `X_test`. El objetivo BigModel y `flagged_fraud` no se
-transforman. El `Standardizer` devuelto en `data.standardizer` puede guardarse
-como NPZ junto con el futuro modelo para reproducir exactamente las predicciones.
+transforman. El `Standardizer` devuelto en `data.standardizer` se guarda como
+NPZ junto con el modelo para reproducir exactamente las predicciones.
 
 Los dígitos conservan sus píxeles en el rango original `[0,1]`; no se dividen
 nuevamente por 255 ni se estandarizan en esta etapa.
@@ -132,8 +144,8 @@ y FPR por clase, además de promedios macro. Las filas de la matriz son clases
 reales y las columnas son predicciones; `labels` es explícito para que una clase
 ausente, como el 8 en training, no desaparezca del informe.
 
-La conversión a clase queda fuera del módulo: fraude aplicará el umbral que se
-decida posteriormente y dígitos usará `argmax`. Las divisiones sin denominador
+La conversión a clase queda fuera del módulo: fraude aplica el umbral congelado
+con validation y dígitos usa `argmax`. Las divisiones sin denominador
 se informan como `NaN`, porque esa métrica no puede evaluarse con esas muestras.
 
 ## Optimización (punto 6)
@@ -141,5 +153,6 @@ se informan como `NaN`, porque esa métrica no puede evaluarse con esas muestras
 El motor incluye descenso básico, Momentum, eta adaptativo, RMSProp y Adam con
 las fórmulas de clase 12.1. La forma de actualización se configura por separado:
 `batch_size=1` es online, un valor intermedio es mini-batch y `batch_size=None`
-o la cantidad total de muestras es batch. Implementarlos no decide cuál usar;
-esa comparación controlada sigue pendiente para cada ejercicio obligatorio.
+o la cantidad total de muestras es batch. Los informes de los ejercicios 1 y 2
+registran las comparaciones controladas y justifican la configuración elegida;
+la variante RMSProp-64 conserva por separado el análisis alternativo.

@@ -9,6 +9,13 @@ Las secciones conservan la evolución del trabajo. Una propuesta pendiente no
 reemplaza una decisión del equipo: los cambios de criterio requieren acuerdo
 explícito y deben registrarse como tales.
 
+> **Estado actual:** los ejercicios 1, 2 y 3 están completos. Varias filas de
+> las primeras secciones describen decisiones históricas tomadas cuando sólo
+> estaba lista la infraestructura. Para el estado final prevalecen las secciones
+> específicas de cada ejercicio y sus informes de resultados. La variante
+> posterior RMSProp-64 se conserva en `rmsprop64/` y no reemplaza silenciosamente
+> la selección original Adam-128.
+
 ## Organización y alcance
 
 | Decisión | Motivo | Aplicación y estado |
@@ -53,9 +60,9 @@ Todas estas elecciones están aplicadas **al apunte**, no a un programa de entre
 | Mantener nombres y bytes originales | Preservar trazabilidad y evitar alteraciones silenciosas | Aplicada; igualdad SHA-256 comprobada con las entradas del ZIP |
 | No duplicar el ZIP dentro del TP | Ya están extraídos sus contenidos útiles | Aplicada; el adjunto original permanece en su ubicación de origen |
 | Registrar las discrepancias de nombres | ZIP y consigna difieren en fraude y datos adicionales | Aplicada en `data/README.md`; correspondencias marcadas como inferidas |
-| Reservar `big_model_fraud_probability` como objetivo de destilación | El ejercicio pide imitar BigModel y la documentación identifica sus salidas | Criterio documentado; entrenamiento pendiente |
-| Excluir `flagged_fraud` del entrenamiento | Prohibición explícita de la documentación del dataset | Regla documentada; aún no existe pipeline que la aplique |
-| Reservar `digits_test.csv` para evaluación final | La consigna impide usarlo para ajustar parámetros e hiperparámetros | Regla documentada; no se hicieron divisiones ni entrenamientos |
+| Reservar `big_model_fraud_probability` como objetivo de destilación | El ejercicio pide imitar BigModel y la documentación identifica sus salidas | Aplicado en el entrenamiento y la evaluación del ejercicio 1 |
+| Excluir `flagged_fraud` del entrenamiento | Prohibición explícita de la documentación del dataset | Aplicado; sólo se usa para estratificar y evaluar clasificación |
+| Reservar `digits_test.csv` para evaluación final | La consigna impide usarlo para ajustar parámetros e hiperparámetros | Aplicado en los ejercicios 2 y 3; se abrió con cada configuración final congelada |
 | Posponer limpieza, normalización y selección de variables | Requieren EDA y corresponden a ejercicios posteriores | Los archivos están intactos; revisar encabezados y contar filas no constituye un EDA completo |
 
 ## Verificación realizada y límites
@@ -83,7 +90,7 @@ Todas estas elecciones están aplicadas **al apunte**, no a un programa de entre
 | Explicitar error total, error por muestra y MSE | Evitar mezclar gradientes, tolerancias o escalas de tasa de aprendizaje | Aplicada: $E=\sum E_\mu=(N/2)\operatorname{MSE}$ |
 | Mantener online para la primera validación | Es el algoritmo de clase 10.2 y permite cotejar una muestra a mano | Aplicada al desarrollo; batch/mini-batch no seleccionados para experimentos |
 | Mantener bias separado y por neurona | Hace visible cada actualización y permite desplazar las activaciones | Aplicada a las fórmulas; clase 11 permite separar pesos y bias |
-| No agregar optimizadores por el solo hecho de aparecer en clase | En esa etapa el objetivo era entender y verificar las reglas básicas | Decisión histórica de la validación inicial; luego se implementaron y compararon en fraude. La selección sigue pendiente para los ejercicios 2 y 3 |
+| No agregar optimizadores por el solo hecho de aparecer en clase | En esa etapa el objetivo era entender y verificar las reglas básicas | Decisión histórica de la validación inicial; luego se implementaron y compararon en fraude y dígitos |
 | No copiar el pseudocódigo literalmente donde alterna convenciones | Debemos respetar la consigna y mantener coherencia matemática | Diferencias documentadas; originales preservados |
 
 Se confirmó que las reglas de Rosenblatt, lineal, tanh y backpropagation del
@@ -154,7 +161,7 @@ código corresponden a la etapa inicial de preparación teórica, ya superada.
 | Graficar en un script separado a partir de los archivos guardados | Reproducir el análisis sin reentrenar y seguir la separación de responsabilidades de TP2 | `scripts/plot_validation.py`; seed 0 predeterminada para fronteras, las tres para curvas y ajustes |
 | Conservar resumen e imágenes fuera de output | La regla existente del repo ignora output | Informe, CSV e imágenes en `docs/resultados-validacion/`; corridas detalladas locales en output |
 | Reutilizar paquetes locales en el entorno de esta ejecución | NumPy y Matplotlib ya estaban instalados | `.venv` creada con `--system-site-packages`; README incluye instalación normal y entorno registrado |
-| Mantener datasets reales intactos y no abrir todavía el test para entrenar | El alcance actual es validar la base que usarán esos ejercicios | No se normalizó ni entrenó fraude o dígitos; protocolos de evaluación pendientes |
+| Mantener datasets reales intactos y no abrir test para entrenar o seleccionar | Evitar contaminación entre desarrollo y evaluación | Aplicado en los tres ejercicios; los tests reservados se abrieron con las configuraciones ya congeladas |
 
 Resultado: 31 pruebas automatizadas aprobadas y 15/15 corridas de la
 configuración final aprobadas. El informe distingue resultados reales,
@@ -186,7 +193,7 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Concatenar `more_digits.csv` únicamente al training del ejercicio 3 | Aislar el efecto de disponer de más datos sin alterar el test | Aplicada mediante `additional_train_path` opcional |
 | Mantener imágenes en `float32` y etiquetas como enteros | Coincidir con el loader recibido y posponer la codificación hasta definir la salida de la red | Aplicada; formas verificadas contra los cuatro CSV reales |
 | Posponer inicialmente normalización, estandarización y codificación | Esas transformaciones debían decidirse después del análisis de los datos | Aplicada durante los puntos 1–3; reemplazada para fraude por la decisión del punto 4 |
-| No usar test para seleccionar configuraciones | Test debe representar la evaluación final | Aplicado en ejercicio 1 con 5-fold sobre development; vigente para ejercicios 2 y 3, cuyo protocolo todavía debe elegirse |
+| No usar test para seleccionar configuraciones | Test debe representar la evaluación final | Aplicado en los tres ejercicios; holdout y 5-fold se realizaron exclusivamente sobre development |
 
 ### Protocolo final del ejercicio 1
 
@@ -206,7 +213,7 @@ fallos de la configuración inicial y limitaciones de la validación.
 | Versionar únicamente las nuevas transcripciones de clases 12.2 y 13 | El pedido actual incluye esos adjuntos y reemplaza la exclusión previa para ellos | Excepciones explícitas en `.gitignore`; las transcripciones anteriores siguen excluidas |
 | Trabajar de a un punto y revisarlo antes de continuar | Pedido del equipo para comprender y justificar cada paso | Primero se vuelve a comprobar el motor con los casos de validación |
 | Analizar las 7500 transacciones en el EDA de fraude | La consigna actualizada pide usar todas las muestras en la primera etapa de aprendizaje | Aplicado; el EDA fue recalculado y el split queda para el protocolo posterior de generalización |
-| Incorporar un holdout temporal para los experimentos | Ofrecer una alternativa simple para elegir hiperparámetros sin consultar test | Aplicada en `experiments.py`: se deriva reproduciblemente de development y expone índices. El ejercicio 1 finalmente usa 5-fold; para ejercicios 2 y 3 debe decidirse si el costo de k-fold se justifica |
+| Incorporar un holdout temporal para los experimentos | Ofrecer una alternativa simple para elegir hiperparámetros sin consultar test | Aplicada en `experiments.py`; los ejercicios 2 y 3 usaron holdout para el embudo y 5-fold para confirmar finalistas |
 | Justificar preprocesamiento y regularización con evidencia | Seguir el hilo experimental de clases 12.2 y 13 | EDA sobre training antes de transformar; regularización solo ante un diagnóstico de sobreajuste; todavía no implementados |
 | Mantener el motor y la configuración de validación actuales | La nueva ejecución pasó los 38 tests y las 15 corridas sin cambios | Punto 1 verificado; se recargaron los 15 modelos y se reprodujeron sus métricas; evidencia en `resultados-validacion.md` |
 
@@ -354,8 +361,8 @@ detectaron columnas constantes.
 | Impedir que búsqueda abra test | Test representa producción y no puede elegir hiperparámetros | `run_digit_search` sólo recibe `digits.csv`; se agregó un split de development que no acepta ruta de test |
 | Seleccionar primariamente con macro-F1 de clases presentes | El dígito 5 es minoritario y el 8 está ausente; accuracy sola puede ocultar el primero y no se puede estimar recall del segundo | Se registran además accuracy, macro-precision, macro-recall, métricas por clase y matriz de diez clases |
 | Comparar ancho con 16, 32 y 64 ocultas | La duplicación sucesiva explora una escala pequeña/intermedia/grande sin barrer cada entero | Plan documentado; las configuraciones se escriben tras elegir learning rate |
-| Comparar `[784,32,10]` y `[784,32,16,10]` | Tienen 25.450 y 25.818 parámetros, por lo que aíslan profundidad con presupuesto casi constante | Plan documentado; ejecución pendiente |
-| Comparar cinco optimizadores con tasas propias | Sus reglas cambian la escala efectiva del paso y no corresponde imponerles una única tasa | Plan documentado; ejecución pendiente |
+| Comparar profundidad con presupuesto de parámetros comparable | Aislar profundidad sin confundirla con un gran aumento de capacidad | Ejecutado y documentado en el informe extenso del ejercicio 2 |
+| Comparar cinco optimizadores con tasas propias | Sus reglas cambian la escala efectiva del paso y no corresponde imponerles una única tasa | Ejecutado; Adam-128 fue la selección original y RMSProp-64 quedó como alternativa eficiente |
 | Comparar batch 1, 32, 128 y full batch | Representan online, dos escalas mini-batch y batch completo | Plan documentado; se informarán épocas, actualizaciones y tiempo |
 | Observar épocas 25, 50, 100 y 200 dentro de una misma trayectoria | Estudia convergencia y sobreajuste sin reentrenar cuatro veces | Aplicado mediante checkpoints configurables; se extiende a 400 sólo si ambas curvas siguen mejorando |
 | Diagnosticar underfitting y overfitting con curvas de training/validation | Un valor final no separa falta de convergencia, falta de capacidad y pérdida de generalización | El runner registra MSE, accuracy y métricas macro por época y conserva el modelo de mejor validation macro-F1 |

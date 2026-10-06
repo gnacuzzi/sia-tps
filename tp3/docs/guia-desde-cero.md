@@ -44,24 +44,20 @@ correcciones hacen que su error disminuya y sus predicciones mejoren.
 
 ### Estado actual
 
-El ejercicio 1 ya compara los perceptrones, estudia aprendizaje y
-generalización, selecciona hiperparámetros con 5-fold, congela un umbral con
-predicciones out-of-fold y evalúa test al final. Siguen pendientes:
-
-1. Entrenar el clasificador de dígitos del ejercicio 2.
-2. Incorporar `more_digits.csv` y resolver el ejercicio 3.
-3. Realizar en los MLP los experimentos obligatorios de learning rate,
-   arquitectura y optimización.
-4. Diagnosticar convergencia, underfitting, overfitting y generalización en los
-   ejercicios 2 y 3.
-5. Elegir para esos ejercicios entre el holdout estratificado ya implementado
-   y k-fold, considerando que k-fold multiplica el costo de cada configuración.
+Los tres ejercicios están completos. El ejercicio 1 compara los perceptrones,
+estudia aprendizaje y generalización, selecciona hiperparámetros con 5-fold,
+congela un umbral con predicciones out-of-fold y evalúa test al final. El
+ejercicio 2 entrena y compara MLP con `digits.csv`; usa holdout para el embudo
+experimental y 5-fold para confirmar finalistas. El ejercicio 3 incorpora
+`more_digits.csv`, deduplica development, agrega softmax, entropía cruzada,
+regularización y augmentation, confirma la receta con 5-fold y abre test una
+sola vez al final. La variante RMSProp-64 repite los ejercicios 2 y 3 con un
+punto de partida más pequeño y queda documentada por separado.
 
 La distinción importante es esta:
 
-> Tener el motor, los datos y las métricas no significa que los ejercicios
-> obligatorios ya estén resueltos. Significa que ya tenemos las herramientas
-> necesarias para empezar a resolverlos.
+> El motor, los datos y las métricas fueron la base; los informes de cada
+> ejercicio registran cómo se usaron para seleccionar y evaluar los modelos.
 
 ## 3. Diccionario mínimo
 
@@ -177,8 +173,9 @@ Dos reglas salen de este diagrama:
 Los loaders mantienen development/test. `experiments.py` puede derivar un
 holdout estratificado y reproducible, pero no obliga a usar un único corte. El
 ejercicio 1 terminó usando 5-fold estratificado para comparar hiperparámetros y
-obtener predicciones out-of-fold. Para los ejercicios 2 y 3 se elegirá holdout
-o k-fold antes de implementar sus runners, sin mirar `digits_test.csv`.
+obtener predicciones out-of-fold. En los ejercicios 2 y 3 se usó holdout para
+el embudo inicial y 5-fold para confirmar el modelo congelado antes de abrir
+`digits_test.csv`.
 
 ## 6. Dónde está cada cosa en el repositorio
 
@@ -807,7 +804,7 @@ se puede justificar por separado.
 
 | Tema | Decisión actual | Por qué |
 |---|---|---|
-| Particiones | Loaders development/test; holdout disponible y 5-fold usado en el ejercicio 1. | Permite seleccionar sin contaminar test; el protocolo del MLP sigue abierto. |
+| Particiones | Loaders development/test; holdout para el embudo y 5-fold para confirmación. | Permite seleccionar sin contaminar test y auditar la estabilidad del MLP. |
 | Test | Reservarlo para evaluar generalización. | Evitar elegir un modelo que sólo funciona en ese conjunto. |
 | Fraude: objetivo | Imitar `big_model_fraud_probability`. | Es lo requerido para TinyModel. |
 | Fraude: etiqueta real | No usar `flagged_fraud` para entrenar. | La documentación lo prohíbe. |

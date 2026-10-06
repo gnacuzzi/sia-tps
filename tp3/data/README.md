@@ -42,8 +42,9 @@ Se implementaron dos protocolos para fraude y uno para dígitos:
   de seleccionar el tipo de perceptrón;
 - ejercicio 2: 12449 imágenes de `digits.csv` para training y las 2497 de
   `digits_test.csv` para test;
-- ejercicio 3: 28190 imágenes de `digits.csv` más `more_digits.csv` para
-  training y el mismo test externo de 2497 imágenes.
+- ejercicio 3: 28190 filas originales de `digits.csv` más `more_digits.csv`;
+  después de eliminar 3689 duplicados exactos quedan 24501 imágenes únicas de
+  development, y se conserva el mismo test externo de 2497 imágenes.
 
 El [análisis exploratorio](../docs/eda-training.md) usa las 7500 transacciones
 de fraude y `digits.csv`. En aprendizaje, las nueve entradas de fraude se
