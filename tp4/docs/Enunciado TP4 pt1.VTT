@@ -1,0 +1,238 @@
+WEBVTT
+
+1
+00:00:03.040 --> 00:00:06.810
+Eugenia Sol Piñeiro: Bueno, T E, P. I, 4, vamos a tener
+
+2
+00:00:07.150 --> 00:00:11.179
+Eugenia Sol Piñeiro: 2 ejercicios. El ejercicio 2 todavía no lo vean porque todavía no lo pueden hacer.
+
+3
+00:00:11.320 --> 00:00:16.000
+Eugenia Sol Piñeiro: Vamos a ver primero el primer ejercicio, que es el de campañas de marketing.
+
+4
+00:00:16.550 --> 00:00:22.530
+Eugenia Sol Piñeiro: Voy a tener una agencia de marketing que trabaja con creadores de contenido, en redes sociales para difundir propuestas a los clientes.
+
+5
+00:00:23.160 --> 00:00:28.989
+Eugenia Sol Piñeiro: y actualmente lo que les pasa es que empiezan a seleccionar los influencers o los creadores de contenido
+
+6
+00:00:29.300 --> 00:00:39.130
+Eugenia Sol Piñeiro: según únicamente la cantidad de followers que tienen entonces no están generando rebaños y no están llegando al alcance que necesitan. En la campaña de marketing
+
+7
+00:00:40.350 --> 00:00:50.870
+Eugenia Sol Piñeiro: tienen distintos clientes, van a tener clientes que, por ejemplo, promueven la adopción de perros tienen marcas de ropa, de entrenamiento para fútbol, empresas de productos de belleza y comercios de materiales de arte.
+
+8
+00:00:51.050 --> 00:00:54.249
+Eugenia Sol Piñeiro: Entonces cada 1 necesita llegar a una audiencia diferente.
+
+9
+00:00:55.380 --> 00:01:07.940
+Eugenia Sol Piñeiro: Entonces lo que pasa es que la agencia de marketing lo que quiere es mejorar justamente cómo seleccionar estos creadores de contenido para llegar a mayor gente orientada a específicamente el
+
+10
+00:01:08.160 --> 00:01:12.589
+Eugenia Sol Piñeiro: el cliente que les va a comprar y generar ventas y generar revenues.
+
+11
+00:01:12.840 --> 00:01:20.850
+Eugenia Sol Piñeiro: Entonces, para eso lo que hicieron fue definir un conjunto de datos que se va a llamar creadores Csb, donde vamos a tener un montón de variables.
+
+12
+00:01:20.980 --> 00:01:25.560
+Eugenia Sol Piñeiro: Ya entiendo que ven por dónde va la mano. Voy a tener muchísimas variables.
+
+13
+00:01:26.590 --> 00:01:38.970
+Eugenia Sol Piñeiro: Vamos a tener el I, D del Creador, el nombre de usuario de de la red social que use el creador, la cantidad de seguidores. Cuántas Cuentas se alcanza cantidad de impresiones.
+
+14
+00:01:39.060 --> 00:01:48.980
+Eugenia Sol Piñeiro: cantidad de vistas por video, la cantidad de post mensuales que hace cual es la audiencia en Argentina? Bueno, y así, léanlas tranquilos. Después tienen un montón.
+
+15
+00:01:51.270 --> 00:01:52.650
+Eugenia Sol Piñeiro: ¿qué es lo que tienen que hacer?
+
+16
+00:01:53.040 --> 00:01:59.820
+Eugenia Sol Piñeiro: Van a tener que primero explorar el conjunto de datos es un conjunto que es grande y tiene muchas features, muchas variables.
+
+17
+00:02:00.050 --> 00:02:03.169
+Eugenia Sol Piñeiro: Entonces tienen que analizarlo, hacer un básico. Ed: a
+
+18
+00:02:03.510 --> 00:02:14.459
+Eugenia Sol Piñeiro: esto lo hablamos. El la última clase, no de hacer el Edda, que es básicamente un poco esto no ver la destrucción de los datos, ver si tengo que estandarizar o no.
+
+19
+00:02:15.670 --> 00:02:25.109
+Eugenia Sol Piñeiro: Qué, qué, qué ficha me aporta más? ¿cuál no? Bueno, intentar ver en qué rango de valores está cada una ver cuál me aporta información y hacer un.
+
+20
+00:02:45.320 --> 00:02:46.450
+Santiago Britez: No se escuchan.
+
+21
+00:02:53.400 --> 00:02:55.700
+Eugenia Sol Piñeiro: Entonces vamos a tener que hacer un análisis con metas principales
+
+22
+00:02:58.480 --> 00:03:12.679
+Eugenia Sol Piñeiro: aclaración. Antes van a tener que reducir la dimensión. Son muchas variables, No se enrosquen con la cantidad de variables. Esto debería funcionarles con 15, 10 15 variables. Debería funcionar bien, o sea, tienen que bajar bastante la dimensión.
+
+23
+00:03:12.870 --> 00:03:14.699
+Eugenia Sol Piñeiro: Lo pueden justificar com.
+
+24
+00:03:15.490 --> 00:03:25.449
+Eugenia Sol Piñeiro: P. S, A Tienen que hacer un análisis de correlación, ver qué qué fichas me aportan y cuáles no. Hay fichas que directamente no se deberían usar.
+
+25
+00:03:25.590 --> 00:03:37.800
+Eugenia Sol Piñeiro: Piénselo un poco más, pero por lo general todos deberían terminar con, por lo menos las fechas más importantes representadas. Es decir, no les va a quedar a todos lo mismo, porque quizás algunos eliminaron alguna variable y otros no.
+
+26
+00:03:37.930 --> 00:03:40.140
+Eugenia Sol Piñeiro: Pero denle la vuelta.
+
+27
+00:03:40.970 --> 00:03:43.049
+Eugenia Sol Piñeiro: ¿y a qué me refiero? Con que son un montón.
+
+28
+00:03:44.060 --> 00:03:53.239
+Eugenia Sol Piñeiro: además de que realmente son un montón que también pueden tomar o asumir ciertas cosas sobre las future en el sentido de
+
+29
+00:03:53.970 --> 00:04:06.010
+Eugenia Sol Piñeiro: el foco. No está en uy, esto es el promedio de la cantidad de Likes por cada 1 000 cuentas. Y esto es mensual. Esto es diario. Y cómo cómo se calcula, y de dónde salió esta feature.
+
+30
+00:04:06.580 --> 00:04:21.870
+Eugenia Sol Piñeiro: El foco está en el método de P. S A, no en el Dataset Grande e interpretar exactamente la fecha pueden asumir. Bueno, esta ficha. La interpreté de esta forma. Y para mí va a ser esto fin si tienes dudas con alguna lo aclaro.
+
+31
+00:04:22.029 --> 00:04:33.909
+Eugenia Sol Piñeiro: También pueden preguntar tranquilamente, no, Pero si alguna les genera mucha duda, empiecen a tomar supuestos sobre el conjunto de datos y sigan implementando, porque el foco está en justamente, pese a
+
+32
+00:04:34.300 --> 00:04:35.980
+Eugenia Sol Piñeiro: bien.
+
+33
+00:04:36.750 --> 00:04:52.010
+Eugenia Sol Piñeiro: ¿qué tienen que hacer acá el Beplot que vimos hoy, pueden hacer el índice también, por ejemplo, para cada 1 de los creadores de contenido y justamente interpretarlos, no como se interpretan esos componentes, que es lo que les dice esa información.
+
+34
+00:04:53.080 --> 00:05:01.389
+Eugenia Sol Piñeiro: Después. Lo que van a tener que hacer es implementar una red de cojones que el objetivo va a ser agrupar justamente los creadores de contenido en términos de todas las variables. Entonces
+
+35
+00:05:01.970 --> 00:05:13.639
+Eugenia Sol Piñeiro: eso lo que les va a dar es otro tipo de información de cómo se organizan, quizás en clusters los creadores de contenido y, por ejemplo, elegir. No sé, estos 2 creadores son similares. Entonces elijo solo 1, porque
+
+36
+00:05:13.770 --> 00:05:16.030
+Eugenia Sol Piñeiro: estoy. Esto no justificado.
+
+37
+00:05:17.590 --> 00:05:34.809
+Eugenia Sol Piñeiro: como mínimo, parte del análisis de la red. Lo que venimos viendo en los últimos trabajos. En este caso va a ser variar hiper parámetros correspondientes de la red. Tienen que justificar como performance, como performance el modelo, porque eligieron esa configuración. En el caso de Kohonen tienen que analizar ese k
+
+38
+00:05:34.930 --> 00:05:44.780
+Eugenia Sol Piñeiro: el k por k de cojones de de por qué definen eso, variarlo, graficar el hitmap con la distribución de los creadores, graficar la matriz u
+
+39
+00:05:44.980 --> 00:05:52.620
+Eugenia Sol Piñeiro: lo que fuimos viendo para interpretar los datos y después tienen que compararlo con P. S A
+
+40
+00:05:53.690 --> 00:05:59.560
+Eugenia Sol Piñeiro: y interpretar, digamos, las distintas técnicas para ese mismo caso de uso.
+
+41
+00:06:01.260 --> 00:06:03.220
+Eugenia Sol Piñeiro: Después van a tener que implementar hojas
+
+42
+00:06:03.430 --> 00:06:08.650
+Eugenia Sol Piñeiro: que hoja debería darles lo mismo que les dio P, S A,
+
+43
+00:06:08.780 --> 00:06:12.379
+Eugenia Sol Piñeiro: No. En cuanto a la P. S. Uno: porque hoja comercial
+
+44
+00:06:12.530 --> 00:06:19.459
+Eugenia Sol Piñeiro: auto vector asociado al primer auto valor. Y con eso me construyó la Pc. Uno entonces lo tiene que comparar después.
+
+45
+00:06:19.760 --> 00:06:34.219
+Eugenia Sol Piñeiro: Y el objetivo va a ser empezar a tomar decisiones, digamos, no a lo largo de todo el trabajo. Esto no es que es un ejercicio independiente, sino que acá les dejo un par de preguntas disparadoras que se pueden hacer para interpretarlo según el caso de uso que tienen
+
+46
+00:06:34.320 --> 00:06:47.030
+Eugenia Sol Piñeiro: Bájenlo al caso de marketing en general, que es lo que están intentando resolver, o sea, no lo vean como aislado de listo. P: S A: Me da la carga 0, coma Cinco y sigo sino Okay. ¿qué significa
+
+47
+00:06:47.260 --> 00:06:48.370
+Eugenia Sol Piñeiro: que te dé eso
+
+48
+00:06:48.550 --> 00:06:54.449
+Eugenia Sol Piñeiro: bajado el caso de uso? Bueno, acá vean lo tranquilos después. Pero estas son preguntas disparadoras. No es que
+
+49
+00:06:54.680 --> 00:06:57.130
+Eugenia Sol Piñeiro: tienen que responder punto por punto, sino
+
+50
+00:06:57.250 --> 00:06:59.120
+Eugenia Sol Piñeiro: para que puedan interpretarlo más fácil.
+
+51
+00:06:59.760 --> 00:07:05.420
+Eugenia Sol Piñeiro: Esta es la creación que hice. El foco. Está en los métodos de aprendizaje supervisado. Tampoco es que
+
+52
+00:07:05.900 --> 00:07:10.490
+Eugenia Sol Piñeiro: tienen que ser expertos en marketing, sino simplemente en
+
+53
+00:07:10.850 --> 00:07:15.329
+Eugenia Sol Piñeiro: utilizar esos 3 métodos y ver cómo compararlos cuando me conviene 1, Cuándo no.
+
+54
+00:07:15.850 --> 00:07:19.559
+Eugenia Sol Piñeiro: Y si llego al mismo resultado. ¿cuál era más eficiente? Bueno.
+
+55
+00:07:19.700 --> 00:07:23.589
+Eugenia Sol Piñeiro: ese tipo de ventajas y desventajas o limitaciones que ven los métodos
+
+56
+00:07:24.900 --> 00:07:33.100
+Eugenia Sol Piñeiro: Bien, este de memoria asociativa. Lo vamos a ver el jueves que viene el martes hay recuperatorios de Tp, Tres.
+
+57
+00:07:33.950 --> 00:07:39.659
+Eugenia Sol Piñeiro: va a haber consultas igual, pero bien dudas hasta Acá del Tp. Vamos a ver ejercicio 1 por lo pronto, este
+
+58
+00:07:41.160 --> 00:07:42.620
+Eugenia Sol Piñeiro: eso ya lo pueden hacer todo
+
+59
+00:07:58.990 --> 00:08:06.110
+Eugenia Sol Piñeiro: y léanlo tranquilos, y el martes. Después lo podemos charlar en las consultas. Podemos ir definiéndolo y demás.
+

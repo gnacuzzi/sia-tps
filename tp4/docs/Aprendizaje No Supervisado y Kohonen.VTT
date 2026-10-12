@@ -1,0 +1,2222 @@
+WEBVTT
+
+1
+00:00:03.580 --> 00:00:11.139
+Eugenia Sol Piñeiro: Bien. Entonces hoy vamos a tener la primera clase de Tp 4 que es de Tp, va a ser sobre aprendizaje no supervisado
+
+2
+00:00:11.410 --> 00:00:13.910
+Eugenia Sol Piñeiro: es otro tipo de aprendizaje. Vamos a ver. Y
+
+3
+00:00:14.200 --> 00:00:19.620
+Eugenia Sol Piñeiro: para eso vamos a hablar sobre 3 tipos de redes neuronales a lo largo de todas estas clases.
+
+4
+00:00:19.940 --> 00:00:38.369
+Eugenia Sol Piñeiro: Hoy vamos a ver la primera, que es la red de cojones. Después vamos a hablar un poco sobre el modelo Hubsail. Y por último, vamos a terminar con la regla de hoja que estas son las redes neuronales. Para entender una de ellas. Tenemos que hablar un poquito sobre estos temas extra. Así que es como toda la teoría base que vamos a ir viendo.
+
+5
+00:00:38.820 --> 00:00:46.059
+Eugenia Sol Piñeiro: pero arranquemos por lo básico sobre qué es el aprendizaje no supervisado.
+
+6
+00:00:47.100 --> 00:00:51.189
+Eugenia Sol Piñeiro: Ustedes hasta ahora tienen aprendizaje supervisado.
+
+7
+00:00:51.530 --> 00:01:08.080
+Eugenia Sol Piñeiro: No, en este caso ustedes tienen acceso a las etiquetas, las labels, la la salida esperada del modelo. Bueno, yendo al Tp, fraude, no fraude. Por ejemplo, entonces 1 ya sabe cuál va a ser esa variable de respuesta.
+
+8
+00:01:08.550 --> 00:01:19.650
+Eugenia Sol Piñeiro: Y este tipo de problemas son problemas que por lo general están muy bien definidos y son, por ejemplo, para clasificación y regresión, que es básicamente lo que están haciendo ahora.
+
+9
+00:01:20.130 --> 00:01:33.960
+Eugenia Sol Piñeiro: Pero ¿qué pasa cuando no tenés esas etiquetas? De hecho, por lo general no se tienen. Son muy difíciles de conseguir y que esté todo el dataset etiquetado con la salida esperada es sumamente complejo. Entonces
+
+10
+00:01:34.350 --> 00:01:47.389
+Eugenia Sol Piñeiro: esto por lo general no se tiene. Entonces cuando tenemos que resolver algún problema que está menos definido, acá es cuando entra el aprendizaje no supervisado y vamos a ver que son problemas más del estilo de cluster o agrupación.
+
+11
+00:01:47.540 --> 00:01:50.550
+Eugenia Sol Piñeiro: asociación y reducción de dimensionalidad.
+
+12
+00:01:50.940 --> 00:01:53.210
+Eugenia Sol Piñeiro: Ahora vamos a ir 1 por 1 que es, pero
+
+13
+00:01:53.890 --> 00:02:00.220
+Eugenia Sol Piñeiro: lo importante que se tienen que llevar de acá es que no tenemos el valor de verdad disponible en nuestros dataset.
+
+14
+00:02:01.160 --> 00:02:08.809
+Eugenia Sol Piñeiro: Entonces? Okay. Si ustedes, cómo calculaban el el error de la red en aprendizaje supervisado, ¿qué es lo que hacen.
+
+15
+00:02:17.880 --> 00:02:22.380
+Eugenia Sol Piñeiro: por ejemplo, en el multicapa o con el ejemplo de fraude.
+
+16
+00:02:23.250 --> 00:02:27.240
+Eugenia Sol Piñeiro: Como pueden saber si está cometiendo un error o no el modelo
+
+17
+00:02:31.360 --> 00:02:38.220
+Eugenia Sol Piñeiro: Okay, la diferencia entre la predicción y el esperado. Ok? Y si ahora no tenemos lo esperado, ¿cómo hacemos.
+
+18
+00:02:39.070 --> 00:02:39.980
+Eugenia Sol Piñeiro: entonces
+
+19
+00:02:40.490 --> 00:02:52.479
+Eugenia Sol Piñeiro: un poco. La idea es ver Okay. Si yo ya no tengo esa etiqueta, esa salida esperada, ¿Cómo es que puedo obtener un patrón o empezar a relacionar alguna característica
+
+20
+00:02:52.800 --> 00:02:54.729
+Eugenia Sol Piñeiro: de la red que me diga
+
+21
+00:02:54.860 --> 00:03:06.649
+Eugenia Sol Piñeiro: si se está performando bien o no se está resolviendo el problema bien o no. Y a partir de eso, sacar conclusiones ¿no? Y resolver el problema que quiero resolver. Entonces es un poco más complejo. Vamos a ver un ejemplo.
+
+22
+00:03:08.510 --> 00:03:11.400
+Eugenia Sol Piñeiro: Supóngase que tenemos este caso de estudio.
+
+23
+00:03:11.930 --> 00:03:16.719
+Eugenia Sol Piñeiro: Tenemos un conjunto de datos con 3 500 pacientes
+
+24
+00:03:17.270 --> 00:03:27.580
+Eugenia Sol Piñeiro: donde se les miden las siguientes variables. Es decir, cada columna va a ser edad, duración de los síntomas, colesterol, sexo, peso, presión arterial, media y una medida del estrés.
+
+25
+00:03:28.170 --> 00:03:29.750
+Eugenia Sol Piñeiro: Y el objetivo es
+
+26
+00:03:30.450 --> 00:03:39.519
+Eugenia Sol Piñeiro: desarrollar un sistema basado en redes neuronales Que me diga cuál es el riesgo de que ese paciente presente una enfermedad arterial.
+
+27
+00:03:40.770 --> 00:03:45.230
+Eugenia Sol Piñeiro: Acá No sé quienes tienen enfermedad arterial y quienes no, o sea, no tengo etiquetas.
+
+28
+00:03:46.080 --> 00:03:50.970
+Eugenia Sol Piñeiro: Entonces para eso, digo, Bueno, vamos a hacer un pequeño análisis de datos y
+
+29
+00:03:51.290 --> 00:03:56.559
+Eugenia Sol Piñeiro: grafiquemos, por ejemplo, la presión en función de la edad del paciente.
+
+30
+00:03:57.400 --> 00:04:01.009
+Eugenia Sol Piñeiro: Si tienen que interpretar este gráfico. ¿qué nos dice?
+
+31
+00:04:02.060 --> 00:04:04.550
+Eugenia Sol Piñeiro: ¿qué conclusión pueden sacar de este gráfico
+
+32
+00:04:24.570 --> 00:04:33.600
+Eugenia Sol Piñeiro: a mayor edad, mayor presión, Ok? Bien, hay como alguna relación positiva entre presión y edad perfecto, los 2. Entonces yo
+
+33
+00:04:34.070 --> 00:04:42.709
+Eugenia Sol Piñeiro: más o menos 1 puede ver que Ok, a mayor presión, mayor edad. Hay ciertos subliayers, pero a grandes rasgos se puede ver esa tendencia.
+
+34
+00:04:43.190 --> 00:04:53.669
+Eugenia Sol Piñeiro: Ahora, yo en realidad tenía 7 variables. No tengo solo la presión y la edad. De hecho, esto esto es muy poca información para poder sacar algo robusto.
+
+35
+00:04:54.340 --> 00:04:59.130
+Eugenia Sol Piñeiro: Entonces, si bien yo puedo quizás intentar asociar, acá
+
+36
+00:05:00.520 --> 00:05:09.820
+Eugenia Sol Piñeiro: me da información está muy bueno, pero al tener solo 2 vara 2 variables, estoy desaprovechando las otras 5 que tengo en media Tasset. Entonces, digo, okay, agregué una variable más
+
+37
+00:05:10.650 --> 00:05:18.629
+Eugenia Sol Piñeiro: la gráfica. Hago un plot en 3 D y agrego, por ejemplo, el peso, Entonces ahora tengo presión, edad y peso.
+
+38
+00:05:18.950 --> 00:05:21.139
+Eugenia Sol Piñeiro: Y ahora cómo lo interpretan.
+
+39
+00:05:44.560 --> 00:05:48.230
+Eugenia Sol Piñeiro: Está más complicado no verlo así.
+
+40
+00:05:48.600 --> 00:05:52.660
+Eugenia Sol Piñeiro: Okay es un poco más complejo.
+
+41
+00:05:53.340 --> 00:05:58.540
+Eugenia Sol Piñeiro: Primero, que es una representación planar de un gráfico, 3, D, o sea, ya desde el vamos.
+
+42
+00:05:59.260 --> 00:06:06.610
+Eugenia Sol Piñeiro: Ni siquiera estoy viendo la profundidad de gráfico, pero que supongamos que tenemos un H. T, M. L, Lo podemos rotar o ver un poco la profundidad
+
+43
+00:06:07.200 --> 00:06:09.830
+Eugenia Sol Piñeiro: a simple vista. Es más complejo verlo
+
+44
+00:06:10.580 --> 00:06:21.089
+Eugenia Sol Piñeiro: y sacar conclusiones a partir de esto. Y de nuevo, solo tengo 3 variables. ¿qué hago si tengo 7? ¿cómo hago? De hecho, no puedo graficar en 7 D. Entonces
+
+45
+00:06:21.360 --> 00:06:23.069
+Eugenia Sol Piñeiro: acá se complica un poco más.
+
+46
+00:06:24.180 --> 00:06:27.070
+Eugenia Sol Piñeiro: Y acá la pregunta es.
+
+47
+00:06:27.420 --> 00:06:44.759
+Eugenia Sol Piñeiro: bien, yo necesito asociar todas estas variables sacar conclusiones. Entonces, ¿qué pasa si puedo construir algún índice de una variable o 2 variables que me representen todo mi conjunto de datos en función de las otras 7 que yo tenía
+
+48
+00:06:44.860 --> 00:06:51.770
+Eugenia Sol Piñeiro: y, por ejemplo, me ordenen los pacientes de mayor a menor riesgo de tener hipertensión.
+
+49
+00:06:52.330 --> 00:06:53.300
+Eugenia Sol Piñeiro: Entonces
+
+50
+00:06:54.050 --> 00:07:10.039
+Eugenia Sol Piñeiro: acá estoy entrando en un problema de cómo puedo agrupar o generar clusters de pacientes con las mismas características, o cómo puedo asociarlos según sus patrones. ¿cómo puedo bajar la dimensión de Mirandasset, que tenía 7 variables, y la quiero representar en otra escala. Entonces
+
+51
+00:07:10.210 --> 00:07:13.210
+Eugenia Sol Piñeiro: acá? Es cuando entra en juego el aprendizaje no supervisado.
+
+52
+00:07:13.670 --> 00:07:18.400
+Eugenia Sol Piñeiro: Entonces voy a tener un input donde yo tengo datos que no están etiquetados.
+
+53
+00:07:18.820 --> 00:07:25.660
+Eugenia Sol Piñeiro: que van a ser datos de de todo tipo. Y al al pasar por mi modelo, que en este caso va a ser una red neuronal.
+
+54
+00:07:26.060 --> 00:07:28.599
+Eugenia Sol Piñeiro: aclaro que en este caso, porque hay modelos
+
+55
+00:07:28.730 --> 00:07:32.590
+Eugenia Sol Piñeiro: no supervisados que no necesariamente son redes neuronales.
+
+56
+00:07:32.910 --> 00:07:36.120
+Eugenia Sol Piñeiro: En esta parte vamos a ver redes neuronales.
+
+57
+00:07:37.400 --> 00:07:43.970
+Eugenia Sol Piñeiro: Y lo que va a hacer el modelo es intentar distinguir estos patrones y, por ejemplo, generar este este tipo de cluster de pacientes.
+
+58
+00:07:45.960 --> 00:07:54.319
+Eugenia Sol Piñeiro: Entonces, primer problema que resuelve aprendizaje no supervisado es clustering o agrupación.
+
+59
+00:07:54.750 --> 00:07:59.830
+Eugenia Sol Piñeiro: Entonces acá. El objetivo va a ser justamente agrupar muestras de mi conjunto de datos u observaciones
+
+60
+00:08:00.420 --> 00:08:13.129
+Eugenia Sol Piñeiro: de forma tal que la similitud de las muestras que me queden en un mismo cluster sea lo más grande posible. O sea, si yo estoy en el mismo cluster, es porque soy muy parecida a otra. Muestra que está en ese mismo cluster conmigo.
+
+61
+00:08:13.260 --> 00:08:17.640
+Eugenia Sol Piñeiro: Entonces, ¿esto de qué me sirve? ¿me va a poder identificar?
+
+62
+00:08:17.770 --> 00:08:20.430
+Eugenia Sol Piñeiro: Justo me quedó el el dibujo del cual te pasaba. Ya.
+
+63
+00:08:21.020 --> 00:08:22.549
+Eugenia Sol Piñeiro: Ese es un cluster
+
+64
+00:08:23.130 --> 00:08:41.949
+Eugenia Sol Piñeiro: que se se representa, acá pues me quedaron agrupados. Y una ventaja es que también puede incluso identificar a un layer. Si me queda, por ejemplo, un un punto acá solo separado, lo que puedo hacer es o intentar unirlo a alguno de estos clusters o simplemente dejarlo solo en un cluster aislado. Y decir, bueno, no
+
+65
+00:08:42.230 --> 00:08:53.830
+Eugenia Sol Piñeiro: vos sos un aulayer perteneces a otro cluster o no, te necesito o te considero layer, o intento agruparte a alguno de los patrones con los que más o menos tenés cierta similitud.
+
+66
+00:08:55.260 --> 00:08:58.469
+Eugenia Sol Piñeiro: Bien, entonces acá. Yo voy a estar
+
+67
+00:08:59.350 --> 00:09:02.099
+Eugenia Sol Piñeiro: ingresando datos y asignándolos a un grupo.
+
+68
+00:09:02.500 --> 00:09:04.020
+Eugenia Sol Piñeiro: no a través de una red neuronal.
+
+69
+00:09:04.950 --> 00:09:13.320
+Eugenia Sol Piñeiro: Y esto implica definir una medida de similitud. Entonces, por ejemplo, puedo definir, bueno, la distancia euclidia entre los puntos de este cluster
+
+70
+00:09:13.460 --> 00:09:17.790
+Eugenia Sol Piñeiro: tiene que ser menor que la distancia Euclidia, por ejemplo, entre este punto y este punto.
+
+71
+00:09:17.950 --> 00:09:25.550
+Eugenia Sol Piñeiro: o sea, en el espacio, 2, de va a estar mucho más alejado, entonces implica definir una medida de similitud.
+
+72
+00:09:27.420 --> 00:09:28.530
+Eugenia Sol Piñeiro: ejemplo.
+
+73
+00:09:29.260 --> 00:09:44.439
+Eugenia Sol Piñeiro: en nuestro caso, donde teníamos el dato de los pacientes? Bueno, la pregunta es: ¿hay ciertos patrones de mi conjunto que me puedan decir qué pacientes van a responder ante cierto tratamiento y quiénes no. Por ejemplo, no sé
+
+74
+00:09:45.030 --> 00:09:55.190
+Eugenia Sol Piñeiro: algún patrón puede ser este grupo de pacientes con edad mayor a 50 presión mayor a tanto y
+
+75
+00:09:55.800 --> 00:09:59.280
+Eugenia Sol Piñeiro: peso mayor a X, Entonces
+
+76
+00:09:59.430 --> 00:10:04.440
+Eugenia Sol Piñeiro: voy a empezar a relacionar en términos de todas mis variables ese tipo de pacientes.
+
+77
+00:10:04.970 --> 00:10:09.979
+Eugenia Sol Piñeiro: Bueno, esto de lo que les dije de los Aulayers me sirve para identificar anomalías
+
+78
+00:10:10.450 --> 00:10:18.530
+Eugenia Sol Piñeiro: dentro de mi conjunto de datos puede servir, por ejemplo, para estrategias de marketing. ¿a qué tipos de usuarios puede estar dirigida una aplicación no es lo mismo.
+
+79
+00:10:18.640 --> 00:10:29.319
+Eugenia Sol Piñeiro: Quizás dirigir la aplicación a una persona de mayor de 70 años, que quizás no usa tanto la computadora o a una persona de 20 que está acostumbrada al sistema.
+
+80
+00:10:29.930 --> 00:10:40.780
+Eugenia Sol Piñeiro: Y así 1 va intentando sacar patrones en términos de todas las variables de mi conjunto de datos. ¿es eso es lo fuerte, digamos no solo de 2 o 3 variables en término de todas las que tengo
+
+81
+00:10:40.930 --> 00:10:42.589
+Eugenia Sol Piñeiro: que me aporten información, ¿no?
+
+82
+00:10:44.310 --> 00:10:51.580
+Eugenia Sol Piñeiro: Bien. Otro problema va a ser asociación, que no es lo mismo que a agrupación que dimos antes.
+
+83
+00:10:51.720 --> 00:10:55.689
+Eugenia Sol Piñeiro: En este caso, voy a empezar a relacionar
+
+84
+00:10:56.170 --> 00:11:01.590
+Eugenia Sol Piñeiro: datos de mi conjunto de de entrenamiento relaciono las características o los ficheros.
+
+85
+00:11:02.010 --> 00:11:06.509
+Eugenia Sol Piñeiro: y esto está basado en un concepto que es el de memoria asociativa
+
+86
+00:11:06.930 --> 00:11:13.390
+Eugenia Sol Piñeiro: que vamos a ver en una de las redes que es la la red de Homefields, que lo que va a hacer es almacenar
+
+87
+00:11:13.590 --> 00:11:16.489
+Eugenia Sol Piñeiro: información en la red y va a recuperar
+
+88
+00:11:16.830 --> 00:11:22.209
+Eugenia Sol Piñeiro: información que esté relacionada en cierta forma con ese patrón que yo le doy. De entrada.
+
+89
+00:11:23.460 --> 00:11:34.250
+Eugenia Sol Piñeiro: todavía se ve muy abstracto. Ya se va a entender mejor cuando vemos la red. Pero para dar un ejemplo sencillo, supóngase que tenemos un sistema de recomendación. Puede ser un E Commerce
+
+90
+00:11:34.420 --> 00:11:51.159
+Eugenia Sol Piñeiro: donde, por ejemplo, quiero identificar qué artículos los clientes compran juntos con frecuencia. Entonces, para dar un ejemplo básico, si quiero comprar pan, y es probable que el cliente quiera comprar mermelada y queso. Entonces.
+
+91
+00:11:51.380 --> 00:12:10.369
+Eugenia Sol Piñeiro: si estoy en en presencial, digamos, si estoy en el supermercado, en la góndola, el pan el que es una mermelada, Deberían estar en un sector juntos porque están relacionados. Y si es un e commerce, puede ser que agregue al carrito, el pan y después le le sugieran un carrusel ítems sugeridos. Comprar mermelada, comprar queso.
+
+92
+00:12:10.380 --> 00:12:16.620
+Eugenia Sol Piñeiro: Entonces eso aumenta las ventas y empieza a asociar
+
+93
+00:12:16.980 --> 00:12:26.760
+Eugenia Sol Piñeiro: patrones según sus características, porque en este caso son artículos que se consumen juntos con frecuencia. Y ese es el patrón que 1 está asociando
+
+94
+00:12:27.440 --> 00:12:35.550
+Eugenia Sol Piñeiro: en el caso de los pacientes puede ser bueno, yo tengo todos estos síntomas, y estos síntomas están asociados a esta enfermedad.
+
+95
+00:12:35.980 --> 00:12:39.980
+Eugenia Sol Piñeiro: entonces es probable que el paciente tenga esa enfermedad.
+
+96
+00:12:40.140 --> 00:12:54.739
+Eugenia Sol Piñeiro: Pero, claro, el es probable, porque la red en general es medicina, no es que diagnostica, sino que es más una herramienta de apoyo. Digamos, te da una una probabilidad, y después el experto es el que decide el experto médico humano.
+
+97
+00:12:54.940 --> 00:12:58.290
+Eugenia Sol Piñeiro: Y la herramienta de renal es solo apoyo a diagnóstico.
+
+98
+00:12:59.500 --> 00:13:02.550
+Eugenia Sol Piñeiro: Bien, te vas a uy.
+
+99
+00:13:02.730 --> 00:13:07.280
+Eugenia Sol Piñeiro: No sé si entendían la diferencia asociación sería como agrupación.
+
+100
+00:13:07.380 --> 00:13:14.739
+Eugenia Sol Piñeiro: pero en un solo eje, por cada eje, o sea, en vez de buscar los que tienen poca distancia. Entonces los ejes buscas que tengan poca distancia. En un eje.
+
+101
+00:13:17.190 --> 00:13:19.999
+Eugenia Sol Piñeiro: espera, me perdí a qué te referís con
+
+102
+00:13:21.480 --> 00:13:24.350
+Eugenia Sol Piñeiro: buscar, pero en un solo eje.
+
+103
+00:13:26.750 --> 00:13:33.810
+Eugenia Sol Piñeiro: o sea, agrupación. Vos querés agrupar datos que son similares según ciertas características.
+
+104
+00:13:35.460 --> 00:13:41.950
+Eugenia Sol Piñeiro: Y en este caso, querés relacionar y buscar patrones entre los datos, o sea, por ahí
+
+105
+00:13:42.300 --> 00:13:44.099
+Eugenia Sol Piñeiro: para dar un ejemplo sencillo, no
+
+106
+00:13:44.440 --> 00:13:49.720
+Eugenia Sol Piñeiro: la mermelada y el pan en cuanto a vos lo ves y la mermelada es muy distinta a un pan.
+
+107
+00:13:50.720 --> 00:14:00.379
+Eugenia Sol Piñeiro: O sea, no están agrupados en esa categoría, quizás no sé, una estará en panadería y el otro encima lo tiene que guardar. No sé, o el queso están lácteos suponete.
+
+108
+00:14:00.690 --> 00:14:14.529
+Eugenia Sol Piñeiro: entonces no están agrupados según esa categoría, pero están relacionados o asociados en el sentido de que, por lo general, cuando 1 compra pan también se lleva queso. No sé de qué es una tostada, por ejemplo.
+
+109
+00:14:15.720 --> 00:14:18.690
+Eugenia Sol Piñeiro: en los datos. Sería como que compartan una característica.
+
+110
+00:14:19.160 --> 00:14:22.090
+Eugenia Sol Piñeiro: o sea, en 1 de los ejes. Tengan valor similar
+
+111
+00:14:23.970 --> 00:14:34.029
+Eugenia Sol Piñeiro: a qué te referís con el tema de los ejes, O sea, lo estás viendo com muy de graficar quizás en 2 D, me parece, Pero por lo general, ahí ni siquiera lo tenés en 2 d ojo con eso.
+
+112
+00:14:40.060 --> 00:14:42.580
+Eugenia Sol Piñeiro: Ambos son X por 100 lácteos.
+
+113
+00:14:48.710 --> 00:14:50.220
+Eugenia Sol Piñeiro: quieres abrir el micrófono?
+
+114
+00:14:55.220 --> 00:15:05.839
+Eugenia Sol Piñeiro: Bueno, o sea, agrupación, pensalo como quiero que generar clusters en mi conjunto de datos y asociación, quiero relacionar
+
+115
+00:15:07.120 --> 00:15:15.180
+Eugenia Sol Piñeiro: y intenta identificar algún patrón que me los pueda asociar según alguna memoria asociativa
+
+116
+00:15:15.290 --> 00:15:18.379
+Eugenia Sol Piñeiro: que los relacione según alguna característica.
+
+117
+00:15:19.140 --> 00:15:22.000
+Eugenia Sol Piñeiro: pueden ser parecidos. En el sentido de.
+
+118
+00:15:22.820 --> 00:15:31.530
+Eugenia Sol Piñeiro: quizás los estoy asociando y después puedo generar casting pasa que no los quiero marear. O sea, por ahora, veámoslo en 2 problemas distintos que resuelven
+
+119
+00:15:31.880 --> 00:15:33.950
+Eugenia Sol Piñeiro: es por características individuales.
+
+120
+00:15:34.580 --> 00:15:39.329
+Eugenia Sol Piñeiro: es que no es individual. Ese es el término de todas las características de mi conjunto de datos. Eso es lo que me da.
+
+121
+00:15:40.860 --> 00:15:47.400
+Eugenia Sol Piñeiro: o sea, vos Sos, un ejemplo con 7. Pero imagínate tenés 20, 40, 50 variables en tu conjunto de datos.
+
+122
+00:15:47.570 --> 00:15:51.799
+Eugenia Sol Piñeiro: ¿Cuál te sirve más con cuál puedo asociar con cuál puedo agrupar
+
+123
+00:15:51.990 --> 00:16:00.690
+Eugenia Sol Piñeiro: qué qué es lo que estoy haciendo y depende del problema. No, a veces solo quiero agrupar, y a veces solo quiero asociar. Uno puede ser un sistema de recomendación de comida
+
+124
+00:16:00.870 --> 00:16:04.840
+Eugenia Sol Piñeiro: y otro puede ser. No sé, agrupar pacientes según características
+
+125
+00:16:08.150 --> 00:16:09.610
+Eugenia Sol Piñeiro: que un poco más claro ahí.
+
+126
+00:16:10.090 --> 00:16:10.920
+Eugenia Sol Piñeiro: Okay.
+
+127
+00:16:11.280 --> 00:16:15.189
+Eugenia Sol Piñeiro: Bien, vamos a ver 2 redes distintas igual para esto
+
+128
+00:16:15.560 --> 00:16:17.299
+Eugenia Sol Piñeiro: y ahí va a quedar un poco más caro también.
+
+129
+00:16:17.410 --> 00:16:18.440
+Eugenia Sol Piñeiro: El problema.
+
+130
+00:16:20.970 --> 00:16:23.560
+Eugenia Sol Piñeiro: Bien, último.
+
+131
+00:16:23.740 --> 00:16:32.589
+Eugenia Sol Piñeiro: el problema que resuelve es la reducción de dimensión, que es esto que les venía diciendo. Yo tengo n variables. Tengo muchas variables y
+
+132
+00:16:32.880 --> 00:16:40.250
+Eugenia Sol Piñeiro: me dificulta visualizarlo. Me genera mucho costo computacional tener en variables. También entonces
+
+133
+00:16:40.720 --> 00:16:52.450
+Eugenia Sol Piñeiro: hay técnicas para reducir la dimensión de mi conjunto de datos que lo que hacen es justamente proyectarlas en otro sistema de coordenadas que va a estar en función de mis variables anteriores.
+
+134
+00:16:52.880 --> 00:17:05.209
+Eugenia Sol Piñeiro: Y por ejemplo, si yo tenía N variable, la puedo representar en 2 variables que me van a aportar la mayor cantidad de información posible y van a servir para sacar conclusiones robustas sobre mi conjunto de datos.
+
+135
+00:17:05.960 --> 00:17:15.029
+Eugenia Sol Piñeiro: Este método de cómo es que yo convierto mis Cn variables en 2 variables que estén relacionadas con las anteriores, pero en otro sistema de coordenadas.
+
+136
+00:17:15.319 --> 00:17:24.570
+Eugenia Sol Piñeiro: Ya Ahora vamos a ver cuando veamos P. S A, que es el principal componente análisis. También se ven auto encode estos más de Tp, 5
+
+137
+00:17:24.760 --> 00:17:28.569
+Eugenia Sol Piñeiro: más por redes neuronales de deep learning. Así que por ahora vamos a enfocarnos, acá.
+
+138
+00:17:28.830 --> 00:17:34.600
+Eugenia Sol Piñeiro: Y así como lo puedo representar en 2 variables, también lo podría representar en una y generar un índice.
+
+139
+00:17:35.430 --> 00:17:42.099
+Eugenia Sol Piñeiro: por ejemplo, para hacer un ranking o un orden de similitud de pacientes, de mis muestras.
+
+140
+00:17:42.740 --> 00:17:51.479
+Eugenia Sol Piñeiro: y lo puedo convertir quizás en una variable entonces de n variables que tenía mis 40 50 variables. La puedo bajar a una. La puedo bajar a 2 y reducir esa dimensión.
+
+141
+00:17:52.110 --> 00:17:54.519
+Eugenia Sol Piñeiro: Puedo perder información, sí,
+
+142
+00:17:55.090 --> 00:18:04.660
+Eugenia Sol Piñeiro: pero no es tan trivial como decir. Ok, Tengo a n variables. Listo, Elimino de mi conjunto de datos, todas estas columnas, las borro
+
+143
+00:18:05.020 --> 00:18:21.370
+Eugenia Sol Piñeiro: no se hace eso, sino que se intenta representar o intentar cuáles intentar ver cuáles son las más importantes las que me aportan más información y expresarlas en función de todas. No es que listo! Tiro todas mis columnas, si no las uso y ya reducir la dimensionalidad, o sea.
+
+144
+00:18:21.440 --> 00:18:35.610
+Eugenia Sol Piñeiro: es un poco más complejo que eso, ya lo vamos a ver. Pero lo que se tienen que llevar es que vamos a proyectar ese espacio de muchas variables a menos variables para justamente reducir el coste computacional y poder interpretar mejor mi conjunto de datos.
+
+145
+00:18:37.400 --> 00:18:42.929
+Eugenia Sol Piñeiro: Ejemplo supóngase que tenemos un conjunto de países
+
+146
+00:18:43.430 --> 00:18:57.090
+Eugenia Sol Piñeiro: donde tenemos para cada país cuál es el nivel de educación, el nivel de desempleo, la inflación, el P. B. I: Bueno, un montón de variables asociadas a los países, y quiero ver, bueno, en qué país me conviene invertir
+
+147
+00:18:57.460 --> 00:19:01.189
+Eugenia Sol Piñeiro: en términos de todas esas variables. Me puedo generar algún índice
+
+148
+00:19:01.490 --> 00:19:06.200
+Eugenia Sol Piñeiro: que me indique, Ok en orden cuál es el país con
+
+149
+00:19:06.320 --> 00:19:08.709
+Eugenia Sol Piñeiro: en donde más me conviene invertir, por ejemplo.
+
+150
+00:19:08.920 --> 00:19:25.049
+Eugenia Sol Piñeiro: y quizás no quiero que sea un país que tenga mucho desemple mucho desempleo y mucha inflación. Pero ¿cómo me afecta en el resto de las variables. Bueno, y así me puedo generar un índice. Una opción que se usa bastante es la de en computer vision, comprimir imágenes.
+
+151
+00:19:25.430 --> 00:19:34.350
+Eugenia Sol Piñeiro: se usa para comprensión de imágenes, y eso te reduce el costo computacional. Es muy pesado. Cargar imágenes por redes neuronales, y sirve bastante cuando 1 reduce.
+
+152
+00:19:34.510 --> 00:19:37.850
+Eugenia Sol Piñeiro: Y así hay un montón de aplicaciones. Pero
+
+153
+00:19:38.210 --> 00:19:48.100
+Eugenia Sol Piñeiro: a grandes rasgos tenemos estos 3 problemas: Agrupación o Glusting, Asociación y reducción de dimensionalidad hasta Acá dudas
+
+154
+00:19:48.340 --> 00:19:49.709
+Eugenia Sol Piñeiro: de esos 3 problemas.
+
+155
+00:19:58.620 --> 00:20:02.620
+Eugenia Sol Piñeiro: vamos a hacer un repaso. Entonces, tenemos
+
+156
+00:20:03.300 --> 00:20:07.400
+Eugenia Sol Piñeiro: ¿qué problemas tiene el aprendizaje supervisado, o sea, la anterior
+
+157
+00:20:07.520 --> 00:20:17.619
+Eugenia Sol Piñeiro: primero. Es costoso tener todas las etiquetas, todo mi conjunto de datos ya con la salida esperada, entonces la ventaja del no supervisado es que justamente no necesita etiquetas.
+
+158
+00:20:18.150 --> 00:20:21.040
+Eugenia Sol Piñeiro: Y en cuanto a dimensionalidad.
+
+159
+00:20:21.350 --> 00:20:38.490
+Eugenia Sol Piñeiro: cuando tenemos muchas características o features, digamos, las columnas de de Mediatasset es muy costoso, quizás resolver el problema o encontrar una buena aproximación a lo que estoy queriendo predecir, entonces el aprendizaje no supervisado justamente me permite bajar esa dimensión.
+
+160
+00:20:38.890 --> 00:20:56.030
+Eugenia Sol Piñeiro: Por otro lado, también facilita la detección de aulayers. Por ejemplo, si 1 ignora los Aulayers, Uno puede cometer más errores a la hora de entrenar, en cambio, en el no supervisado por ahí. Puedo agrupar los por un lado y dejarlos, y el resto de los datos por el otro. Entonces
+
+161
+00:20:56.130 --> 00:20:58.759
+Eugenia Sol Piñeiro: estas son como las principales diferencias.
+
+162
+00:21:01.170 --> 00:21:07.030
+Eugenia Sol Piñeiro: Acá Les dejo después para que lo vean. Esto es una aplicación en realidad virtual.
+
+163
+00:21:07.910 --> 00:21:13.680
+Eugenia Sol Piñeiro: algún curso, o está cursando realidad virtual. Ahora me interesa o hizo algo en realidad virtual
+
+164
+00:21:13.980 --> 00:21:17.189
+Eugenia Sol Piñeiro: videojuegos. Por lo general se usa mucho para videojuegos.
+
+165
+00:21:23.680 --> 00:21:26.620
+Eugenia Sol Piñeiro: Estoy tentada a hacer un poll, pero
+
+166
+00:21:33.900 --> 00:21:38.410
+Eugenia Sol Piñeiro: Okay, lo que quería traer acá es que
+
+167
+00:21:38.930 --> 00:21:51.649
+Eugenia Sol Piñeiro: en realidad virtual, 1, por lo general, creo que se pone los cascos y ve, digamos, en 3 D. Se usa mucho para videojuegos, que ya está dentro del videojuego y demás. Y da como esa sensación más inmersiva.
+
+168
+00:21:52.120 --> 00:22:09.180
+Eugenia Sol Piñeiro: Lo que quiero traer es que que se lleven, que también se usa para análisis de datos. O sea, esto también se puede usar en inteligencia artificial. Uno se pone los cascos y puede visualizar su datasset en 3 D e incluso agregar por ahí sonido espacial y demás. Entonces
+
+169
+00:22:09.590 --> 00:22:12.040
+Eugenia Sol Piñeiro: puede visualizar quizás los clusters
+
+170
+00:22:12.420 --> 00:22:29.139
+Eugenia Sol Piñeiro: en 3 D y va va moviendo. Y viendo que si miro al conjunto de datos, este gris, ¿qué tipo de pacientes son que puede aparecer información de los pacientes. Miro el verde. Bueno, y estos que están agrupados acá en esta parte de mi gráfico. Cuáles son? Bueno.
+
+171
+00:22:29.200 --> 00:22:34.340
+Eugenia Sol Piñeiro: se usan mucho, por ejemplo, para este tipo de análisis. Les dejo el proyecto para el que quiera verlo.
+
+172
+00:22:35.470 --> 00:22:38.610
+Eugenia Sol Piñeiro: pero para que tengan alguna aplicación, quizás un poco fuera de lo común.
+
+173
+00:22:39.790 --> 00:22:44.589
+Eugenia Sol Piñeiro: Bien. Otra aplicación es, por ejemplo, Instagram.
+
+174
+00:22:45.000 --> 00:22:52.080
+Eugenia Sol Piñeiro: que Instagram define un montón de variables, no para hacer el sistema este de recomendación de
+
+175
+00:22:52.210 --> 00:22:54.409
+Eugenia Sol Piñeiro: en este caso de imágenes o vídeos.
+
+176
+00:22:55.220 --> 00:23:12.179
+Eugenia Sol Piñeiro: Entonces se guarda un montón de variables, por ejemplo, acciones positivas, como que 1 se guarde algún reel o le dé like a alguna foto y se guarda acciones negativas, como no sé denunciar o bloquear o no. Quiero ver este tipo de post o no estoy interesado.
+
+177
+00:23:12.750 --> 00:23:18.130
+Eugenia Sol Piñeiro: y esto se hace a través de redes neuronales que lo que con aprendizaje no supervisado.
+
+178
+00:23:18.260 --> 00:23:28.009
+Eugenia Sol Piñeiro: que la la idea general es bueno. Si vos leíste like a una foto de Alice, y Alice es similar con cierta medida de similitud que se define
+
+179
+00:23:28.140 --> 00:23:34.400
+Eugenia Sol Piñeiro: a Bob y Bob hizo todos estos posts, entonces es muy probable que a vos te gusten todos estos posts.
+
+180
+00:23:34.540 --> 00:23:40.409
+Eugenia Sol Piñeiro: Entonces esa es la idea de Ok, empezar a recomendar en términos de todas esas variables.
+
+181
+00:23:40.810 --> 00:23:44.729
+Eugenia Sol Piñeiro: qué qué fotos o qué vídeos son los que más te gustan.
+
+182
+00:23:45.190 --> 00:23:50.140
+Eugenia Sol Piñeiro: Así como está el de Instagram. Hay un montón. No está, por ejemplo, el de Spotify
+
+183
+00:23:50.250 --> 00:23:58.340
+Eugenia Sol Piñeiro: vieron cuando dice entras a Spotify. Te te sugiere contenido hecho para vos personalizado, como
+
+184
+00:23:58.490 --> 00:24:08.790
+Eugenia Sol Piñeiro: tus top mixies que te recomendamos para hoy, basado en tu actividad. Esto puede ser lo que más te va a gustar.
+
+185
+00:24:08.940 --> 00:24:13.739
+Eugenia Sol Piñeiro: ¿ Bueno, está como más personalizado. Entonces, ¿cómo hace eso
+
+186
+00:24:13.950 --> 00:24:19.039
+Eugenia Sol Piñeiro: de nuevo, registra un montón de variables. Estas son solo algunas, de hecho.
+
+187
+00:24:19.390 --> 00:24:22.740
+Eugenia Sol Piñeiro: pero fíjense que, por ejemplo, guarda tu comportamiento
+
+188
+00:24:22.890 --> 00:24:42.610
+Eugenia Sol Piñeiro: que Playlist que Playlist guardaste a qué canciones le diste? Skit cuales guardaste como favorito. Cuáles compartís? Qué es lo que más escuchas, cuánto tiempo lo escuchas después, tu comportamiento lo mezcla con el comportamiento de otros. Para quizás ver, bueno, estas son las más populares en general, o en tu región.
+
+189
+00:24:42.720 --> 00:24:57.060
+Eugenia Sol Piñeiro: Entonces, cuáles son los los artistas que están en tendencia ahora? Cuáles son los artistas similares a los artistas que ya la hay que o que ya sueles escuchar cuales son las nuevas canciones de los artistas que te gustan.
+
+190
+00:24:57.860 --> 00:25:11.450
+Eugenia Sol Piñeiro: Y además de todo esto, lo mezcla con el audio en sí features del audio de, por ejemplo. ¿cuál es el espectograma? ¿cuál es el tempo de la canción? ¿cuál es la amplitud? ¿cuál es la letra? ¿cuánto dura? Entonces?
+
+191
+00:25:11.560 --> 00:25:19.100
+Eugenia Sol Piñeiro: Fíjense que primero estas solo son algunas, y ya son un montón de variables, entonces
+
+192
+00:25:19.610 --> 00:25:28.490
+Eugenia Sol Piñeiro: este tipo de sistemas también son redes neuronales con aprendizaje no supervisado justamente para recomendar o personalizar la experiencia para el usuario.
+
+193
+00:25:30.810 --> 00:25:38.739
+Eugenia Sol Piñeiro: Entonces resumen esto un poco. Ya lo aclaré, pero vamos a ver aprendizaje no supervisado, aplicado a redes neuronales.
+
+194
+00:25:40.010 --> 00:25:50.280
+Eugenia Sol Piñeiro: Hoy vamos a arrancar con cojones. Después. Vamos a ver hoja primero y último, vamos a ver. Hop Fill. Después van a escuchar. Está este modelo de Sanger, pero lo vamos a ver un poco más por acá
+
+195
+00:25:51.030 --> 00:25:55.729
+Eugenia Sol Piñeiro: pero hasta acá. La intro ya ven, paso a la red, pero dudas.
+
+196
+00:25:56.080 --> 00:25:58.489
+Eugenia Sol Piñeiro: pero claro que es no supervisado.
+
+197
+00:26:11.940 --> 00:26:18.730
+Eugenia Sol Piñeiro: ¿por qué se necesita no supervisar en el caso de recomendaciones y las recomendaciones en base a los gustos de otros similar.
+
+198
+00:26:19.060 --> 00:26:22.600
+Eugenia Sol Piñeiro: 3, el dato etiquetado de que le gusta a otro
+
+199
+00:26:24.020 --> 00:26:26.780
+Eugenia Sol Piñeiro: está supervisado en base a otros, pero eventualmente.
+
+200
+00:26:27.000 --> 00:26:30.089
+Eugenia Sol Piñeiro: a qué te referís con que lo tenés etiquetado
+
+201
+00:26:30.650 --> 00:26:32.359
+Eugenia Sol Piñeiro: de que le gusta a otro.
+
+202
+00:26:36.860 --> 00:26:40.259
+Eugenia Sol Piñeiro: o sea, la etiqueta que necesitarías ahí. En realidad es
+
+203
+00:26:40.790 --> 00:26:50.350
+Eugenia Sol Piñeiro: que me gusta a mí. ¿cómo sabes que me gusta o no somos? Necesitas una etiqueta que no sé por todas las canciones que hay en Spotify digas 0 o 1, Si a mí me gusta o no
+
+204
+00:26:50.460 --> 00:26:52.570
+Eugenia Sol Piñeiro: a mí para cada usuario encima.
+
+205
+00:26:53.160 --> 00:27:00.500
+Eugenia Sol Piñeiro: o sea imposible tener para los 1 000 000 y 1 000 000 de usuarios. Un Dataset específico etiquetado donde le gusta. No le gusta, le gusta. No le gusta. Y así
+
+206
+00:27:01.350 --> 00:27:06.349
+Eugenia Sol Piñeiro: saber si soy similar a otro. No me sirve para hacer la recomendación hasta no saber que le gusta al otro.
+
+207
+00:27:10.170 --> 00:27:17.529
+Eugenia Sol Piñeiro: Claro. Bueno, pero es el es probable que a los 2 les guste la misma música si son similares.
+
+208
+00:27:17.890 --> 00:27:22.550
+Eugenia Sol Piñeiro: En ese sentido, basado en el comportamiento, quizás de
+
+209
+00:27:22.790 --> 00:27:36.420
+Eugenia Sol Piñeiro: la recomendación general del histórico del usuario. Lo que te puede pasar es el caso border de el usuario es nuevo o el usuario no está logueado, Entonces, no tenés información registrada de su actividad. Y ahí se pone, por ejemplo, la más popular.
+
+210
+00:27:37.830 --> 00:27:46.660
+Eugenia Sol Piñeiro: En general, quizás no está tan personalizado, pero podés arrancar por ahí y después empezar a personalizar más la experiencia. En caso de personalización se hace eso.
+
+211
+00:27:57.200 --> 00:28:02.470
+Eugenia Sol Piñeiro: no, no, o sea. No tenés etiquetas, ¿Cómo cómo te estás imaginando en la tarjeta ahí.
+
+212
+00:28:05.430 --> 00:28:10.439
+Eugenia Sol Piñeiro: O sea, puede ser que las tengas, por lo general no las tenés.
+
+213
+00:28:10.780 --> 00:28:17.020
+Eugenia Sol Piñeiro: entonces ese es el caso en el que yo no tengo etiquetas. De hecho, no las necesito en este caso, pues justamente lo que te dan
+
+214
+00:28:17.150 --> 00:28:21.170
+Eugenia Sol Piñeiro: este tipo de de modelos es la posibilidad de ni siquiera tenerlas
+
+215
+00:28:25.200 --> 00:28:30.899
+Eugenia Sol Piñeiro: tenés. El conjunto de características con los que detectas. Quién puede tener gustos similares
+
+216
+00:28:34.700 --> 00:28:35.890
+Eugenia Sol Piñeiro: Okay
+
+217
+00:28:38.340 --> 00:28:44.310
+Eugenia Sol Piñeiro: y qué más. O sea tenés un conjunto de, pero para recomendar con saber cuál es el gusto efectivo del otro.
+
+218
+00:28:48.240 --> 00:28:54.030
+Eugenia Sol Piñeiro: Ahí no necesitas la etiqueta es que claro, vos lo que estás intentando ahí es ver
+
+219
+00:28:54.520 --> 00:28:58.000
+Eugenia Sol Piñeiro: cuál es tu gusto, no.
+
+220
+00:28:58.690 --> 00:29:05.089
+Eugenia Sol Piñeiro: O sea, no tenés la etiqueta de qué te gusta. Y qué no te gusta a Vos Nicolás como usuario de Spotify.
+
+221
+00:29:05.650 --> 00:29:13.360
+Eugenia Sol Piñeiro: o sea. No tenés el 0, 1 de te gusta esta canción, imagínate una taset de canciones, canción, 1
+
+222
+00:29:13.580 --> 00:29:25.149
+Eugenia Sol Piñeiro: te gusta 0, canción, 2, te gusta 1. O sea, no te gusta, te gusta, no te gusta, te gusta y vas. Etiquetando esa columna del 0, 1 no la tenés. De hecho, es lo que querés
+
+223
+00:29:25.860 --> 00:29:30.860
+Eugenia Sol Piñeiro: conseguir o intentar relacionar patrones para justamente no tener que conseguir esa etiqueta.
+
+224
+00:29:35.090 --> 00:29:37.929
+Eugenia Sol Piñeiro: No lo puede predecir un M. L. P: normal. Eso en
+
+225
+00:29:38.040 --> 00:29:47.069
+Eugenia Sol Piñeiro: entrenado en base a los datos de otros. Mi columna no la sabemos, pero sí la de otros no, no, Tampoco tenés la del otro con la del otro. También vas relacionando patrones.
+
+226
+00:29:47.930 --> 00:29:49.769
+Eugenia Sol Piñeiro: Y el M L. P.
+
+227
+00:29:49.900 --> 00:29:53.099
+Eugenia Sol Piñeiro: Se usa también para aprendizaje no supervisado.
+
+228
+00:29:56.440 --> 00:30:00.499
+Eugenia Sol Piñeiro: y pero ya lo ya lo vamos a ver
+
+229
+00:30:01.500 --> 00:30:07.660
+Eugenia Sol Piñeiro: tu columna, No la sabes, la del otro, tampoco la sabés, o sea, Sacás, asociaciones
+
+230
+00:30:07.780 --> 00:30:12.140
+Eugenia Sol Piñeiro: o agrupás, gente que suele escuchar este tipo de música. Sí,
+
+231
+00:30:12.890 --> 00:30:16.049
+Eugenia Sol Piñeiro: ¿cómo será recomendación, si tampoco sé qué le gusta a otros
+
+232
+00:30:18.640 --> 00:30:20.530
+Eugenia Sol Piñeiro: es que los empezás a agrupar.
+
+233
+00:30:20.900 --> 00:30:26.309
+Eugenia Sol Piñeiro: se entiende. O sea, no sé. Yo suponete que escucho pop y escucho rock.
+
+234
+00:30:26.680 --> 00:30:34.390
+Eugenia Sol Piñeiro: y vos por lo general escuchas pop y escuchas ciertos artistas de Pop y
+
+235
+00:30:34.660 --> 00:30:39.780
+Eugenia Sol Piñeiro: y yo también. Entonces okay, nosotros estamos relacionados con esos artistas.
+
+236
+00:30:40.450 --> 00:30:44.320
+Eugenia Sol Piñeiro: Entonces así es como vas. No, No es una etiqueta Pop Rock.
+
+237
+00:30:45.140 --> 00:30:50.760
+Eugenia Sol Piñeiro: Ese es el género, la categoría, o sea, vos, en este caso, la etiqueta que necesitas es. ¿te gusta o no te gusta
+
+238
+00:30:51.800 --> 00:30:53.030
+Eugenia Sol Piñeiro: en este ejercicio
+
+239
+00:30:55.830 --> 00:31:01.709
+Eugenia Sol Piñeiro: pop, pro que es una categoría de un género de música. Sí, eso lo puedes tener tranquilamente.
+
+240
+00:31:03.530 --> 00:31:15.270
+Eugenia Sol Piñeiro: Suponete que en realidad tu caso es intentar clasi clasificar canciones en pop y rock. Ahí lo que querés es la etiqueta de Pop Rock que no la tenés.
+
+241
+00:31:15.580 --> 00:31:17.190
+Eugenia Sol Piñeiro: Pero tenés otras cosas.
+
+242
+00:31:17.420 --> 00:31:23.239
+Eugenia Sol Piñeiro: Entonces, bueno, por lo general las las de Pop suelen ser así.
+
+243
+00:31:23.640 --> 00:31:35.009
+Eugenia Sol Piñeiro: Y ahí intentas asociar patrones o intentar agrupar estas características. Y después ves que es lo que querés. Pero tenés que ir un paso más allá, después para clasificar. Estás como pensando mucho en problemas de clasificación.
+
+244
+00:31:35.530 --> 00:31:39.660
+Eugenia Sol Piñeiro: acá, estamos más en problemas de agrupación o castings, asociación.
+
+245
+00:31:45.750 --> 00:31:49.179
+Eugenia Sol Piñeiro: O sea, si tenés la etiqueta podés hacer. M. L, P: Y listo.
+
+246
+00:31:49.810 --> 00:31:55.530
+Eugenia Sol Piñeiro: le qui el M. L. P. Que conocen como lo vieron hoy en Ay estos estos meses.
+
+247
+00:31:58.560 --> 00:32:01.649
+Eugenia Sol Piñeiro: Okay. No sé si te convencí igual.
+
+248
+00:32:01.890 --> 00:32:06.190
+Eugenia Sol Piñeiro: pero ahora vamos a ver un ejemplo con redes neuronales donde vamos a agrupar.
+
+249
+00:32:09.190 --> 00:32:10.030
+Eugenia Sol Piñeiro: Bien.
+
+250
+00:32:13.350 --> 00:32:16.180
+Eugenia Sol Piñeiro: Bueno, les dejo la bibliografía acá
+
+251
+00:32:17.020 --> 00:32:21.430
+Eugenia Sol Piñeiro: para que quiera profundizar, vamos a irnos al modelo de Cohonen.
+
+252
+00:32:30.980 --> 00:32:32.990
+Eugenia Sol Piñeiro: que sería la segunda parte. Okay.
+
+253
+00:32:34.750 --> 00:32:36.370
+Eugenia Sol Piñeiro: ¿Qué es lo que va a hacer esta red?
+
+254
+00:32:37.680 --> 00:32:49.710
+Eugenia Sol Piñeiro: Bueno, primero vamos a estar en el problema de aprendizaje no supervisado, o sea, acá. No vamos a tener etiquetas. No hay información que me diga si la red se está comportando bien o no se está performando bien o no el modelo
+
+255
+00:32:50.370 --> 00:32:53.339
+Eugenia Sol Piñeiro: Y lo que hace la red de pro de cojones es
+
+256
+00:32:53.460 --> 00:33:01.309
+Eugenia Sol Piñeiro: durante el training durante el proceso de aprendizaje. Intenta aprender patrones sobre los datos de entrada.
+
+257
+00:33:01.540 --> 00:33:12.239
+Eugenia Sol Piñeiro: y después va a terminar agrupándolos en la red, o sea, la salida de la red va a ser una agrupación de mis patrones en términos de todas las variables que yo tenía.
+
+258
+00:33:12.770 --> 00:33:22.569
+Eugenia Sol Piñeiro: A esto también se le llama Zoom. O Self Organizage Maps, mapas autorganizados. Lo pueden encontrar así también. Pero es la red de cojones.
+
+259
+00:33:23.120 --> 00:33:29.550
+Eugenia Sol Piñeiro: Esto se definió por primera vez en 1 982, o sea, que viene hace
+
+260
+00:33:29.670 --> 00:33:31.640
+Eugenia Sol Piñeiro: bastante ya. Y
+
+261
+00:33:32.520 --> 00:33:46.099
+Eugenia Sol Piñeiro: y fue muy importante. Después se siguió trabajando durante bastante tiempo sobre esto, pero yo pensé que esto es de del 82 bastante viejo, y lo que hace es justamente organizar la información de forma topológica en este mapa
+
+262
+00:33:46.430 --> 00:33:47.750
+Eugenia Sol Piñeiro: que ya vamos a ver cómo
+
+263
+00:33:48.850 --> 00:33:50.690
+Eugenia Sol Piñeiro: y esta va a ser la arquitectura.
+
+264
+00:33:51.440 --> 00:33:53.850
+Eugenia Sol Piñeiro: Voy a tener una red neuronal.
+
+265
+00:33:53.990 --> 00:33:57.939
+Eugenia Sol Piñeiro: ¿dónde voy a tener un vector de entrada
+
+266
+00:33:58.550 --> 00:34:01.869
+Eugenia Sol Piñeiro: que el vector de entrada van a ser mis características.
+
+267
+00:34:02.280 --> 00:34:06.040
+Eugenia Sol Piñeiro: no. O sea, si yo tengo pacientes.
+
+268
+00:34:06.160 --> 00:34:16.640
+Eugenia Sol Piñeiro: va a entrar el paciente, 1 donde X 0 va a ser edad X, 1 va a hacer peso, equis va a ser presión arterial. X, Tres: va a ser altura.
+
+269
+00:34:17.040 --> 00:34:23.360
+Eugenia Sol Piñeiro: Entonces entra una muestra de mi conjunto de datos y va a intentar agruparlos
+
+270
+00:34:23.489 --> 00:34:26.989
+Eugenia Sol Piñeiro: a alguna de las neuronas de salida de la red.
+
+271
+00:34:27.100 --> 00:34:31.670
+Eugenia Sol Piñeiro: La salida de la red va a estar expresada en una grilla de k por K.
+
+272
+00:34:32.120 --> 00:34:41.179
+Eugenia Sol Piñeiro: Bueno, en este caso es de 3 por 5, donde las neuronas de salida están conectadas con sí mismas
+
+273
+00:34:41.420 --> 00:34:45.410
+Eugenia Sol Piñeiro: y además, están conectadas con sus vecinas.
+
+274
+00:34:46.050 --> 00:34:53.699
+Eugenia Sol Piñeiro: Entonces acá va a haber un concepto de similitud entre vecinas. También va a estar el concepto, este de quiénes son mis vecinas? ¿quién es el vecindario?
+
+275
+00:34:54.560 --> 00:34:57.570
+Eugenia Sol Piñeiro: Y lo que me va a decir. Este mapa de salida es
+
+276
+00:34:58.480 --> 00:35:02.690
+Eugenia Sol Piñeiro: si esta muestra activó la neurona 1.
+
+277
+00:35:03.110 --> 00:35:13.350
+Eugenia Sol Piñeiro: Y la siguiente muestra también activó la neurona 1. Entonces es porque son muy similares, y las empieza a agrupar las agrupa en las neuronas, o sea, en este caso mis clusters
+
+278
+00:35:13.490 --> 00:35:15.760
+Eugenia Sol Piñeiro: van a quedar en cada una de las neuronas
+
+279
+00:35:17.030 --> 00:35:32.159
+Eugenia Sol Piñeiro: Y Si, por ejemplo, viene una muestra y me queda en la neurona vecina, la de al lado. También es similar porque es mi vecina, Y yo soy similar a mis vecinas, pero no tan similar como si hubiese activado exactamente la misma neurona. Entonces
+
+280
+00:35:32.700 --> 00:35:47.739
+Eugenia Sol Piñeiro: eso va a ser lo importante, o lo core del concepto de Hobfield de Cohonen, donde voy a empezar a agrupar muestras dentro de mi red, que fíjense que es como un M. L, P: Donde
+
+281
+00:35:47.800 --> 00:35:54.509
+Eugenia Sol Piñeiro: en vez de tener capas ocultas, o sea, no tengo acá tantas capas ocultas, es simplemente una capa de salida muy grande
+
+282
+00:35:54.660 --> 00:35:55.740
+Eugenia Sol Piñeiro: de k por K,
+
+283
+00:35:56.490 --> 00:36:01.549
+Eugenia Sol Piñeiro: nada más. O sea, es un perceptrón con una capa y una capa de salida de K, por acá
+
+284
+00:36:02.520 --> 00:36:03.760
+Eugenia Sol Piñeiro: Y en
+
+285
+00:36:04.160 --> 00:36:13.880
+Eugenia Sol Piñeiro: vamos a ver el concepto de radio para definir las vecinas. Creo que está acá arriba de la N. Ya lo vamos a ver. Pero por lo pronto, esta es la arquitectura. Es bastante sencilla.
+
+286
+00:36:14.550 --> 00:36:15.610
+Eugenia Sol Piñeiro: En
+
+287
+00:36:16.250 --> 00:36:21.579
+Eugenia Sol Piñeiro: bien después les dejo acá también. Otro ejemplo es realidad virtual, pero con cojones para el que quiera verlo.
+
+288
+00:36:21.810 --> 00:36:29.810
+Eugenia Sol Piñeiro: Y vamos a ver cuál es este concepto de aprendizaje competitivo
+
+289
+00:36:30.790 --> 00:36:38.489
+Eugenia Sol Piñeiro: encojonenla. Lo que va a pasar es que las neuronas van a empezar a competir. Se dice unas con otras. ¿por qué? Porque
+
+290
+00:36:39.150 --> 00:36:46.389
+Eugenia Sol Piñeiro: la el objetivo es justamente activar algún que alguna neurona que va a ser la ganadora.
+
+291
+00:36:46.620 --> 00:36:51.560
+Eugenia Sol Piñeiro: ¿Por qué se la llama ganadora? Porque entra este paciente y
+
+292
+00:36:51.990 --> 00:36:56.709
+Eugenia Sol Piñeiro: necesito que se active solo una para que quede agrupada a ese cluster.
+
+293
+00:36:57.500 --> 00:37:12.670
+Eugenia Sol Piñeiro: Entonces el objetivo final es que la activación de esta neurona sea mayor y el resto minimizarla. Entonces necesito activarse una neurona para poder agrupar mis pacientes en ese clúster En este caso, esta muestra en ese cluster.
+
+294
+00:37:12.990 --> 00:37:16.599
+Eugenia Sol Piñeiro: Y las demás son forzadas a valores de respuesta mínimos.
+
+295
+00:37:17.330 --> 00:37:24.660
+Eugenia Sol Piñeiro: A esta neurona ganadora También se la llama B, M, U quizás la pueden encontrar. Así
+
+296
+00:37:25.900 --> 00:37:28.500
+Eugenia Sol Piñeiro: que estos best matching unit.
+
+297
+00:37:28.830 --> 00:37:39.420
+Eugenia Sol Piñeiro: bueno, la ganadora o la la o la unidad que mejor Machea. Se les llama así. Entonces van a competir unas con otras, pero se va a activar solo una.
+
+298
+00:37:39.830 --> 00:37:44.110
+Eugenia Sol Piñeiro: Entonces, ¿qué es lo que va a pasar a lo largo de las épocas mientras yo voy entrenando.
+
+299
+00:37:44.330 --> 00:37:53.090
+Eugenia Sol Piñeiro: va a haber algunas neuronas que van a tomar un nivel de activación mayor y el resto se va a empezar a anular, ¿Va a tender a 0. Entonces la neurona ganadora se define como
+
+300
+00:37:53.210 --> 00:38:06.469
+Eugenia Sol Piñeiro: Dada la unidad de entrada X, que va a ser una muestra de mi conjunto de datos, la neurona que tenga el vector de pesos más similar a X, va a ser la ganadora, O sea, yo acá estoy comparando
+
+301
+00:38:07.610 --> 00:38:14.890
+Eugenia Sol Piñeiro: pesos con la entrada, o sea, voy a tener mi mi vector de
+
+302
+00:38:15.250 --> 00:38:30.730
+Eugenia Sol Piñeiro: edad, peso, altura, no sé presión arterial, etcétera. Y lo tengo que comparar con alguna medida de similitud con mi vector de pesos, no, por ejemplo, la distancia euclidia entre X y W.
+
+303
+00:38:31.260 --> 00:38:46.780
+Eugenia Sol Piñeiro: Hay que definir cuál es esa distancia. ¿cuál es la medida de similitud. Pero lo que yo estoy comparando es X con los pesos de cada neurona que al principio se van a inicializar, Random. Pero después, a lo largo del entrenamiento igual a todo lo que ya vimos.
+
+304
+00:38:47.740 --> 00:38:53.210
+Eugenia Sol Piñeiro: va a activarse esa neurona que tenga un vector de peso similar.
+
+305
+00:38:54.600 --> 00:38:55.480
+Eugenia Sol Piñeiro: Bien.
+
+306
+00:38:56.290 --> 00:38:58.959
+Eugenia Sol Piñeiro: Y esto se lo llama aprendizaje competitivo.
+
+307
+00:39:02.150 --> 00:39:04.489
+Eugenia Sol Piñeiro: Bueno, ¿cuál es el objetivo?
+
+308
+00:39:04.870 --> 00:39:09.639
+Eugenia Sol Piñeiro: Si 2 registros me activan la misma neurona, entonces son parecidos.
+
+309
+00:39:10.340 --> 00:39:15.089
+Eugenia Sol Piñeiro: ¿no? Supóngase que tenemos esto, pues así que tengo esta red
+
+310
+00:39:17.160 --> 00:39:19.079
+Eugenia Sol Piñeiro: va a ser la de 2 por 2
+
+311
+00:39:20.580 --> 00:39:23.249
+Eugenia Sol Piñeiro: solo porque soy muy mala dibujando, pero
+
+312
+00:39:23.650 --> 00:39:28.550
+Eugenia Sol Piñeiro: supóngase que entra el paciente. Uno en izuna.
+
+313
+00:39:30.770 --> 00:39:44.279
+Eugenia Sol Piñeiro: corro la red y la neurona con mayor activación que tiene el vector de peso similar a X es esta. Entonces acá. Me quedo agrupado. X, Uno: Bien, listo. Ya terminé con X, 1, voy con X 2, que es mi segundo paciente.
+
+314
+00:39:44.340 --> 00:39:52.400
+Eugenia Sol Piñeiro: Bueno, ¿dónde quedará mi segundo paciente? ¿cuál es la neurona con el vector de peso más similar. Bueno, a lo largo de las épocas me termina activando. Ésta.
+
+315
+00:39:52.910 --> 00:39:59.489
+Eugenia Sol Piñeiro: Entonces acá me quedaron X 1 y X 2, voy con X 3 X Tres: me activa esta
+
+316
+00:40:01.480 --> 00:40:06.379
+Eugenia Sol Piñeiro: entonces X, 1 y X, 3 son pacientes que tienen
+
+317
+00:40:06.520 --> 00:40:16.860
+Eugenia Sol Piñeiro: características en términos de todas sus variables muy parecidas porque me activaron la misma neurona. Entonces X, 1 y X Tres: quedan agrupados en ese cluster.
+
+318
+00:40:17.740 --> 00:40:23.500
+Eugenia Sol Piñeiro: Y X 2 quedó en otro cluster que en este caso, como la hice de 2 por 2,
+
+319
+00:40:23.950 --> 00:40:28.999
+Eugenia Sol Piñeiro: pueden llegar a ser vecinas según como defina el radio, pues está está bastante cerca.
+
+320
+00:40:29.110 --> 00:40:35.050
+Eugenia Sol Piñeiro: Quizás no. Porque quizás definí como defi vecinas solo estas, pero ¿a qué voy con esto con
+
+321
+00:40:35.600 --> 00:40:43.340
+Eugenia Sol Piñeiro: X? Uno y X, 3 son muy similares, pero activaron la misma. Pero ojo porque X 2 también puede ser similar
+
+322
+00:40:44.040 --> 00:40:45.209
+Eugenia Sol Piñeiro: porque es vecina.
+
+323
+00:40:46.370 --> 00:40:51.420
+Eugenia Sol Piñeiro: Entonces, el objetivo es que activen la misma neurona de salida, las que son más similares.
+
+324
+00:40:53.030 --> 00:40:56.589
+Eugenia Sol Piñeiro: Hasta Acá la idea general de cojones se entendió,
+
+325
+00:41:00.820 --> 00:41:03.130
+Eugenia Sol Piñeiro: o sea, va a ser una red de una sola capa
+
+326
+00:41:04.120 --> 00:41:18.559
+Eugenia Sol Piñeiro: donde va estar expresada en una grilla bidimensional de K. Por K Fíjense que ahí hay una reducción de dimensionalidad. Tenía n variables y la pasé por mi red. Y ahora tengo una grilla de Ek, por K, sabes, bidimensional
+
+327
+00:41:19.680 --> 00:41:30.429
+Eugenia Sol Piñeiro: Y, bueno, cada neurona está conectada con todas las componentes de un vector de entrada l dimensional. Esto parece demasiado. Ahora vamos a ver que es simplemente que están todas conectadas contra todas.
+
+328
+00:41:30.960 --> 00:41:36.620
+Eugenia Sol Piñeiro: Entonces, esta es la reducción de dimensionalidad, no del espacio multidimensional. Paso a 2 D.
+
+329
+00:41:39.140 --> 00:41:47.350
+Eugenia Sol Piñeiro: Esto es lo que decía antes que el X, 1 que va a ser el Por ejemplo, el primer, la primer Feature.
+
+330
+00:41:47.490 --> 00:41:51.390
+Eugenia Sol Piñeiro: va a estar conectada con todas las neuronas de la capa de salida.
+
+331
+00:41:52.330 --> 00:41:55.750
+Eugenia Sol Piñeiro: Entonces, si los datos de entrada tienen dimensión, n.
+
+332
+00:41:56.360 --> 00:41:59.190
+Eugenia Sol Piñeiro: cada neurona de la orilla tiene n conexiones.
+
+333
+00:42:00.030 --> 00:42:05.019
+Eugenia Sol Piñeiro: no porque va a estar conectada con todos estos de acá con éste también. Y así,
+
+334
+00:42:08.000 --> 00:42:18.599
+Eugenia Sol Piñeiro: N, en este caso, va a ser la cantidad de columnas o cantidad de ficheros que tenga. O sea, si tengo 7 fichers como tenía antes con los pacientes. Entonces voy a tener vectores de 7 D:
+
+335
+00:42:20.950 --> 00:42:25.479
+Eugenia Sol Piñeiro: Bien, y esta grilla se puede expresar de distintas formas.
+
+336
+00:42:25.630 --> 00:42:36.160
+Eugenia Sol Piñeiro: Puedo tener una orilla rectangular cuadrada. Pero acá lo importante es, cómo defino yo, mi vecindario.
+
+337
+00:42:36.360 --> 00:42:41.319
+Eugenia Sol Piñeiro: Fijensé que supóngase que esta es mi B m u no mi neurona ganadora
+
+338
+00:42:41.440 --> 00:42:47.669
+Eugenia Sol Piñeiro: y agarro y defino. Bueno, quiero radio, 1 para definir mi vecindario.
+
+339
+00:42:48.380 --> 00:42:55.280
+Eugenia Sol Piñeiro: Entonces mi vecindario van a ser las que están arriba abajo, izquierda a derecha, no, o sea radio. Uno están inmediatamente al lado.
+
+340
+00:42:56.800 --> 00:42:59.350
+Eugenia Sol Piñeiro: Entonces tengo ahí mis 4 vecinos
+
+341
+00:43:00.270 --> 00:43:05.019
+Eugenia Sol Piñeiro: o puedo definir, No, yo quiero radio raíz de 2.
+
+342
+00:43:05.770 --> 00:43:11.529
+Eugenia Sol Piñeiro: Entonces, acá por ejemplo, tengo mis 4 vecinos, pero también voy a tener las diagonales.
+
+343
+00:43:11.940 --> 00:43:13.550
+Eugenia Sol Piñeiro: No, lo que es raíz de 2.
+
+344
+00:43:13.960 --> 00:43:17.020
+Eugenia Sol Piñeiro: Entonces ahí voy a tener mis 8 vecinas.
+
+345
+00:43:17.630 --> 00:43:22.909
+Eugenia Sol Piñeiro: Puedo definir radio 2 y empezar a escalar, ¿no? Y que rodea mi vecindario sea este
+
+346
+00:43:23.190 --> 00:43:31.119
+Eugenia Sol Piñeiro: y definir un poco más de vecinas. Bueno, eso depende. Va a ser justamente 1 de los parámetros con los que hay que jugar en la red.
+
+347
+00:43:31.670 --> 00:43:38.789
+Eugenia Sol Piñeiro: o incluso puede no ser constantes. Ya lo vamos a ver, pero ese es el el concepto general del radio.
+
+348
+00:43:39.410 --> 00:43:47.930
+Eugenia Sol Piñeiro: Y esto va a variar según cómo yo defina mi grilla, porque en este caso la orilla es cuadrada. ¿pero ¿qué pasa si, por ejemplo, tengo una orilla hexagonal.
+
+349
+00:43:48.670 --> 00:43:51.489
+Eugenia Sol Piñeiro: Acá Si defino el radio 1,
+
+350
+00:43:54.230 --> 00:43:57.859
+Eugenia Sol Piñeiro: voy a tener 6 vecinas. No voy a tener todas estas
+
+351
+00:43:59.900 --> 00:44:06.670
+Eugenia Sol Piñeiro: por cómo están en la red definidas, cómo están definidas las conexiones en las neuronas con una grilla hexagonal?
+
+352
+00:44:06.860 --> 00:44:12.549
+Eugenia Sol Piñeiro: A términos del trabajo práctico, pueden elegir el formato de orilla que quieran.
+
+353
+00:44:12.780 --> 00:44:21.860
+Eugenia Sol Piñeiro: Está bueno. De hecho, si prueban como varían con distintas grillas, pero por lo general se suele usar más la cuadrada. La hexagonal es más compleja.
+
+354
+00:44:22.020 --> 00:44:30.449
+Eugenia Sol Piñeiro: pero también me permite conseguir relaciones más complejas. Entonces está buena para poder representar quizás problemas un poco más complejos.
+
+355
+00:44:34.220 --> 00:44:38.060
+Eugenia Sol Piñeiro: Bien, entonces esto es, en resumen, lo que dije. Se define un radio R
+
+356
+00:44:38.490 --> 00:44:45.410
+Eugenia Sol Piñeiro: y en una orilla rectangular para definir mis 4 vecinos. Voy a tener arriba. Uno: 8 vecinos arriba igual a raíz de 2 que oímos recién.
+
+357
+00:44:45.690 --> 00:44:47.690
+Eugenia Sol Piñeiro: Y lo importante es que
+
+358
+00:44:48.160 --> 00:44:56.320
+Eugenia Sol Piñeiro: las entradas similares van a ir a parar en la misma neurona. Pero si estoy en una de las vecinas, también voy a ser similar. O sea, a medida que me alejo
+
+359
+00:44:56.520 --> 00:45:03.800
+Eugenia Sol Piñeiro: de mi B. M. W. De mi neurona ganadora más distintas, van a ser a medida que me acerco más similares van a ser a mi neurona ganadora.
+
+360
+00:45:06.380 --> 00:45:07.480
+Eugenia Sol Piñeiro: Entonces
+
+361
+00:45:08.680 --> 00:45:14.819
+Eugenia Sol Piñeiro: lo que va variando en la red de cojones va a ser el vector de pesos de cada neurona. Entonces
+
+362
+00:45:15.260 --> 00:45:18.269
+Eugenia Sol Piñeiro: voy a tener que primero elegir el k
+
+363
+00:45:18.630 --> 00:45:24.370
+Eugenia Sol Piñeiro: otro hiper parámetro que tengo que variar, así como varía el radio. El K también puede ser variable y
+
+364
+00:45:24.840 --> 00:45:28.519
+Eugenia Sol Piñeiro: es algo con lo que es bastante experimental, y 1 tiene que probar.
+
+365
+00:45:28.670 --> 00:45:31.639
+Eugenia Sol Piñeiro: Ahora vamos a ver qué puede pasar y qué
+
+366
+00:45:31.830 --> 00:45:36.949
+Eugenia Sol Piñeiro: qué tengo que seguir para variar el k después? Cada neurona de salida
+
+367
+00:45:37.790 --> 00:45:50.759
+Eugenia Sol Piñeiro: va a tener asociado un vector de pesos a ese vector de pesos, Lo vamos a llamar el representante de cada neurona, y el objetivo va a ser justamente que el el representante de cada neurona, o sea, el vector de pesos.
+
+368
+00:45:51.070 --> 00:45:56.240
+Eugenia Sol Piñeiro: tenga la misma dimensión de mi capa de salida y que yo empiece a agrupar estas características similares.
+
+369
+00:45:56.380 --> 00:46:01.500
+Eugenia Sol Piñeiro: Ok, quiero lograr que los pesos sean lo más parecido posible a los datos. De entrada.
+
+370
+00:46:02.010 --> 00:46:03.420
+Eugenia Sol Piñeiro: ese es el objetivo de la red.
+
+371
+00:46:05.710 --> 00:46:11.009
+Eugenia Sol Piñeiro: Vamos a ir con el algoritmo, pero hasta acá dudas ahora vamos a ver paso por paso cómo se implementa.
+
+372
+00:46:18.740 --> 00:46:23.150
+Eugenia Sol Piñeiro: Se entendió el concepto general de cojones
+
+373
+00:46:34.680 --> 00:46:37.020
+Eugenia Sol Piñeiro: okay.
+
+374
+00:46:37.340 --> 00:46:42.100
+Eugenia Sol Piñeiro: Voy a tomar a a Nicolás como referente de todos.
+
+375
+00:46:42.350 --> 00:46:45.380
+Eugenia Sol Piñeiro: Estoy muy callado, soy, pero, bueno, vamos a ver
+
+376
+00:46:47.360 --> 00:46:55.519
+Eugenia Sol Piñeiro: Okay. Primero tenemos que inicializar un montón de cosas. Vamos a ver cómo inicializamos con todas las redes neuronales, entonces
+
+377
+00:46:56.460 --> 00:46:58.369
+Eugenia Sol Piñeiro: voy a tener mi X. P.
+
+378
+00:46:58.560 --> 00:47:03.760
+Eugenia Sol Piñeiro: X, P. Va a ser mi muestra, Si vuelvo al ejemplo de los pacientes va a ser un paciente.
+
+379
+00:47:04.650 --> 00:47:11.660
+Eugenia Sol Piñeiro: o sea, va a ser un registro. Y el X 1 va a ser, por ejemplo, la edad, peso.
+
+380
+00:47:11.770 --> 00:47:23.170
+Eugenia Sol Piñeiro: altura, lo que sea que tenga definido a mis pacientes, o sea, en el ejemplo que habíamos visto. Tengo, por ejemplo, B, p. Igual a 20 pacientes con 7 variables, cada 1, Entonces n igual a 7.
+
+381
+00:47:25.650 --> 00:47:27.309
+Eugenia Sol Piñeiro: Voy a tener que definir el k.
+
+382
+00:47:28.770 --> 00:47:32.020
+Eugenia Sol Piñeiro: definir la cantidad de neuronas de salida, no de la villa de acá Por acá
+
+383
+00:47:32.460 --> 00:47:34.770
+Eugenia Sol Piñeiro: Después voy a inicializar los pesos.
+
+384
+00:47:35.900 --> 00:47:39.840
+Eugenia Sol Piñeiro: Los pesos W. Van a estar inicializados con valores aleatorios.
+
+385
+00:47:40.220 --> 00:47:45.449
+Eugenia Sol Piñeiro: como veníamos haciendo. Se puede tener una distribución uniforme, pero eso tiene una desventaja.
+
+386
+00:47:46.290 --> 00:47:49.849
+Eugenia Sol Piñeiro: ¿qué es lo que yo estoy comparando en la red de cojones
+
+387
+00:47:50.500 --> 00:47:54.459
+Eugenia Sol Piñeiro: sobre qué se calculaba la medida de similitud que comparaba. ¿se acuerdan?
+
+388
+00:48:15.980 --> 00:48:20.520
+Eugenia Sol Piñeiro: Te acuerdas? Yo tenía el X y contra qué lo comparo
+
+389
+00:48:23.120 --> 00:48:29.349
+Eugenia Sol Piñeiro: para definir esta medida de similitud, el peso. Bien.
+
+390
+00:48:29.590 --> 00:48:32.340
+Eugenia Sol Piñeiro: o sea, hago X comparado con doble B.
+
+391
+00:48:33.080 --> 00:48:46.729
+Eugenia Sol Piñeiro: Entonces, si yo inicializo W con cualquier valor totalmente aleatorio, quizás ya desde el inicio, no se parece en nada, ni siquiera puede estar en la misma escala o en el mismo intervalo, en absolutamente nada. Con mi conjunto de entrada.
+
+392
+00:48:46.900 --> 00:48:59.340
+Eugenia Sol Piñeiro: entonces eso puede perjudicar a la red y se llama que pueden quedar muchas neuronas muertas. Se le dice, o sea neuronas donde no tiene ningún patrón asociado.
+
+393
+00:49:00.090 --> 00:49:01.130
+Eugenia Sol Piñeiro: Entonces.
+
+394
+00:49:01.280 --> 00:49:15.580
+Eugenia Sol Piñeiro: para mitigar ese problema de que me queden muchas neuronas sin nada asociado, sueltas, clusters vacíos. Lo que se hace es inicializar con algún ejemplo al azar del conjunto de entrenamiento para que para que me queden en las mismas caras
+
+395
+00:49:16.200 --> 00:49:30.610
+Eugenia Sol Piñeiro: hala los pesos. Yo después lo voy a estar comparando. Entonces, si ya desde el vamos, hay un registro que no se parece en absoluto a mis pesos. Ya lo estoy perjudicando. Es es imposible que active una neurona y que haya una neurona que gane para esa muestra.
+
+396
+00:49:30.850 --> 00:49:32.580
+Eugenia Sol Piñeiro: Por ejemplo, entonces
+
+397
+00:49:32.820 --> 00:49:41.019
+Eugenia Sol Piñeiro: nunca va a ser una B M W, Sí, Jamás se va a aparecer en absolutamente nada a ninguna de las muestras que yo tenía entonces. Una opción es
+
+398
+00:49:41.230 --> 00:49:46.260
+Eugenia Sol Piñeiro: inicializar aleatorio e incluso se puede comparar. Bueno, que pasa
+
+399
+00:49:46.570 --> 00:49:56.079
+Eugenia Sol Piñeiro: así. Ahora lo analizo con alguna muestra de mi conjunto de entrenamiento baja, la cantidad de neuronas muertas no me afecta porque quizás tenga un conjunto de datos muy chico, o
+
+400
+00:49:56.190 --> 00:49:59.280
+Eugenia Sol Piñeiro: o cómo puedo analizar esto?
+
+401
+00:50:00.340 --> 00:50:01.230
+Eugenia Sol Piñeiro: Bien.
+
+402
+00:50:03.380 --> 00:50:16.289
+Eugenia Sol Piñeiro: hay que seleccionar un radio. Hay que seleccionar el radio inicial, porque porque el radio puede ser constante y mantenerlo igual durante todas las épocas, o puede ir variando
+
+403
+00:50:17.500 --> 00:50:23.280
+Eugenia Sol Piñeiro: ejemplo. A veces se lo inicializa con radio, igual. Acá?
+
+404
+00:50:24.760 --> 00:50:26.759
+Eugenia Sol Piñeiro: ¿qué pasa si el radio es igual a acá?
+
+405
+00:50:28.730 --> 00:50:30.390
+Eugenia Sol Piñeiro: Quiénes son mis vecinas.
+
+406
+00:50:40.020 --> 00:50:41.730
+Eugenia Sol Piñeiro: todas. Bien.
+
+407
+00:50:41.920 --> 00:50:51.470
+Eugenia Sol Piñeiro: Entonces, al principio, como, bueno, quiero abarcar toda la red, mi primera iteración. Y en la siguiente voy haciendo radio menos 1.
+
+408
+00:50:52.570 --> 00:51:00.170
+Eugenia Sol Piñeiro: Y lo voy bajando, no hasta llegar a 1, porque lo mínimo que puedo tener es radio 1, no mis 4 vecinas en el caso de la
+
+409
+00:51:00.290 --> 00:51:01.839
+Eugenia Sol Piñeiro: de la orilla rectangular.
+
+410
+00:51:02.460 --> 00:51:13.640
+Eugenia Sol Piñeiro: Entonces lo puedo ir tirando y quizás en vez de mantenerlo constante, mantener un radio dinámico que al principio intenta abarcar un poco más y después vaya haciendo cada vez más preciso. A medida que entreno.
+
+411
+00:51:14.590 --> 00:51:18.460
+Eugenia Sol Piñeiro: Esa puede ser una opción después para definir este K.
+
+412
+00:51:18.840 --> 00:51:24.790
+Eugenia Sol Piñeiro: Me puede pasar que si yo tengo un Kaf muy, muy grande
+
+413
+00:51:25.350 --> 00:51:33.449
+Eugenia Sol Piñeiro: después, cuando estoy haciendo el casting quizás es tan grande el K que me quedan
+
+414
+00:51:33.770 --> 00:51:38.880
+Eugenia Sol Piñeiro: todos los pacientes, por ejemplo, distribuidos todas mis muestras distribuidos en toda la red. Quizás no agrupe nada
+
+415
+00:51:39.120 --> 00:51:42.379
+Eugenia Sol Piñeiro: por ahí. Me quedaron un paciente en cada neurona.
+
+416
+00:51:42.490 --> 00:51:43.460
+Eugenia Sol Piñeiro: Entonces
+
+417
+00:51:43.640 --> 00:52:02.160
+Eugenia Sol Piñeiro: no logré hacer el casting que yo quería y todo, intentar asociarlos. Yo defino un k igual a 50 y tengo 10 pacientes. Va a tener una grilla de 50 por 50 solo para 10 pacientes. O sea, no puse un ejemplo extremo, ¿no? Pero si tengo un camp muy grande, pierdo agrupación.
+
+418
+00:52:02.170 --> 00:52:10.210
+Eugenia Sol Piñeiro: y si tengo un k muy, muy chico. Me voy al otro extremo que quizás todos me quedan agrupados con todos y al final no pude distinguir nada.
+
+419
+00:52:10.250 --> 00:52:13.269
+Eugenia Sol Piñeiro: Entonces así es como 1 tiene que empezar a jugar con el K.
+
+420
+00:52:14.470 --> 00:52:29.089
+Eugenia Sol Piñeiro: Se pueden probar distintos cada pues arrancar con 1 inicial y después en otra iteración, subirlo y ver cuántas neuronas muertas me quedaron, o como me quedo, como me quedaron agrupados, mis muestras en el conjunto de datos y empezar a variar con eso.
+
+421
+00:52:30.110 --> 00:52:36.089
+Eugenia Sol Piñeiro: Y otra de las cosas que llevaría es justamente la tasa de aprendizaje. Puedo definir un E. T a inicial
+
+422
+00:52:36.230 --> 00:52:41.700
+Eugenia Sol Piñeiro: y después aplicar, por ejemplo, Beta adaptativo e ir variándolo a lo largo del entrenamiento.
+
+423
+00:52:42.150 --> 00:52:51.399
+Eugenia Sol Piñeiro: siempre menor a 1. Esto es por convergencia. Si no, no va a converger, la red le va a diverger. Lo pueden probar si quieren.
+
+424
+00:52:51.540 --> 00:52:55.309
+Eugenia Sol Piñeiro: pero con esa pequeña restricción, Uno ya después lo va variando.
+
+425
+00:52:58.120 --> 00:53:02.150
+Eugenia Sol Piñeiro: Bien, Entonces, ¿qué vamos a hacer? Ya tenemos todo inicializado.
+
+426
+00:53:03.010 --> 00:53:08.360
+Eugenia Sol Piñeiro: Vamos a seleccionar 1 de los registros de entrada que va a ser X. P. Selecciona un paciente
+
+427
+00:53:08.840 --> 00:53:12.239
+Eugenia Sol Piñeiro: y quiero encontrar la neurona ganadora que se la vamos a llamar K
+
+428
+00:53:12.670 --> 00:53:20.169
+Eugenia Sol Piñeiro: que tenga el vectorado de pesos más cercano a mi muestra. Xp: Entonces para eso voy a definir una medida de similitud
+
+429
+00:53:21.390 --> 00:53:27.860
+Eugenia Sol Piñeiro: este D, y acá es la distancia que hay entre el X P y el W.
+
+430
+00:53:28.230 --> 00:53:41.630
+Eugenia Sol Piñeiro: La distancia. ¿qué puede ser distancia? Un cría distancia exponencial alguna medida de similitud que me permita comparar esos 2 vectores. De nuevo, es algo con lo que puedo jugar, y puedo experimentar para comparar el X y el W,
+
+431
+00:53:42.950 --> 00:53:50.209
+Eugenia Sol Piñeiro: y después se van a actualizar los pesos de las neuronas vecinas y de la neurona ganadora según la regla de Cojonen.
+
+432
+00:53:51.350 --> 00:53:53.059
+Eugenia Sol Piñeiro: que es la regla de cojones.
+
+433
+00:53:53.320 --> 00:53:56.309
+Eugenia Sol Piñeiro: Y vamos a ver
+
+434
+00:53:57.350 --> 00:54:09.760
+Eugenia Sol Piñeiro: después de esto. Se va a activar la neurona ganadora, no después que yo actualice todo. Entonces, encojones se van a actualizar los pesos del vecindario y de la neurona ganadora. ¿quién es el vecindario. ¿cómo lo defino?
+
+435
+00:54:09.990 --> 00:54:11.000
+Eugenia Sol Piñeiro: Entonces
+
+436
+00:54:11.240 --> 00:54:24.519
+Eugenia Sol Piñeiro: para cada una de mis neuronas, voy a tener que el vecindario básicamente son las neuronas tal que la distancia entre la neurona y la neurona ganadora sea menor a el radio
+
+437
+00:54:24.730 --> 00:54:34.000
+Eugenia Sol Piñeiro: que definí, o sea, el radio. Es lo que me va a definir el vecindario, que es lo que ya estuvimos viendo. Entonces, esto tan formal es simplemente Okay, Actualizo las vecinas
+
+438
+00:54:34.320 --> 00:54:37.730
+Eugenia Sol Piñeiro: sí y la que ganó entonces
+
+439
+00:54:38.220 --> 00:54:44.919
+Eugenia Sol Piñeiro: la regla de cojones solo va a actualizar esos pesos. El resto no se hace nada. No se mantiene fijo el peso.
+
+440
+00:54:47.210 --> 00:54:48.050
+Eugenia Sol Piñeiro: Bien.
+
+441
+00:54:49.060 --> 00:55:02.089
+Eugenia Sol Piñeiro: Entonces, ¿cómo se actualizan? Vamos a tener que si la neurona pertenece al vecindario, entonces el peso? El siguiente paso va a ser igual al peso que tenía actualmente más el Eta por
+
+442
+00:55:02.240 --> 00:55:07.389
+Eugenia Sol Piñeiro: la la diferencia entre la muestra el X, P. El peso.
+
+443
+00:55:07.730 --> 00:55:09.260
+Eugenia Sol Piñeiro: Esta es la regla de cojones.
+
+444
+00:55:10.040 --> 00:55:14.750
+Eugenia Sol Piñeiro: o sea, básicamente el el delta W que tenían antes. Va a ser este
+
+445
+00:55:16.240 --> 00:55:19.530
+Eugenia Sol Piñeiro: el E T A por la diferencia entre el X y el W,
+
+446
+00:55:19.840 --> 00:55:22.709
+Eugenia Sol Piñeiro: y si no no perteneces al vecindario
+
+447
+00:55:22.870 --> 00:55:26.559
+Eugenia Sol Piñeiro: te mantenés igual doble B, y más 1 igual, la W I
+
+448
+00:55:28.080 --> 00:55:35.360
+Eugenia Sol Piñeiro: De nuevo, acá dice E, T a su y porque quizás tienen el E T A adaptativo. Puede ser fijo también.
+
+449
+00:55:35.680 --> 00:55:36.630
+Eugenia Sol Piñeiro: ¿
+
+450
+00:55:38.060 --> 00:55:40.679
+Eugenia Sol Piñeiro: Bien, así te actualizan los pesos.
+
+451
+00:55:40.990 --> 00:55:46.230
+Eugenia Sol Piñeiro: Entonces, ¿por qué converge que les decía cuidado con el Eta?
+
+452
+00:55:46.460 --> 00:55:49.090
+Eugenia Sol Piñeiro: Porque si yo tengo estos pesos.
+
+453
+00:55:50.280 --> 00:55:52.570
+Eugenia Sol Piñeiro: tengo esta regla, no de actualización.
+
+454
+00:55:52.860 --> 00:55:59.590
+Eugenia Sol Piñeiro: Acá Lo que se está haciendo para demostrar la convergencia es simplemente restar a cada lado del término el X. P:
+
+455
+00:55:59.790 --> 00:56:04.810
+Eugenia Sol Piñeiro: Entonces acá se agrupa no por 1 menos E. T, A
+
+456
+00:56:05.020 --> 00:56:13.369
+Eugenia Sol Piñeiro: que esto está expresado. Es lo mismo, no es 1 menos Z por W. X. P: Esta es la distancia que yo quiero minimizar.
+
+457
+00:56:13.580 --> 00:56:17.670
+Eugenia Sol Piñeiro: No quiero que sea lo más similar posible. Justamente el X y el doble B.
+
+458
+00:56:17.780 --> 00:56:23.490
+Eugenia Sol Piñeiro: Entonces converge porque habíamos dicho que este E. T A era menor a 1,
+
+459
+00:56:23.800 --> 00:56:29.940
+Eugenia Sol Piñeiro: ¿no? Entonces 1 menos algo menor a 1 a ser menor a 1.
+
+460
+00:56:31.570 --> 00:56:40.730
+Eugenia Sol Piñeiro: Y si es menor a 1. Y yo lo multiplico por X, menos por doble B menos X. Entonces, en el paso siguiente, va a ser menor esa distancia.
+
+461
+00:56:41.040 --> 00:56:53.460
+Eugenia Sol Piñeiro: No, pues estoy multiplicando por algo que es menor a 1, entonces la distancia de el vector de pesos en el paso siguiente hacia X, P va a ser menor a la distancia que tenía el vector de pesos actual. Menos X. P.
+
+462
+00:56:53.460 --> 00:57:03.520
+Eugenia Sol Piñeiro: Entonces, así es como los pesos empiezan a aparecer a los datos de entrada por esa medida de similitud que yo fui definiendo. Y cómo es que va afectando la tasa de aprendizaje a lo largo del tren.
+
+463
+00:57:06.440 --> 00:57:13.699
+Eugenia Sol Piñeiro: bien hasta acá el algoritmo. Hay un montón de cosas para definir. Ya hablamos del radio, hablamos del E T A.
+
+464
+00:57:14.120 --> 00:57:16.729
+Eugenia Sol Piñeiro: Puedo tener otra medida de similitud.
+
+465
+00:57:17.480 --> 00:57:37.270
+Eugenia Sol Piñeiro: Puedo definir la distancia euclidia entre el X y el W. Hay otra que se usa, que es la distancia exponencial. Estas están en el artículo que les mostré antes en el paper original. Pueden probarlas. Las llaman funciones de propagación, que esta es la exponencial de menos X, o sea, de la distancia entre X y W.
+
+466
+00:57:38.380 --> 00:57:40.429
+Eugenia Sol Piñeiro: Importante, acá.
+
+467
+00:57:40.540 --> 00:57:47.459
+Eugenia Sol Piñeiro: Cuando tengo una medida de similitud donde yo estoy comparando X, y W, tengo que estandarizar.
+
+468
+00:57:47.690 --> 00:57:53.750
+Eugenia Sol Piñeiro: Se acuerdan que era estandarizar mis mis variables, mi conjunto de entradas.
+
+469
+00:57:55.810 --> 00:57:57.230
+Eugenia Sol Piñeiro: Y para qué me servía
+
+470
+00:58:16.880 --> 00:58:24.349
+Eugenia Sol Piñeiro: alguno, quería que se acuerdan, que restaba la media dividido por el desvío. ¿de qué me sirve hacer eso?
+
+471
+00:58:24.950 --> 00:58:27.219
+Eugenia Sol Piñeiro: ¿por qué es importante estandarizar, acá?
+
+472
+00:58:46.880 --> 00:58:56.439
+Eugenia Sol Piñeiro: O sea. Yo estoy comparando el X y el W, No. Y necesito que el X, que las variables de mi conjunto detrás estén estandarizadas.
+
+473
+00:58:56.740 --> 00:59:00.889
+Eugenia Sol Piñeiro: estandarización, por ejemplo, me aseguraba que estén todos dentro de la misma escala.
+
+474
+00:59:01.200 --> 00:59:11.029
+Eugenia Sol Piñeiro: no necesariamente en un intervalo fijo, o sea, no por ahí no me queda entre 0 y 1 o entre menos 1 y 1. Eso me lo daba reescalar, Pero estandarizar me asegura
+
+475
+00:59:12.080 --> 00:59:16.160
+Eugenia Sol Piñeiro: que la media sea 0 y el desvío estándar sea 1. Entonces, en todas
+
+476
+00:59:16.650 --> 00:59:28.149
+Eugenia Sol Piñeiro: las variables, me van a quedar dentro de la misma escala y no me va a afectar la escala de medida de mi conjunto de datos a la hora de calcular esta similitud, no supongo que antes tengo una variable metros y otra en kilómetros.
+
+477
+00:59:28.230 --> 00:59:38.690
+Eugenia Sol Piñeiro: No quiero que simplemente porque sea un valor más grande, me altere los resultados. Entonces voy a estandarizar mis features y voy a comparar X con W.
+
+478
+00:59:40.730 --> 00:59:53.229
+Eugenia Sol Piñeiro: Entonces el problema de inicialización de pesos, esto ya lo vimos. Hubo un poquito más rápido que se pueden inicializar con valores Random, pero teníamos el problema de que quizá esté perjudicando algunas de las neuronas.
+
+479
+00:59:53.370 --> 01:00:10.630
+Eugenia Sol Piñeiro: porque me quedó muy lejos. Inicialmente de las muestras que tenía. Y como estoy comparando X con el vector de pesos, la puedo llegar a perjudicar, porque quizás el vector de pesos no se parece en absoluto a mi muestra. Entonces nunca va a ganar esa neurona.
+
+480
+01:00:10.950 --> 01:00:19.979
+Eugenia Sol Piñeiro: Entonces, Bueno, eso se le llama que son unidades muertas o neuronas muertas. Y para mitigar ese problema, lo que se hace es inicializar con una muestra del conjunto de entrada.
+
+481
+01:00:21.790 --> 01:00:24.540
+Eugenia Sol Piñeiro: Después, tengo que definir
+
+482
+01:00:24.660 --> 01:00:31.540
+Eugenia Sol Piñeiro: la cantidad total de iteraciones que voy a hacer. Por lo general puede depender de la cantidad de neuronas que tenga entrada
+
+483
+01:00:31.720 --> 01:00:43.070
+Eugenia Sol Piñeiro: el radio del vecindario que puede ir variando. Esto ya lo vimos o lo dejo constante o, por ejemplo, lo puedo inicializar con K e ir variando hasta llegar a 1, que es lo mínimo que puedo tener.
+
+484
+01:00:44.040 --> 01:00:47.640
+Eugenia Sol Piñeiro: y hasta acá el algoritmo.
+
+485
+01:00:48.330 --> 01:00:53.160
+Eugenia Sol Piñeiro: Ahora vamos a ver cómo presentamos los resultados dudas.
+
+486
+01:01:02.920 --> 01:01:07.280
+Eugenia Sol Piñeiro: Bien, lo que vamos a ver es yo. Voy a tener que
+
+487
+01:01:07.660 --> 01:01:11.419
+Eugenia Sol Piñeiro: abrir esa caja negra de mi grilla de salida.
+
+488
+01:01:11.560 --> 01:01:18.019
+Eugenia Sol Piñeiro: ver qué es lo que está pasando. La capa de salida, pues justamente es lo que yo quería no ver como me quedaban los clusters agrupados
+
+489
+01:01:18.250 --> 01:01:19.690
+Eugenia Sol Piñeiro: y
+
+490
+01:01:19.820 --> 01:01:28.879
+Eugenia Sol Piñeiro: las muestras agrupadas en clases. Entonces yo voy a tener, por ejemplo, para graficar mi grilla de salida. Puedo generar un hitmap. Esto me va a decir
+
+491
+01:01:29.080 --> 01:01:39.359
+Eugenia Sol Piñeiro: 0? Va a ser que no asocio ninguna muestra a esa neurona. Y a medida que me acerco a más de 400 es la cantidad de registros que asoció, no
+
+492
+01:01:39.740 --> 01:01:48.850
+Eugenia Sol Piñeiro: entonces se puede ver en qué coordenada está cada 1 de mis conjuntos de datos. Entonces supóngase acá
+
+493
+01:01:50.050 --> 01:01:56.369
+Eugenia Sol Piñeiro: este era un ejemplo donde además primero se caracterizaba y después se clasificaba como un paso, un paso posterior.
+
+494
+01:01:56.550 --> 01:02:01.570
+Eugenia Sol Piñeiro: Por ahora ignoren el 1 0, o sea, supóngase que acá tienen 46.
+
+495
+01:02:02.060 --> 01:02:17.630
+Eugenia Sol Piñeiro: Esto me va a decir en esta neurona. Me quedaron estas 46 muestras asociadas, y estas 46 muestras son muy similares entre sí porque están en la misma neurona. Y van a hacer algo similares a, por ejemplo, mis vecinas de radio, 1,
+
+496
+01:02:18.120 --> 01:02:24.779
+Eugenia Sol Piñeiro: pero no van a tener nada que ver o van a ser muy pocos similares a, por ejemplo, las que están acá
+
+497
+01:02:24.990 --> 01:02:30.669
+Eugenia Sol Piñeiro: no que están bastante lejos en cuanto al radio de mi vecindario.
+
+498
+01:02:33.550 --> 01:02:48.689
+Eugenia Sol Piñeiro: Fíjense que acá quedaron varias neuronas muertas o casi muertas que tienen muy poquitos registros asociados. ¿no? Entonces hay hay bastante desbalance entre ok, acá. Tengo sólo 5. Y acá por ejemplo, estoy teniendo
+
+499
+01:02:48.730 --> 01:02:54.490
+Eugenia Sol Piñeiro: más de 400 neuronas asociadas, perdón, más de 400 muestras asociadas de esa neurona.
+
+500
+01:02:55.260 --> 01:02:57.199
+Eugenia Sol Piñeiro: Entonces así es como lo puedo interpretar.
+
+501
+01:02:59.370 --> 01:03:03.770
+Eugenia Sol Piñeiro: Bien, vamos a ver otro ejemplo: supóngase que
+
+502
+01:03:04.210 --> 01:03:08.170
+Eugenia Sol Piñeiro: tenemos que hacer un censo de una población. Teniendo en cuenta todas estas variables.
+
+503
+01:03:09.060 --> 01:03:18.219
+Eugenia Sol Piñeiro: tengo cantidad de habitantes, el promedio de edad de la población. El promedio a nivel de educación, cantidad de autos, cantidad de personas desempleadas y subempleadas.
+
+504
+01:03:18.940 --> 01:03:32.350
+Eugenia Sol Piñeiro: Y lo que quiero hacer es ver qué ciudades son parecidas en términos de todas estas variables. Entonces vamos a utilizar una red de cojolen con k igual a 20. Vamos a tener una varilla de 20 por 20. Hago el hitmap
+
+505
+01:03:33.010 --> 01:03:35.449
+Eugenia Sol Piñeiro: y obtengo este resultado.
+
+506
+01:03:37.080 --> 01:03:40.670
+Eugenia Sol Piñeiro: ¿cómo lo pueden interpretar que ven? Acá?
+
+507
+01:03:41.160 --> 01:03:42.329
+Eugenia Sol Piñeiro: ¿qué está pasando?
+
+508
+01:03:58.280 --> 01:04:01.640
+Eugenia Sol Piñeiro: ¿qué ¿Qué dice esta neurona roja? Por ejemplo, que estaba acá?
+
+509
+01:04:05.420 --> 01:04:10.069
+Eugenia Sol Piñeiro: El Ca: ¿Quedó grande? Bien el caquedo grande. ¿por qué decís eso?
+
+510
+01:04:10.230 --> 01:04:13.620
+Eugenia Sol Piñeiro: Qué te ¿Qué te dio la la idea de que el cacario grande
+
+511
+01:04:16.890 --> 01:04:18.960
+Eugenia Sol Piñeiro: la escala? Porque la escala.
+
+512
+01:04:22.700 --> 01:04:26.439
+Eugenia Sol Piñeiro: te referís a a esta barra, hay muchos azules y verdes.
+
+513
+01:04:27.070 --> 01:04:30.649
+Eugenia Sol Piñeiro: okay tenés, pocos registros en cada neurona okay, Bien.
+
+514
+01:04:31.240 --> 01:04:36.569
+Eugenia Sol Piñeiro: o sea, más que más que una temperatura, es cantidad de registros.
+
+515
+01:04:37.690 --> 01:04:40.149
+Eugenia Sol Piñeiro: Claro, no aprovecharías la vecindad. Bien.
+
+516
+01:04:40.330 --> 01:04:44.280
+Eugenia Sol Piñeiro: o sea tenés, muy poquitos registros. Acá hay muchísimas neuronas muertas, no
+
+517
+01:04:44.710 --> 01:04:51.080
+Eugenia Sol Piñeiro: casi muertas tendiendo a hacer registros en cada neurona, y hay una que tiene
+
+518
+01:04:51.260 --> 01:05:02.309
+Eugenia Sol Piñeiro: un montón de 25 más o menos o casi 25 de ciudades asociadas a esa neurona. Entonces me está agrupando todas. Acá Quizás la mayoría acá no.
+
+519
+01:05:02.980 --> 01:05:04.240
+Eugenia Sol Piñeiro: Porque está en naranja.
+
+520
+01:05:04.950 --> 01:05:14.410
+Eugenia Sol Piñeiro: y el resto me quedó totalmente muerto. Hay muy poquitas ciudades que activaron las neuronas, una sola neurona. Entonces
+
+521
+01:05:15.410 --> 01:05:33.720
+Eugenia Sol Piñeiro: después quedó un nodo donde van a ir todas las ciudades a parar ahí. Y no, no estoy pudiendo agrupar o intentar relacionar patrones que me indiquen. Bueno, Okay, estas son parecidas entre sí. Las vecinas me quedaron muy poquitas.
+
+522
+01:05:33.830 --> 01:05:37.220
+Eugenia Sol Piñeiro: Entonces acá. Me quedan tantas neuronas muertas que la idea es justamente bajar el Ca.
+
+523
+01:05:37.440 --> 01:05:46.530
+Eugenia Sol Piñeiro: probar. No sé un k a D e 5 por 5 o 10 por 10, con toda la furia, pero tengo pocos registros y empezar a agrupar ahí.
+
+524
+01:05:47.040 --> 01:05:54.420
+Eugenia Sol Piñeiro: Entonces, este es un caso de donde me pasé de acá Tengo que empezar a bajarlo después. Otra
+
+525
+01:05:54.880 --> 01:06:01.789
+Eugenia Sol Piñeiro: otra visualización que se suele hacer es la matriz y que es la Unifight Distance Matrix, que lo que se hace es
+
+526
+01:06:01.940 --> 01:06:09.129
+Eugenia Sol Piñeiro: para para cada neurona. Voy a promediar la distancia euclidia entre el vector de pesos de la neurona
+
+527
+01:06:09.420 --> 01:06:11.420
+Eugenia Sol Piñeiro: y los pesos de mis vecinas.
+
+528
+01:06:11.730 --> 01:06:18.870
+Eugenia Sol Piñeiro: O sea, ¡ay, esto va a ser directamente
+
+529
+01:06:19.170 --> 01:06:32.259
+Eugenia Sol Piñeiro: esta medida de distancia que voy a tener con mis vecinas, o sea, yo quiero que acá me quede todo muy cercano a 0, no porque me indica qué tan similar soy a mis vecinas, o sea, si el método funciona bien
+
+530
+01:06:32.420 --> 01:06:36.309
+Eugenia Sol Piñeiro: en esta matriz. Debería tener todos valores muy cercanos a ceros.
+
+531
+01:06:36.780 --> 01:06:39.849
+Eugenia Sol Piñeiro: pues está comparando justamente el el vecindario.
+
+532
+01:06:40.060 --> 01:06:41.759
+Eugenia Sol Piñeiro: El caso anterior
+
+533
+01:06:42.610 --> 01:06:49.430
+Eugenia Sol Piñeiro: iba a tener, No, no me iba a servir mucho no iba a tener distancias quizás un poco más grandes con mis vecinas.
+
+534
+01:06:50.230 --> 01:06:53.820
+Eugenia Sol Piñeiro: Otra opción también es en vez de
+
+535
+01:06:54.140 --> 01:06:58.400
+Eugenia Sol Piñeiro: graficar todo junto en término de todas las variables. Puedo quizás observar una sola
+
+536
+01:06:59.170 --> 01:07:02.590
+Eugenia Sol Piñeiro: y ver el valor promedio de una sola variable
+
+537
+01:07:03.470 --> 01:07:13.989
+Eugenia Sol Piñeiro: de de distancia, no, y que qué puedo empezar a hacer acá a relacionar ciertas variables, por ejemplo, acá me indica que a menor desempleo.
+
+538
+01:07:14.250 --> 01:07:16.090
+Eugenia Sol Piñeiro: mayor nivel de educación.
+
+539
+01:07:16.940 --> 01:07:29.499
+Eugenia Sol Piñeiro: ¿no? Y puedo empezar a sacar características o relaciones entre distintas variables y acá. A la inversa, no si lo leo al revés. Fíjense que donde quedaron más neuronas muertas acá es donde más activaciones hay con la otra variable.
+
+540
+01:07:29.950 --> 01:07:36.390
+Eugenia Sol Piñeiro: Entonces puedo empezar a jugar o a interpretar los resultados en términos de una sola variable y empezar a relacionarlas
+
+541
+01:07:38.790 --> 01:07:40.429
+Eugenia Sol Piñeiro: bien ya para cerrar.
+
+542
+01:07:40.940 --> 01:07:46.669
+Eugenia Sol Piñeiro: Entonces, ¿qué ventajas tiene la red de cojones. Primero, puede llegar a ser más rápida que el multicapa
+
+543
+01:07:46.850 --> 01:07:48.830
+Eugenia Sol Piñeiro: depende del multicapa, la verdad.
+
+544
+01:07:48.900 --> 01:08:07.419
+Eugenia Sol Piñeiro: Pero ¿por qué? Porque no teníamos teníamos solo una capa de salida no que iba a ser la grilla. Pero por ahí la grilla es muy grande o mi multicapa que por ahí tienen pocas capas ocultas. Pero bueno, puede llegar a ser más rápida. Después, la gran ventaja es que se puede aplicar en casos donde no tengo etiquetas donde es aprendizaje no supervisado
+
+545
+01:08:07.670 --> 01:08:20.169
+Eugenia Sol Piñeiro: y que puedo reducir la dimensión. Yo tenía n variables 20 variables, 40 variables y las pude reducir a un espacio bidimensional que va a ser mi grilla de ká por Ká, que va a estar en 2 D
+
+546
+01:08:20.800 --> 01:08:22.490
+Eugenia Sol Piñeiro: ahora desventajas.
+
+547
+01:08:22.660 --> 01:08:32.830
+Eugenia Sol Piñeiro: Si el conjunto de variables justamente es muy grande, es difícil representar un montón de variables, es solo en 2, digamos, en un conjunto que sea bidimensional.
+
+548
+01:08:33.450 --> 01:08:36.970
+Eugenia Sol Piñeiro: Esto también sólo puede realizarse con variables numéricas.
+
+549
+01:08:37.600 --> 01:08:46.190
+Eugenia Sol Piñeiro: Hay formas de convertir igual las las variables, categóricas o variables textuales o que no sean numéricas a numéricas. Así que
+
+550
+01:08:46.300 --> 01:08:53.759
+Eugenia Sol Piñeiro: con comillas y no hay un criterio demostrado justamente para definir el tamaño del K no es bastante experimental.
+
+551
+01:08:54.340 --> 01:09:05.669
+Eugenia Sol Piñeiro: más o menos. Uno tiene idea, ¿no? De bueno, pruebo con este ka, si me quedan muchas neuronas muertas o no pude agrupar lo bajo, pero puede llegar a cambiar la interpretación de los resultados según el K. Así que cuidado con eso con cómo lo definen.
+
+552
+01:09:07.450 --> 01:09:14.210
+Eugenia Sol Piñeiro: Y bueno, acá les dejo la bibliografía y hasta acá la clase, dudas de Cojonen.
+
+553
+01:09:17.350 --> 01:09:20.840
+Eugenia Sol Piñeiro: o sea, el el martes es el T. P, Tres, Pero
+
+554
+01:09:21.359 --> 01:09:30.229
+Eugenia Sol Piñeiro: la próxima de Tp, 4 ya hemos denunciado, o sea, por lo pronto. Enfóquense en Tp, Tres, pero hasta acá la primera red de las que vamos a ver.
+
+555
+01:09:32.560 --> 01:09:34.290
+Eugenia Sol Piñeiro: quedó claro alguna duda.
+

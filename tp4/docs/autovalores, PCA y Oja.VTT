@@ -1,0 +1,2166 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:07.230
+Eugenia Sol Piñeiro: Y a el aprendizaje no supervisado que se acuerdan que vimos el jueves pasado?
+
+2
+00:00:08.280 --> 00:00:12.079
+Eugenia Sol Piñeiro: ¿qué problemas resolvía? ¿cuál era la característica principal.
+
+3
+00:00:16.260 --> 00:00:17.470
+Eugenia Sol Piñeiro: cuéntennos.
+
+4
+00:00:28.350 --> 00:00:31.840
+Santiago Britez: Los datos no poseen etiquetas específicas.
+
+5
+00:00:33.040 --> 00:00:40.489
+Eugenia Sol Piñeiro: Bien, Perfecto. No tenés. Respuesta: no tenés la variable de salida. Y entonces, ¿qué ¿qué tipo de problemas resolvíamos?
+
+6
+00:00:50.550 --> 00:00:53.299
+Eugenia Sol Piñeiro: Asociación: bien es la 1.
+
+7
+00:00:54.020 --> 00:00:57.670
+Eugenia Sol Piñeiro: El martes Dale.
+
+8
+00:01:01.030 --> 00:01:01.770
+Marcos David Kantor: Saliendo.
+
+9
+00:01:01.770 --> 00:01:07.260
+Eugenia Sol Piñeiro: Ok, similitud, ¿a qué te refieres con similitud específicamente.
+
+10
+00:01:13.770 --> 00:01:18.300
+Marcos David Kantor: Y lo que entendí, no sé si está correcto. Es que, como como a
+
+11
+00:01:18.880 --> 00:01:25.520
+Marcos David Kantor: cuando era estructurado, conocíamos el resultado verdadero. Y ahora no tenemos que aprender. Entonces
+
+12
+00:01:26.240 --> 00:01:31.780
+Marcos David Kantor: vamos a través de la similitud que hay que definirla. Obviamente que esa es la parte compleja.
+
+13
+00:01:31.920 --> 00:01:34.040
+Marcos David Kantor: ¿cómo definirla?
+
+14
+00:01:34.260 --> 00:01:37.180
+Marcos David Kantor: ¿vamos logrando conocer un dato verdadero o
+
+15
+00:01:38.380 --> 00:01:40.990
+Marcos David Kantor: o darle una lógica al resultado.
+
+16
+00:01:41.540 --> 00:01:47.310
+Eugenia Sol Piñeiro: Okay. Bien, o sea, empezamos a asociar o relacionar patrones
+
+17
+00:01:47.440 --> 00:01:49.370
+Eugenia Sol Piñeiro: según una medida de similitud, no
+
+18
+00:01:49.570 --> 00:01:52.219
+Eugenia Sol Piñeiro: que en ese caso habíamos visto
+
+19
+00:01:54.530 --> 00:01:56.709
+Eugenia Sol Piñeiro: también con cuál era la red.
+
+20
+00:02:07.170 --> 00:02:15.100
+Eugenia Sol Piñeiro: cómo se llamaba el modelo que que nos permitía asociar en la capa de salida Okay perfecto.
+
+21
+00:02:15.240 --> 00:02:27.289
+Eugenia Sol Piñeiro: Y lo que hacía era Okay. Agrupábamos patrones en la última capa en la capa de salida de la red, y teníamos una grilla donde me quedaban los clústers de patrones que eran similares muestras que eran similares.
+
+22
+00:02:30.940 --> 00:02:35.200
+Eugenia Sol Piñeiro: que es el más importante porque es el que vamos a ver hoy que otro problema resolvía.
+
+23
+00:02:53.240 --> 00:02:57.609
+Eugenia Sol Piñeiro: ¿se acuerdan Okay reducir dimensiones? Bueno, bien, Magdalena está
+
+24
+00:02:58.310 --> 00:03:03.989
+Eugenia Sol Piñeiro: muy bien. Los 3. Perfecto. Ahora vamos a ver cómo reducir dimensionalidad.
+
+25
+00:03:05.060 --> 00:03:11.549
+Eugenia Sol Piñeiro: Ya lo habíamos visto igual un poco, no porque Cojonen hacía cierta reducción. Me empezaba a representar los datos en 2, D
+
+26
+00:03:11.880 --> 00:03:22.180
+Eugenia Sol Piñeiro: en términos de todas mis variables al mismo tiempo, eso es lo importante que quiero capturar: empezar a relacionar patrones en términos de ene variables simultáneamente.
+
+27
+00:03:22.440 --> 00:03:27.269
+Eugenia Sol Piñeiro: Entonces, para eso hoy vamos a ver estos 3 temas
+
+28
+00:03:27.890 --> 00:03:37.249
+Eugenia Sol Piñeiro: están separados por slides, si se quiere, pero en realidad, lo importante es ver esta red neuronal que usa todos estos conceptos previos.
+
+29
+00:03:37.380 --> 00:03:46.030
+Eugenia Sol Piñeiro: Pero en general, la red neuronal es muy cortita de de explicar lo que se refiere. Es bueno este conocimiento previo de componentes principales.
+
+30
+00:03:46.240 --> 00:03:50.289
+Eugenia Sol Piñeiro: y para eso se requieren auto valores de autodeutores. Entonces, por eso todo el camino que vamos a hacer hoy.
+
+31
+00:03:50.560 --> 00:03:56.569
+Eugenia Sol Piñeiro: Bueno, así que arranquemos primero, breve, repaso de auto valores y auto vectores.
+
+32
+00:03:57.250 --> 00:04:00.530
+Eugenia Sol Piñeiro: No Me voy a detener mucho esto también para el que quiera
+
+33
+00:04:00.690 --> 00:04:06.720
+Eugenia Sol Piñeiro: verlo un poco más detallado. Está en el libro que lo tienen en biblioteca. Así que lo pueden ver ahí,
+
+34
+00:04:07.800 --> 00:04:14.540
+Eugenia Sol Piñeiro: que está. De hecho, creo que está el mismo ejemplo. Habíamos puesto bueno, autodelores y auto vectores, tenemos
+
+35
+00:04:15.090 --> 00:04:27.359
+Eugenia Sol Piñeiro: primero una matriz a la vamos a definir así de esta forma. Y el vector Xy entonces acá simplemente se multiplica a por B, vamos a tener la matriz 3 X, 2, si X 4. Y
+
+36
+00:04:28.820 --> 00:04:41.439
+Eugenia Sol Piñeiro: entonces, ¿qué pasa si consideramos los siguientes ejemplos para reemplazar en nuestra matriz, no sin mi vector, es el 1 0. Simplemente hago a por el 1 0. Y me queda el vector 3. Uno.
+
+37
+00:04:42.800 --> 00:04:50.300
+Eugenia Sol Piñeiro: Si hago la reemplazo por 0, 1 me queda el 2, 4. Y si lo reemplazo por el 1, 1, me queda el 5, 5,
+
+38
+00:04:50.540 --> 00:04:57.350
+Eugenia Sol Piñeiro: un ejemplo muy sencillo. Acá No se hace nada del otro mundo, pero grafiquémoslo.
+
+39
+00:04:58.020 --> 00:05:07.600
+Eugenia Sol Piñeiro: Entonces, nuestro vector 0, 1 al multiplicarlo por la matriz se transformó en el vector. Dos, 4,
+
+40
+00:05:08.050 --> 00:05:13.380
+Eugenia Sol Piñeiro: el 1. Uno se transforma en 5, 5, y el 1 0 se transforma en 3. Uno.
+
+41
+00:05:13.730 --> 00:05:23.069
+Eugenia Sol Piñeiro: ¿qué característica particular ven en el en el rojo, digamos en el 1, 1 que no, no está en los otros 2 vectores.
+
+42
+00:05:30.750 --> 00:05:32.280
+Eugenia Sol Piñeiro: Diferencia tiene
+
+43
+00:05:47.310 --> 00:05:52.349
+Eugenia Sol Piñeiro: bien, mantiene la misma dirección perfecto. Y ese es el concepto clave de auto valores y auto vectores.
+
+44
+00:05:52.400 --> 00:06:08.690
+Eugenia Sol Piñeiro: Entonces vamos a tener que los otros 2 vectores no conservan la dirección y este sí, entonces ese vector que mantiene la dirección se lo llama auto vector. Y ese factor por el cual se lo multiplicó, se lo escaló, es el auto valor correspondiente.
+
+45
+00:06:10.010 --> 00:06:17.780
+Eugenia Sol Piñeiro: Entonces vamos a tener para definir los autovalores de autoductores. Se plantea este sistema donde tengo mi matriz a por B
+
+46
+00:06:17.880 --> 00:06:20.750
+Eugenia Sol Piñeiro: va a ser igual a lambda, la
+
+47
+00:06:21.980 --> 00:06:24.629
+Eugenia Sol Piñeiro: Org B que va a ser el auto vector
+
+48
+00:06:24.810 --> 00:06:30.540
+Eugenia Sol Piñeiro: que se nos define como ese vector que queda invariante después de una transformación.
+
+49
+00:06:31.140 --> 00:06:38.890
+Eugenia Sol Piñeiro: Y en particular, ese vector tiene que ser distinto de 0, porque si es 0, es una solución del sistema que es trivial y nosotros no vamos a querer la solución trivial.
+
+50
+00:06:40.390 --> 00:06:42.429
+Eugenia Sol Piñeiro: entonces tenemos esa limitación.
+
+51
+00:06:43.030 --> 00:06:55.889
+Eugenia Sol Piñeiro: ¿cómo es que los puedo encontrar mis autovalores y autodictores? Voy a resolver este sistema que acá simplemente lo que se hace es restar a ambos lados y sacar factor común o pasar.
+
+52
+00:06:58.310 --> 00:07:08.139
+Eugenia Sol Piñeiro: y se lo multiplica por la identidad, pues estamos con matrices. Entonces, para resolver este sistema es lo mismo que plantear a menos lambda por la identidad por B igual a 0.
+
+53
+00:07:08.990 --> 00:07:16.340
+Eugenia Sol Piñeiro: Entonces acá. Simplemente tengo un sistema de alinear homogéneo. ¿se acuerdan términos constantes para cada ecuación.
+
+54
+00:07:16.870 --> 00:07:24.220
+Eugenia Sol Piñeiro: La el sistema tiene coeficientes reales. Entonces, para resolverlo tenemos
+
+55
+00:07:24.450 --> 00:07:29.839
+Eugenia Sol Piñeiro: 2 posibilidades: o mi solución trivial, 0 o infinitas soluciones.
+
+56
+00:07:29.950 --> 00:07:32.819
+Eugenia Sol Piñeiro: Entonces quiero encontrar
+
+57
+00:07:32.940 --> 00:07:43.740
+Eugenia Sol Piñeiro: el auto vector que cumpla con esta condición de que no sea 0. Entonces, para resolverlo, basta con plantear que el determinante de este sistema
+
+58
+00:07:43.870 --> 00:07:44.959
+Eugenia Sol Piñeiro: sea 0.
+
+59
+00:07:46.390 --> 00:07:53.690
+Eugenia Sol Piñeiro: Y a esto a este 1. Una vez que 1 resuelve el determinante, se lo llama el que se obtiene el polinomio característico.
+
+60
+00:07:54.840 --> 00:08:06.190
+Eugenia Sol Piñeiro: Y el problema característico. Voy a buscar las raíces de ese polinomio y las raíces van a ser los autovalores asociados a este este esta matriz.
+
+61
+00:08:06.330 --> 00:08:19.150
+Eugenia Sol Piñeiro: Entonces, después, una vez que yo tengo los lambda. Tengo los autovalores. Voy a volver a plantear, digamos, ya resolví esta incógnita. Voy a volver a plantear el sistema para reemplazar los lambda y obtener los auto vectores.
+
+62
+00:08:19.610 --> 00:08:22.559
+Eugenia Sol Piñeiro: ¿no? Entonces hago lambda por la identidad.
+
+63
+00:08:22.710 --> 00:08:31.830
+Eugenia Sol Piñeiro: Por el mi incógnita, digamos, el autodector igual a 0. Entonces después lo voy a plantear reemplazando por algún valor
+
+64
+00:08:31.990 --> 00:08:36.990
+Eugenia Sol Piñeiro: y voy a obtener el polinomio asociado a ese sistema.
+
+65
+00:08:38.080 --> 00:08:39.080
+Eugenia Sol Piñeiro: Ejemplo.
+
+66
+00:08:39.700 --> 00:08:56.080
+Eugenia Sol Piñeiro: sigamos con nuestra misma matriz. Voy a tener 3, 2, 1, 4. Tengo esta matriz, lambda por la identidad. Simplemente me van a quedar 3 menos Lambda. Dos, 1, 4, menos. Lambda. Planteo el determinante de esta matriz
+
+67
+00:08:56.220 --> 00:09:07.460
+Eugenia Sol Piñeiro: que no va a ser más que multiplicar este por este menos este por este, que me va a dar 3 menos lambda por 4 menos lambda, menos 2 igual a 0.
+
+68
+00:09:08.260 --> 00:09:16.289
+Eugenia Sol Piñeiro: Planteo este sistema binomio sencillo lo resuelvo buscando las raíces y me da lambda 1. Dos
+
+69
+00:09:16.410 --> 00:09:18.229
+Eugenia Sol Piñeiro: le han dado es igual a 5,
+
+70
+00:09:19.490 --> 00:09:26.960
+Eugenia Sol Piñeiro: y en este caso, Simplemente, acá Ahora, ¿qué hago reemplazo? En mi sistema? Tenía a menos 2,
+
+71
+00:09:27.070 --> 00:09:39.969
+Eugenia Sol Piñeiro: en este caso por la identidad, por equis, y este sistema tiene que ser a 0. Entonces, resolviendo mi sistema, me queda esta condición que X tiene que ser igual a menos 2. I.
+
+72
+00:09:40.120 --> 00:09:44.880
+Eugenia Sol Piñeiro: A esto me refiero con que tenemos muchas soluciones no posibles.
+
+73
+00:09:45.020 --> 00:10:02.839
+Eugenia Sol Piñeiro: Después vamos a ver una característica que tendría que cumplir para que nos sirva para, en nuestro caso de redes neuronales, No, Pero por lo pronto, reemplazo con algún auto vector En este caso, tomo i igual a 1. Y me queda el auto vector asociado a ese auto valor que va a ser el menos 2 1.
+
+74
+00:10:03.680 --> 00:10:10.910
+Eugenia Sol Piñeiro: Hago lo mismo con el 5. Y en este caso me queda la condición de que X tiene que ser igual a. Y entonces un auto vector que cumple es el 1. Uno.
+
+75
+00:10:12.390 --> 00:10:14.010
+Eugenia Sol Piñeiro: Bien, acá
+
+76
+00:10:15.030 --> 00:10:23.280
+Eugenia Sol Piñeiro: debería debería de hacer nada nuevo. Así que vamos a pasar a el análisis completos principales, que es lo que usa esto.
+
+77
+00:10:23.640 --> 00:10:33.930
+Eugenia Sol Piñeiro: Ya vamos a llegar a la red neuronal, que en realidad lo que pasa es que va a converger a un auto o a un conductor particular. Vamos a ver de qué nos sirve la convergencia de esa red.
+
+78
+00:10:35.830 --> 00:10:41.229
+Eugenia Sol Piñeiro: Entonces vamos con P. S, A, que es el siguiente análisis. Eso fue repaso pequeño de auto vectores.
+
+79
+00:10:44.130 --> 00:10:47.749
+Eugenia Sol Piñeiro: Bien, Ahora sí, vamos a hablar de P. S, A,
+
+80
+00:10:47.980 --> 00:10:52.160
+Eugenia Sol Piñeiro: que es principal component, análisis o análisis de componentes principales.
+
+81
+00:10:55.050 --> 00:11:03.300
+Eugenia Sol Piñeiro: Y ahora vamos a plantear un pequeño ejemplo para abrir el el problema que queremos tratar.
+
+82
+00:11:03.830 --> 00:11:10.030
+Eugenia Sol Piñeiro: Supóngase que tenemos este conjunto de datos donde tenemos nadadores.
+
+83
+00:11:10.700 --> 00:11:16.339
+Eugenia Sol Piñeiro: En este caso vamos a tomar el tiempo que tardó cada nadador en correr cierto tramo.
+
+84
+00:11:16.530 --> 00:11:24.149
+Eugenia Sol Piñeiro: Me dio minutos. Entonces voy a tener bueno, nadador. Uno tardó 10 min para estos 2 tramos y tardó un poco más para los siguientes tramos
+
+85
+00:11:25.060 --> 00:11:33.789
+Eugenia Sol Piñeiro: y quiero empezar a agrupar estos nadadores y empezar a sacar relaciones entre este conjunto de datos. Por ejemplo.
+
+86
+00:11:34.410 --> 00:11:43.450
+Eugenia Sol Piñeiro: ¿qué podrían relacionar acá viéndolo así a simple vista? ¿qué pueden sacar de este de este dataceto?
+
+87
+00:12:01.790 --> 00:12:05.820
+Eugenia Sol Piñeiro: ¿cómo lo pueden relacionar a los nadadores.
+
+88
+00:12:22.270 --> 00:12:31.939
+Eugenia Sol Piñeiro: Bueno. Hay un montón de cosas para sacar. Por ejemplo, el nadador. Uno tardó lo mismo en recorrer el tramo. Uno, el tra el tramo 2, no lo mismo con el nadador, 7
+
+89
+00:12:32.290 --> 00:12:40.809
+Eugenia Sol Piñeiro: después el nadador 5 también tardó el mismo tiempo en recorrer el 1 y el 2, pero ya tardó menos que quizás el nadador, 1 y el 7
+
+90
+00:12:41.240 --> 00:12:47.679
+Eugenia Sol Piñeiro: después va a pasar lo mismo con el 4, vemos que los tramos 3 y 4 quizás son más largos, Entonces, por lo general todos están tardando un poco más.
+
+91
+00:12:47.820 --> 00:12:55.119
+Eugenia Sol Piñeiro: a excepción del 7 que quizás tarda menos, entonces ya empezar a sacar relaciones entre los nadadores. Se complejiza un poco.
+
+92
+00:12:55.600 --> 00:12:57.189
+Eugenia Sol Piñeiro: ¿qué podríamos hacer?
+
+93
+00:12:57.390 --> 00:13:00.370
+Eugenia Sol Piñeiro: Una es ser cojonen, por ejemplo.
+
+94
+00:13:00.530 --> 00:13:03.420
+Eugenia Sol Piñeiro: para empezar a agruparlos. Otra es.
+
+95
+00:13:03.590 --> 00:13:07.359
+Eugenia Sol Piñeiro: primero, hacer un análisis de componentes principales que ahora vamos a ver cómo.
+
+96
+00:13:08.940 --> 00:13:12.069
+Eugenia Sol Piñeiro: si volvemos a nuestro ejemplo de
+
+97
+00:13:12.490 --> 00:13:20.399
+Eugenia Sol Piñeiro: que teníamos antes, que es el ejemplo que vamos a tomar para para todos nuestros casos de aprendizaje no supervisado que se llama sencillo.
+
+98
+00:13:20.740 --> 00:13:27.769
+Eugenia Sol Piñeiro: Volvemos a nuestros pacientes donde teníamos edad, duración de los síntomas, colesterol, sexo, peso, presión arterial, y una medida del estrés.
+
+99
+00:13:28.300 --> 00:13:33.059
+Eugenia Sol Piñeiro: Entonces, en este caso queríamos saber si el paciente presentaba una enfermedad arterial o no.
+
+100
+00:13:33.190 --> 00:13:43.300
+Eugenia Sol Piñeiro: Pero acá la pregunta que nos vamos a plantear es: Ok, hay ciertos patrones en mi conjunto De entrada que me indique si el paciente puede responder bien a cierto tratamiento.
+
+101
+00:13:43.540 --> 00:13:52.760
+Eugenia Sol Piñeiro: puedo llegar a armar algún índice que me indique cuál es el paciente con mayor riesgo? Y quizás el que
+
+102
+00:13:53.310 --> 00:14:02.699
+Eugenia Sol Piñeiro: pueda presentar esa enfermedad o no quieres el que tiene más riesgo. Quien no tiene tanto riesgo y formar un índice que quizás me lo resuma todo en términos de una variable.
+
+103
+00:14:02.940 --> 00:14:09.490
+Eugenia Sol Piñeiro: Entonces ese tipo de preguntas es lo que nos va a resolver? P: S A, antes de entrar a
+
+104
+00:14:09.760 --> 00:14:17.689
+Eugenia Sol Piñeiro: a como es el método pequeño, repaso de medidas descriptivas, que es lo que vamos a usar. Ahora
+
+105
+00:14:18.430 --> 00:14:29.580
+Eugenia Sol Piñeiro: voy a usar estas medidas durante toda la clase ya las conocen. Una es la media y la otra es el el desvío o la varianza muestral, porque se toma una parte de la de la población
+
+106
+00:14:29.770 --> 00:14:47.390
+Eugenia Sol Piñeiro: y no se acuerdan de esta medida muy variada, que es la covarianza astral, que también es una medida de asociación. Las otras eran univariadas. Nada más. Pero acá lo que se va a estimar es a partir de la muestra ver la asociación asociación entre 2 variables, en este caso, X y e X K.
+
+107
+00:14:47.750 --> 00:14:52.690
+Eugenia Sol Piñeiro: Entonces voy a tener mi matriz de covarianzas que me va a empezar a
+
+108
+00:14:52.820 --> 00:14:56.920
+Eugenia Sol Piñeiro: asociar linealmente estas variables. Entonces voy a tener
+
+109
+00:14:57.300 --> 00:15:00.030
+Eugenia Sol Piñeiro: la covarianza de equis. Uno Uno
+
+110
+00:15:00.340 --> 00:15:12.920
+Eugenia Sol Piñeiro: va a ser la relación que tengo con yo con mí misma, no, o sea, en la la varianza que hay con la variable y sí misma. Después voy a tener la relación entre la variable, 1 y la 2, la variable.
+
+111
+00:15:13.060 --> 00:15:18.369
+Eugenia Sol Piñeiro: 1, la 3, la 1, la 4, la 1, la n sucesivamente para todas las variables.
+
+112
+00:15:19.770 --> 00:15:21.980
+Eugenia Sol Piñeiro: acá. Nada muy nuevo.
+
+113
+00:15:22.480 --> 00:15:34.150
+Eugenia Sol Piñeiro: Lo importante es que esta matriz, que formo con micovarianza a partir de el conjunto de datos tiene la característica de que es primero simétrica.
+
+114
+00:15:34.300 --> 00:15:39.820
+Eugenia Sol Piñeiro: es decir, la la covarianza entre X 1 y X 2 es lo mismo que la covarianza entre X 2 y X Uno.
+
+115
+00:15:39.940 --> 00:15:43.510
+Eugenia Sol Piñeiro: pero además es simétrica, definida positiva.
+
+116
+00:15:43.860 --> 00:15:50.060
+Eugenia Sol Piñeiro: Esto es importante porque, al tener esa característica, me permite una descomposición que usa los auto vectores.
+
+117
+00:15:51.090 --> 00:15:52.199
+Eugenia Sol Piñeiro: Ya lo vamos a ver.
+
+118
+00:15:52.790 --> 00:15:59.930
+Eugenia Sol Piñeiro: Parece un dato de color, pero es importante porque los autovalores en P. C A nos indican algo que
+
+119
+00:16:00.790 --> 00:16:03.560
+Eugenia Sol Piñeiro: es es importante a la hora de reducir la dimensión.
+
+120
+00:16:04.020 --> 00:16:07.779
+Eugenia Sol Piñeiro: Entonces, esto, ¿cómo lo podemos interpretar
+
+121
+00:16:09.160 --> 00:16:16.949
+Eugenia Sol Piñeiro: simicovarianza es positiva, significa que hay una asociación lineal positiva entre los datos.
+
+122
+00:16:17.140 --> 00:16:29.339
+Eugenia Sol Piñeiro: Si es negativa, hay una asociación lineal negativa. Esto lo único que quiere decir es que si una crece entonces la otra decrece, digamos, quizás la interpretación teórica o o de negocio que se le da de según el caso de uso.
+
+123
+00:16:29.570 --> 00:16:39.849
+Eugenia Sol Piñeiro: no necesariamente es negativa, Es simplemente que están asociadas negativamente. Después 1 lo interpretará según su problema, que esté resolviendo y nada más. Pero por lo pronto, una crece y la otra decrece.
+
+124
+00:16:40.030 --> 00:16:42.809
+Eugenia Sol Piñeiro: Y si es 0, es porque son independientes
+
+125
+00:16:44.770 --> 00:17:03.480
+Eugenia Sol Piñeiro: y a partir de la matriz de covarianzas. Puedo sacar también la matriz de correlaciones o calcular la correlación menstral, que no es más que primero, estandarizar las variables y después calcular la matriz de covarianzas. Básicamente es la covarianza, pero con las variables que ya están estandarizadas.
+
+126
+00:17:04.089 --> 00:17:06.379
+Eugenia Sol Piñeiro: De nuevo. Esto es importante porque
+
+127
+00:17:06.550 --> 00:17:16.900
+Eugenia Sol Piñeiro: también vamos a tener, podemos llegar a tener quizás en nuestro conjunto de datos variables que están en distintas magnitudes si no queremos que eso nos afecte en nuestros resultados.
+
+128
+00:17:17.780 --> 00:17:30.200
+Eugenia Sol Piñeiro: entonces esto nos va a facilitar todo el análisis, así que vamos a usar directamente la matriz de correlaciones, que no es más que calcular la covarianza de mi conjunto de datos y ya teniendo estandarizadas las variables.
+
+129
+00:17:32.290 --> 00:17:43.210
+Eugenia Sol Piñeiro: Ahora, sí, después de toda esa intro que es. P. S A. Entonces S A: me va a dar
+
+130
+00:17:43.460 --> 00:17:56.219
+Eugenia Sol Piñeiro: información sobre qué variables de mi conjunto de datos son redundantes, es decir, va a eliminar la redundancia justamente reduciendo la dimensionalidad de mi conjunto. De datos.
+
+131
+00:17:56.820 --> 00:18:00.469
+Eugenia Sol Piñeiro: Entonces, si mis variables están muy correlacionadas.
+
+132
+00:18:00.660 --> 00:18:05.430
+Eugenia Sol Piñeiro: es porque son muy parecidas. Hay información que es redundante que no necesito procesar.
+
+133
+00:18:05.600 --> 00:18:15.439
+Eugenia Sol Piñeiro: pero no va a ser tan trivial como, por ejemplo. Digo, bueno, son muy parecidas. La elimino directamente hago un drop de la columna y la elimino.
+
+134
+00:18:15.770 --> 00:18:21.220
+Eugenia Sol Piñeiro: Eso es muy trivial. Acá No queremos perder información, sino eliminar redundancia y hacer
+
+135
+00:18:21.670 --> 00:18:34.629
+Eugenia Sol Piñeiro: implementar alguna técnica que me permita justamente reducir la dimensionalidad, pero representar la información de otra forma que abarque todas las variables originales que yo tenía.
+
+136
+00:18:35.120 --> 00:18:49.329
+Eugenia Sol Piñeiro: Entonces, Ahora vamos a ver cómo lo hacemos con P. S, A que no va a ser más que una combinación lineal. Pero el objetivo principal es eliminar la redundancia con la condición de que las variables tienen que estar correlacionadas si no están correlacionadas ya directamente y no no me sirve hacer que sea
+
+137
+00:18:51.220 --> 00:18:53.830
+Eugenia Sol Piñeiro: entonces el objetivo va a ser transformar
+
+138
+00:18:54.020 --> 00:19:02.379
+Eugenia Sol Piñeiro: mi conjunto de variables originales en otro conjunto que van a ser combinaciones lineales entre las variables anteriores.
+
+139
+00:19:02.550 --> 00:19:06.650
+Eugenia Sol Piñeiro: A este nuevo conjunto. Le vamos a llamar el conjunto de las componentes principales.
+
+140
+00:19:08.040 --> 00:19:13.489
+Eugenia Sol Piñeiro: Ahora bien, para construirlo hay que hacerlo con cierto criterio, ¿no? Y eso es lo que define. P. C, A que ahora lo vamos a ver
+
+141
+00:19:15.340 --> 00:19:30.179
+Eugenia Sol Piñeiro: para que se orienten un poco en línea del tiempo de hace cuánto viene. Esto es bastante viejo. Es de 1 933, y se usa mucho como base de redes neuronales muy modernas. Por ejemplo, Tomgoder, que vamos a ver en el
+
+142
+00:19:30.330 --> 00:19:40.740
+Eugenia Sol Piñeiro: más por el T. P. Cinco, me estoy adelantando un poco, pero a lo que quiero llegar es que esta es una una técnica bastante vieja y que se usa muchísimo como base de otras redes.
+
+143
+00:19:42.930 --> 00:19:46.010
+Eugenia Sol Piñeiro: Entonces, ¿qué es lo que vamos a hacer?
+
+144
+00:19:46.220 --> 00:19:51.179
+Eugenia Sol Piñeiro: Voy a tener p variables originales, no, o sea, si yo tenía, por ejemplo.
+
+145
+00:19:52.580 --> 00:19:55.120
+Eugenia Sol Piñeiro: no sé mi conjunto de datos, que era
+
+146
+00:19:55.830 --> 00:20:04.590
+Eugenia Sol Piñeiro: todos mis pacientes. Tenía la edad que es X, 1. X, 2 es el colesterol X 3. Es una medida del estrés.
+
+147
+00:20:04.720 --> 00:20:10.940
+Eugenia Sol Piñeiro: Y así, con todas mis variables hasta llegar a creo que teníamos 7. En este caso van a ser P. Variables.
+
+148
+00:20:12.310 --> 00:20:21.869
+Eugenia Sol Piñeiro: Voy a buscar qu variables con Qú Menor. Ap: Es decir, quiero menos variables que me representen la mayor variabilidad de los datos.
+
+149
+00:20:22.220 --> 00:20:29.749
+Eugenia Sol Piñeiro: es decir, l la que me represente la mayor cantidad de información posible, pero con menos variables.
+
+150
+00:20:31.230 --> 00:20:36.029
+Eugenia Sol Piñeiro: Y para eso voy a empezar a hacer una combinación lineal de las prevariables originales.
+
+151
+00:20:36.870 --> 00:20:47.569
+Eugenia Sol Piñeiro: Entonces voy a encontrar P. Componentes principales y después voy a elegir. Q o sea, voy a elegir, que van a ser las más importantes, y eso es lo que yo quiero representar.
+
+152
+00:20:47.940 --> 00:21:01.260
+Eugenia Sol Piñeiro: Entonces, por ejemplo, supóngase que tenemos este conjunto de datos que está en 3 D en este caso. Simplemente tengo 3 variables para poder representarlo. Pero fíjense que la mayor variabilidad de los datos
+
+153
+00:21:01.280 --> 00:21:08.480
+Eugenia Sol Piñeiro: está en este eje, no O sea, no está representado en este dataset. Está en este eje. Entonces.
+
+154
+00:21:08.670 --> 00:21:19.349
+Eugenia Sol Piñeiro: por ejemplo, podría plantear una combinación lineal para representar mi conjunto de datos original, que estaba en 3 variables en menos variables en este caso, 2,
+
+155
+00:21:19.610 --> 00:21:25.559
+Eugenia Sol Piñeiro: y que me represente la mayor variabilidad de los datos. Entonces, por ejemplo, podría plantear este sistema.
+
+156
+00:21:25.750 --> 00:21:42.799
+Eugenia Sol Piñeiro: Empecé a que no es más que hacer esto, entonces fíjense que la primer componente principal va a estar en la dirección de mayor variabilidad. La segunda componente principal va a estar en la dirección con mayor variabilidad, pero un poco menos que P. S. Uno.
+
+157
+00:21:42.930 --> 00:21:51.769
+Eugenia Sol Piñeiro: Y así puedo tener mi componente principal, Tres: mi componente principal, 4, o sea, una por cada variable de las que yo tenía en mi Atasset. Pero en este caso me estoy quedando con las
+
+158
+00:21:51.950 --> 00:21:57.970
+Eugenia Sol Piñeiro: 2 primeras componentes que me van a representar la mayor cantidad de información posible.
+
+159
+00:22:00.660 --> 00:22:08.540
+Eugenia Sol Piñeiro: Entonces, ahora, ¿cómo sabemos cómo eliminar la redundancia? ¿cómo definimos qué variable o qué componente es la principal.
+
+160
+00:22:08.800 --> 00:22:16.400
+Eugenia Sol Piñeiro: Entonces acá vamos a tomar esta característica de intentar maximizar la variabilidad de mi conjunto de datos.
+
+161
+00:22:17.350 --> 00:22:18.969
+Eugenia Sol Piñeiro: ¿qué significa eso?
+
+162
+00:22:19.230 --> 00:22:27.299
+Eugenia Sol Piñeiro: Uno era quizás más visual, que es lo que veíamos antes de Okay. Lo estoy viendo que que está en esa dirección la mayor variabilidad, pero, por ejemplo.
+
+163
+00:22:27.540 --> 00:22:32.609
+Eugenia Sol Piñeiro: no sé, tenemos un conjunto de datos de vehículos y tenemos esta feature que es color.
+
+164
+00:22:33.230 --> 00:22:34.869
+Eugenia Sol Piñeiro: Y los quiero distinguir
+
+165
+00:22:35.450 --> 00:22:44.729
+Eugenia Sol Piñeiro: mucha variabilidad. No me da no, O sea, si me dicen si es color rojo, y no sé si es un auto de un camión, si es un colectivo o lo que sea.
+
+166
+00:22:44.840 --> 00:22:48.589
+Eugenia Sol Piñeiro: Ahora, si agrego cantidad de ruedas, me da un poco más de variabilidad.
+
+167
+00:22:48.720 --> 00:22:53.079
+Eugenia Sol Piñeiro: Si agrego longitud del vehículo, me da aún más variabilidad.
+
+168
+00:22:53.250 --> 00:23:01.059
+Eugenia Sol Piñeiro: Entonces empiezo a buscar una característica que corresponda a todos los datos del conjunto que empiece a maximizar esa variabilidad.
+
+169
+00:23:03.220 --> 00:23:05.050
+Eugenia Sol Piñeiro: Entonces, ¿qué va a hacer? P: S A:
+
+170
+00:23:05.860 --> 00:23:08.949
+Eugenia Sol Piñeiro: Primero, vamos a tener nuestra matriz, que es nuestro conjunto de datos
+
+171
+00:23:10.310 --> 00:23:22.139
+Eugenia Sol Piñeiro: que en este caso va a ser de N por P. Es decir, voy a tener N pacientes en nuestro ejemplo y p variables que de nuevo van a ser edad, peso, colesterol, estrés, etcétera. Hasta X, P:
+
+172
+00:23:22.340 --> 00:23:26.500
+Eugenia Sol Piñeiro: vamos a transformar estas variables, cómo lo vamos a hacer?
+
+173
+00:23:27.530 --> 00:23:30.230
+Eugenia Sol Piñeiro: Nuestras componentes principales. Las vamos a llamar. Y
+
+174
+00:23:31.210 --> 00:23:35.200
+Eugenia Sol Piñeiro: entonces voy a buscar. I, sub 1 que va a ser la primera componente principal.
+
+175
+00:23:35.510 --> 00:23:42.550
+Eugenia Sol Piñeiro: Para eso, voy a plantear la combinación lineal con mi conjunto de datos original. No, Yo tenía
+
+176
+00:23:42.830 --> 00:23:47.370
+Eugenia Sol Piñeiro: mi matriz X con X Uno.
+
+177
+00:23:47.600 --> 00:23:51.579
+Eugenia Sol Piñeiro: X, 2, que van a ser todas las fitures en columnas.
+
+178
+00:23:52.070 --> 00:23:54.719
+Eugenia Sol Piñeiro: Las filas van a representar cada paciente, ¿no?
+
+179
+00:23:55.240 --> 00:23:58.679
+Eugenia Sol Piñeiro: Entonces este número lo tengo, digamos, no es que es una incógnita
+
+180
+00:23:59.030 --> 00:24:06.290
+Eugenia Sol Piñeiro: X, entonces lo único que voy a hacer es para calcular, y 1 voy a plantear una combinación lineal que va a ser
+
+181
+00:24:06.580 --> 00:24:10.519
+Eugenia Sol Piñeiro: un factor que ahora vamos a ver cómo se calcula que va a ser a 1
+
+182
+00:24:10.630 --> 00:24:15.800
+Eugenia Sol Piñeiro: por equis 1, más a 2 por X, 2
+
+183
+00:24:17.310 --> 00:24:22.180
+Eugenia Sol Piñeiro: a 2 por X, 2 más a 3, por X, 3, a 4 X, 4. Y así hasta X, P:
+
+184
+00:24:22.990 --> 00:24:24.520
+Eugenia Sol Piñeiro: No, Entonces
+
+185
+00:24:25.670 --> 00:24:38.919
+Eugenia Sol Piñeiro: en este caso se está restando la media en el de arriba. Esto lo mismo que arriba, pero porque las variables no están estandarizadas, Si están estandarizadas, no es necesario hacer esto, entonces puedo estandarizar al principio y ya está y simplemente calculo mis componentes principales de esta forma.
+
+186
+00:24:39.400 --> 00:24:40.300
+Eugenia Sol Piñeiro: Ahora.
+
+187
+00:24:40.560 --> 00:24:48.209
+Eugenia Sol Piñeiro: quiénes son a 1, a 2, a 3 y etcétera, como que los puedo conseguir a este vector se le va a llamar el vector de cargas
+
+188
+00:24:48.950 --> 00:24:50.760
+Eugenia Sol Piñeiro: que va a ser nuestra incógnita.
+
+189
+00:24:51.020 --> 00:25:02.559
+Eugenia Sol Piñeiro: Entonces, lo que tiene la característica que tiene que cumplir la carga es que tiene que ser un vector que esté normalizado, así que tenga norma 1 y que su varianza resulte máxima.
+
+190
+00:25:02.970 --> 00:25:05.960
+Eugenia Sol Piñeiro: Entonces, para hallar
+
+191
+00:25:06.080 --> 00:25:21.519
+Eugenia Sol Piñeiro: el el coeficiente a su I, que va a ser todo Este vector que también se llama Lowdins, el vector de Lowings o de cargas. Lo que voy a hacer es buscar los auto vectores de la matriz de covarianzas de mi conjunto de datos.
+
+192
+00:25:22.130 --> 00:25:29.250
+Eugenia Sol Piñeiro: Entonces, de nuevo, tengo mi conjunto de datos. X: Calculo, la matriz de covarianza
+
+193
+00:25:29.470 --> 00:25:40.569
+Eugenia Sol Piñeiro: o primero, estandarizo y ya directamente calculo, la matriz de correlaciones y listo. Me ahorro restar la media. Entonces, calculo la matriz de correlaciones, Calculo, los auto vectores asociados a esa matriz.
+
+194
+00:25:40.680 --> 00:25:42.600
+Eugenia Sol Piñeiro: y ahí obtengo las cargas.
+
+195
+00:25:43.530 --> 00:25:48.209
+Eugenia Sol Piñeiro: Entonces, ¿qué es lo que voy a hacer? ¿se acuerdan que teníamos para auto valores y auto vectores
+
+196
+00:25:49.320 --> 00:25:52.340
+Eugenia Sol Piñeiro: plantear este sistema a menos lambda por E
+
+197
+00:25:56.190 --> 00:26:01.720
+Eugenia Sol Piñeiro: por B, igual a 0, No, este V ahora van a ser las cargas?
+
+198
+00:26:02.850 --> 00:26:04.050
+Eugenia Sol Piñeiro: ¿van a ser mis a
+
+199
+00:26:04.200 --> 00:26:11.099
+Eugenia Sol Piñeiro: Y esta matriz a en realidad va a ser mi matriz de correlaciones asociada al conjunto de datos X que le vamos a llamar s. Sub: X.
+
+200
+00:26:11.700 --> 00:26:14.879
+Eugenia Sol Piñeiro: Entonces, para hacer los componentes principales, tenemos que calcular
+
+201
+00:26:15.030 --> 00:26:17.870
+Eugenia Sol Piñeiro: ese vector de cargas, o sea, calculo de los auto vectores.
+
+202
+00:26:18.300 --> 00:26:24.130
+Eugenia Sol Piñeiro: Entonces, ahora las como entes principales, van a ser, y 1
+
+203
+00:26:24.310 --> 00:26:30.060
+Eugenia Sol Piñeiro: que va a ser el primer valor del primer auto vector por X, 1 más
+
+204
+00:26:30.620 --> 00:26:39.040
+Eugenia Sol Piñeiro: el segundo valor del primer auto vector por X, 2, y así sucesivamente. No, O sea, yo acá. Voy a tener un auto vector.
+
+205
+00:26:40.020 --> 00:26:49.799
+Eugenia Sol Piñeiro: ve 1 que va a tener el B, 1 1 de 1, 2, y así sucesivamente
+
+206
+00:26:52.380 --> 00:26:55.260
+Eugenia Sol Piñeiro: hasta hasta P hasta p variables, y
+
+207
+00:26:56.240 --> 00:26:59.110
+Eugenia Sol Piñeiro: esto me va a permitir calcular la primer componente principal.
+
+208
+00:27:00.310 --> 00:27:07.510
+Eugenia Sol Piñeiro: Ahora, ¿quién es el B? Uno es el auto vector asociado al mayor autovalor.
+
+209
+00:27:08.040 --> 00:27:13.840
+Eugenia Sol Piñeiro: Si yo para calcular los autovectores, primero tenía que haber calculado los lambda, no los auto los autovalores.
+
+210
+00:27:14.180 --> 00:27:22.479
+Eugenia Sol Piñeiro: entonces este va a estar asociado a Landa, 1 que va a ser mayor a todos los la nosotros, lambda que tenía.
+
+211
+00:27:23.690 --> 00:27:30.500
+Eugenia Sol Piñeiro: ¿por qué? Porque el auto valor con mayor valor me va a dar la máxima varianza.
+
+212
+00:27:31.490 --> 00:27:37.780
+Eugenia Sol Piñeiro: Y yo lo que quería era que mi primer componente principal sea la que maximice la variabilidad de mi conjunto de datos.
+
+213
+00:27:39.000 --> 00:27:49.809
+Eugenia Sol Piñeiro: Entonces, acá fíjense que se plantea la misma combinación que dijimos antes. Es es a 1 por X, 1, más a 2 X, 2 o 3 por X 3 s. A: va a ser el auto vector asociado al mayor autovalor de mi matriz de correlaciones.
+
+214
+00:27:50.760 --> 00:27:58.159
+Eugenia Sol Piñeiro: lo cual son trabalenguas, pero hasta acá se entendió el el la idea principal. Ahora vamos a ver un ejemplo numérico igual.
+
+215
+00:27:59.840 --> 00:28:01.899
+Eugenia Sol Piñeiro: pero la idea es general quedó clara.
+
+216
+00:28:10.530 --> 00:28:11.420
+Eugenia Sol Piñeiro: Okay.
+
+217
+00:28:12.270 --> 00:28:13.190
+Eugenia Sol Piñeiro: Bien.
+
+218
+00:28:14.300 --> 00:28:24.839
+Eugenia Sol Piñeiro: entonces el auto. Esto lo que acabo de decir, el autovalor. Lambda sugi es el que se corresponde con la varianza de la componente. Y entonces, si yo ordeno a los autovalores de mayor a menor.
+
+219
+00:28:25.190 --> 00:28:33.160
+Eugenia Sol Piñeiro: Puedo lograr reducir la dimensionalidad porque tomo únicamente los auto vectores que estén asociados a los autovalores de mayor valor.
+
+220
+00:28:33.350 --> 00:28:42.960
+Eugenia Sol Piñeiro: y esos son los que más más información me van a dar bien después para aclarar Covarianza, versus correlación.
+
+221
+00:28:43.490 --> 00:28:51.259
+Eugenia Sol Piñeiro: Básicamente, lo que les conviene es, primero, estandarizar su conjunto de datos y después calcular la covarianza. Entonces ahí ya van a obtener la correlación
+
+222
+00:28:51.830 --> 00:28:59.350
+Eugenia Sol Piñeiro: del conjunto de datos justamente para que no dependa específicamente de las variables de medidas que esto es lo que ya fuimos viendo a la hora de estandarizar
+
+223
+00:28:59.570 --> 00:29:00.520
+Eugenia Sol Piñeiro: entonces
+
+224
+00:29:00.780 --> 00:29:07.719
+Eugenia Sol Piñeiro: justamente para evitar ese problema. Okay estandarizo primero y después hago todo el análisis directamente con la matriz de correlaciones.
+
+225
+00:29:11.050 --> 00:29:14.520
+Eugenia Sol Piñeiro: no que supongo que es lo que dice. Acá Bien.
+
+226
+00:29:15.190 --> 00:29:18.629
+Eugenia Sol Piñeiro: vamos a hacer este pequeño ejercicio sencillo.
+
+227
+00:29:19.430 --> 00:29:21.559
+Eugenia Sol Piñeiro: Voy a tener mi conjunto de datos X.
+
+228
+00:29:21.790 --> 00:29:28.270
+Eugenia Sol Piñeiro: En este caso, voy a tener X Uno: X, 2, X, 3
+
+229
+00:29:29.260 --> 00:29:34.180
+Eugenia Sol Piñeiro: son 3 variables a términos de hacer el ejemplo numérico un poco más sencillo.
+
+230
+00:29:34.890 --> 00:29:42.540
+Eugenia Sol Piñeiro: Entonces voy a calcular mi matriz de correlaciones a asociada a mi hidrataset X, y me da esto.
+
+231
+00:29:44.670 --> 00:29:48.990
+Eugenia Sol Piñeiro: ¿qué hago ahora para encontrar, y 1 y 2 y 3,
+
+232
+00:29:49.390 --> 00:29:52.590
+Eugenia Sol Piñeiro: Por ejemplo, yo quiero encontrar ahora y 1. ¿qué tengo que hacer?
+
+233
+00:29:54.690 --> 00:29:56.080
+Eugenia Sol Piñeiro: ¿cuál es el primer paso?
+
+234
+00:29:56.740 --> 00:30:02.740
+Eugenia Sol Piñeiro: Y 1 es la primer componente principal, no la que más variabilidad me va a dar en mi conjunto de datos, la mas importante.
+
+235
+00:30:19.630 --> 00:30:24.169
+Eugenia Sol Piñeiro: Bien, perfecto, a 1 por equis 1.
+
+236
+00:30:25.130 --> 00:30:30.869
+Eugenia Sol Piñeiro: Ahí. Creo que se te se te coló un X, 1 de más, o sea, más 2
+
+237
+00:30:31.220 --> 00:30:35.119
+Eugenia Sol Piñeiro: a 2 por X, 2, Y así no
+
+238
+00:30:35.220 --> 00:30:36.970
+Eugenia Sol Piñeiro: vas a 3 por X 3.
+
+239
+00:30:37.270 --> 00:30:38.780
+Eugenia Sol Piñeiro: Tenemos solo 3 variables.
+
+240
+00:30:39.500 --> 00:30:42.340
+Eugenia Sol Piñeiro: Entonces empiezo a plantear el sistema de esa forma.
+
+241
+00:30:42.970 --> 00:30:44.730
+Eugenia Sol Piñeiro: Entonces, ahora quiero encontrar
+
+242
+00:30:44.890 --> 00:30:55.259
+Eugenia Sol Piñeiro: el primer auto vector, no que va a ser a 1 o 2 a 3, o sea, estas van a ser las incógnitas de mi sistema. Y esto se va a corresponder al mayor autovalor lambda. Uno.
+
+243
+00:30:56.880 --> 00:30:59.729
+Eugenia Sol Piñeiro: Entonces planteo mi matriz de correlaciones
+
+244
+00:31:01.040 --> 00:31:07.139
+Eugenia Sol Piñeiro: Ya tenía entonces voy a hacer a menos perdón. No vamos a ponerle, S, ya que estamos
+
+245
+00:31:07.250 --> 00:31:09.840
+Eugenia Sol Piñeiro: ese menos landa por I.
+
+246
+00:31:12.480 --> 00:31:18.489
+Eugenia Sol Piñeiro: Planteo el determinante de este sistema lo evalúa 0.
+
+247
+00:31:20.110 --> 00:31:25.809
+Eugenia Sol Piñeiro: Busco el polinomio característico, No, esto me da el polinomio característico.
+
+248
+00:31:26.160 --> 00:31:31.949
+Eugenia Sol Piñeiro: Las raíces de este polinomio van a ser los autovalores, que es lo que me da acá
+
+249
+00:31:32.710 --> 00:31:34.809
+Eugenia Sol Piñeiro: y las ordeno de mayor a menor.
+
+250
+00:31:35.540 --> 00:31:42.119
+Eugenia Sol Piñeiro: Entonces voy a tener que el mayor auto valor es Landa, 1 que va a ser igual a
+
+251
+00:32:03.510 --> 00:32:04.819
+Eugenia Sol Piñeiro: Mhm. Ahí se me escucha.
+
+252
+00:32:08.240 --> 00:32:18.500
+Eugenia Sol Piñeiro: Siempre me quedo sin material en esta clase. Saben por hoy, porque doy L. E. Ms: hasta las 10 de la noche, los miércoles. Entonces siempre me olvido cargarlos. Bueno, no importa.
+
+253
+00:32:19.290 --> 00:32:27.359
+Eugenia Sol Piñeiro: Bien, me ve que estaba diciendo. Tenemos los autovalores, lambda, 1 igual a 6.
+
+254
+00:32:29.590 --> 00:32:39.540
+Eugenia Sol Piñeiro: Y entonces ahora voy a buscar el primer auto vector que va a estar asociado a Zelanda. Entonces, ¿qué es lo que hago? Planteo de nuevo mi sistema? No ese menos lambda por i
+
+255
+00:32:40.310 --> 00:32:44.510
+Eugenia Sol Piñeiro: hoy lo escribí súper mal. Bueno, ese me lo han dado por y por B igual a 0.
+
+256
+00:32:47.110 --> 00:32:58.370
+Eugenia Sol Piñeiro: Estelanda va a ser 6. En este caso? Bueno, ese lo tengo y es la identidad. Entonces planteo el sistema con Xy Z en este caso, pues son 3, y
+
+257
+00:32:58.770 --> 00:33:04.170
+Eugenia Sol Piñeiro: veo cuál es el auto vector asociado al mayor autovalor. Y me da
+
+258
+00:33:04.470 --> 00:33:11.409
+Eugenia Sol Piñeiro: este auto vector. Este va a ser mi B, 1 que nosotros lo llamamos nuestro vector de cargas a 1.
+
+259
+00:33:12.220 --> 00:33:13.380
+Eugenia Sol Piñeiro: Víctor.
+
+260
+00:33:14.950 --> 00:33:29.930
+Eugenia Sol Piñeiro: Entonces ahí para calcular los componentes principales. Voy a tener que hacer. Primero quiero calcular mi primer componente principal, que va a ser I 1. Entonces voy a hacer a 1 por X, 1 ósea menos 0 4 por X, 1, menos 0, 4 por X, 2, menos 81 por X 3.
+
+261
+00:33:30.310 --> 00:33:36.899
+Eugenia Sol Piñeiro: Ahora estas X las tengo, no son incógnitas. O sea, esto me va a dar un número.
+
+262
+00:33:37.710 --> 00:33:43.329
+Eugenia Sol Piñeiro: el el X 1. Este, por ejemplo, no sé, va a ser, tiene 50 años.
+
+263
+00:33:43.990 --> 00:33:55.990
+Eugenia Sol Piñeiro: Imagínenselo, estandarizado, ¿no? Pero bueno, tiene 50 años, tiene, no sé cierto peso y tiene cierta altura o cierta medida del estrés, el colesterol lo que tenía mi conjunto de datos.
+
+264
+00:33:56.320 --> 00:33:58.969
+Eugenia Sol Piñeiro: ¿a qué me refiero? ¿a que no es una incógnita el X.
+
+265
+00:33:59.830 --> 00:34:09.190
+Eugenia Sol Piñeiro: Después voy a calcular la segunda componente principal que acá voy a usar el auto vector asociado al segundo lambda.
+
+266
+00:34:09.670 --> 00:34:17.790
+Eugenia Sol Piñeiro: Y voy a tener la segunda compra principal. Y así con todas las componentes principales y puedo calcular hasta y 3 en este caso, que voy a usar este
+
+267
+00:34:18.060 --> 00:34:26.799
+Eugenia Sol Piñeiro: auto vector asociado bien hasta acá la solución con autovalores y autovectores. Ya encontré todos mis componentes principales.
+
+268
+00:34:27.020 --> 00:34:29.890
+Eugenia Sol Piñeiro: ¿qué me dicen los autovalores?
+
+269
+00:34:31.250 --> 00:34:42.160
+Eugenia Sol Piñeiro: ¿me va a representar la varianza de mi conjunto de datos, entonces puedo calcular cuál es la proporción de información que me representa cada una de las componentes.
+
+270
+00:34:42.320 --> 00:34:48.780
+Eugenia Sol Piñeiro: entonces voy a tener 1 y 2 y 3, que va a ser igual a esto se calcula como
+
+271
+00:34:51.480 --> 00:34:57.779
+Eugenia Sol Piñeiro: lambda subí sobre la sumatoria de los landa. Y
+
+272
+00:34:58.040 --> 00:35:17.849
+Eugenia Sol Piñeiro: Y esto me va a representar la varianza de cada una de las componentes principales. Entonces acá. Voy a usar para calcular la de la primer componente principal uso el auto valor de mayor valor sobre la sumatoria de todos los otros lambda. Entonces la primer componente principal. Me va a representar 6 onceavos de la información, la segunda, 3, onceavos. Y la tercera, 2, onceavos.
+
+273
+00:35:18.090 --> 00:35:23.329
+Eugenia Sol Piñeiro: Por ejemplo, imagínense que tengo más variables, ¿no? Pero bueno, en este caso podría eliminar
+
+274
+00:35:24.130 --> 00:35:34.419
+Eugenia Sol Piñeiro: esta componente, porque no me representa tanta información y me basta con tener representado todo en términos de la primera y la segunda componente principal
+
+275
+00:35:34.510 --> 00:35:48.350
+Eugenia Sol Piñeiro: que adentro. Ya hicimos la combinación lineal en términos de todas las variables de mi conjunto de datos. Lo único que hice fue representarlo en otro sistema de coordenadas en otro. En otro conjunto de datos, que es combinación lineal de mis variables originales.
+
+276
+00:35:48.780 --> 00:35:49.730
+Eugenia Sol Piñeiro: entonces
+
+277
+00:35:50.130 --> 00:36:02.149
+Eugenia Sol Piñeiro: estoy perdiendo muy poquita información y me alcanza lo suficiente como para representarlo de esta forma, que son las de máxima varianza, entonces de esa forma puede reducir la dimensionalidad de mi conjunto de datos.
+
+278
+00:36:04.620 --> 00:36:20.190
+Eugenia Sol Piñeiro: Resumen, voy a tener primero que construir mi matriz X que va a ser mi inmediata, No, o sea, es poner simplemente las variables en columnas que van a ser mis fichus estandarizo, la matriz y calculo mi matriz de correlaciones que va a ser s. X.
+
+279
+00:36:20.430 --> 00:36:27.150
+Eugenia Sol Piñeiro: Busco a los auto vectores y autovalores asociados a esa matriz ordeno, los autovalores de mayor a menor.
+
+280
+00:36:27.320 --> 00:36:30.540
+Eugenia Sol Piñeiro: Y ahí voy a construir mi matriz de auto vectores
+
+281
+00:36:30.750 --> 00:36:39.229
+Eugenia Sol Piñeiro: donde justamente cada autovalor va a estar asociado a una de las componentes, entonces voy a calcular ahí recién mi
+
+282
+00:36:39.340 --> 00:36:49.550
+Eugenia Sol Piñeiro: mis variables i que va a ser mi conjunto de componentes principales como una combinación lineal de las originales que va a ser a 1 por equis, 1 a 2 por X 2 pasa 3 por X 3.
+
+283
+00:36:49.960 --> 00:36:54.590
+Eugenia Sol Piñeiro: Y este es todo el procedimiento de P. C. A. Vamos hasta acá
+
+284
+00:36:55.260 --> 00:37:04.690
+Eugenia Sol Piñeiro: pude obtener mi conjunto de datos con reducción de dimensionalidad hasta acá la teoría
+
+285
+00:37:05.090 --> 00:37:08.639
+Eugenia Sol Piñeiro: más pesada de de que sea dudas.
+
+286
+00:37:09.250 --> 00:37:13.510
+Eugenia Sol Piñeiro: Ahora vamos a ver cómo lo interpreto? Porque todo muy lindo tenemos la teoría. Pero y como lo puedo interpretar.
+
+287
+00:37:13.750 --> 00:37:17.490
+Eugenia Sol Piñeiro: Pero así se calcula.
+
+288
+00:37:18.490 --> 00:37:25.970
+EMILIO JOSÉ MITCHELL: Perdón descartar y 3, ¿qué estaríamos descartando? Ahí no hay dónde, claro.
+
+289
+00:37:27.260 --> 00:37:38.429
+Eugenia Sol Piñeiro: Estás descartando la componente que no te representa variabilidad en tus datos, vos, Estás representando el conjunto X en un conjunto y no que es el de componentes principales.
+
+290
+00:37:39.210 --> 00:37:45.670
+Eugenia Sol Piñeiro: el de componentes principales podes descartar las últimas. Y después, por ejemplo, si imagínate tenés hacer 50 variables.
+
+291
+00:37:45.850 --> 00:37:54.110
+Eugenia Sol Piñeiro: descartás algunas y después las pasás por tu red neuronal únicamente las que ya te dan más información, por ejemplo.
+
+292
+00:37:54.440 --> 00:38:01.019
+Eugenia Sol Piñeiro: Entonces usas un conjunto de datos reducido o es se se entendió ahí.
+
+293
+00:38:01.880 --> 00:38:03.520
+EMILIO JOSÉ MITCHELL: Sí, Sí, sí, sí, mejor.
+
+294
+00:38:03.520 --> 00:38:04.240
+Eugenia Sol Piñeiro: Okay.
+
+295
+00:38:04.980 --> 00:38:10.989
+Eugenia Sol Piñeiro: se pierde la identidad de las feature de cada P. S. A. ¿a qué te referís que salga el Nick.
+
+296
+00:38:12.900 --> 00:38:23.899
+Santiago Britez: O sea, lo que me refiero es que si luego quisieras ver cuáles fueron esas características que más peso tuvieron al hacer el P C A de la reducción, dimensionalidad, perdés la identidad de ellas.
+
+297
+00:38:25.360 --> 00:38:29.439
+Eugenia Sol Piñeiro: Lo podés ver. Ahora vamos a ver cómo que en realidad eso es lo que te representa las cargas.
+
+298
+00:38:30.590 --> 00:38:44.939
+Eugenia Sol Piñeiro: porque cada una de las X está representada por una carga, no el a 1 por X. Uno es de a 1. Te va. Te va a especificar qué variable de esas X es la que más importancia tiene. Básicamente la que tenga mayor carga. Es la más importante.
+
+299
+00:38:45.600 --> 00:38:49.790
+Eugenia Sol Piñeiro: Ahora vamos a ver en el resultado igual, pero no perdés, digamos esa información.
+
+300
+00:38:56.990 --> 00:38:58.429
+Eugenia Sol Piñeiro: No sé Ahí quedó más claro.
+
+301
+00:39:02.660 --> 00:39:03.959
+Santiago Britez: Sí, sí queda claro.
+
+302
+00:39:04.510 --> 00:39:05.130
+Eugenia Sol Piñeiro: Okay.
+
+303
+00:39:05.640 --> 00:39:09.500
+Eugenia Sol Piñeiro: Bien, bueno.
+
+304
+00:39:10.410 --> 00:39:17.119
+Eugenia Sol Piñeiro: sigamos un poquito más, Veamos cómo se interpreta por lo menos la Pc 1. Así queda un poco más claro también.
+
+305
+00:39:17.640 --> 00:39:19.650
+Eugenia Sol Piñeiro: Pero supóngase que tengo
+
+306
+00:39:20.520 --> 00:39:26.549
+Eugenia Sol Piñeiro: un conjunto de datos donde lo que tengo es una encuesta de presupuestos familiares en distintas provincias
+
+307
+00:39:26.810 --> 00:39:31.620
+Eugenia Sol Piñeiro: y tengo los gastos, medios de las familias y se utilizan estas 6 variables.
+
+308
+00:39:31.790 --> 00:39:43.049
+Eugenia Sol Piñeiro: Los voy a tener X Uno va a ser alimentación. X, 2 vestido de calzado X, 3. ¿cuánto gastan en vivienda, X, 4 4 gastan en mobiliario equis 5 en salud, X, en educación.
+
+309
+00:39:44.110 --> 00:39:54.000
+Eugenia Sol Piñeiro: Entonces quiero, por ejemplo, ver cuál es la provincia que más gasta en estas variables.
+
+310
+00:39:54.920 --> 00:39:58.009
+Eugenia Sol Piñeiro: Planteo, P. S A: Y lo que hago es
+
+311
+00:39:58.120 --> 00:40:05.239
+Eugenia Sol Piñeiro: calcular de nuevo. Y 1 va a ser a 1 por equis 1, más a 2 por equis o más a 3 por X 3,
+
+312
+00:40:05.880 --> 00:40:09.080
+Eugenia Sol Piñeiro: y así voy a interpretar la primera Pc: 1. Ahora.
+
+313
+00:40:09.290 --> 00:40:14.269
+Eugenia Sol Piñeiro: si la carga, lo que me aporta es qué tan importante es
+
+314
+00:40:15.020 --> 00:40:20.009
+Eugenia Sol Piñeiro: la la feature en este conjunto de datos. Entonces, ¿qué es lo que me está diciendo esto?
+
+315
+00:40:21.890 --> 00:40:24.340
+Eugenia Sol Piñeiro: Si yo lo veo así, ¿cómo lo puedo interpretar
+
+316
+00:40:25.480 --> 00:40:28.340
+Eugenia Sol Piñeiro: en qué, en qué es lo que más gasta la familia
+
+317
+00:40:30.540 --> 00:40:35.649
+Eugenia Sol Piñeiro: Si volvemos para atrás que teníamos X, 1, alimentación. X, 2 vestidos X, 3 viviendas
+
+318
+00:40:37.120 --> 00:40:39.760
+Eugenia Sol Piñeiro: Okay en X, 1, Bien, o sea.
+
+319
+00:40:40.060 --> 00:40:43.999
+Eugenia Sol Piñeiro: suelen gastar mucho más en alimento que en
+
+320
+00:40:44.110 --> 00:40:50.669
+Eugenia Sol Piñeiro: X 2 que X 2, era vestido de calzado Y en X 3, también gasta un poco, no que era vivienda.
+
+321
+00:40:52.070 --> 00:40:53.910
+Eugenia Sol Piñeiro: Entonces vamos a tener.
+
+322
+00:40:54.790 --> 00:41:13.139
+Eugenia Sol Piñeiro: y 1 va a ser esta suma ponderada de todos los gastos. Donde voy a tener que X, 1 X, 5 y X 6 es en lo que más invierten las familias. En este caso, o sea, invierten más en alimentación, salud y educación, y el menor peso lo tiene el gasto en X 2, que va a ser vestido de calzado.
+
+323
+00:41:13.820 --> 00:41:21.229
+Eugenia Sol Piñeiro: Es así? Es como yo puedo interpretar las cargas de mi primer combate principal.
+
+324
+00:41:22.660 --> 00:41:23.570
+Eugenia Sol Piñeiro: Entonces.
+
+325
+00:41:24.680 --> 00:41:34.760
+Eugenia Sol Piñeiro: básicamente, cuando les pidamos cual es la interpretación de Pc, 1 lo que tienen que hacer un poco es esto no intentar bajarlo a su caso de uso y Okay. ¿cuál es la más importante, Entonces, ¿cómo puede reducir la dimensionalidad y demás?
+
+326
+00:41:36.460 --> 00:41:38.540
+Eugenia Sol Piñeiro: Bien, Entonces.
+
+327
+00:41:40.470 --> 00:41:50.559
+Eugenia Sol Piñeiro: si yo calculo los valores de 1 para cada una de estas provincias. Puedo reducir todo a una variable que va a representar un índice. ¿por qué esto.
+
+328
+00:41:51.160 --> 00:42:09.860
+Eugenia Sol Piñeiro: de nuevo, no es una incógnita. Lo tengo en mi conjunto de datos. Entonces puedo hacer para cada una de las filas. Calculo, la Ps: 1 calculo, el la primer componente principal, y me va a dar un valor. Y después puedo ordenar las provincias de mayor a valor de mayor a menor. Y puedo obtener Entonces, ¿cuál es la que más gastó, Por ejemplo.
+
+329
+00:42:10.770 --> 00:42:18.449
+Eugenia Sol Piñeiro: entonces básicamente reduje todo a un índice que me representan una sola variable.
+
+330
+00:42:19.010 --> 00:42:21.929
+Eugenia Sol Piñeiro: en este caso reduje la dimensión hasta 1.
+
+331
+00:42:22.490 --> 00:42:28.100
+Eugenia Sol Piñeiro: Y en este caso me indica ese índice. La capacidad de gasto de provincias, no para interpretarlo bajado al caso de uso
+
+332
+00:42:32.050 --> 00:42:37.359
+Eugenia Sol Piñeiro: ¿Cómo se interpreta en general el coeficiente. En realidad, el valor numérico de la carga
+
+333
+00:42:37.690 --> 00:42:50.669
+Eugenia Sol Piñeiro: que está relacionado con lo que vimos antes de la interpretación, Justamente de la Covarianza es que si la carga es positiva, entonces significa que la variable y la componente tienen una correlación positiva.
+
+334
+00:42:51.300 --> 00:42:53.490
+Eugenia Sol Piñeiro: De nuevo, en términos de
+
+335
+00:42:53.630 --> 00:43:01.889
+Eugenia Sol Piñeiro: que si una crece la otra también crece si es negativa, una crece y la otra decrece. Y si es igual, entonces ¿por qué son independientes, ¿no?
+
+336
+00:43:02.500 --> 00:43:06.089
+Eugenia Sol Piñeiro: Pero acá. Lo importante es que después 1 le da
+
+337
+00:43:06.230 --> 00:43:08.789
+Eugenia Sol Piñeiro: la interpretación bajada del caso de uso.
+
+338
+00:43:09.580 --> 00:43:13.579
+Eugenia Sol Piñeiro: Ahora lo vamos a ver para que quede un poco más claro. Vamos a ver los 2 casos.
+
+339
+00:43:14.940 --> 00:43:19.149
+Eugenia Sol Piñeiro: Así que voy a seguir mejor, porque la quedemos para acá
+
+340
+00:43:20.270 --> 00:43:22.319
+Eugenia Sol Piñeiro: vamos a ver el ejemplo del chat bot.
+
+341
+00:43:24.720 --> 00:43:32.790
+Eugenia Sol Piñeiro: Supóngase que tenemos una compañía be to be o business to business que lo que hace es dar servicios al cliente a través del desarrollo de Chatbox.
+
+342
+00:43:34.150 --> 00:43:46.150
+Eugenia Sol Piñeiro: Entonces el objetivo del proyecto es, primero, automatizar los procesos de ventas. Por eso quieren hacer los bots quieren recurrir a asistencia humana lo menos posible y mejorar la experiencia del usuario.
+
+343
+00:43:46.460 --> 00:43:52.609
+Eugenia Sol Piñeiro: Estoy segurísima que habrán usado algún bot que tiene muy mala experiencia de usuario y tuvieron que recurrir a asistencia humana.
+
+344
+00:43:53.050 --> 00:44:00.359
+Eugenia Sol Piñeiro: Entonces, para eso se recopilan un montón de datos de cómo interactúan los usuarios con cada bot.
+
+345
+00:44:01.190 --> 00:44:06.749
+Eugenia Sol Piñeiro: entonces, por ejemplo, se recopila, bueno, ¿cual es la longitud del input del usuario medido en cantidad de palabras
+
+346
+00:44:07.180 --> 00:44:14.760
+Eugenia Sol Piñeiro: o tokens. En realidad, esto asterisco. Por Por lo general se usan tokens que son partes de palabras.
+
+347
+00:44:15.310 --> 00:44:18.850
+Eugenia Sol Piñeiro: longitud del mensaje enviado por el chatbot.
+
+348
+00:44:19.860 --> 00:44:23.529
+Eugenia Sol Piñeiro: la tarjeta naranja que dolor de cabeza? Bueno, sí puede ser
+
+349
+00:44:23.780 --> 00:44:27.490
+Eugenia Sol Piñeiro: el de movistar todos esos. También.
+
+350
+00:44:27.880 --> 00:44:30.929
+Eugenia Sol Piñeiro: Bueno, Índice de Complejidad de la respuesta del chat bot.
+
+351
+00:44:31.320 --> 00:44:37.390
+Eugenia Sol Piñeiro: el tiempo de respuesta, justamente que si no quiero estar 5 min esperando a que el bot me responda
+
+352
+00:44:37.600 --> 00:44:51.479
+Eugenia Sol Piñeiro: ¿Cuál es la frecuencia de solicitudes de input hechas por el bot al usuario, vieron cuando te empieza a pedir cuál es tu nombre. Cuál es tu D, N. I, ¿Cuál es tu edad, o sea, un montón de solicitudes de input medio que te vas del bot.
+
+353
+00:44:52.160 --> 00:45:04.870
+Eugenia Sol Piñeiro: se mide la satisfacción del usuario medida del 1 al 10. ¿cuál es la frecuencia de input tipes, Es decir, cuántas veces tuviste que cargar una imagen tuviste que mandar un audio o cuántas veces mandas, texto, si lo puede interpretar o no.
+
+354
+00:45:05.460 --> 00:45:20.689
+Eugenia Sol Piñeiro: ¿cuál es la cantidad, interacciones del usuario por sesión. ¿cuánto le lleva toda la conversación que quizás entre más le lleve peor la cantidad de excepciones. Cuántas veces te rompió el bot Básicamente, y cuántas veces se solicitó asistencia humana
+
+355
+00:45:21.240 --> 00:45:23.240
+Eugenia Sol Piñeiro: se miden todas esas variables.
+
+356
+00:45:24.680 --> 00:45:33.169
+Eugenia Sol Piñeiro: Entonces lo que se quiere hacer es ver, Ok. Cuáles son las variables que más influyen en la satisfacción del usuario y hacer un índice
+
+357
+00:45:33.560 --> 00:45:42.350
+Eugenia Sol Piñeiro: ordenando los bots? Para decir, Bueno, primero voy a ordenar. Voy a arreglar. Voy a invertir en arreglar este bot, que es el que peor está funcionando
+
+358
+00:45:42.720 --> 00:45:47.780
+Eugenia Sol Piñeiro: y después sigo con el resto, pero tengo que priorizar porque tengo pocos recursos, entonces tengo que invertir en alguno.
+
+359
+00:45:49.200 --> 00:45:50.090
+Eugenia Sol Piñeiro: Bien.
+
+360
+00:45:50.370 --> 00:45:55.309
+Eugenia Sol Piñeiro: voy a tener entonces 10 variables que van a ser mis features, y en este caso vamos a tener 26 bots.
+
+361
+00:45:57.550 --> 00:46:00.219
+Eugenia Sol Piñeiro: Voy a representar mis features de esta forma.
+
+362
+00:46:02.280 --> 00:46:06.130
+Eugenia Sol Piñeiro: ¿qué pasa acá que ven que lo el primer paso que tengo que hacer
+
+363
+00:46:29.820 --> 00:46:31.590
+Eugenia Sol Piñeiro: está Marisa. Bien.
+
+364
+00:46:32.460 --> 00:46:38.599
+Eugenia Sol Piñeiro: Tengo que estandarizar mi conjunto de datos, porque fíjense que acá la cantidad de interacciones del usuario está
+
+365
+00:46:38.760 --> 00:46:48.569
+Eugenia Sol Piñeiro: del 0 al 2 000. Incluso hay un par de Bliers acá llegaste casi hasta el 3 500 y no me permite visualizar, por ejemplo, estas variables que están medidas en otra escala.
+
+366
+00:46:48.730 --> 00:46:52.339
+Eugenia Sol Piñeiro: como cantidad de Proms o satisfacción que iba del 1 al 10.
+
+367
+00:46:53.200 --> 00:46:54.470
+Eugenia Sol Piñeiro: No la puedo apreciar
+
+368
+00:46:54.820 --> 00:47:06.229
+Eugenia Sol Piñeiro: entonces estandarizo y me queda de esta forma que recordemos que al estandarizar no es que me quedaran dentro de un intervalo fijo, sino que lo que me aseguraba era que la media sea 0, y el desvío sea 1.
+
+369
+00:47:06.510 --> 00:47:12.549
+Eugenia Sol Piñeiro: Es decir, no es que está reescalado a o fijo al intervalo 0, 1 o al menos 1 1.
+
+370
+00:47:13.210 --> 00:47:19.760
+Eugenia Sol Piñeiro: De hecho, acaba del 2 al 3, Entonces tengo mis fichas estandarizadas.
+
+371
+00:47:20.430 --> 00:47:26.469
+Eugenia Sol Piñeiro: Hago todo el proceso de P. C, A. No calculo de matriz, de correlaciones. Busco autovalores y autodictores. Calculo
+
+372
+00:47:26.650 --> 00:47:32.719
+Eugenia Sol Piñeiro: la P. S. Uno y Calculo, la P. S Dos: en este caso, y las gráfico.
+
+373
+00:47:33.260 --> 00:47:36.769
+Eugenia Sol Piñeiro: si eras gráfico, obtenemos esto, que es el byplod
+
+374
+00:47:36.900 --> 00:47:41.290
+Eugenia Sol Piñeiro: que lo que va a hacer es representar la P. S. Dos en función de la P. S. Uno
+
+375
+00:47:42.460 --> 00:47:58.969
+Eugenia Sol Piñeiro: y las flechas que vemos acá estos vectores van a ser las variables. Fíjense acá. Hice asistencia humana. Satisfacción, complejidad, cantidad de preguntas del usuario, longitud de la respuesta del bot, cantidad, excepciones, tiempo de respuesta y demás.
+
+376
+00:47:59.740 --> 00:48:10.410
+Eugenia Sol Piñeiro: La distancia desde el origen de este vector, o sea la magnitud del vector son las cargas, entonces, a mayor magnitud, más importancia tiene esta variable?
+
+377
+00:48:10.590 --> 00:48:12.780
+Eugenia Sol Piñeiro: Después, ¿qué tan juntas
+
+378
+00:48:13.390 --> 00:48:21.629
+Eugenia Sol Piñeiro: están estas variables? Es qué tan correlacionadas están también? No sea. Fíjense que Acá me quedo
+
+379
+00:48:21.820 --> 00:48:30.829
+Eugenia Sol Piñeiro: mensajes de audio. No se llegan a leer mensajes de audio y mensajes de de texto una arriba de la otra. Es decir, eran muy parecido.
+
+380
+00:48:31.030 --> 00:48:38.210
+Eugenia Sol Piñeiro: Se pisan, Están color relacionadas, Acá están muy parecidas, pero puedo sacar más información de esas
+
+381
+00:48:39.600 --> 00:48:48.869
+Eugenia Sol Piñeiro: y después, por ejemplo, puedo empezar a relacionar mis datos. Acá Tengo todos los bots representados. Entonces Fíjense
+
+382
+00:48:49.550 --> 00:48:55.890
+Eugenia Sol Piñeiro: que, por ejemplo, voy a tener de este lado los que mayor satisfacción tienen no que es éste.
+
+383
+00:48:56.380 --> 00:49:02.439
+Eugenia Sol Piñeiro: Entonces todo acá va a tener mucha satisfacción y lo que esté en la dirección opuesta.
+
+384
+00:49:05.150 --> 00:49:10.879
+Eugenia Sol Piñeiro: Lección opuesta de este vector de cargas son los que menos satisfacción tienen.
+
+385
+00:49:11.120 --> 00:49:16.520
+Eugenia Sol Piñeiro: Y fíjense que si tiene menos satisfacción, está justo en la dirección de mayor cantidad de excepciones.
+
+386
+00:49:16.890 --> 00:49:22.039
+Eugenia Sol Piñeiro: entonces tiene sentido. Lo puedo empezar a interpretar de esa forma y jugar un poco con eso. ¿qué más pueden interpretar acá
+
+387
+00:49:22.390 --> 00:49:23.300
+Eugenia Sol Piñeiro: que ven?
+
+388
+00:49:28.680 --> 00:49:31.579
+Eugenia Sol Piñeiro: Hay un montón de información para sacar de este gráfico.
+
+389
+00:49:39.090 --> 00:49:42.799
+EMILIO JOSÉ MITCHELL: El tiempo de respuesta también va en contra de la satisfacción.
+
+390
+00:49:44.210 --> 00:49:48.880
+Eugenia Sol Piñeiro: Bien perfecto, O sea, todos estos bots tienen un tiempo de respuesta alto.
+
+391
+00:49:49.380 --> 00:49:54.459
+Eugenia Sol Piñeiro: o sea, si ten tuvieses que elegir acá en cuál invertís en arreglar. Por ejemplo.
+
+392
+00:49:54.940 --> 00:50:04.570
+EMILIO JOSÉ MITCHELL: Entonces en arreglar la longitud del chat bot, la longitud de la respuesta no creería que es
+
+393
+00:50:05.360 --> 00:50:07.599
+EMILIO JOSÉ MITCHELL: en la línea de estudio más larga simplemente.
+
+394
+00:50:08.240 --> 00:50:09.420
+Eugenia Sol Piñeiro: Okay, Bien.
+
+395
+00:50:10.620 --> 00:50:11.270
+Eugenia Sol Piñeiro: Y.
+
+396
+00:50:11.270 --> 00:50:12.410
+EMILIO JOSÉ MITCHELL: Eso tendrá nada.
+
+397
+00:50:13.090 --> 00:50:19.650
+Eugenia Sol Piñeiro: Okay lo lo viste según la variable, está bien igual, O sea, podrías mejorar la longitud de respuesta, Vamos a hacerla más corta, ¿no?
+
+398
+00:50:20.110 --> 00:50:24.169
+Eugenia Sol Piñeiro: Perfecto. Y entonces los que mayor
+
+399
+00:50:24.390 --> 00:50:29.580
+Eugenia Sol Piñeiro: longitud de respuesta tienen son estos: no hay mayor cantidad de excepciones. Estos son los peores, todo lo que están acá.
+
+400
+00:50:30.170 --> 00:50:34.109
+EMILIO JOSÉ MITCHELL: Claro. Sí, eso es chat. Oye tu pregunta. Llamas a kit chat bots, arreglarías.
+
+401
+00:50:34.110 --> 00:50:34.800
+Eugenia Sol Piñeiro: Claro.
+
+402
+00:50:35.030 --> 00:50:36.320
+EMILIO JOSÉ MITCHELL: Pero te entendían.
+
+403
+00:50:36.320 --> 00:50:43.539
+Eugenia Sol Piñeiro: No igual estuvo bien porque también, o sea, es otra información que puedes sacar. ¿es eso. Ok, Bajemos la longitud de respuesta
+
+404
+00:50:44.220 --> 00:50:45.160
+Eugenia Sol Piñeiro: perfecto.
+
+405
+00:50:46.180 --> 00:50:53.220
+Eugenia Sol Piñeiro: En bien, ahí dicen, el de cablevisión necesita asistencia de humanos muy constantemente
+
+406
+00:50:54.000 --> 00:50:56.819
+Eugenia Sol Piñeiro: perfecto, pues está en la dirección. Esta
+
+407
+00:50:57.010 --> 00:51:02.230
+Eugenia Sol Piñeiro: hay una correlación entre ser Proms y human Assistant
+
+408
+00:51:05.060 --> 00:51:09.550
+Eugenia Sol Piñeiro: en realidad están bastante separados. No hay
+
+409
+00:51:10.130 --> 00:51:15.840
+Eugenia Sol Piñeiro: No sé si te referís a correlación más, como no en términos teóricos de correlación, sino de
+
+410
+00:51:17.050 --> 00:51:21.120
+Eugenia Sol Piñeiro: de relación entre human asistance You Air Bronx.
+
+411
+00:51:24.950 --> 00:51:35.290
+Eugenia Sol Piñeiro: o sea, si las variables están muy correlacionadas. ¿es este caso, por ejemplo, o sea, no me sirve tener estas 2, si están muy correlacionadas. La verdad que la puedo sacar una de esas. No me está dando información.
+
+412
+00:51:36.180 --> 00:51:41.280
+Eugenia Sol Piñeiro: Está bien, perfecto, igual. O sea, sí, hay cierta relación, acá digamos, si
+
+413
+00:51:41.940 --> 00:51:45.809
+Eugenia Sol Piñeiro: tengo mucha cantidad de Proms, por lo general.
+
+414
+00:51:45.950 --> 00:51:54.370
+Eugenia Sol Piñeiro: en realidad, al revés. No, no es tan s justo. Está como muy cercano a
+
+415
+00:51:55.170 --> 00:51:56.959
+Eugenia Sol Piñeiro: como lo explico. Está muy vertical.
+
+416
+00:51:57.440 --> 00:52:04.129
+Eugenia Sol Piñeiro: ¿no? O sea, el el más notorio. Es este de satisfacción que si quedas justamente en la dirección totalmente opuesta.
+
+417
+00:52:05.320 --> 00:52:10.650
+Eugenia Sol Piñeiro: es complicado, no, O sea, no tenés nada de satisfacción, tenés que invertir acá.
+
+418
+00:52:13.370 --> 00:52:16.299
+Eugenia Sol Piñeiro: Lo mismo de, por ejemplo, si el bote es más complejo.
+
+419
+00:52:17.140 --> 00:52:22.409
+Eugenia Sol Piñeiro: Quizás Okay tiene más satisfacción, pero invertiste una banda, dices vos tenés, un montón de complejidad.
+
+420
+00:52:27.480 --> 00:52:37.159
+Eugenia Sol Piñeiro: ¿sí? Podés sacar ese tipo de relaciones de, por ejemplo, Okay. Estos van mucho a asistencia humana y por lo general no piden tantos proms al usuario.
+
+421
+00:52:40.480 --> 00:52:43.230
+Eugenia Sol Piñeiro: Por ejemplo, ese tipo de relaciones, puedes sacar
+
+422
+00:52:45.590 --> 00:52:53.690
+Eugenia Sol Piñeiro: lo mismo. Acá No tengo mucho tiempo de respuesta y muchas excepciones. Entonces tengo baja satisfacción. Y así voy empezando a interpretar las variables. ¿no?
+
+423
+00:52:54.440 --> 00:53:00.450
+Eugenia Sol Piñeiro: Bien, acá logramos reducir la dimensionalidad. Incluso fíjense
+
+424
+00:53:01.160 --> 00:53:03.339
+Eugenia Sol Piñeiro: que podría llegar a armar clusters.
+
+425
+00:53:03.870 --> 00:53:13.599
+Eugenia Sol Piñeiro: No ven eso, o sea, si acá. Estos, por ejemplo, los podría agrupar acá. Estos. Los podría agrupar. Acá. Lo estoy haciendo muy a ojo, ¿no? O sea, 1 lo puede hacer
+
+426
+00:53:14.200 --> 00:53:16.699
+Eugenia Sol Piñeiro: redes neuronales, incluso con cojones y demás.
+
+427
+00:53:17.710 --> 00:53:23.309
+Eugenia Sol Piñeiro: Pero bueno, fíjense que también me da cierto cierta agrupación.
+
+428
+00:53:24.180 --> 00:53:27.070
+Eugenia Sol Piñeiro: Entonces me da muchísima información. Este gráfico.
+
+429
+00:53:29.140 --> 00:53:36.239
+Eugenia Sol Piñeiro: Y acá bajé la dimensión tenía todas estas variables. Lo pude representar en 2, que son la Pc 2 y la Pc 1.
+
+430
+00:53:36.380 --> 00:53:49.870
+Eugenia Sol Piñeiro: Ahora vamos un paso más y representémoslo en una sola en un índice que me los ordene de mayor a menor en cuanto a quién es el que más tengo que invertir o cuál es el peor de los bots y cuáles no.
+
+431
+00:53:51.120 --> 00:54:01.919
+Eugenia Sol Piñeiro: Entonces puedo calcular un índice únicamente representando a la P. S. Uno que de nuevo acuérdense que las X no son incógnitas, sino que tengo el valor, entonces puedo calcular la P. S, 1 para cada 1 de los bots.
+
+432
+00:54:03.000 --> 00:54:13.049
+Eugenia Sol Piñeiro: Entonces, en este caso, los que me dan negativos, acá está representado el autodector opuesto a propósito. En este caso, los que me dan negativos son los que tengo que invertir.
+
+433
+00:54:13.330 --> 00:54:16.130
+Eugenia Sol Piñeiro: Entonces, si yo veo este índice
+
+434
+00:54:16.520 --> 00:54:18.640
+Eugenia Sol Piñeiro: Digo, okay, bueno, el el de
+
+435
+00:54:18.940 --> 00:54:26.200
+Eugenia Sol Piñeiro: cable visión es el peor de todos. No debería invertir en este ahora. ¿qué puede pasar
+
+436
+00:54:27.050 --> 00:54:29.779
+Eugenia Sol Piñeiro: Este gráfico me puede dar invertido.
+
+437
+00:54:30.310 --> 00:54:43.600
+Eugenia Sol Piñeiro: Es decir, cablevisión. Me puede dar muy positivo, pero la interpretación de positivo significa que es malo, o sea, en cuanto a la interpretación de que el bote está roto. Y tengo que invertir en eso.
+
+438
+00:54:43.860 --> 00:54:55.069
+Eugenia Sol Piñeiro: ¿por qué? Porque me puede dar el auto vector opuesto que en cuanto a soluciones, está bien. Acuérdese que teníamos muchas soluciones para resolver autovalores y autovectores, entonces quizás me da justo el otro auto vector.
+
+439
+00:54:55.180 --> 00:55:00.550
+Eugenia Sol Piñeiro: que es válido, pero tengo que interpretarlo bajándolo a mi caso. Uso al revés.
+
+440
+00:55:01.730 --> 00:55:06.090
+Eugenia Sol Piñeiro: Ejemplo: supóngase que yo tenía y 1
+
+441
+00:55:06.820 --> 00:55:10.570
+Eugenia Sol Piñeiro: va a ser igual a no sé menos
+
+442
+00:55:11.170 --> 00:55:14.490
+Eugenia Sol Piñeiro: 0, 5 por cantidad de excepciones.
+
+443
+00:55:14.820 --> 00:55:21.569
+Eugenia Sol Piñeiro: Esto es, tiene carga negativa y la interpretación de excepciones. Es negativo. Es malo tener excepciones.
+
+444
+00:55:22.410 --> 00:55:32.840
+Eugenia Sol Piñeiro: pero por ejemplo, tengo más, No sé 0, coma 0, 1 muy poquito de satisfacción, entonces
+
+445
+00:55:33.560 --> 00:55:39.310
+Eugenia Sol Piñeiro: la satisfacción es algo positivo y la carga asociada también es positiva.
+
+446
+00:55:39.380 --> 00:55:57.769
+Eugenia Sol Piñeiro: Entonces, en este ejemplo, Ok, si es muy negativo, entonces está ahí, está dándole bastante peso a las variables asociadas a cargas negativas, como por ejemplo, excepciones decir, acá. Tengo mucha excepción y seguramente de acá. La carga de, por ejemplo, tiempo de respuesta, como habíamos visto antes, es negativa. También
+
+447
+00:55:58.190 --> 00:56:02.759
+Eugenia Sol Piñeiro: entonces tiene mucho tiempo de respuestas, muchas excepciones y poca satisfacción.
+
+448
+00:56:02.870 --> 00:56:12.260
+Eugenia Sol Piñeiro: Pero si esto me da al revés, no esto acá graficado, Uy, la gráfica es horrible. Bueno, me puede dar más 0 5 decepciones.
+
+449
+00:56:13.450 --> 00:56:15.440
+Eugenia Sol Piñeiro: o sea, el autodector me dio al revés
+
+450
+00:56:15.780 --> 00:56:22.330
+Eugenia Sol Piñeiro: la carga expositiva, pero la interpretación que yo le doy es negativa, Es decir, es malo tener excepciones.
+
+451
+00:56:22.630 --> 00:56:28.910
+Eugenia Sol Piñeiro: No pasa nada. Me dio positiva la carga, pero es malo, agrupo mis variables en cuales me dan carga positiva y cuáles tienen carga negativa
+
+452
+00:56:29.250 --> 00:56:35.890
+Eugenia Sol Piñeiro: y saco una interpretación. Ahí es como sabemos cuántas Pc hacer para nuestro conjunto de datos.
+
+453
+00:56:36.600 --> 00:56:38.890
+Eugenia Sol Piñeiro: Eso depende en cuanto quieras reducir la dimensión.
+
+454
+00:56:39.290 --> 00:56:45.580
+Eugenia Sol Piñeiro: o sea, graficar la P. S. Uno, así como este índice te da justamente
+
+455
+00:56:46.550 --> 00:56:54.499
+Eugenia Sol Piñeiro: un índice ordenado en términos de unas variables de listo. Lo veo directamente con una variable y fin: coge la dimensión en una en la Pc. Uno
+
+456
+00:56:54.780 --> 00:57:07.409
+Eugenia Sol Piñeiro: y calculando Te acordás lo el los autovalores, el lambda, 1 sobre la sumatoria de todos los otros. Lambda te da cuánta información estás representando solo con la Pc 1.
+
+457
+00:57:08.610 --> 00:57:11.850
+Eugenia Sol Piñeiro: Entonces, por ejemplo, te da más de un 80 por 100. Está perfecto.
+
+458
+00:57:14.540 --> 00:57:23.790
+Eugenia Sol Piñeiro: Después puedes decir, bueno, quiero un poco más de información, agrego la P. S. Dos y por ejemplo, gráficas. Esto para sacar conclusiones basado en tu conjunto de datos
+
+459
+00:57:29.190 --> 00:57:38.979
+Eugenia Sol Piñeiro: con el lambda. Podemos darnos una claro el el lambda. Lo que te indica es cuánta varianza tiene esa variable. Y P. S: Uno es la de mayor variabilidad
+
+460
+00:57:41.190 --> 00:57:43.390
+Eugenia Sol Piñeiro: no sea la que mayor información me representa
+
+461
+00:57:45.170 --> 00:57:52.039
+Eugenia Sol Piñeiro: allá. A medida que te alejás tenés menos información. Entonces las últimas las puedes ir descartando. Pero vas a tener
+
+462
+00:57:52.590 --> 00:57:58.800
+Eugenia Sol Piñeiro: P componentes principales, siendo p la cantidad de columnas que tengas, no una por cada variable.
+
+463
+00:58:00.770 --> 00:58:06.190
+Eugenia Sol Piñeiro: Bien, esto de la interpretación de las cargas. Quedó claro
+
+464
+00:58:07.300 --> 00:58:14.669
+Eugenia Sol Piñeiro: lo aclaro también, no solo por en general, de cómo interpretarlo, sino porque quizás a algún grupo le queda un auto vector y lo interpreta de una forma.
+
+465
+00:58:15.040 --> 00:58:20.470
+Eugenia Sol Piñeiro: Y a un grupo le queda el auto vector opuesto y la interpretación tiene que ser la misma.
+
+466
+00:58:25.880 --> 00:58:31.670
+Eugenia Sol Piñeiro: o sea, después, más allá del signo que tenga la carga, tienen que interpretarlo bajado al caso uso
+
+467
+00:58:45.360 --> 00:58:48.720
+Eugenia Sol Piñeiro: bien dudas. Hasta acá.
+
+468
+00:58:58.060 --> 00:59:07.269
+Eugenia Sol Piñeiro: Vamos a hacer ahora igual, No sé, 5 min quieren hacer hasta y cuarto, mejor hasta 10 y cuarto, y volvemos. Me queda una parte muy cortita. Vemos el enunciado del T, P,
+
+469
+00:59:07.550 --> 00:59:12.039
+Eugenia Sol Piñeiro: Pues, claro, vimos todo esto, pero ¿y las redes neuronales, dónde quedaron entonces? Ahora vamos a ver la red neuronal
+
+470
+00:59:12.150 --> 00:59:14.800
+Eugenia Sol Piñeiro: que hace más cortito.
+
+471
+00:59:15.990 --> 00:59:26.280
+Eugenia Sol Piñeiro: Voy a aclarar algo para que quede clavado. Pero después actualizo las filminas. Me quedó este ejercicio acá. Como obligatorio. Esto era del 4 y pasado, así que ignórenlo. Esto no va a estar este cuadro.
+
+472
+00:59:27.880 --> 00:59:28.570
+Eugenia Sol Piñeiro: ¿sí?
+
+473
+00:59:31.770 --> 00:59:32.470
+Eugenia Sol Piñeiro: O sea.
+
+474
+00:59:35.420 --> 00:59:41.770
+Eugenia Sol Piñeiro: bueno, todo esto fue para llegar a la regla de hoja que va a ser la red neuronal que vamos a ver hoy
+
+475
+00:59:43.120 --> 00:59:50.519
+Eugenia Sol Piñeiro: como pequeño resumen, entonces teníamos los componentes principales que nos servían para reducir la dimensión de nuestro conjunto de datos
+
+476
+00:59:50.650 --> 00:59:58.190
+Eugenia Sol Piñeiro: eliminando redundancia, ¿no? Entonces algunos modelos de redes neuronales me permiten calcular estas componentes principales.
+
+477
+00:59:58.320 --> 01:00:06.149
+Eugenia Sol Piñeiro: La ventaja es que puede llegar a reducir el costo computacional. Si tengo muchas variables, muchos registros
+
+478
+01:00:06.210 --> 01:00:20.429
+Eugenia Sol Piñeiro: y desventaja que también es muy difícil representar un conjunto de datos que tienen muchas variables en muy poquitas y reducir tan drásticamente la dimensión. Pero por ahora no lo quiero hacer con P. S A. Vamos a hacerlo con redes neuronales.
+
+479
+01:00:22.490 --> 01:00:23.580
+Eugenia Sol Piñeiro: Entonces
+
+480
+01:00:23.700 --> 01:00:33.179
+Eugenia Sol Piñeiro: vamos a ver la regla de hoja. ¿se acuerdan que habíamos visto el perceptrón minial simple donde calculábamos la salida de la red, como los pesos.
+
+481
+01:00:33.410 --> 01:00:38.380
+Eugenia Sol Piñeiro: tole por los registros que va a ser el input, no por X, por X, por doble B,
+
+482
+01:00:38.830 --> 01:00:48.649
+Eugenia Sol Piñeiro: y actualizamos los pesos con este Delta W, que era el Eta por el valor de verdad y la salida esperada.
+
+483
+01:00:49.070 --> 01:00:54.929
+Eugenia Sol Piñeiro: Entonces, ¿qué es lo que pasa Ahora, el aprendizaje supervisado.
+
+484
+01:00:57.120 --> 01:00:58.779
+Eugenia Sol Piñeiro: ¿qué problema ven acá
+
+485
+01:01:15.640 --> 01:01:22.379
+Eugenia Sol Piñeiro: o sea, qué debería cambiar yo en el delta W, que no tengo ahora.
+
+486
+01:01:25.540 --> 01:01:27.070
+Santiago Britez: No tenés el true. Leven.
+
+487
+01:01:27.650 --> 01:01:34.050
+Eugenia Sol Piñeiro: Perfecto, entonces no puedo calcular los pesos de esta forma. No puedo actualizar, o sea, no tengo el
+
+488
+01:01:34.400 --> 01:01:38.889
+Eugenia Sol Piñeiro: el registro de la de de verdad no tengo etiquetas, entonces digo, bueno.
+
+489
+01:01:39.010 --> 01:01:42.520
+Eugenia Sol Piñeiro: lo elimino y actualizo los pesos como
+
+490
+01:01:42.670 --> 01:01:46.200
+Eugenia Sol Piñeiro: el Eta por la salida del modelo por el input.
+
+491
+01:01:46.380 --> 01:01:53.390
+Eugenia Sol Piñeiro: ¿no? Yo simplemente borro el el valor de verdad, porque no lo tengo en aprendizaje no supervisado.
+
+492
+01:01:54.230 --> 01:01:59.559
+Eugenia Sol Piñeiro: Parece todo muy sencillo, pero claramente no lo va a hacer. Entonces hay un problema con la actualización. Acá
+
+493
+01:02:00.360 --> 01:02:06.090
+Eugenia Sol Piñeiro: En este caso, Lo que pasa es que está todo el tiempo multiplicándose el Eta por
+
+494
+01:02:06.270 --> 01:02:17.409
+Eugenia Sol Piñeiro: o por equis, Entonces, cada vez esto va aumentando, va aumentando, va aumentando y puede producir Overflow al pasar de las épocas, Entonces no converge después. El modelo no se puede usar esta actualización.
+
+495
+01:02:18.840 --> 01:02:29.300
+Eugenia Sol Piñeiro: Entonces lo que demuestra hoja es que en caso hipotético de que la red anterior converge entonces el vector de peso resultante va a ser
+
+496
+01:02:29.480 --> 01:02:35.640
+Eugenia Sol Piñeiro: un punto sobre la dirección de máxima variación de los datos, es decir, va a converger a
+
+497
+01:02:37.060 --> 01:02:40.820
+Eugenia Sol Piñeiro: vector que me va a permitir calcular la primer componente principal.
+
+498
+01:02:41.430 --> 01:02:47.600
+Eugenia Sol Piñeiro: El problema es que no converge, no porque este delta W va aumentando en cada paso. Entonces, el algoritmo es muy inestable.
+
+499
+01:02:47.800 --> 01:02:51.380
+Eugenia Sol Piñeiro: Entonces lo que plantea oja. Es decir, bueno, lo normalizo
+
+500
+01:02:51.520 --> 01:02:58.790
+Eugenia Sol Piñeiro: para que se haga más chico. Entonces dice, bueno, en lugar de usar el aprendizaje joviano, así como está. Dividamos por la norma.
+
+501
+01:02:59.000 --> 01:03:06.179
+Eugenia Sol Piñeiro: Entonces, en cada paso tengo que dividir por cada 1 de los elementos de la norma de los que tenía antes. Así no se produce Orflow.
+
+502
+01:03:06.570 --> 01:03:10.449
+Eugenia Sol Piñeiro: pero es muy costoso calcular la norma en cada paso.
+
+503
+01:03:10.650 --> 01:03:21.579
+Eugenia Sol Piñeiro: Entonces, al final, Ok, no produce Overflow. Pero voy a estar años entrenando mi red hasta que calculo la norma en cada 1 de los pasos.
+
+504
+01:03:22.480 --> 01:03:25.230
+Eugenia Sol Piñeiro: Entonces voy a seguir teniendo un gran costo computacional.
+
+505
+01:03:25.960 --> 01:03:34.929
+Eugenia Sol Piñeiro: una hoja, y dice: Ok, vamos a estimarla. Y lo que hace es empezar a estimar esta actualización de los pesos con polinomio de Taylor.
+
+506
+01:03:36.210 --> 01:03:53.720
+Eugenia Sol Piñeiro: Antes de que se asusten, no me voy a meter en polinomio de Taylor. Ya lo vieron seguramente en Menea o análisis matemáticos. Yo no me acuerdo ese día, pero básicamente, lo que hace es derivar respecto a W. Se evalúa en W sobre la norma, que es el X 0 del polinomio de Taylor.
+
+507
+01:03:54.110 --> 01:04:01.730
+Eugenia Sol Piñeiro: Más allá de eso, lo importante en realidad que se tienen que llevar es que la regla de actualización estimada queda de esta forma.
+
+508
+01:04:02.100 --> 01:04:07.139
+Eugenia Sol Piñeiro: Entonces lo que demuestra hoja es que el delta W puede ser el Eta por
+
+509
+01:04:07.260 --> 01:04:10.890
+Eugenia Sol Piñeiro: la salida del modelo por equis y menos
+
+510
+01:04:11.150 --> 01:04:14.060
+Eugenia Sol Piñeiro: la salida al cuadrado por el peso en el paso anterior.
+
+511
+01:04:15.790 --> 01:04:23.120
+Eugenia Sol Piñeiro: y esto se mantiene acotado, no digamos, no diverge, O sea, la red empieza a converger, No produce Overflow. Y
+
+512
+01:04:23.410 --> 01:04:31.039
+Eugenia Sol Piñeiro: lo que muestra es que el método converge al auto vector correspondiente al mayor autovalor de la matriz de correlaciones.
+
+513
+01:04:32.010 --> 01:04:37.639
+Eugenia Sol Piñeiro: Y esto era lo que vimos que usábamos para construir la primer componente principal.
+
+514
+01:04:38.070 --> 01:04:44.359
+Eugenia Sol Piñeiro: Cuidado. Acá no converge a la P. C, Uno converja el auto vector que me permite construirla.
+
+515
+01:04:44.510 --> 01:04:54.440
+Eugenia Sol Piñeiro: Entonces tengo que ir un pasito más allá para construirla, que es simplemente hacer el y 1 por las cargas que me dio por equis 1 más a 2 por X, 2, más o 3 por X 3.
+
+516
+01:04:54.780 --> 01:04:57.960
+Eugenia Sol Piñeiro: Entonces básicamente converge al A. Me da las cargas.
+
+517
+01:04:59.120 --> 01:05:07.180
+Eugenia Sol Piñeiro: Entonces fíjense que es tan sencillo. De hecho, ya casi que lo tienen, lo único que tienen que actualizar en el perceptor lineal es
+
+518
+01:05:07.900 --> 01:05:14.290
+Eugenia Sol Piñeiro: la regla de actualización de los pesos, porque ahora no tengo etiquetas y tengo que actualizarla con la regla de hoja para que converja.
+
+519
+01:05:14.650 --> 01:05:24.039
+Eugenia Sol Piñeiro: Entonces se puede reducir a Ok, cambiamos una línea de código. Ahí estamos, pero fíjense toda la teoría que hay detrás de por qué esto funciona.
+
+520
+01:05:24.960 --> 01:05:27.420
+Eugenia Sol Piñeiro: Entonces, acá.
+
+521
+01:05:27.660 --> 01:05:40.740
+Eugenia Sol Piñeiro: De hecho, incluso lo pueden graficar. Pueden ver cómo inicializan los pesos de forma random y el vector de pesos final de la red. En mi última época, debería quedar en la dirección de la máxima alianza de mis datos
+
+522
+01:05:41.440 --> 01:05:49.749
+Eugenia Sol Piñeiro: que con esa trayectoria me construía la Pc Uno y que me representaba la mayor variabilidad de los datos, entonces esto debería ocurrir cuando ustedes entrenan hoja.
+
+523
+01:05:52.130 --> 01:05:59.220
+Eugenia Sol Piñeiro: bien para asegurar la convergencia. Lo que se propone es que leta sea igual a 1 sobre 1, 2 por Landa. Uno
+
+524
+01:06:00.180 --> 01:06:04.209
+Eugenia Sol Piñeiro: Okay parece teóricamente muy lindo, pero Yo Landa, no lo tengo. De hecho, si lo tuviera.
+
+525
+01:06:04.350 --> 01:06:21.620
+Eugenia Sol Piñeiro: no haría todo esto porque ya directamente puedo calcular la P. Seguro y sin, Pero como no conozco ese autovalor, entonces es mejor, primero, estandarizar todo y arrancar con un E T A que sea, por ejemplo, menor a 0 5 como para que tengan algún lineamiento de por dónde arrancar con los hiper parámetros de la red.
+
+526
+01:06:21.840 --> 01:06:28.190
+Eugenia Sol Piñeiro: incluso arrancaría por un poquito menos 0, 1, Una cosa así, pero en orden de magnitud sería eso 10, 1.
+
+527
+01:06:30.460 --> 01:06:37.150
+Eugenia Sol Piñeiro: Entonces arquitectura va a ser un percepción simple con una sola capa de salida que va a hacer ese auto vector asociado
+
+528
+01:06:37.410 --> 01:06:50.319
+Eugenia Sol Piñeiro: a la P. C, Uno, Y en este caso no tenemos varias en la regla de hoja. No hay umbral, no hay capas intermedias. Es un perceptrón lineal. Es un perceptrón simple y lo que voy a cambiar es actualizar los pesos según la regla de hoja.
+
+529
+01:06:51.270 --> 01:07:02.439
+Eugenia Sol Piñeiro: como los inicialices, los puedo inicializar con distribución uniforme entre 0 y 1 los inicialices de forma aleatoria, y después pueden llegar a ver eso de que debería terminar en la dirección de la máxima varianza.
+
+530
+01:07:03.150 --> 01:07:08.119
+Eugenia Sol Piñeiro: De nuevo, la tasa de aprendizaje puede ser 0: 5
+
+531
+01:07:08.330 --> 01:07:18.570
+Eugenia Sol Piñeiro: a arrancar con un ete adaptativo, por ejemplo, no irlo bajándoleta a lo largo de las épocas o arrancar con algo más chico y empezar a probar. Eso es lo que tienen que experimentar
+
+532
+01:07:19.650 --> 01:07:24.169
+Eugenia Sol Piñeiro: y después se define la regla de Sanger, porque, claro, la regla de hoja me da
+
+533
+01:07:25.130 --> 01:07:29.860
+Eugenia Sol Piñeiro: un auto vector, no el asociado a la a la P. S. Uno, pero P. S. A, me daba a todos.
+
+534
+01:07:30.090 --> 01:07:36.559
+Eugenia Sol Piñeiro: Entonces acá. Está la extensión de la regla de hoja, que es la regla de Sanger que converge a la matriz
+
+535
+01:07:36.820 --> 01:07:38.260
+Eugenia Sol Piñeiro: de auto vectores.
+
+536
+01:07:39.890 --> 01:07:55.460
+Eugenia Sol Piñeiro: Esto es como más trato de color. En realidad acá no lo vamos a implementar. Vamos a quedarnos con la regla de hoja. Pero para que se lleven una idea de bueno, en realidad está esta extensión que sirve mucho y puedo hacer más eficiente el proceso de cálculo de componentes principales
+
+537
+01:07:55.870 --> 01:07:58.700
+Eugenia Sol Piñeiro: con redes neuronales, bien
+
+538
+01:07:59.140 --> 01:08:09.230
+Eugenia Sol Piñeiro: hasta acá la teoría, todo esto, ya que estamos, les muestro, no sé si alguno sacó el libro de biblioteca, pero esto es todo el módulo, 4 del libro
+
+539
+01:08:09.550 --> 01:08:20.669
+Eugenia Sol Piñeiro: está todo detallado. Ahí tienen todo lo que vimos de aprendizaje no supervisado la red de cojones Hupfield Hoja. Hablamos un poco de sanger cómo transformar los datos y demás también lo tienen detallado ahí
+
+540
+01:08:20.840 --> 01:08:22.020
+Eugenia Sol Piñeiro: para el que lo quiera leer.
+
+541
+01:08:22.130 --> 01:08:26.939
+Eugenia Sol Piñeiro: Y hasta acá la teoría, dudas. Ahora vamos a ver el T, P.
+
