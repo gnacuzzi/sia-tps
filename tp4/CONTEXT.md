@@ -15,10 +15,17 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   interpretación como que el algoritmo funcione.
 - No agregar trailers de coautoría de Claude a los commits.
 
-## Estado al crear este contexto
+## Estado actual
 
-- Todavía no hay implementación, configuración, entorno Python ni resultados
-  del TP4. `README.md` está vacío.
+- Existe un primer EDA reproducible en `scripts/analyze_creators.py`; genera el
+  informe `docs/eda-creadores/README.md`, tablas CSV y visualizaciones SVG.
+  Todavía no se implementaron PCA, Kohonen, Oja ni Hopfield.
+- El EDA define 15 variables base para la primera ejecución de PCA. Las
+  justificaciones y variables auxiliares están en `docs/decisiones.md`.
+  Permanece pendiente una comparación controlada entre engagement total y sus
+  cuatro componentes antes de fijar las entradas definitivas de Kohonen y Oja.
+- Todavía no hay configuración, entorno Python ni resultados de modelos del
+  TP4. El `README.md` principal sigue vacío.
 - El material disponible alcanza para resolver el ejercicio 1 completo:
   introducción al aprendizaje no supervisado, Kohonen, autovalores y
   autovectores, PCA, Oja y Sanger.
@@ -324,8 +331,8 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
 
 ## Decisiones todavía abiertas
 
-- Variables finales y tratamiento de cada grupo redundante.
-- Tratamiento de outliers y posible asimetría de variables de escala/costo.
+- Resultado de la comparación entre engagement total y sus cuatro componentes.
+- Confirmación de las 15 variables base después de interpretar PCA.
 - Cantidad de componentes conservadas y criterio de varianza explicada.
 - Convención exacta del vecindario de Kohonen.
 - Grilla, inicialización, schedules, épocas y criterio final de comparación de
@@ -350,4 +357,3 @@ interpretación.
 - `docs/6 - Regla de Oja y Sanger (1).pdf`.
 - `docs/autovalores, PCA y Oja.VTT`.
 - `datos/creadores.csv`.
-

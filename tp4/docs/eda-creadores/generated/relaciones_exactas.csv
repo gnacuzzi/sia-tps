@@ -1,0 +1,7 @@
+relacion,max_abs_error,tolerancia,interpretacion
+estimated_argentina_reach = average_reach * argentina_audience_pct / 100,0.4985000000160653,0.5,Identidad con redondeo a una cuenta.
+total_engagement_per_1000 = likes + comments + saves + shares,1.4210854715202004e-14,1e-09,Identidad exacta salvo precisión de punto flotante.
+price_ars = 1500 * price_usd,9.313225746154785e-10,1e-06,Identidad exacta salvo precisión de punto flotante.
+sponsored_posts_pct + organic_posts_pct = 100,0.0,1e-09,Composición cerrada de dos porcentajes.
+topic_football_pct + topic_makeup_pct + topic_dogs_pct + topic_art_pct = 100,1.4210854715202004e-14,1e-09,Composición temática cerrada.
+content_tutorial_pct + content_review_pct + content_entertainment_pct + content_showcase_pct = 100,1.4210854715202004e-14,1e-09,Composición de contenido cerrada.

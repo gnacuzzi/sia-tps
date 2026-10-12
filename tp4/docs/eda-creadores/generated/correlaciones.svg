@@ -1,0 +1,1135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1042" height="992" viewBox="0 0 1042 992">
+<rect width="100%" height="100%" fill="#ffffff"/>
+<style>text{font-family:Arial,sans-serif;fill:#172033}.label{font-size:10px}.title{font-size:18px;font-weight:700}.note{font-size:11px;fill:#4b5563}</style>
+<text x="20" y="28" class="title">Correlación de Pearson entre variables numéricas</text>
+<text x="20" y="48" class="note">Azul: correlación negativa. Rojo: correlación positiva. La diagonal vale 1.</text>
+<text x="242" y="270.8" text-anchor="end" class="label">followers</text>
+<text transform="translate(264.3,247) rotate(-60)" text-anchor="start" class="label">followers</text>
+<text x="242" y="292.8" text-anchor="end" class="label">average_reach</text>
+<text transform="translate(286.3,247) rotate(-60)" text-anchor="start" class="label">average_reach</text>
+<text x="242" y="314.8" text-anchor="end" class="label">average_impressions</text>
+<text transform="translate(308.3,247) rotate(-60)" text-anchor="start" class="label">average_impressions</text>
+<text x="242" y="336.8" text-anchor="end" class="label">average_video_views</text>
+<text transform="translate(330.3,247) rotate(-60)" text-anchor="start" class="label">average_video_views</text>
+<text x="242" y="358.8" text-anchor="end" class="label">monthly_posts</text>
+<text transform="translate(352.3,247) rotate(-60)" text-anchor="start" class="label">monthly_posts</text>
+<text x="242" y="380.8" text-anchor="end" class="label">argentina_audience_pct</text>
+<text transform="translate(374.3,247) rotate(-60)" text-anchor="start" class="label">argentina_audience_pct</text>
+<text x="242" y="402.8" text-anchor="end" class="label">estimated_argentina_reach</text>
+<text transform="translate(396.3,247) rotate(-60)" text-anchor="start" class="label">estimated_argentina_reach</text>
+<text x="242" y="424.8" text-anchor="end" class="label">non_follower_reach_pct</text>
+<text transform="translate(418.3,247) rotate(-60)" text-anchor="start" class="label">non_follower_reach_pct</text>
+<text x="242" y="446.8" text-anchor="end" class="label">likes_per_1000</text>
+<text transform="translate(440.3,247) rotate(-60)" text-anchor="start" class="label">likes_per_1000</text>
+<text x="242" y="468.8" text-anchor="end" class="label">comments_per_1000</text>
+<text transform="translate(462.3,247) rotate(-60)" text-anchor="start" class="label">comments_per_1000</text>
+<text x="242" y="490.8" text-anchor="end" class="label">saves_per_1000</text>
+<text transform="translate(484.3,247) rotate(-60)" text-anchor="start" class="label">saves_per_1000</text>
+<text x="242" y="512.8" text-anchor="end" class="label">shares_per_1000</text>
+<text transform="translate(506.3,247) rotate(-60)" text-anchor="start" class="label">shares_per_1000</text>
+<text x="242" y="534.8" text-anchor="end" class="label">total_engagement_per_1000</text>
+<text transform="translate(528.3,247) rotate(-60)" text-anchor="start" class="label">total_engagement_per_1000</text>
+<text x="242" y="556.8" text-anchor="end" class="label">profile_visits_per_1000</text>
+<text transform="translate(550.3,247) rotate(-60)" text-anchor="start" class="label">profile_visits_per_1000</text>
+<text x="242" y="578.8" text-anchor="end" class="label">price_usd</text>
+<text transform="translate(572.3,247) rotate(-60)" text-anchor="start" class="label">price_usd</text>
+<text x="242" y="600.8" text-anchor="end" class="label">price_ars</text>
+<text transform="translate(594.3,247) rotate(-60)" text-anchor="start" class="label">price_ars</text>
+<text x="242" y="622.8" text-anchor="end" class="label">sponsored_posts_pct</text>
+<text transform="translate(616.3,247) rotate(-60)" text-anchor="start" class="label">sponsored_posts_pct</text>
+<text x="242" y="644.8" text-anchor="end" class="label">organic_posts_pct</text>
+<text transform="translate(638.3,247) rotate(-60)" text-anchor="start" class="label">organic_posts_pct</text>
+<text x="242" y="666.8" text-anchor="end" class="label">topic_football_pct</text>
+<text transform="translate(660.3,247) rotate(-60)" text-anchor="start" class="label">topic_football_pct</text>
+<text x="242" y="688.8" text-anchor="end" class="label">topic_makeup_pct</text>
+<text transform="translate(682.3,247) rotate(-60)" text-anchor="start" class="label">topic_makeup_pct</text>
+<text x="242" y="710.8" text-anchor="end" class="label">topic_dogs_pct</text>
+<text transform="translate(704.3,247) rotate(-60)" text-anchor="start" class="label">topic_dogs_pct</text>
+<text x="242" y="732.8" text-anchor="end" class="label">topic_art_pct</text>
+<text transform="translate(726.3,247) rotate(-60)" text-anchor="start" class="label">topic_art_pct</text>
+<text x="242" y="754.8" text-anchor="end" class="label">content_tutorial_pct</text>
+<text transform="translate(748.3,247) rotate(-60)" text-anchor="start" class="label">content_tutorial_pct</text>
+<text x="242" y="776.8" text-anchor="end" class="label">content_review_pct</text>
+<text transform="translate(770.3,247) rotate(-60)" text-anchor="start" class="label">content_review_pct</text>
+<text x="242" y="798.8" text-anchor="end" class="label">content_entertainment_pct</text>
+<text transform="translate(792.3,247) rotate(-60)" text-anchor="start" class="label">content_entertainment_pct</text>
+<text x="242" y="820.8" text-anchor="end" class="label">content_showcase_pct</text>
+<text transform="translate(814.3,247) rotate(-60)" text-anchor="start" class="label">content_showcase_pct</text>
+<text x="242" y="842.8" text-anchor="end" class="label">average_caption_words</text>
+<text transform="translate(836.3,247) rotate(-60)" text-anchor="start" class="label">average_caption_words</text>
+<text x="242" y="864.8" text-anchor="end" class="label">average_watch_time_seconds</text>
+<text transform="translate(858.3,247) rotate(-60)" text-anchor="start" class="label">average_watch_time_seconds</text>
+<text x="242" y="886.8" text-anchor="end" class="label">video_posts_pct</text>
+<text transform="translate(880.3,247) rotate(-60)" text-anchor="start" class="label">video_posts_pct</text>
+<text x="242" y="908.8" text-anchor="end" class="label">short_form_posts_pct</text>
+<text transform="translate(902.3,247) rotate(-60)" text-anchor="start" class="label">short_form_posts_pct</text>
+<text x="242" y="930.8" text-anchor="end" class="label">trend_posts_pct</text>
+<text transform="translate(924.3,247) rotate(-60)" text-anchor="start" class="label">trend_posts_pct</text>
+<rect x="250" y="255" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>followers / followers: 1.0000</title></rect>
+<rect x="272" y="255" width="22" height="22" fill="#df3838" stroke="#e5e7eb" stroke-width="0.5"><title>followers / average_reach: 0.9181</title></rect>
+<rect x="294" y="255" width="22" height="22" fill="#df3939" stroke="#e5e7eb" stroke-width="0.5"><title>followers / average_impressions: 0.9117</title></rect>
+<rect x="316" y="255" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>followers / average_video_views: 0.9064</title></rect>
+<rect x="338" y="255" width="22" height="22" fill="#fef8f8" stroke="#e5e7eb" stroke-width="0.5"><title>followers / monthly_posts: 0.0333</title></rect>
+<rect x="360" y="255" width="22" height="22" fill="#ffffff" stroke="#e5e7eb" stroke-width="0.5"><title>followers / argentina_audience_pct: -0.0010</title></rect>
+<rect x="382" y="255" width="22" height="22" fill="#e35252" stroke="#e5e7eb" stroke-width="0.5"><title>followers / estimated_argentina_reach: 0.7984</title></rect>
+<rect x="404" y="255" width="22" height="22" fill="#ed9292" stroke="#e5e7eb" stroke-width="0.5"><title>followers / non_follower_reach_pct: 0.5023</title></rect>
+<rect x="426" y="255" width="22" height="22" fill="#ec8787" stroke="#e5e7eb" stroke-width="0.5"><title>followers / likes_per_1000: 0.5515</title></rect>
+<rect x="448" y="255" width="22" height="22" fill="#6893f1" stroke="#e5e7eb" stroke-width="0.5"><title>followers / comments_per_1000: -0.6934</title></rect>
+<rect x="470" y="255" width="22" height="22" fill="#5f8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>followers / saves_per_1000: -0.7356</title></rect>
+<rect x="492" y="255" width="22" height="22" fill="#ed9090" stroke="#e5e7eb" stroke-width="0.5"><title>followers / shares_per_1000: 0.5136</title></rect>
+<rect x="514" y="255" width="22" height="22" fill="#fae0e0" stroke="#e5e7eb" stroke-width="0.5"><title>followers / total_engagement_per_1000: 0.1414</title></rect>
+<rect x="536" y="255" width="22" height="22" fill="#769df2" stroke="#e5e7eb" stroke-width="0.5"><title>followers / profile_visits_per_1000: -0.6265</title></rect>
+<rect x="558" y="255" width="22" height="22" fill="#e24d4d" stroke="#e5e7eb" stroke-width="0.5"><title>followers / price_usd: 0.8224</title></rect>
+<rect x="580" y="255" width="22" height="22" fill="#e24d4d" stroke="#e5e7eb" stroke-width="0.5"><title>followers / price_ars: 0.8224</title></rect>
+<rect x="602" y="255" width="22" height="22" fill="#fef9f9" stroke="#e5e7eb" stroke-width="0.5"><title>followers / sponsored_posts_pct: 0.0264</title></rect>
+<rect x="624" y="255" width="22" height="22" fill="#f9fbfe" stroke="#e5e7eb" stroke-width="0.5"><title>followers / organic_posts_pct: -0.0264</title></rect>
+<rect x="646" y="255" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>followers / topic_football_pct: 0.1331</title></rect>
+<rect x="668" y="255" width="22" height="22" fill="#f1a9a9" stroke="#e5e7eb" stroke-width="0.5"><title>followers / topic_makeup_pct: 0.3959</title></rect>
+<rect x="690" y="255" width="22" height="22" fill="#a4bef7" stroke="#e5e7eb" stroke-width="0.5"><title>followers / topic_dogs_pct: -0.4165</title></rect>
+<rect x="712" y="255" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>followers / topic_art_pct: -0.0997</title></rect>
+<rect x="734" y="255" width="22" height="22" fill="#7ca1f3" stroke="#e5e7eb" stroke-width="0.5"><title>followers / content_tutorial_pct: -0.6028</title></rect>
+<rect x="756" y="255" width="22" height="22" fill="#8eaef5" stroke="#e5e7eb" stroke-width="0.5"><title>followers / content_review_pct: -0.5178</title></rect>
+<rect x="778" y="255" width="22" height="22" fill="#e87272" stroke="#e5e7eb" stroke-width="0.5"><title>followers / content_entertainment_pct: 0.6516</title></rect>
+<rect x="800" y="255" width="22" height="22" fill="#b8ccf9" stroke="#e5e7eb" stroke-width="0.5"><title>followers / content_showcase_pct: -0.3247</title></rect>
+<rect x="822" y="255" width="22" height="22" fill="#4c7fef" stroke="#e5e7eb" stroke-width="0.5"><title>followers / average_caption_words: -0.8211</title></rect>
+<rect x="844" y="255" width="22" height="22" fill="#6a94f1" stroke="#e5e7eb" stroke-width="0.5"><title>followers / average_watch_time_seconds: -0.6848</title></rect>
+<rect x="866" y="255" width="22" height="22" fill="#e86e6e" stroke="#e5e7eb" stroke-width="0.5"><title>followers / video_posts_pct: 0.6694</title></rect>
+<rect x="888" y="255" width="22" height="22" fill="#e87070" stroke="#e5e7eb" stroke-width="0.5"><title>followers / short_form_posts_pct: 0.6608</title></rect>
+<rect x="910" y="255" width="22" height="22" fill="#e76c6c" stroke="#e5e7eb" stroke-width="0.5"><title>followers / trend_posts_pct: 0.6755</title></rect>
+<rect x="250" y="277" width="22" height="22" fill="#df3838" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / followers: 0.9181</title></rect>
+<rect x="272" y="277" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / average_reach: 1.0000</title></rect>
+<rect x="294" y="277" width="22" height="22" fill="#dc2929" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / average_impressions: 0.9874</title></rect>
+<rect x="316" y="277" width="22" height="22" fill="#dc2727" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / average_video_views: 0.9973</title></rect>
+<rect x="338" y="277" width="22" height="22" fill="#fcfdff" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / monthly_posts: -0.0140</title></rect>
+<rect x="360" y="277" width="22" height="22" fill="#fdf3f3" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / argentina_audience_pct: 0.0572</title></rect>
+<rect x="382" y="277" width="22" height="22" fill="#e04141" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / estimated_argentina_reach: 0.8748</title></rect>
+<rect x="404" y="277" width="22" height="22" fill="#eb8484" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / non_follower_reach_pct: 0.5679</title></rect>
+<rect x="426" y="277" width="22" height="22" fill="#ea7e7e" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / likes_per_1000: 0.5929</title></rect>
+<rect x="448" y="277" width="22" height="22" fill="#5d8bf0" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / comments_per_1000: -0.7420</title></rect>
+<rect x="470" y="277" width="22" height="22" fill="#5e8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / saves_per_1000: -0.7375</title></rect>
+<rect x="492" y="277" width="22" height="22" fill="#ee9595" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / shares_per_1000: 0.4903</title></rect>
+<rect x="514" y="277" width="22" height="22" fill="#fadede" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / total_engagement_per_1000: 0.1536</title></rect>
+<rect x="536" y="277" width="22" height="22" fill="#6a94f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / profile_visits_per_1000: -0.6840</title></rect>
+<rect x="558" y="277" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / price_usd: 0.9070</title></rect>
+<rect x="580" y="277" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / price_ars: 0.9070</title></rect>
+<rect x="602" y="277" width="22" height="22" fill="#fef6f6" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / sponsored_posts_pct: 0.0413</title></rect>
+<rect x="624" y="277" width="22" height="22" fill="#f6f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / organic_posts_pct: -0.0413</title></rect>
+<rect x="646" y="277" width="22" height="22" fill="#f8d3d3" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / topic_football_pct: 0.2011</title></rect>
+<rect x="668" y="277" width="22" height="22" fill="#f7cdcd" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / topic_makeup_pct: 0.2282</title></rect>
+<rect x="690" y="277" width="22" height="22" fill="#b2c8f8" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / topic_dogs_pct: -0.3516</title></rect>
+<rect x="712" y="277" width="22" height="22" fill="#eff3fe" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / topic_art_pct: -0.0739</title></rect>
+<rect x="734" y="277" width="22" height="22" fill="#789ff3" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / content_tutorial_pct: -0.6185</title></rect>
+<rect x="756" y="277" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / content_review_pct: -0.5463</title></rect>
+<rect x="778" y="277" width="22" height="22" fill="#e76b6b" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / content_entertainment_pct: 0.6807</title></rect>
+<rect x="800" y="277" width="22" height="22" fill="#b1c7f8" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / content_showcase_pct: -0.3566</title></rect>
+<rect x="822" y="277" width="22" height="22" fill="#4379ee" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / average_caption_words: -0.8604</title></rect>
+<rect x="844" y="277" width="22" height="22" fill="#6490f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / average_watch_time_seconds: -0.7126</title></rect>
+<rect x="866" y="277" width="22" height="22" fill="#e76868" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / video_posts_pct: 0.6956</title></rect>
+<rect x="888" y="277" width="22" height="22" fill="#e76b6b" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / short_form_posts_pct: 0.6798</title></rect>
+<rect x="910" y="277" width="22" height="22" fill="#e56060" stroke="#e5e7eb" stroke-width="0.5"><title>average_reach / trend_posts_pct: 0.7338</title></rect>
+<rect x="250" y="299" width="22" height="22" fill="#df3939" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / followers: 0.9117</title></rect>
+<rect x="272" y="299" width="22" height="22" fill="#dc2929" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / average_reach: 0.9874</title></rect>
+<rect x="294" y="299" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / average_impressions: 1.0000</title></rect>
+<rect x="316" y="299" width="22" height="22" fill="#dc2929" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / average_video_views: 0.9884</title></rect>
+<rect x="338" y="299" width="22" height="22" fill="#fef9f9" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / monthly_posts: 0.0273</title></rect>
+<rect x="360" y="299" width="22" height="22" fill="#fef7f7" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / argentina_audience_pct: 0.0346</title></rect>
+<rect x="382" y="299" width="22" height="22" fill="#e14444" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / estimated_argentina_reach: 0.8596</title></rect>
+<rect x="404" y="299" width="22" height="22" fill="#eb8585" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / non_follower_reach_pct: 0.5643</title></rect>
+<rect x="426" y="299" width="22" height="22" fill="#ea7b7b" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / likes_per_1000: 0.6080</title></rect>
+<rect x="448" y="299" width="22" height="22" fill="#5e8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / comments_per_1000: -0.7366</title></rect>
+<rect x="470" y="299" width="22" height="22" fill="#5c8bf0" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / saves_per_1000: -0.7457</title></rect>
+<rect x="492" y="299" width="22" height="22" fill="#ed8e8e" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / shares_per_1000: 0.5209</title></rect>
+<rect x="514" y="299" width="22" height="22" fill="#f9d8d8" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / total_engagement_per_1000: 0.1796</title></rect>
+<rect x="536" y="299" width="22" height="22" fill="#6d97f2" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / profile_visits_per_1000: -0.6675</title></rect>
+<rect x="558" y="299" width="22" height="22" fill="#df3939" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / price_usd: 0.9145</title></rect>
+<rect x="580" y="299" width="22" height="22" fill="#df3939" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / price_ars: 0.9145</title></rect>
+<rect x="602" y="299" width="22" height="22" fill="#fef8f8" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / sponsored_posts_pct: 0.0335</title></rect>
+<rect x="624" y="299" width="22" height="22" fill="#f8fafe" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / organic_posts_pct: -0.0335</title></rect>
+<rect x="646" y="299" width="22" height="22" fill="#f8d5d5" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / topic_football_pct: 0.1922</title></rect>
+<rect x="668" y="299" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / topic_makeup_pct: 0.2165</title></rect>
+<rect x="690" y="299" width="22" height="22" fill="#afc6f8" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / topic_dogs_pct: -0.3649</title></rect>
+<rect x="712" y="299" width="22" height="22" fill="#f8fafe" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / topic_art_pct: -0.0343</title></rect>
+<rect x="734" y="299" width="22" height="22" fill="#739bf2" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / content_tutorial_pct: -0.6438</title></rect>
+<rect x="756" y="299" width="22" height="22" fill="#7fa4f3" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / content_review_pct: -0.5860</title></rect>
+<rect x="778" y="299" width="22" height="22" fill="#e66363" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / content_entertainment_pct: 0.7176</title></rect>
+<rect x="800" y="299" width="22" height="22" fill="#acc3f7" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / content_showcase_pct: -0.3825</title></rect>
+<rect x="822" y="299" width="22" height="22" fill="#4379ee" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / average_caption_words: -0.8606</title></rect>
+<rect x="844" y="299" width="22" height="22" fill="#6591f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / average_watch_time_seconds: -0.7066</title></rect>
+<rect x="866" y="299" width="22" height="22" fill="#e66666" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / video_posts_pct: 0.7045</title></rect>
+<rect x="888" y="299" width="22" height="22" fill="#e76969" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / short_form_posts_pct: 0.6903</title></rect>
+<rect x="910" y="299" width="22" height="22" fill="#e55e5e" stroke="#e5e7eb" stroke-width="0.5"><title>average_impressions / trend_posts_pct: 0.7415</title></rect>
+<rect x="250" y="321" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / followers: 0.9064</title></rect>
+<rect x="272" y="321" width="22" height="22" fill="#dc2727" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / average_reach: 0.9973</title></rect>
+<rect x="294" y="321" width="22" height="22" fill="#dc2929" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / average_impressions: 0.9884</title></rect>
+<rect x="316" y="321" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / average_video_views: 1.0000</title></rect>
+<rect x="338" y="321" width="22" height="22" fill="#fbfcff" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / monthly_posts: -0.0193</title></rect>
+<rect x="360" y="321" width="22" height="22" fill="#fef6f6" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / argentina_audience_pct: 0.0401</title></rect>
+<rect x="382" y="321" width="22" height="22" fill="#e14545" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / estimated_argentina_reach: 0.8568</title></rect>
+<rect x="404" y="321" width="22" height="22" fill="#eb8181" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / non_follower_reach_pct: 0.5829</title></rect>
+<rect x="426" y="321" width="22" height="22" fill="#ea7b7b" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / likes_per_1000: 0.6071</title></rect>
+<rect x="448" y="321" width="22" height="22" fill="#5e8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / comments_per_1000: -0.7381</title></rect>
+<rect x="470" y="321" width="22" height="22" fill="#5f8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / saves_per_1000: -0.7345</title></rect>
+<rect x="492" y="321" width="22" height="22" fill="#ed9292" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / shares_per_1000: 0.5025</title></rect>
+<rect x="514" y="321" width="22" height="22" fill="#f9d9d9" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / total_engagement_per_1000: 0.1757</title></rect>
+<rect x="536" y="321" width="22" height="22" fill="#6a94f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / profile_visits_per_1000: -0.6830</title></rect>
+<rect x="558" y="321" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / price_usd: 0.9082</title></rect>
+<rect x="580" y="321" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / price_ars: 0.9082</title></rect>
+<rect x="602" y="321" width="22" height="22" fill="#fef7f7" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / sponsored_posts_pct: 0.0385</title></rect>
+<rect x="624" y="321" width="22" height="22" fill="#f7f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / organic_posts_pct: -0.0385</title></rect>
+<rect x="646" y="321" width="22" height="22" fill="#f8d3d3" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / topic_football_pct: 0.2034</title></rect>
+<rect x="668" y="321" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / topic_makeup_pct: 0.2162</title></rect>
+<rect x="690" y="321" width="22" height="22" fill="#b3c8f8" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / topic_dogs_pct: -0.3508</title></rect>
+<rect x="712" y="321" width="22" height="22" fill="#f1f5fe" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / topic_art_pct: -0.0643</title></rect>
+<rect x="734" y="321" width="22" height="22" fill="#779ef3" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / content_tutorial_pct: -0.6224</title></rect>
+<rect x="756" y="321" width="22" height="22" fill="#86a8f4" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / content_review_pct: -0.5557</title></rect>
+<rect x="778" y="321" width="22" height="22" fill="#e76a6a" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / content_entertainment_pct: 0.6873</title></rect>
+<rect x="800" y="321" width="22" height="22" fill="#b0c7f8" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / content_showcase_pct: -0.3602</title></rect>
+<rect x="822" y="321" width="22" height="22" fill="#457aee" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / average_caption_words: -0.8548</title></rect>
+<rect x="844" y="321" width="22" height="22" fill="#6691f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / average_watch_time_seconds: -0.7037</title></rect>
+<rect x="866" y="321" width="22" height="22" fill="#e66565" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / video_posts_pct: 0.7095</title></rect>
+<rect x="888" y="321" width="22" height="22" fill="#e76969" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / short_form_posts_pct: 0.6925</title></rect>
+<rect x="910" y="321" width="22" height="22" fill="#e55d5d" stroke="#e5e7eb" stroke-width="0.5"><title>average_video_views / trend_posts_pct: 0.7477</title></rect>
+<rect x="250" y="343" width="22" height="22" fill="#fef8f8" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / followers: 0.0333</title></rect>
+<rect x="272" y="343" width="22" height="22" fill="#fcfdff" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / average_reach: -0.0140</title></rect>
+<rect x="294" y="343" width="22" height="22" fill="#fef9f9" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / average_impressions: 0.0273</title></rect>
+<rect x="316" y="343" width="22" height="22" fill="#fbfcff" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / average_video_views: -0.0193</title></rect>
+<rect x="338" y="343" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / monthly_posts: 1.0000</title></rect>
+<rect x="360" y="343" width="22" height="22" fill="#c1d2f9" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / argentina_audience_pct: -0.2864</title></rect>
+<rect x="382" y="343" width="22" height="22" fill="#eaf0fd" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / estimated_argentina_reach: -0.0958</title></rect>
+<rect x="404" y="343" width="22" height="22" fill="#f7cece" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / non_follower_reach_pct: 0.2270</title></rect>
+<rect x="426" y="343" width="22" height="22" fill="#f9dada" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / likes_per_1000: 0.1689</title></rect>
+<rect x="448" y="343" width="22" height="22" fill="#cad9fa" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / comments_per_1000: -0.2412</title></rect>
+<rect x="470" y="343" width="22" height="22" fill="#e8eefd" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / saves_per_1000: -0.1062</title></rect>
+<rect x="492" y="343" width="22" height="22" fill="#fae1e1" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / shares_per_1000: 0.1385</title></rect>
+<rect x="514" y="343" width="22" height="22" fill="#fbe7e7" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / total_engagement_per_1000: 0.1099</title></rect>
+<rect x="536" y="343" width="22" height="22" fill="#fdfeff" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / profile_visits_per_1000: -0.0080</title></rect>
+<rect x="558" y="343" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / price_usd: 0.1344</title></rect>
+<rect x="580" y="343" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / price_ars: 0.1344</title></rect>
+<rect x="602" y="343" width="22" height="22" fill="#d2dffb" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / sponsored_posts_pct: -0.2063</title></rect>
+<rect x="624" y="343" width="22" height="22" fill="#f8d2d2" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / organic_posts_pct: 0.2063</title></rect>
+<rect x="646" y="343" width="22" height="22" fill="#fafbff" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / topic_football_pct: -0.0239</title></rect>
+<rect x="668" y="343" width="22" height="22" fill="#fefeff" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / topic_makeup_pct: -0.0042</title></rect>
+<rect x="690" y="343" width="22" height="22" fill="#f2f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / topic_dogs_pct: -0.0589</title></rect>
+<rect x="712" y="343" width="22" height="22" fill="#fbe8e8" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / topic_art_pct: 0.1041</title></rect>
+<rect x="734" y="343" width="22" height="22" fill="#dae5fc" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / content_tutorial_pct: -0.1682</title></rect>
+<rect x="756" y="343" width="22" height="22" fill="#f2f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / content_review_pct: -0.0605</title></rect>
+<rect x="778" y="343" width="22" height="22" fill="#fcebeb" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / content_entertainment_pct: 0.0911</title></rect>
+<rect x="800" y="343" width="22" height="22" fill="#fbe6e6" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / content_showcase_pct: 0.1157</title></rect>
+<rect x="822" y="343" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / average_caption_words: -0.1028</title></rect>
+<rect x="844" y="343" width="22" height="22" fill="#fafcff" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / average_watch_time_seconds: -0.0209</title></rect>
+<rect x="866" y="343" width="22" height="22" fill="#f8d1d1" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / video_posts_pct: 0.2112</title></rect>
+<rect x="888" y="343" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / short_form_posts_pct: 0.2150</title></rect>
+<rect x="910" y="343" width="22" height="22" fill="#f7cfcf" stroke="#e5e7eb" stroke-width="0.5"><title>monthly_posts / trend_posts_pct: 0.2189</title></rect>
+<rect x="250" y="365" width="22" height="22" fill="#ffffff" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / followers: -0.0010</title></rect>
+<rect x="272" y="365" width="22" height="22" fill="#fdf3f3" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / average_reach: 0.0572</title></rect>
+<rect x="294" y="365" width="22" height="22" fill="#fef7f7" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / average_impressions: 0.0346</title></rect>
+<rect x="316" y="365" width="22" height="22" fill="#fef6f6" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / average_video_views: 0.0401</title></rect>
+<rect x="338" y="365" width="22" height="22" fill="#c1d2f9" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / monthly_posts: -0.2864</title></rect>
+<rect x="360" y="365" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / argentina_audience_pct: 1.0000</title></rect>
+<rect x="382" y="365" width="22" height="22" fill="#f0a5a5" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / estimated_argentina_reach: 0.4148</title></rect>
+<rect x="404" y="365" width="22" height="22" fill="#dde7fc" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / non_follower_reach_pct: -0.1547</title></rect>
+<rect x="426" y="365" width="22" height="22" fill="#c9d8fa" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / likes_per_1000: -0.2493</title></rect>
+<rect x="448" y="365" width="22" height="22" fill="#fdf5f5" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / comments_per_1000: 0.0474</title></rect>
+<rect x="470" y="365" width="22" height="22" fill="#fdf0f0" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / saves_per_1000: 0.0694</title></rect>
+<rect x="492" y="365" width="22" height="22" fill="#eaf0fd" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / shares_per_1000: -0.0955</title></rect>
+<rect x="514" y="365" width="22" height="22" fill="#d1defb" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / total_engagement_per_1000: -0.2131</title></rect>
+<rect x="536" y="365" width="22" height="22" fill="#fcefef" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / profile_visits_per_1000: 0.0724</title></rect>
+<rect x="558" y="365" width="22" height="22" fill="#f0f4fe" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / price_usd: -0.0699</title></rect>
+<rect x="580" y="365" width="22" height="22" fill="#f0f4fe" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / price_ars: -0.0699</title></rect>
+<rect x="602" y="365" width="22" height="22" fill="#c1d2f9" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / sponsored_posts_pct: -0.2861</title></rect>
+<rect x="624" y="365" width="22" height="22" fill="#f5c1c1" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / organic_posts_pct: 0.2861</title></rect>
+<rect x="646" y="365" width="22" height="22" fill="#edf2fd" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / topic_football_pct: -0.0813</title></rect>
+<rect x="668" y="365" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / topic_makeup_pct: -0.1027</title></rect>
+<rect x="690" y="365" width="22" height="22" fill="#f6caca" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / topic_dogs_pct: 0.2443</title></rect>
+<rect x="712" y="365" width="22" height="22" fill="#edf2fd" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / topic_art_pct: -0.0811</title></rect>
+<rect x="734" y="365" width="22" height="22" fill="#f8d1d1" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / content_tutorial_pct: 0.2104</title></rect>
+<rect x="756" y="365" width="22" height="22" fill="#eef3fd" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / content_review_pct: -0.0783</title></rect>
+<rect x="778" y="365" width="22" height="22" fill="#fbfcff" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / content_entertainment_pct: -0.0167</title></rect>
+<rect x="800" y="365" width="22" height="22" fill="#bed0f9" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / content_showcase_pct: -0.2989</title></rect>
+<rect x="822" y="365" width="22" height="22" fill="#fbe5e5" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / average_caption_words: 0.1204</title></rect>
+<rect x="844" y="365" width="22" height="22" fill="#fae1e1" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / average_watch_time_seconds: 0.1375</title></rect>
+<rect x="866" y="365" width="22" height="22" fill="#d4e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / video_posts_pct: -0.1950</title></rect>
+<rect x="888" y="365" width="22" height="22" fill="#d4e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / short_form_posts_pct: -0.1955</title></rect>
+<rect x="910" y="365" width="22" height="22" fill="#dce6fc" stroke="#e5e7eb" stroke-width="0.5"><title>argentina_audience_pct / trend_posts_pct: -0.1610</title></rect>
+<rect x="250" y="387" width="22" height="22" fill="#e35252" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / followers: 0.7984</title></rect>
+<rect x="272" y="387" width="22" height="22" fill="#e04141" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / average_reach: 0.8748</title></rect>
+<rect x="294" y="387" width="22" height="22" fill="#e14444" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / average_impressions: 0.8596</title></rect>
+<rect x="316" y="387" width="22" height="22" fill="#e14545" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / average_video_views: 0.8568</title></rect>
+<rect x="338" y="387" width="22" height="22" fill="#eaf0fd" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / monthly_posts: -0.0958</title></rect>
+<rect x="360" y="387" width="22" height="22" fill="#f0a5a5" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / argentina_audience_pct: 0.4148</title></rect>
+<rect x="382" y="387" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / estimated_argentina_reach: 1.0000</title></rect>
+<rect x="404" y="387" width="22" height="22" fill="#f0a2a2" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / non_follower_reach_pct: 0.4300</title></rect>
+<rect x="426" y="387" width="22" height="22" fill="#ef9d9d" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / likes_per_1000: 0.4502</title></rect>
+<rect x="448" y="387" width="22" height="22" fill="#84a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / comments_per_1000: -0.5632</title></rect>
+<rect x="470" y="387" width="22" height="22" fill="#80a4f3" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / saves_per_1000: -0.5833</title></rect>
+<rect x="492" y="387" width="22" height="22" fill="#ef9e9e" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / shares_per_1000: 0.4471</title></rect>
+<rect x="514" y="387" width="22" height="22" fill="#fae0e0" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / total_engagement_per_1000: 0.1440</title></rect>
+<rect x="536" y="387" width="22" height="22" fill="#91b0f5" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / profile_visits_per_1000: -0.5043</title></rect>
+<rect x="558" y="387" width="22" height="22" fill="#e76767" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / price_usd: 0.6985</title></rect>
+<rect x="580" y="387" width="22" height="22" fill="#e76767" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / price_ars: 0.6985</title></rect>
+<rect x="602" y="387" width="22" height="22" fill="#f4f7fe" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / sponsored_posts_pct: -0.0518</title></rect>
+<rect x="624" y="387" width="22" height="22" fill="#fdf4f4" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / organic_posts_pct: 0.0518</title></rect>
+<rect x="646" y="387" width="22" height="22" fill="#fae0e0" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / topic_football_pct: 0.1419</title></rect>
+<rect x="668" y="387" width="22" height="22" fill="#fbe8e8" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / topic_makeup_pct: 0.1051</title></rect>
+<rect x="690" y="387" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / topic_dogs_pct: -0.1917</title></rect>
+<rect x="712" y="387" width="22" height="22" fill="#f2f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / topic_art_pct: -0.0579</title></rect>
+<rect x="734" y="387" width="22" height="22" fill="#9bb7f6" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / content_tutorial_pct: -0.4597</title></rect>
+<rect x="756" y="387" width="22" height="22" fill="#98b5f6" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / content_review_pct: -0.4725</title></rect>
+<rect x="778" y="387" width="22" height="22" fill="#ec8787" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / content_entertainment_pct: 0.5543</title></rect>
+<rect x="800" y="387" width="22" height="22" fill="#b2c8f8" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / content_showcase_pct: -0.3522</title></rect>
+<rect x="822" y="387" width="22" height="22" fill="#6a94f1" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / average_caption_words: -0.6846</title></rect>
+<rect x="844" y="387" width="22" height="22" fill="#84a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / average_watch_time_seconds: -0.5665</title></rect>
+<rect x="866" y="387" width="22" height="22" fill="#ec8a8a" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / video_posts_pct: 0.5401</title></rect>
+<rect x="888" y="387" width="22" height="22" fill="#ec8c8c" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / short_form_posts_pct: 0.5297</title></rect>
+<rect x="910" y="387" width="22" height="22" fill="#eb8585" stroke="#e5e7eb" stroke-width="0.5"><title>estimated_argentina_reach / trend_posts_pct: 0.5637</title></rect>
+<rect x="250" y="409" width="22" height="22" fill="#ed9292" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / followers: 0.5023</title></rect>
+<rect x="272" y="409" width="22" height="22" fill="#eb8484" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / average_reach: 0.5679</title></rect>
+<rect x="294" y="409" width="22" height="22" fill="#eb8585" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / average_impressions: 0.5643</title></rect>
+<rect x="316" y="409" width="22" height="22" fill="#eb8181" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / average_video_views: 0.5829</title></rect>
+<rect x="338" y="409" width="22" height="22" fill="#f7cece" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / monthly_posts: 0.2270</title></rect>
+<rect x="360" y="409" width="22" height="22" fill="#dde7fc" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / argentina_audience_pct: -0.1547</title></rect>
+<rect x="382" y="409" width="22" height="22" fill="#f0a2a2" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / estimated_argentina_reach: 0.4300</title></rect>
+<rect x="404" y="409" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / non_follower_reach_pct: 1.0000</title></rect>
+<rect x="426" y="409" width="22" height="22" fill="#e66464" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / likes_per_1000: 0.7156</title></rect>
+<rect x="448" y="409" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / comments_per_1000: -0.5444</title></rect>
+<rect x="470" y="409" width="22" height="22" fill="#90b0f5" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / saves_per_1000: -0.5076</title></rect>
+<rect x="492" y="409" width="22" height="22" fill="#ec8989" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / shares_per_1000: 0.5453</title></rect>
+<rect x="514" y="409" width="22" height="22" fill="#ee9696" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / total_engagement_per_1000: 0.4847</title></rect>
+<rect x="536" y="409" width="22" height="22" fill="#7ca1f3" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / profile_visits_per_1000: -0.6001</title></rect>
+<rect x="558" y="409" width="22" height="22" fill="#eb8181" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / price_usd: 0.5791</title></rect>
+<rect x="580" y="409" width="22" height="22" fill="#eb8181" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / price_ars: 0.5791</title></rect>
+<rect x="602" y="409" width="22" height="22" fill="#f6f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / sponsored_posts_pct: -0.0405</title></rect>
+<rect x="624" y="409" width="22" height="22" fill="#fef6f6" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / organic_posts_pct: 0.0405</title></rect>
+<rect x="646" y="409" width="22" height="22" fill="#f3b2b2" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / topic_football_pct: 0.3539</title></rect>
+<rect x="668" y="409" width="22" height="22" fill="#fdfdff" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / topic_makeup_pct: -0.0100</title></rect>
+<rect x="690" y="409" width="22" height="22" fill="#b5caf8" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / topic_dogs_pct: -0.3411</title></rect>
+<rect x="712" y="409" width="22" height="22" fill="#fdfeff" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / topic_art_pct: -0.0071</title></rect>
+<rect x="734" y="409" width="22" height="22" fill="#87a9f4" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / content_tutorial_pct: -0.5512</title></rect>
+<rect x="756" y="409" width="22" height="22" fill="#9eb9f6" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / content_review_pct: -0.4455</title></rect>
+<rect x="778" y="409" width="22" height="22" fill="#ec8989" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / content_entertainment_pct: 0.5438</title></rect>
+<rect x="800" y="409" width="22" height="22" fill="#dde6fc" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / content_showcase_pct: -0.1572</title></rect>
+<rect x="822" y="409" width="22" height="22" fill="#6f98f2" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / average_caption_words: -0.6623</title></rect>
+<rect x="844" y="409" width="22" height="22" fill="#a2bcf6" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / average_watch_time_seconds: -0.4266</title></rect>
+<rect x="866" y="409" width="22" height="22" fill="#e45959" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / video_posts_pct: 0.7635</title></rect>
+<rect x="888" y="409" width="22" height="22" fill="#e35454" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / short_form_posts_pct: 0.7860</title></rect>
+<rect x="910" y="409" width="22" height="22" fill="#e45656" stroke="#e5e7eb" stroke-width="0.5"><title>non_follower_reach_pct / trend_posts_pct: 0.7780</title></rect>
+<rect x="250" y="431" width="22" height="22" fill="#ec8787" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / followers: 0.5515</title></rect>
+<rect x="272" y="431" width="22" height="22" fill="#ea7e7e" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / average_reach: 0.5929</title></rect>
+<rect x="294" y="431" width="22" height="22" fill="#ea7b7b" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / average_impressions: 0.6080</title></rect>
+<rect x="316" y="431" width="22" height="22" fill="#ea7b7b" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / average_video_views: 0.6071</title></rect>
+<rect x="338" y="431" width="22" height="22" fill="#f9dada" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / monthly_posts: 0.1689</title></rect>
+<rect x="360" y="431" width="22" height="22" fill="#c9d8fa" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / argentina_audience_pct: -0.2493</title></rect>
+<rect x="382" y="431" width="22" height="22" fill="#ef9d9d" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / estimated_argentina_reach: 0.4502</title></rect>
+<rect x="404" y="431" width="22" height="22" fill="#e66464" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / non_follower_reach_pct: 0.7156</title></rect>
+<rect x="426" y="431" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / likes_per_1000: 1.0000</title></rect>
+<rect x="448" y="431" width="22" height="22" fill="#95b3f5" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / comments_per_1000: -0.4842</title></rect>
+<rect x="470" y="431" width="22" height="22" fill="#729af2" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / saves_per_1000: -0.6451</title></rect>
+<rect x="492" y="431" width="22" height="22" fill="#e76b6b" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / shares_per_1000: 0.6843</title></rect>
+<rect x="514" y="431" width="22" height="22" fill="#e66262" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / total_engagement_per_1000: 0.7248</title></rect>
+<rect x="536" y="431" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / profile_visits_per_1000: -0.5453</title></rect>
+<rect x="558" y="431" width="22" height="22" fill="#eb8585" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / price_usd: 0.5643</title></rect>
+<rect x="580" y="431" width="22" height="22" fill="#eb8585" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / price_ars: 0.5643</title></rect>
+<rect x="602" y="431" width="22" height="22" fill="#fdf3f3" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / sponsored_posts_pct: 0.0565</title></rect>
+<rect x="624" y="431" width="22" height="22" fill="#f3f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / organic_posts_pct: -0.0565</title></rect>
+<rect x="646" y="431" width="22" height="22" fill="#f9dbdb" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / topic_football_pct: 0.1675</title></rect>
+<rect x="668" y="431" width="22" height="22" fill="#fcecec" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / topic_makeup_pct: 0.0862</title></rect>
+<rect x="690" y="431" width="22" height="22" fill="#a2bcf6" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / topic_dogs_pct: -0.4270</title></rect>
+<rect x="712" y="431" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / topic_art_pct: 0.2144</title></rect>
+<rect x="734" y="431" width="22" height="22" fill="#97b5f6" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / content_tutorial_pct: -0.4750</title></rect>
+<rect x="756" y="431" width="22" height="22" fill="#8bacf4" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / content_review_pct: -0.5340</title></rect>
+<rect x="778" y="431" width="22" height="22" fill="#ec8b8b" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / content_entertainment_pct: 0.5348</title></rect>
+<rect x="800" y="431" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / content_showcase_pct: -0.1926</title></rect>
+<rect x="822" y="431" width="22" height="22" fill="#6792f1" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / average_caption_words: -0.6987</title></rect>
+<rect x="844" y="431" width="22" height="22" fill="#89aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / average_watch_time_seconds: -0.5433</title></rect>
+<rect x="866" y="431" width="22" height="22" fill="#e14242" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / video_posts_pct: 0.8700</title></rect>
+<rect x="888" y="431" width="22" height="22" fill="#df3b3b" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / short_form_posts_pct: 0.9012</title></rect>
+<rect x="910" y="431" width="22" height="22" fill="#e04141" stroke="#e5e7eb" stroke-width="0.5"><title>likes_per_1000 / trend_posts_pct: 0.8762</title></rect>
+<rect x="250" y="453" width="22" height="22" fill="#6893f1" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / followers: -0.6934</title></rect>
+<rect x="272" y="453" width="22" height="22" fill="#5d8bf0" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / average_reach: -0.7420</title></rect>
+<rect x="294" y="453" width="22" height="22" fill="#5e8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / average_impressions: -0.7366</title></rect>
+<rect x="316" y="453" width="22" height="22" fill="#5e8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / average_video_views: -0.7381</title></rect>
+<rect x="338" y="453" width="22" height="22" fill="#cad9fa" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / monthly_posts: -0.2412</title></rect>
+<rect x="360" y="453" width="22" height="22" fill="#fdf5f5" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / argentina_audience_pct: 0.0474</title></rect>
+<rect x="382" y="453" width="22" height="22" fill="#84a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / estimated_argentina_reach: -0.5632</title></rect>
+<rect x="404" y="453" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / non_follower_reach_pct: -0.5444</title></rect>
+<rect x="426" y="453" width="22" height="22" fill="#95b3f5" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / likes_per_1000: -0.4842</title></rect>
+<rect x="448" y="453" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / comments_per_1000: 1.0000</title></rect>
+<rect x="470" y="453" width="22" height="22" fill="#e76d6d" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / saves_per_1000: 0.6722</title></rect>
+<rect x="492" y="453" width="22" height="22" fill="#b4c9f8" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / shares_per_1000: -0.3435</title></rect>
+<rect x="514" y="453" width="22" height="22" fill="#fefafa" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / total_engagement_per_1000: 0.0249</title></rect>
+<rect x="536" y="453" width="22" height="22" fill="#eb8282" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / profile_visits_per_1000: 0.5756</title></rect>
+<rect x="558" y="453" width="22" height="22" fill="#6994f1" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / price_usd: -0.6891</title></rect>
+<rect x="580" y="453" width="22" height="22" fill="#6994f1" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / price_ars: -0.6891</title></rect>
+<rect x="602" y="453" width="22" height="22" fill="#fceeee" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / sponsored_posts_pct: 0.0773</title></rect>
+<rect x="624" y="453" width="22" height="22" fill="#eef3fd" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / organic_posts_pct: -0.0773</title></rect>
+<rect x="646" y="453" width="22" height="22" fill="#edf2fd" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / topic_football_pct: -0.0825</title></rect>
+<rect x="668" y="453" width="22" height="22" fill="#c8d8fa" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / topic_makeup_pct: -0.2523</title></rect>
+<rect x="690" y="453" width="22" height="22" fill="#f6c5c5" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / topic_dogs_pct: 0.2651</title></rect>
+<rect x="712" y="453" width="22" height="22" fill="#fdf2f2" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / topic_art_pct: 0.0612</title></rect>
+<rect x="734" y="453" width="22" height="22" fill="#e97878" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / content_tutorial_pct: 0.6242</title></rect>
+<rect x="756" y="453" width="22" height="22" fill="#f0a1a1" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / content_review_pct: 0.4311</title></rect>
+<rect x="778" y="453" width="22" height="22" fill="#789ef3" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / content_entertainment_pct: -0.6208</title></rect>
+<rect x="800" y="453" width="22" height="22" fill="#f5c4c4" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / content_showcase_pct: 0.2715</title></rect>
+<rect x="822" y="453" width="22" height="22" fill="#e45757" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / average_caption_words: 0.7720</title></rect>
+<rect x="844" y="453" width="22" height="22" fill="#ec8787" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / average_watch_time_seconds: 0.5535</title></rect>
+<rect x="866" y="453" width="22" height="22" fill="#7fa3f3" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / video_posts_pct: -0.5894</title></rect>
+<rect x="888" y="453" width="22" height="22" fill="#81a4f3" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / short_form_posts_pct: -0.5802</title></rect>
+<rect x="910" y="453" width="22" height="22" fill="#7ca1f3" stroke="#e5e7eb" stroke-width="0.5"><title>comments_per_1000 / trend_posts_pct: -0.6024</title></rect>
+<rect x="250" y="475" width="22" height="22" fill="#5f8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / followers: -0.7356</title></rect>
+<rect x="272" y="475" width="22" height="22" fill="#5e8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / average_reach: -0.7375</title></rect>
+<rect x="294" y="475" width="22" height="22" fill="#5c8bf0" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / average_impressions: -0.7457</title></rect>
+<rect x="316" y="475" width="22" height="22" fill="#5f8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / average_video_views: -0.7345</title></rect>
+<rect x="338" y="475" width="22" height="22" fill="#e8eefd" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / monthly_posts: -0.1062</title></rect>
+<rect x="360" y="475" width="22" height="22" fill="#fdf0f0" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / argentina_audience_pct: 0.0694</title></rect>
+<rect x="382" y="475" width="22" height="22" fill="#80a4f3" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / estimated_argentina_reach: -0.5833</title></rect>
+<rect x="404" y="475" width="22" height="22" fill="#90b0f5" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / non_follower_reach_pct: -0.5076</title></rect>
+<rect x="426" y="475" width="22" height="22" fill="#729af2" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / likes_per_1000: -0.6451</title></rect>
+<rect x="448" y="475" width="22" height="22" fill="#e76d6d" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / comments_per_1000: 0.6722</title></rect>
+<rect x="470" y="475" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / saves_per_1000: 1.0000</title></rect>
+<rect x="492" y="475" width="22" height="22" fill="#85a8f4" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / shares_per_1000: -0.5577</title></rect>
+<rect x="514" y="475" width="22" height="22" fill="#f0f4fe" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / total_engagement_per_1000: -0.0679</title></rect>
+<rect x="536" y="475" width="22" height="22" fill="#ea7f7f" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / profile_visits_per_1000: 0.5904</title></rect>
+<rect x="558" y="475" width="22" height="22" fill="#6994f1" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / price_usd: -0.6861</title></rect>
+<rect x="580" y="475" width="22" height="22" fill="#6994f1" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / price_ars: -0.6861</title></rect>
+<rect x="602" y="475" width="22" height="22" fill="#f7f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / sponsored_posts_pct: -0.0383</title></rect>
+<rect x="624" y="475" width="22" height="22" fill="#fef7f7" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / organic_posts_pct: 0.0383</title></rect>
+<rect x="646" y="475" width="22" height="22" fill="#f1f5fe" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / topic_football_pct: -0.0642</title></rect>
+<rect x="668" y="475" width="22" height="22" fill="#c8d7fa" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / topic_makeup_pct: -0.2536</title></rect>
+<rect x="690" y="475" width="22" height="22" fill="#f1a7a7" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / topic_dogs_pct: 0.4055</title></rect>
+<rect x="712" y="475" width="22" height="22" fill="#e3ebfc" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / topic_art_pct: -0.1279</title></rect>
+<rect x="734" y="475" width="22" height="22" fill="#eb8383" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / content_tutorial_pct: 0.5695</title></rect>
+<rect x="756" y="475" width="22" height="22" fill="#e97676" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / content_review_pct: 0.6303</title></rect>
+<rect x="778" y="475" width="22" height="22" fill="#7099f2" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / content_entertainment_pct: -0.6566</title></rect>
+<rect x="800" y="475" width="22" height="22" fill="#f5c0c0" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / content_showcase_pct: 0.2913</title></rect>
+<rect x="822" y="475" width="22" height="22" fill="#e24c4c" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / average_caption_words: 0.8229</title></rect>
+<rect x="844" y="475" width="22" height="22" fill="#e97676" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / average_watch_time_seconds: 0.6318</title></rect>
+<rect x="866" y="475" width="22" height="22" fill="#5e8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / video_posts_pct: -0.7375</title></rect>
+<rect x="888" y="475" width="22" height="22" fill="#618ef1" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / short_form_posts_pct: -0.7240</title></rect>
+<rect x="910" y="475" width="22" height="22" fill="#5d8bf0" stroke="#e5e7eb" stroke-width="0.5"><title>saves_per_1000 / trend_posts_pct: -0.7441</title></rect>
+<rect x="250" y="497" width="22" height="22" fill="#ed9090" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / followers: 0.5136</title></rect>
+<rect x="272" y="497" width="22" height="22" fill="#ee9595" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / average_reach: 0.4903</title></rect>
+<rect x="294" y="497" width="22" height="22" fill="#ed8e8e" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / average_impressions: 0.5209</title></rect>
+<rect x="316" y="497" width="22" height="22" fill="#ed9292" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / average_video_views: 0.5025</title></rect>
+<rect x="338" y="497" width="22" height="22" fill="#fae1e1" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / monthly_posts: 0.1385</title></rect>
+<rect x="360" y="497" width="22" height="22" fill="#eaf0fd" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / argentina_audience_pct: -0.0955</title></rect>
+<rect x="382" y="497" width="22" height="22" fill="#ef9e9e" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / estimated_argentina_reach: 0.4471</title></rect>
+<rect x="404" y="497" width="22" height="22" fill="#ec8989" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / non_follower_reach_pct: 0.5453</title></rect>
+<rect x="426" y="497" width="22" height="22" fill="#e76b6b" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / likes_per_1000: 0.6843</title></rect>
+<rect x="448" y="497" width="22" height="22" fill="#b4c9f8" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / comments_per_1000: -0.3435</title></rect>
+<rect x="470" y="497" width="22" height="22" fill="#85a8f4" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / saves_per_1000: -0.5577</title></rect>
+<rect x="492" y="497" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / shares_per_1000: 1.0000</title></rect>
+<rect x="514" y="497" width="22" height="22" fill="#e66262" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / total_engagement_per_1000: 0.7229</title></rect>
+<rect x="536" y="497" width="22" height="22" fill="#8faff5" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / profile_visits_per_1000: -0.5160</title></rect>
+<rect x="558" y="497" width="22" height="22" fill="#ef9999" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / price_usd: 0.4678</title></rect>
+<rect x="580" y="497" width="22" height="22" fill="#ef9999" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / price_ars: 0.4678</title></rect>
+<rect x="602" y="497" width="22" height="22" fill="#f0f5fe" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / sponsored_posts_pct: -0.0668</title></rect>
+<rect x="624" y="497" width="22" height="22" fill="#fdf1f1" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / organic_posts_pct: 0.0668</title></rect>
+<rect x="646" y="497" width="22" height="22" fill="#fbe4e4" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / topic_football_pct: 0.1261</title></rect>
+<rect x="668" y="497" width="22" height="22" fill="#fef6f6" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / topic_makeup_pct: 0.0425</title></rect>
+<rect x="690" y="497" width="22" height="22" fill="#bed1f9" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / topic_dogs_pct: -0.2967</title></rect>
+<rect x="712" y="497" width="22" height="22" fill="#fadddd" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / topic_art_pct: 0.1564</title></rect>
+<rect x="734" y="497" width="22" height="22" fill="#a4bef7" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / content_tutorial_pct: -0.4185</title></rect>
+<rect x="756" y="497" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / content_review_pct: -0.5472</title></rect>
+<rect x="778" y="497" width="22" height="22" fill="#ed8f8f" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / content_entertainment_pct: 0.5177</title></rect>
+<rect x="800" y="497" width="22" height="22" fill="#cbdafa" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / content_showcase_pct: -0.2401</title></rect>
+<rect x="822" y="497" width="22" height="22" fill="#8faff5" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / average_caption_words: -0.5118</title></rect>
+<rect x="844" y="497" width="22" height="22" fill="#bccff9" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / average_watch_time_seconds: -0.3087</title></rect>
+<rect x="866" y="497" width="22" height="22" fill="#e56060" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / video_posts_pct: 0.7309</title></rect>
+<rect x="888" y="497" width="22" height="22" fill="#e66464" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / short_form_posts_pct: 0.7163</title></rect>
+<rect x="910" y="497" width="22" height="22" fill="#e76767" stroke="#e5e7eb" stroke-width="0.5"><title>shares_per_1000 / trend_posts_pct: 0.6988</title></rect>
+<rect x="250" y="519" width="22" height="22" fill="#fae0e0" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / followers: 0.1414</title></rect>
+<rect x="272" y="519" width="22" height="22" fill="#fadede" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / average_reach: 0.1536</title></rect>
+<rect x="294" y="519" width="22" height="22" fill="#f9d8d8" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / average_impressions: 0.1796</title></rect>
+<rect x="316" y="519" width="22" height="22" fill="#f9d9d9" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / average_video_views: 0.1757</title></rect>
+<rect x="338" y="519" width="22" height="22" fill="#fbe7e7" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / monthly_posts: 0.1099</title></rect>
+<rect x="360" y="519" width="22" height="22" fill="#d1defb" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / argentina_audience_pct: -0.2131</title></rect>
+<rect x="382" y="519" width="22" height="22" fill="#fae0e0" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / estimated_argentina_reach: 0.1440</title></rect>
+<rect x="404" y="519" width="22" height="22" fill="#ee9696" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / non_follower_reach_pct: 0.4847</title></rect>
+<rect x="426" y="519" width="22" height="22" fill="#e66262" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / likes_per_1000: 0.7248</title></rect>
+<rect x="448" y="519" width="22" height="22" fill="#fefafa" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / comments_per_1000: 0.0249</title></rect>
+<rect x="470" y="519" width="22" height="22" fill="#f0f4fe" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / saves_per_1000: -0.0679</title></rect>
+<rect x="492" y="519" width="22" height="22" fill="#e66262" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / shares_per_1000: 0.7229</title></rect>
+<rect x="514" y="519" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / total_engagement_per_1000: 1.0000</title></rect>
+<rect x="536" y="519" width="22" height="22" fill="#c7d7fa" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / profile_visits_per_1000: -0.2587</title></rect>
+<rect x="558" y="519" width="22" height="22" fill="#f9dcdc" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / price_usd: 0.1608</title></rect>
+<rect x="580" y="519" width="22" height="22" fill="#f9dcdc" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / price_ars: 0.1608</title></rect>
+<rect x="602" y="519" width="22" height="22" fill="#fefeff" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / sponsored_posts_pct: -0.0035</title></rect>
+<rect x="624" y="519" width="22" height="22" fill="#fffefe" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / organic_posts_pct: 0.0035</title></rect>
+<rect x="646" y="519" width="22" height="22" fill="#f9dddd" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / topic_football_pct: 0.1583</title></rect>
+<rect x="668" y="519" width="22" height="22" fill="#e5ecfd" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / topic_makeup_pct: -0.1211</title></rect>
+<rect x="690" y="519" width="22" height="22" fill="#d1defb" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / topic_dogs_pct: -0.2119</title></rect>
+<rect x="712" y="519" width="22" height="22" fill="#f8d4d4" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / topic_art_pct: 0.1971</title></rect>
+<rect x="734" y="519" width="22" height="22" fill="#dfe8fc" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / content_tutorial_pct: -0.1476</title></rect>
+<rect x="756" y="519" width="22" height="22" fill="#c5d6fa" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / content_review_pct: -0.2647</title></rect>
+<rect x="778" y="519" width="22" height="22" fill="#f8d4d4" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / content_entertainment_pct: 0.1970</title></rect>
+<rect x="800" y="519" width="22" height="22" fill="#f3f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / content_showcase_pct: -0.0558</title></rect>
+<rect x="822" y="519" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / average_caption_words: -0.1925</title></rect>
+<rect x="844" y="519" width="22" height="22" fill="#e7eefd" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / average_watch_time_seconds: -0.1115</title></rect>
+<rect x="866" y="519" width="22" height="22" fill="#eb8686" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / video_posts_pct: 0.5580</title></rect>
+<rect x="888" y="519" width="22" height="22" fill="#ea8080" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / short_form_posts_pct: 0.5872</title></rect>
+<rect x="910" y="519" width="22" height="22" fill="#ec8a8a" stroke="#e5e7eb" stroke-width="0.5"><title>total_engagement_per_1000 / trend_posts_pct: 0.5378</title></rect>
+<rect x="250" y="541" width="22" height="22" fill="#769df2" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / followers: -0.6265</title></rect>
+<rect x="272" y="541" width="22" height="22" fill="#6a94f1" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / average_reach: -0.6840</title></rect>
+<rect x="294" y="541" width="22" height="22" fill="#6d97f2" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / average_impressions: -0.6675</title></rect>
+<rect x="316" y="541" width="22" height="22" fill="#6a94f1" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / average_video_views: -0.6830</title></rect>
+<rect x="338" y="541" width="22" height="22" fill="#fdfeff" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / monthly_posts: -0.0080</title></rect>
+<rect x="360" y="541" width="22" height="22" fill="#fcefef" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / argentina_audience_pct: 0.0724</title></rect>
+<rect x="382" y="541" width="22" height="22" fill="#91b0f5" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / estimated_argentina_reach: -0.5043</title></rect>
+<rect x="404" y="541" width="22" height="22" fill="#7ca1f3" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / non_follower_reach_pct: -0.6001</title></rect>
+<rect x="426" y="541" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / likes_per_1000: -0.5453</title></rect>
+<rect x="448" y="541" width="22" height="22" fill="#eb8282" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / comments_per_1000: 0.5756</title></rect>
+<rect x="470" y="541" width="22" height="22" fill="#ea7f7f" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / saves_per_1000: 0.5904</title></rect>
+<rect x="492" y="541" width="22" height="22" fill="#8faff5" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / shares_per_1000: -0.5160</title></rect>
+<rect x="514" y="541" width="22" height="22" fill="#c7d7fa" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / total_engagement_per_1000: -0.2587</title></rect>
+<rect x="536" y="541" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / profile_visits_per_1000: 1.0000</title></rect>
+<rect x="558" y="541" width="22" height="22" fill="#6b95f1" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / price_usd: -0.6804</title></rect>
+<rect x="580" y="541" width="22" height="22" fill="#6b95f1" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / price_ars: -0.6804</title></rect>
+<rect x="602" y="541" width="22" height="22" fill="#fffdfd" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / sponsored_posts_pct: 0.0076</title></rect>
+<rect x="624" y="541" width="22" height="22" fill="#fdfeff" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / organic_posts_pct: -0.0076</title></rect>
+<rect x="646" y="541" width="22" height="22" fill="#b9cdf9" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / topic_football_pct: -0.3225</title></rect>
+<rect x="668" y="541" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / topic_makeup_pct: -0.1949</title></rect>
+<rect x="690" y="541" width="22" height="22" fill="#ee9696" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / topic_dogs_pct: 0.4837</title></rect>
+<rect x="712" y="541" width="22" height="22" fill="#fefafa" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / topic_art_pct: 0.0251</title></rect>
+<rect x="734" y="541" width="22" height="22" fill="#ea7a7a" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / content_tutorial_pct: 0.6119</title></rect>
+<rect x="756" y="541" width="22" height="22" fill="#f3b2b2" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / content_review_pct: 0.3555</title></rect>
+<rect x="778" y="541" width="22" height="22" fill="#84a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / content_entertainment_pct: -0.5620</title></rect>
+<rect x="800" y="541" width="22" height="22" fill="#f9d7d7" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / content_showcase_pct: 0.1855</title></rect>
+<rect x="822" y="541" width="22" height="22" fill="#e45555" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / average_caption_words: 0.7814</title></rect>
+<rect x="844" y="541" width="22" height="22" fill="#ea7c7c" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / average_watch_time_seconds: 0.6040</title></rect>
+<rect x="866" y="541" width="22" height="22" fill="#759cf2" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / video_posts_pct: -0.6319</title></rect>
+<rect x="888" y="541" width="22" height="22" fill="#779ef3" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / short_form_posts_pct: -0.6223</title></rect>
+<rect x="910" y="541" width="22" height="22" fill="#6c96f2" stroke="#e5e7eb" stroke-width="0.5"><title>profile_visits_per_1000 / trend_posts_pct: -0.6731</title></rect>
+<rect x="250" y="563" width="22" height="22" fill="#e24d4d" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / followers: 0.8224</title></rect>
+<rect x="272" y="563" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / average_reach: 0.9070</title></rect>
+<rect x="294" y="563" width="22" height="22" fill="#df3939" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / average_impressions: 0.9145</title></rect>
+<rect x="316" y="563" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / average_video_views: 0.9082</title></rect>
+<rect x="338" y="563" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / monthly_posts: 0.1344</title></rect>
+<rect x="360" y="563" width="22" height="22" fill="#f0f4fe" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / argentina_audience_pct: -0.0699</title></rect>
+<rect x="382" y="563" width="22" height="22" fill="#e76767" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / estimated_argentina_reach: 0.6985</title></rect>
+<rect x="404" y="563" width="22" height="22" fill="#eb8181" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / non_follower_reach_pct: 0.5791</title></rect>
+<rect x="426" y="563" width="22" height="22" fill="#eb8585" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / likes_per_1000: 0.5643</title></rect>
+<rect x="448" y="563" width="22" height="22" fill="#6994f1" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / comments_per_1000: -0.6891</title></rect>
+<rect x="470" y="563" width="22" height="22" fill="#6994f1" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / saves_per_1000: -0.6861</title></rect>
+<rect x="492" y="563" width="22" height="22" fill="#ef9999" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / shares_per_1000: 0.4678</title></rect>
+<rect x="514" y="563" width="22" height="22" fill="#f9dcdc" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / total_engagement_per_1000: 0.1608</title></rect>
+<rect x="536" y="563" width="22" height="22" fill="#6b95f1" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / profile_visits_per_1000: -0.6804</title></rect>
+<rect x="558" y="563" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / price_usd: 1.0000</title></rect>
+<rect x="580" y="563" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / price_ars: 1.0000</title></rect>
+<rect x="602" y="563" width="22" height="22" fill="#fcebeb" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / sponsored_posts_pct: 0.0916</title></rect>
+<rect x="624" y="563" width="22" height="22" fill="#ebf1fd" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / organic_posts_pct: -0.0916</title></rect>
+<rect x="646" y="563" width="22" height="22" fill="#f7cfcf" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / topic_football_pct: 0.2230</title></rect>
+<rect x="668" y="563" width="22" height="22" fill="#f8d2d2" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / topic_makeup_pct: 0.2053</title></rect>
+<rect x="690" y="563" width="22" height="22" fill="#aec5f8" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / topic_dogs_pct: -0.3707</title></rect>
+<rect x="712" y="563" width="22" height="22" fill="#f4f7fe" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / topic_art_pct: -0.0519</title></rect>
+<rect x="734" y="563" width="22" height="22" fill="#6f98f2" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / content_tutorial_pct: -0.6583</title></rect>
+<rect x="756" y="563" width="22" height="22" fill="#91b0f5" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / content_review_pct: -0.5037</title></rect>
+<rect x="778" y="563" width="22" height="22" fill="#e76c6c" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / content_entertainment_pct: 0.6791</title></rect>
+<rect x="800" y="563" width="22" height="22" fill="#bbcef9" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / content_showcase_pct: -0.3141</title></rect>
+<rect x="822" y="563" width="22" height="22" fill="#5585ef" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / average_caption_words: -0.7816</title></rect>
+<rect x="844" y="563" width="22" height="22" fill="#769df2" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / average_watch_time_seconds: -0.6291</title></rect>
+<rect x="866" y="563" width="22" height="22" fill="#e97474" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / video_posts_pct: 0.6414</title></rect>
+<rect x="888" y="563" width="22" height="22" fill="#e87070" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / short_form_posts_pct: 0.6570</title></rect>
+<rect x="910" y="563" width="22" height="22" fill="#e66161" stroke="#e5e7eb" stroke-width="0.5"><title>price_usd / trend_posts_pct: 0.7278</title></rect>
+<rect x="250" y="585" width="22" height="22" fill="#e24d4d" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / followers: 0.8224</title></rect>
+<rect x="272" y="585" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / average_reach: 0.9070</title></rect>
+<rect x="294" y="585" width="22" height="22" fill="#df3939" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / average_impressions: 0.9145</title></rect>
+<rect x="316" y="585" width="22" height="22" fill="#df3a3a" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / average_video_views: 0.9082</title></rect>
+<rect x="338" y="585" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / monthly_posts: 0.1344</title></rect>
+<rect x="360" y="585" width="22" height="22" fill="#f0f4fe" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / argentina_audience_pct: -0.0699</title></rect>
+<rect x="382" y="585" width="22" height="22" fill="#e76767" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / estimated_argentina_reach: 0.6985</title></rect>
+<rect x="404" y="585" width="22" height="22" fill="#eb8181" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / non_follower_reach_pct: 0.5791</title></rect>
+<rect x="426" y="585" width="22" height="22" fill="#eb8585" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / likes_per_1000: 0.5643</title></rect>
+<rect x="448" y="585" width="22" height="22" fill="#6994f1" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / comments_per_1000: -0.6891</title></rect>
+<rect x="470" y="585" width="22" height="22" fill="#6994f1" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / saves_per_1000: -0.6861</title></rect>
+<rect x="492" y="585" width="22" height="22" fill="#ef9999" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / shares_per_1000: 0.4678</title></rect>
+<rect x="514" y="585" width="22" height="22" fill="#f9dcdc" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / total_engagement_per_1000: 0.1608</title></rect>
+<rect x="536" y="585" width="22" height="22" fill="#6b95f1" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / profile_visits_per_1000: -0.6804</title></rect>
+<rect x="558" y="585" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / price_usd: 1.0000</title></rect>
+<rect x="580" y="585" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / price_ars: 1.0000</title></rect>
+<rect x="602" y="585" width="22" height="22" fill="#fcebeb" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / sponsored_posts_pct: 0.0916</title></rect>
+<rect x="624" y="585" width="22" height="22" fill="#ebf1fd" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / organic_posts_pct: -0.0916</title></rect>
+<rect x="646" y="585" width="22" height="22" fill="#f7cfcf" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / topic_football_pct: 0.2230</title></rect>
+<rect x="668" y="585" width="22" height="22" fill="#f8d2d2" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / topic_makeup_pct: 0.2053</title></rect>
+<rect x="690" y="585" width="22" height="22" fill="#aec5f8" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / topic_dogs_pct: -0.3707</title></rect>
+<rect x="712" y="585" width="22" height="22" fill="#f4f7fe" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / topic_art_pct: -0.0519</title></rect>
+<rect x="734" y="585" width="22" height="22" fill="#6f98f2" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / content_tutorial_pct: -0.6583</title></rect>
+<rect x="756" y="585" width="22" height="22" fill="#91b0f5" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / content_review_pct: -0.5037</title></rect>
+<rect x="778" y="585" width="22" height="22" fill="#e76c6c" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / content_entertainment_pct: 0.6791</title></rect>
+<rect x="800" y="585" width="22" height="22" fill="#bbcef9" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / content_showcase_pct: -0.3141</title></rect>
+<rect x="822" y="585" width="22" height="22" fill="#5585ef" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / average_caption_words: -0.7816</title></rect>
+<rect x="844" y="585" width="22" height="22" fill="#769df2" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / average_watch_time_seconds: -0.6291</title></rect>
+<rect x="866" y="585" width="22" height="22" fill="#e97474" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / video_posts_pct: 0.6414</title></rect>
+<rect x="888" y="585" width="22" height="22" fill="#e87070" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / short_form_posts_pct: 0.6570</title></rect>
+<rect x="910" y="585" width="22" height="22" fill="#e66161" stroke="#e5e7eb" stroke-width="0.5"><title>price_ars / trend_posts_pct: 0.7278</title></rect>
+<rect x="250" y="607" width="22" height="22" fill="#fef9f9" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / followers: 0.0264</title></rect>
+<rect x="272" y="607" width="22" height="22" fill="#fef6f6" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / average_reach: 0.0413</title></rect>
+<rect x="294" y="607" width="22" height="22" fill="#fef8f8" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / average_impressions: 0.0335</title></rect>
+<rect x="316" y="607" width="22" height="22" fill="#fef7f7" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / average_video_views: 0.0385</title></rect>
+<rect x="338" y="607" width="22" height="22" fill="#d2dffb" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / monthly_posts: -0.2063</title></rect>
+<rect x="360" y="607" width="22" height="22" fill="#c1d2f9" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / argentina_audience_pct: -0.2861</title></rect>
+<rect x="382" y="607" width="22" height="22" fill="#f4f7fe" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / estimated_argentina_reach: -0.0518</title></rect>
+<rect x="404" y="607" width="22" height="22" fill="#f6f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / non_follower_reach_pct: -0.0405</title></rect>
+<rect x="426" y="607" width="22" height="22" fill="#fdf3f3" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / likes_per_1000: 0.0565</title></rect>
+<rect x="448" y="607" width="22" height="22" fill="#fceeee" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / comments_per_1000: 0.0773</title></rect>
+<rect x="470" y="607" width="22" height="22" fill="#f7f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / saves_per_1000: -0.0383</title></rect>
+<rect x="492" y="607" width="22" height="22" fill="#f0f5fe" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / shares_per_1000: -0.0668</title></rect>
+<rect x="514" y="607" width="22" height="22" fill="#fefeff" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / total_engagement_per_1000: -0.0035</title></rect>
+<rect x="536" y="607" width="22" height="22" fill="#fffdfd" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / profile_visits_per_1000: 0.0076</title></rect>
+<rect x="558" y="607" width="22" height="22" fill="#fcebeb" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / price_usd: 0.0916</title></rect>
+<rect x="580" y="607" width="22" height="22" fill="#fcebeb" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / price_ars: 0.0916</title></rect>
+<rect x="602" y="607" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / sponsored_posts_pct: 1.0000</title></rect>
+<rect x="624" y="607" width="22" height="22" fill="#2563eb" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / organic_posts_pct: -1.0000</title></rect>
+<rect x="646" y="607" width="22" height="22" fill="#f2adad" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / topic_football_pct: 0.3763</title></rect>
+<rect x="668" y="607" width="22" height="22" fill="#fafcff" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / topic_makeup_pct: -0.0217</title></rect>
+<rect x="690" y="607" width="22" height="22" fill="#a2bdf6" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / topic_dogs_pct: -0.4259</title></rect>
+<rect x="712" y="607" width="22" height="22" fill="#fceeee" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / topic_art_pct: 0.0805</title></rect>
+<rect x="734" y="607" width="22" height="22" fill="#e4ecfd" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / content_tutorial_pct: -0.1222</title></rect>
+<rect x="756" y="607" width="22" height="22" fill="#fdf2f2" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / content_review_pct: 0.0578</title></rect>
+<rect x="778" y="607" width="22" height="22" fill="#fdf5f5" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / content_entertainment_pct: 0.0446</title></rect>
+<rect x="800" y="607" width="22" height="22" fill="#fdf5f5" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / content_showcase_pct: 0.0474</title></rect>
+<rect x="822" y="607" width="22" height="22" fill="#f1f5fe" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / average_caption_words: -0.0652</title></rect>
+<rect x="844" y="607" width="22" height="22" fill="#dee8fc" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / average_watch_time_seconds: -0.1491</title></rect>
+<rect x="866" y="607" width="22" height="22" fill="#fbfcff" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / video_posts_pct: -0.0173</title></rect>
+<rect x="888" y="607" width="22" height="22" fill="#fffefe" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / short_form_posts_pct: 0.0042</title></rect>
+<rect x="910" y="607" width="22" height="22" fill="#fef7f7" stroke="#e5e7eb" stroke-width="0.5"><title>sponsored_posts_pct / trend_posts_pct: 0.0377</title></rect>
+<rect x="250" y="629" width="22" height="22" fill="#f9fbfe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / followers: -0.0264</title></rect>
+<rect x="272" y="629" width="22" height="22" fill="#f6f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / average_reach: -0.0413</title></rect>
+<rect x="294" y="629" width="22" height="22" fill="#f8fafe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / average_impressions: -0.0335</title></rect>
+<rect x="316" y="629" width="22" height="22" fill="#f7f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / average_video_views: -0.0385</title></rect>
+<rect x="338" y="629" width="22" height="22" fill="#f8d2d2" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / monthly_posts: 0.2063</title></rect>
+<rect x="360" y="629" width="22" height="22" fill="#f5c1c1" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / argentina_audience_pct: 0.2861</title></rect>
+<rect x="382" y="629" width="22" height="22" fill="#fdf4f4" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / estimated_argentina_reach: 0.0518</title></rect>
+<rect x="404" y="629" width="22" height="22" fill="#fef6f6" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / non_follower_reach_pct: 0.0405</title></rect>
+<rect x="426" y="629" width="22" height="22" fill="#f3f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / likes_per_1000: -0.0565</title></rect>
+<rect x="448" y="629" width="22" height="22" fill="#eef3fd" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / comments_per_1000: -0.0773</title></rect>
+<rect x="470" y="629" width="22" height="22" fill="#fef7f7" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / saves_per_1000: 0.0383</title></rect>
+<rect x="492" y="629" width="22" height="22" fill="#fdf1f1" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / shares_per_1000: 0.0668</title></rect>
+<rect x="514" y="629" width="22" height="22" fill="#fffefe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / total_engagement_per_1000: 0.0035</title></rect>
+<rect x="536" y="629" width="22" height="22" fill="#fdfeff" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / profile_visits_per_1000: -0.0076</title></rect>
+<rect x="558" y="629" width="22" height="22" fill="#ebf1fd" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / price_usd: -0.0916</title></rect>
+<rect x="580" y="629" width="22" height="22" fill="#ebf1fd" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / price_ars: -0.0916</title></rect>
+<rect x="602" y="629" width="22" height="22" fill="#2563eb" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / sponsored_posts_pct: -1.0000</title></rect>
+<rect x="624" y="629" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / organic_posts_pct: 1.0000</title></rect>
+<rect x="646" y="629" width="22" height="22" fill="#adc4f7" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / topic_football_pct: -0.3763</title></rect>
+<rect x="668" y="629" width="22" height="22" fill="#fefafa" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / topic_makeup_pct: 0.0217</title></rect>
+<rect x="690" y="629" width="22" height="22" fill="#f0a3a3" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / topic_dogs_pct: 0.4259</title></rect>
+<rect x="712" y="629" width="22" height="22" fill="#edf2fd" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / topic_art_pct: -0.0805</title></rect>
+<rect x="734" y="629" width="22" height="22" fill="#fbe4e4" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / content_tutorial_pct: 0.1222</title></rect>
+<rect x="756" y="629" width="22" height="22" fill="#f2f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / content_review_pct: -0.0578</title></rect>
+<rect x="778" y="629" width="22" height="22" fill="#f5f8fe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / content_entertainment_pct: -0.0446</title></rect>
+<rect x="800" y="629" width="22" height="22" fill="#f5f8fe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / content_showcase_pct: -0.0474</title></rect>
+<rect x="822" y="629" width="22" height="22" fill="#fdf1f1" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / average_caption_words: 0.0652</title></rect>
+<rect x="844" y="629" width="22" height="22" fill="#fadfdf" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / average_watch_time_seconds: 0.1491</title></rect>
+<rect x="866" y="629" width="22" height="22" fill="#fefbfb" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / video_posts_pct: 0.0173</title></rect>
+<rect x="888" y="629" width="22" height="22" fill="#fefeff" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / short_form_posts_pct: -0.0042</title></rect>
+<rect x="910" y="629" width="22" height="22" fill="#f7f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>organic_posts_pct / trend_posts_pct: -0.0377</title></rect>
+<rect x="250" y="651" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / followers: 0.1331</title></rect>
+<rect x="272" y="651" width="22" height="22" fill="#f8d3d3" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / average_reach: 0.2011</title></rect>
+<rect x="294" y="651" width="22" height="22" fill="#f8d5d5" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / average_impressions: 0.1922</title></rect>
+<rect x="316" y="651" width="22" height="22" fill="#f8d3d3" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / average_video_views: 0.2034</title></rect>
+<rect x="338" y="651" width="22" height="22" fill="#fafbff" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / monthly_posts: -0.0239</title></rect>
+<rect x="360" y="651" width="22" height="22" fill="#edf2fd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / argentina_audience_pct: -0.0813</title></rect>
+<rect x="382" y="651" width="22" height="22" fill="#fae0e0" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / estimated_argentina_reach: 0.1419</title></rect>
+<rect x="404" y="651" width="22" height="22" fill="#f3b2b2" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / non_follower_reach_pct: 0.3539</title></rect>
+<rect x="426" y="651" width="22" height="22" fill="#f9dbdb" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / likes_per_1000: 0.1675</title></rect>
+<rect x="448" y="651" width="22" height="22" fill="#edf2fd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / comments_per_1000: -0.0825</title></rect>
+<rect x="470" y="651" width="22" height="22" fill="#f1f5fe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / saves_per_1000: -0.0642</title></rect>
+<rect x="492" y="651" width="22" height="22" fill="#fbe4e4" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / shares_per_1000: 0.1261</title></rect>
+<rect x="514" y="651" width="22" height="22" fill="#f9dddd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / total_engagement_per_1000: 0.1583</title></rect>
+<rect x="536" y="651" width="22" height="22" fill="#b9cdf9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / profile_visits_per_1000: -0.3225</title></rect>
+<rect x="558" y="651" width="22" height="22" fill="#f7cfcf" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / price_usd: 0.2230</title></rect>
+<rect x="580" y="651" width="22" height="22" fill="#f7cfcf" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / price_ars: 0.2230</title></rect>
+<rect x="602" y="651" width="22" height="22" fill="#f2adad" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / sponsored_posts_pct: 0.3763</title></rect>
+<rect x="624" y="651" width="22" height="22" fill="#adc4f7" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / organic_posts_pct: -0.3763</title></rect>
+<rect x="646" y="651" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / topic_football_pct: 1.0000</title></rect>
+<rect x="668" y="651" width="22" height="22" fill="#b2c8f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / topic_makeup_pct: -0.3528</title></rect>
+<rect x="690" y="651" width="22" height="22" fill="#a0bbf6" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / topic_dogs_pct: -0.4374</title></rect>
+<rect x="712" y="651" width="22" height="22" fill="#bfd1f9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / topic_art_pct: -0.2922</title></rect>
+<rect x="734" y="651" width="22" height="22" fill="#cfddfb" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / content_tutorial_pct: -0.2210</title></rect>
+<rect x="756" y="651" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / content_review_pct: -0.1023</title></rect>
+<rect x="778" y="651" width="22" height="22" fill="#f8d1d1" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / content_entertainment_pct: 0.2102</title></rect>
+<rect x="800" y="651" width="22" height="22" fill="#e5edfd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / content_showcase_pct: -0.1179</title></rect>
+<rect x="822" y="651" width="22" height="22" fill="#ccdbfa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / average_caption_words: -0.2322</title></rect>
+<rect x="844" y="651" width="22" height="22" fill="#d1defb" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / average_watch_time_seconds: -0.2101</title></rect>
+<rect x="866" y="651" width="22" height="22" fill="#fcecec" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / video_posts_pct: 0.0898</title></rect>
+<rect x="888" y="651" width="22" height="22" fill="#fbe5e5" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / short_form_posts_pct: 0.1209</title></rect>
+<rect x="910" y="651" width="22" height="22" fill="#f9dada" stroke="#e5e7eb" stroke-width="0.5"><title>topic_football_pct / trend_posts_pct: 0.1696</title></rect>
+<rect x="250" y="673" width="22" height="22" fill="#f1a9a9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / followers: 0.3959</title></rect>
+<rect x="272" y="673" width="22" height="22" fill="#f7cdcd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / average_reach: 0.2282</title></rect>
+<rect x="294" y="673" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / average_impressions: 0.2165</title></rect>
+<rect x="316" y="673" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / average_video_views: 0.2162</title></rect>
+<rect x="338" y="673" width="22" height="22" fill="#fefeff" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / monthly_posts: -0.0042</title></rect>
+<rect x="360" y="673" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / argentina_audience_pct: -0.1027</title></rect>
+<rect x="382" y="673" width="22" height="22" fill="#fbe8e8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / estimated_argentina_reach: 0.1051</title></rect>
+<rect x="404" y="673" width="22" height="22" fill="#fdfdff" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / non_follower_reach_pct: -0.0100</title></rect>
+<rect x="426" y="673" width="22" height="22" fill="#fcecec" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / likes_per_1000: 0.0862</title></rect>
+<rect x="448" y="673" width="22" height="22" fill="#c8d8fa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / comments_per_1000: -0.2523</title></rect>
+<rect x="470" y="673" width="22" height="22" fill="#c8d7fa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / saves_per_1000: -0.2536</title></rect>
+<rect x="492" y="673" width="22" height="22" fill="#fef6f6" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / shares_per_1000: 0.0425</title></rect>
+<rect x="514" y="673" width="22" height="22" fill="#e5ecfd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / total_engagement_per_1000: -0.1211</title></rect>
+<rect x="536" y="673" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / profile_visits_per_1000: -0.1949</title></rect>
+<rect x="558" y="673" width="22" height="22" fill="#f8d2d2" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / price_usd: 0.2053</title></rect>
+<rect x="580" y="673" width="22" height="22" fill="#f8d2d2" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / price_ars: 0.2053</title></rect>
+<rect x="602" y="673" width="22" height="22" fill="#fafcff" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / sponsored_posts_pct: -0.0217</title></rect>
+<rect x="624" y="673" width="22" height="22" fill="#fefafa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / organic_posts_pct: 0.0217</title></rect>
+<rect x="646" y="673" width="22" height="22" fill="#b2c8f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / topic_football_pct: -0.3528</title></rect>
+<rect x="668" y="673" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / topic_makeup_pct: 1.0000</title></rect>
+<rect x="690" y="673" width="22" height="22" fill="#b4c9f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / topic_dogs_pct: -0.3433</title></rect>
+<rect x="712" y="673" width="22" height="22" fill="#c4d5fa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / topic_art_pct: -0.2697</title></rect>
+<rect x="734" y="673" width="22" height="22" fill="#e2eafc" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / content_tutorial_pct: -0.1342</title></rect>
+<rect x="756" y="673" width="22" height="22" fill="#e5ecfd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / content_review_pct: -0.1210</title></rect>
+<rect x="778" y="673" width="22" height="22" fill="#f9d9d9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / content_entertainment_pct: 0.1761</title></rect>
+<rect x="800" y="673" width="22" height="22" fill="#dbe5fc" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / content_showcase_pct: -0.1672</title></rect>
+<rect x="822" y="673" width="22" height="22" fill="#c9d8fa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / average_caption_words: -0.2477</title></rect>
+<rect x="844" y="673" width="22" height="22" fill="#e8effd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / average_watch_time_seconds: -0.1032</title></rect>
+<rect x="866" y="673" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / video_posts_pct: 0.2186</title></rect>
+<rect x="888" y="673" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / short_form_posts_pct: 0.1342</title></rect>
+<rect x="910" y="673" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>topic_makeup_pct / trend_posts_pct: 0.1338</title></rect>
+<rect x="250" y="695" width="22" height="22" fill="#a4bef7" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / followers: -0.4165</title></rect>
+<rect x="272" y="695" width="22" height="22" fill="#b2c8f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / average_reach: -0.3516</title></rect>
+<rect x="294" y="695" width="22" height="22" fill="#afc6f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / average_impressions: -0.3649</title></rect>
+<rect x="316" y="695" width="22" height="22" fill="#b3c8f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / average_video_views: -0.3508</title></rect>
+<rect x="338" y="695" width="22" height="22" fill="#f2f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / monthly_posts: -0.0589</title></rect>
+<rect x="360" y="695" width="22" height="22" fill="#f6caca" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / argentina_audience_pct: 0.2443</title></rect>
+<rect x="382" y="695" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / estimated_argentina_reach: -0.1917</title></rect>
+<rect x="404" y="695" width="22" height="22" fill="#b5caf8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / non_follower_reach_pct: -0.3411</title></rect>
+<rect x="426" y="695" width="22" height="22" fill="#a2bcf6" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / likes_per_1000: -0.4270</title></rect>
+<rect x="448" y="695" width="22" height="22" fill="#f6c5c5" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / comments_per_1000: 0.2651</title></rect>
+<rect x="470" y="695" width="22" height="22" fill="#f1a7a7" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / saves_per_1000: 0.4055</title></rect>
+<rect x="492" y="695" width="22" height="22" fill="#bed1f9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / shares_per_1000: -0.2967</title></rect>
+<rect x="514" y="695" width="22" height="22" fill="#d1defb" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / total_engagement_per_1000: -0.2119</title></rect>
+<rect x="536" y="695" width="22" height="22" fill="#ee9696" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / profile_visits_per_1000: 0.4837</title></rect>
+<rect x="558" y="695" width="22" height="22" fill="#aec5f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / price_usd: -0.3707</title></rect>
+<rect x="580" y="695" width="22" height="22" fill="#aec5f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / price_ars: -0.3707</title></rect>
+<rect x="602" y="695" width="22" height="22" fill="#a2bdf6" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / sponsored_posts_pct: -0.4259</title></rect>
+<rect x="624" y="695" width="22" height="22" fill="#f0a3a3" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / organic_posts_pct: 0.4259</title></rect>
+<rect x="646" y="695" width="22" height="22" fill="#a0bbf6" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / topic_football_pct: -0.4374</title></rect>
+<rect x="668" y="695" width="22" height="22" fill="#b4c9f8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / topic_makeup_pct: -0.3433</title></rect>
+<rect x="690" y="695" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / topic_dogs_pct: 1.0000</title></rect>
+<rect x="712" y="695" width="22" height="22" fill="#c0d2f9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / topic_art_pct: -0.2909</title></rect>
+<rect x="734" y="695" width="22" height="22" fill="#f4bdbd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / content_tutorial_pct: 0.3021</title></rect>
+<rect x="756" y="695" width="22" height="22" fill="#fbe4e4" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / content_review_pct: 0.1234</title></rect>
+<rect x="778" y="695" width="22" height="22" fill="#ccdafa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / content_entertainment_pct: -0.2341</title></rect>
+<rect x="800" y="695" width="22" height="22" fill="#fffefe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / content_showcase_pct: 0.0055</title></rect>
+<rect x="822" y="695" width="22" height="22" fill="#ef9999" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / average_caption_words: 0.4681</title></rect>
+<rect x="844" y="695" width="22" height="22" fill="#f1aaaa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / average_watch_time_seconds: 0.3918</title></rect>
+<rect x="866" y="695" width="22" height="22" fill="#9db9f6" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / video_posts_pct: -0.4477</title></rect>
+<rect x="888" y="695" width="22" height="22" fill="#9bb7f6" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / short_form_posts_pct: -0.4586</title></rect>
+<rect x="910" y="695" width="22" height="22" fill="#9db9f6" stroke="#e5e7eb" stroke-width="0.5"><title>topic_dogs_pct / trend_posts_pct: -0.4499</title></rect>
+<rect x="250" y="717" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / followers: -0.0997</title></rect>
+<rect x="272" y="717" width="22" height="22" fill="#eff3fe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / average_reach: -0.0739</title></rect>
+<rect x="294" y="717" width="22" height="22" fill="#f8fafe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / average_impressions: -0.0343</title></rect>
+<rect x="316" y="717" width="22" height="22" fill="#f1f5fe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / average_video_views: -0.0643</title></rect>
+<rect x="338" y="717" width="22" height="22" fill="#fbe8e8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / monthly_posts: 0.1041</title></rect>
+<rect x="360" y="717" width="22" height="22" fill="#edf2fd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / argentina_audience_pct: -0.0811</title></rect>
+<rect x="382" y="717" width="22" height="22" fill="#f2f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / estimated_argentina_reach: -0.0579</title></rect>
+<rect x="404" y="717" width="22" height="22" fill="#fdfeff" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / non_follower_reach_pct: -0.0071</title></rect>
+<rect x="426" y="717" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / likes_per_1000: 0.2144</title></rect>
+<rect x="448" y="717" width="22" height="22" fill="#fdf2f2" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / comments_per_1000: 0.0612</title></rect>
+<rect x="470" y="717" width="22" height="22" fill="#e3ebfc" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / saves_per_1000: -0.1279</title></rect>
+<rect x="492" y="717" width="22" height="22" fill="#fadddd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / shares_per_1000: 0.1564</title></rect>
+<rect x="514" y="717" width="22" height="22" fill="#f8d4d4" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / total_engagement_per_1000: 0.1971</title></rect>
+<rect x="536" y="717" width="22" height="22" fill="#fefafa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / profile_visits_per_1000: 0.0251</title></rect>
+<rect x="558" y="717" width="22" height="22" fill="#f4f7fe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / price_usd: -0.0519</title></rect>
+<rect x="580" y="717" width="22" height="22" fill="#f4f7fe" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / price_ars: -0.0519</title></rect>
+<rect x="602" y="717" width="22" height="22" fill="#fceeee" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / sponsored_posts_pct: 0.0805</title></rect>
+<rect x="624" y="717" width="22" height="22" fill="#edf2fd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / organic_posts_pct: -0.0805</title></rect>
+<rect x="646" y="717" width="22" height="22" fill="#bfd1f9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / topic_football_pct: -0.2922</title></rect>
+<rect x="668" y="717" width="22" height="22" fill="#c4d5fa" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / topic_makeup_pct: -0.2697</title></rect>
+<rect x="690" y="717" width="22" height="22" fill="#c0d2f9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / topic_dogs_pct: -0.2909</title></rect>
+<rect x="712" y="717" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / topic_art_pct: 1.0000</title></rect>
+<rect x="734" y="717" width="22" height="22" fill="#fdf3f3" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / content_tutorial_pct: 0.0532</title></rect>
+<rect x="756" y="717" width="22" height="22" fill="#fbe7e7" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / content_review_pct: 0.1095</title></rect>
+<rect x="778" y="717" width="22" height="22" fill="#dae5fc" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / content_entertainment_pct: -0.1681</title></rect>
+<rect x="800" y="717" width="22" height="22" fill="#f4b9b9" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / content_showcase_pct: 0.3209</title></rect>
+<rect x="822" y="717" width="22" height="22" fill="#fefeff" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / average_caption_words: -0.0067</title></rect>
+<rect x="844" y="717" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / average_watch_time_seconds: -0.1019</title></rect>
+<rect x="866" y="717" width="22" height="22" fill="#f8d7d7" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / video_posts_pct: 0.1863</title></rect>
+<rect x="888" y="717" width="22" height="22" fill="#f6c8c8" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / short_form_posts_pct: 0.2554</title></rect>
+<rect x="910" y="717" width="22" height="22" fill="#f8d7d7" stroke="#e5e7eb" stroke-width="0.5"><title>topic_art_pct / trend_posts_pct: 0.1865</title></rect>
+<rect x="250" y="739" width="22" height="22" fill="#7ca1f3" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / followers: -0.6028</title></rect>
+<rect x="272" y="739" width="22" height="22" fill="#789ff3" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / average_reach: -0.6185</title></rect>
+<rect x="294" y="739" width="22" height="22" fill="#739bf2" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / average_impressions: -0.6438</title></rect>
+<rect x="316" y="739" width="22" height="22" fill="#779ef3" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / average_video_views: -0.6224</title></rect>
+<rect x="338" y="739" width="22" height="22" fill="#dae5fc" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / monthly_posts: -0.1682</title></rect>
+<rect x="360" y="739" width="22" height="22" fill="#f8d1d1" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / argentina_audience_pct: 0.2104</title></rect>
+<rect x="382" y="739" width="22" height="22" fill="#9bb7f6" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / estimated_argentina_reach: -0.4597</title></rect>
+<rect x="404" y="739" width="22" height="22" fill="#87a9f4" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / non_follower_reach_pct: -0.5512</title></rect>
+<rect x="426" y="739" width="22" height="22" fill="#97b5f6" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / likes_per_1000: -0.4750</title></rect>
+<rect x="448" y="739" width="22" height="22" fill="#e97878" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / comments_per_1000: 0.6242</title></rect>
+<rect x="470" y="739" width="22" height="22" fill="#eb8383" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / saves_per_1000: 0.5695</title></rect>
+<rect x="492" y="739" width="22" height="22" fill="#a4bef7" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / shares_per_1000: -0.4185</title></rect>
+<rect x="514" y="739" width="22" height="22" fill="#dfe8fc" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / total_engagement_per_1000: -0.1476</title></rect>
+<rect x="536" y="739" width="22" height="22" fill="#ea7a7a" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / profile_visits_per_1000: 0.6119</title></rect>
+<rect x="558" y="739" width="22" height="22" fill="#6f98f2" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / price_usd: -0.6583</title></rect>
+<rect x="580" y="739" width="22" height="22" fill="#6f98f2" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / price_ars: -0.6583</title></rect>
+<rect x="602" y="739" width="22" height="22" fill="#e4ecfd" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / sponsored_posts_pct: -0.1222</title></rect>
+<rect x="624" y="739" width="22" height="22" fill="#fbe4e4" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / organic_posts_pct: 0.1222</title></rect>
+<rect x="646" y="739" width="22" height="22" fill="#cfddfb" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / topic_football_pct: -0.2210</title></rect>
+<rect x="668" y="739" width="22" height="22" fill="#e2eafc" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / topic_makeup_pct: -0.1342</title></rect>
+<rect x="690" y="739" width="22" height="22" fill="#f4bdbd" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / topic_dogs_pct: 0.3021</title></rect>
+<rect x="712" y="739" width="22" height="22" fill="#fdf3f3" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / topic_art_pct: 0.0532</title></rect>
+<rect x="734" y="739" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / content_tutorial_pct: 1.0000</title></rect>
+<rect x="756" y="739" width="22" height="22" fill="#f0a0a0" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / content_review_pct: 0.4373</title></rect>
+<rect x="778" y="739" width="22" height="22" fill="#487cee" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / content_entertainment_pct: -0.8392</title></rect>
+<rect x="800" y="739" width="22" height="22" fill="#f8d4d4" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / content_showcase_pct: 0.1965</title></rect>
+<rect x="822" y="739" width="22" height="22" fill="#e66666" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / average_caption_words: 0.7040</title></rect>
+<rect x="844" y="739" width="22" height="22" fill="#f0a1a1" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / average_watch_time_seconds: 0.4349</title></rect>
+<rect x="866" y="739" width="22" height="22" fill="#8bacf4" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / video_posts_pct: -0.5305</title></rect>
+<rect x="888" y="739" width="22" height="22" fill="#89aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / short_form_posts_pct: -0.5424</title></rect>
+<rect x="910" y="739" width="22" height="22" fill="#83a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>content_tutorial_pct / trend_posts_pct: -0.5671</title></rect>
+<rect x="250" y="761" width="22" height="22" fill="#8eaef5" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / followers: -0.5178</title></rect>
+<rect x="272" y="761" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / average_reach: -0.5463</title></rect>
+<rect x="294" y="761" width="22" height="22" fill="#7fa4f3" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / average_impressions: -0.5860</title></rect>
+<rect x="316" y="761" width="22" height="22" fill="#86a8f4" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / average_video_views: -0.5557</title></rect>
+<rect x="338" y="761" width="22" height="22" fill="#f2f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / monthly_posts: -0.0605</title></rect>
+<rect x="360" y="761" width="22" height="22" fill="#eef3fd" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / argentina_audience_pct: -0.0783</title></rect>
+<rect x="382" y="761" width="22" height="22" fill="#98b5f6" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / estimated_argentina_reach: -0.4725</title></rect>
+<rect x="404" y="761" width="22" height="22" fill="#9eb9f6" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / non_follower_reach_pct: -0.4455</title></rect>
+<rect x="426" y="761" width="22" height="22" fill="#8bacf4" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / likes_per_1000: -0.5340</title></rect>
+<rect x="448" y="761" width="22" height="22" fill="#f0a1a1" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / comments_per_1000: 0.4311</title></rect>
+<rect x="470" y="761" width="22" height="22" fill="#e97676" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / saves_per_1000: 0.6303</title></rect>
+<rect x="492" y="761" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / shares_per_1000: -0.5472</title></rect>
+<rect x="514" y="761" width="22" height="22" fill="#c5d6fa" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / total_engagement_per_1000: -0.2647</title></rect>
+<rect x="536" y="761" width="22" height="22" fill="#f3b2b2" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / profile_visits_per_1000: 0.3555</title></rect>
+<rect x="558" y="761" width="22" height="22" fill="#91b0f5" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / price_usd: -0.5037</title></rect>
+<rect x="580" y="761" width="22" height="22" fill="#91b0f5" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / price_ars: -0.5037</title></rect>
+<rect x="602" y="761" width="22" height="22" fill="#fdf2f2" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / sponsored_posts_pct: 0.0578</title></rect>
+<rect x="624" y="761" width="22" height="22" fill="#f2f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / organic_posts_pct: -0.0578</title></rect>
+<rect x="646" y="761" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / topic_football_pct: -0.1023</title></rect>
+<rect x="668" y="761" width="22" height="22" fill="#e5ecfd" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / topic_makeup_pct: -0.1210</title></rect>
+<rect x="690" y="761" width="22" height="22" fill="#fbe4e4" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / topic_dogs_pct: 0.1234</title></rect>
+<rect x="712" y="761" width="22" height="22" fill="#fbe7e7" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / topic_art_pct: 0.1095</title></rect>
+<rect x="734" y="761" width="22" height="22" fill="#f0a0a0" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / content_tutorial_pct: 0.4373</title></rect>
+<rect x="756" y="761" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / content_review_pct: 1.0000</title></rect>
+<rect x="778" y="761" width="22" height="22" fill="#4e80ef" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / content_entertainment_pct: -0.8141</title></rect>
+<rect x="800" y="761" width="22" height="22" fill="#e76a6a" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / content_showcase_pct: 0.6878</title></rect>
+<rect x="822" y="761" width="22" height="22" fill="#ea8080" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / average_caption_words: 0.5873</title></rect>
+<rect x="844" y="761" width="22" height="22" fill="#f4bdbd" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / average_watch_time_seconds: 0.3045</title></rect>
+<rect x="866" y="761" width="22" height="22" fill="#7da2f3" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / video_posts_pct: -0.5941</title></rect>
+<rect x="888" y="761" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / short_form_posts_pct: -0.5469</title></rect>
+<rect x="910" y="761" width="22" height="22" fill="#84a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>content_review_pct / trend_posts_pct: -0.5637</title></rect>
+<rect x="250" y="783" width="22" height="22" fill="#e87272" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / followers: 0.6516</title></rect>
+<rect x="272" y="783" width="22" height="22" fill="#e76b6b" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / average_reach: 0.6807</title></rect>
+<rect x="294" y="783" width="22" height="22" fill="#e66363" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / average_impressions: 0.7176</title></rect>
+<rect x="316" y="783" width="22" height="22" fill="#e76a6a" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / average_video_views: 0.6873</title></rect>
+<rect x="338" y="783" width="22" height="22" fill="#fcebeb" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / monthly_posts: 0.0911</title></rect>
+<rect x="360" y="783" width="22" height="22" fill="#fbfcff" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / argentina_audience_pct: -0.0167</title></rect>
+<rect x="382" y="783" width="22" height="22" fill="#ec8787" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / estimated_argentina_reach: 0.5543</title></rect>
+<rect x="404" y="783" width="22" height="22" fill="#ec8989" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / non_follower_reach_pct: 0.5438</title></rect>
+<rect x="426" y="783" width="22" height="22" fill="#ec8b8b" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / likes_per_1000: 0.5348</title></rect>
+<rect x="448" y="783" width="22" height="22" fill="#789ef3" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / comments_per_1000: -0.6208</title></rect>
+<rect x="470" y="783" width="22" height="22" fill="#7099f2" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / saves_per_1000: -0.6566</title></rect>
+<rect x="492" y="783" width="22" height="22" fill="#ed8f8f" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / shares_per_1000: 0.5177</title></rect>
+<rect x="514" y="783" width="22" height="22" fill="#f8d4d4" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / total_engagement_per_1000: 0.1970</title></rect>
+<rect x="536" y="783" width="22" height="22" fill="#84a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / profile_visits_per_1000: -0.5620</title></rect>
+<rect x="558" y="783" width="22" height="22" fill="#e76c6c" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / price_usd: 0.6791</title></rect>
+<rect x="580" y="783" width="22" height="22" fill="#e76c6c" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / price_ars: 0.6791</title></rect>
+<rect x="602" y="783" width="22" height="22" fill="#fdf5f5" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / sponsored_posts_pct: 0.0446</title></rect>
+<rect x="624" y="783" width="22" height="22" fill="#f5f8fe" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / organic_posts_pct: -0.0446</title></rect>
+<rect x="646" y="783" width="22" height="22" fill="#f8d1d1" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / topic_football_pct: 0.2102</title></rect>
+<rect x="668" y="783" width="22" height="22" fill="#f9d9d9" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / topic_makeup_pct: 0.1761</title></rect>
+<rect x="690" y="783" width="22" height="22" fill="#ccdafa" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / topic_dogs_pct: -0.2341</title></rect>
+<rect x="712" y="783" width="22" height="22" fill="#dae5fc" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / topic_art_pct: -0.1681</title></rect>
+<rect x="734" y="783" width="22" height="22" fill="#487cee" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / content_tutorial_pct: -0.8392</title></rect>
+<rect x="756" y="783" width="22" height="22" fill="#4e80ef" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / content_review_pct: -0.8141</title></rect>
+<rect x="778" y="783" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / content_entertainment_pct: 1.0000</title></rect>
+<rect x="800" y="783" width="22" height="22" fill="#7099f2" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / content_showcase_pct: -0.6557</title></rect>
+<rect x="822" y="783" width="22" height="22" fill="#5f8df0" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / average_caption_words: -0.7338</title></rect>
+<rect x="844" y="783" width="22" height="22" fill="#a4bef7" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / average_watch_time_seconds: -0.4172</title></rect>
+<rect x="866" y="783" width="22" height="22" fill="#ea7f7f" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / video_posts_pct: 0.5895</title></rect>
+<rect x="888" y="783" width="22" height="22" fill="#eb8484" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / short_form_posts_pct: 0.5656</title></rect>
+<rect x="910" y="783" width="22" height="22" fill="#ea7d7d" stroke="#e5e7eb" stroke-width="0.5"><title>content_entertainment_pct / trend_posts_pct: 0.5980</title></rect>
+<rect x="250" y="805" width="22" height="22" fill="#b8ccf9" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / followers: -0.3247</title></rect>
+<rect x="272" y="805" width="22" height="22" fill="#b1c7f8" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / average_reach: -0.3566</title></rect>
+<rect x="294" y="805" width="22" height="22" fill="#acc3f7" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / average_impressions: -0.3825</title></rect>
+<rect x="316" y="805" width="22" height="22" fill="#b0c7f8" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / average_video_views: -0.3602</title></rect>
+<rect x="338" y="805" width="22" height="22" fill="#fbe6e6" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / monthly_posts: 0.1157</title></rect>
+<rect x="360" y="805" width="22" height="22" fill="#bed0f9" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / argentina_audience_pct: -0.2989</title></rect>
+<rect x="382" y="805" width="22" height="22" fill="#b2c8f8" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / estimated_argentina_reach: -0.3522</title></rect>
+<rect x="404" y="805" width="22" height="22" fill="#dde6fc" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / non_follower_reach_pct: -0.1572</title></rect>
+<rect x="426" y="805" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / likes_per_1000: -0.1926</title></rect>
+<rect x="448" y="805" width="22" height="22" fill="#f5c4c4" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / comments_per_1000: 0.2715</title></rect>
+<rect x="470" y="805" width="22" height="22" fill="#f5c0c0" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / saves_per_1000: 0.2913</title></rect>
+<rect x="492" y="805" width="22" height="22" fill="#cbdafa" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / shares_per_1000: -0.2401</title></rect>
+<rect x="514" y="805" width="22" height="22" fill="#f3f6fe" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / total_engagement_per_1000: -0.0558</title></rect>
+<rect x="536" y="805" width="22" height="22" fill="#f9d7d7" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / profile_visits_per_1000: 0.1855</title></rect>
+<rect x="558" y="805" width="22" height="22" fill="#bbcef9" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / price_usd: -0.3141</title></rect>
+<rect x="580" y="805" width="22" height="22" fill="#bbcef9" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / price_ars: -0.3141</title></rect>
+<rect x="602" y="805" width="22" height="22" fill="#fdf5f5" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / sponsored_posts_pct: 0.0474</title></rect>
+<rect x="624" y="805" width="22" height="22" fill="#f5f8fe" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / organic_posts_pct: -0.0474</title></rect>
+<rect x="646" y="805" width="22" height="22" fill="#e5edfd" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / topic_football_pct: -0.1179</title></rect>
+<rect x="668" y="805" width="22" height="22" fill="#dbe5fc" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / topic_makeup_pct: -0.1672</title></rect>
+<rect x="690" y="805" width="22" height="22" fill="#fffefe" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / topic_dogs_pct: 0.0055</title></rect>
+<rect x="712" y="805" width="22" height="22" fill="#f4b9b9" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / topic_art_pct: 0.3209</title></rect>
+<rect x="734" y="805" width="22" height="22" fill="#f8d4d4" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / content_tutorial_pct: 0.1965</title></rect>
+<rect x="756" y="805" width="22" height="22" fill="#e76a6a" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / content_review_pct: 0.6878</title></rect>
+<rect x="778" y="805" width="22" height="22" fill="#7099f2" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / content_entertainment_pct: -0.6557</title></rect>
+<rect x="800" y="805" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / content_showcase_pct: 1.0000</title></rect>
+<rect x="822" y="805" width="22" height="22" fill="#f4bcbc" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / average_caption_words: 0.3090</title></rect>
+<rect x="844" y="805" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / average_watch_time_seconds: 0.1349</title></rect>
+<rect x="866" y="805" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / video_posts_pct: -0.1924</title></rect>
+<rect x="888" y="805" width="22" height="22" fill="#e1e9fc" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / short_form_posts_pct: -0.1395</title></rect>
+<rect x="910" y="805" width="22" height="22" fill="#d9e4fb" stroke="#e5e7eb" stroke-width="0.5"><title>content_showcase_pct / trend_posts_pct: -0.1761</title></rect>
+<rect x="250" y="827" width="22" height="22" fill="#4c7fef" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / followers: -0.8211</title></rect>
+<rect x="272" y="827" width="22" height="22" fill="#4379ee" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / average_reach: -0.8604</title></rect>
+<rect x="294" y="827" width="22" height="22" fill="#4379ee" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / average_impressions: -0.8606</title></rect>
+<rect x="316" y="827" width="22" height="22" fill="#457aee" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / average_video_views: -0.8548</title></rect>
+<rect x="338" y="827" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / monthly_posts: -0.1028</title></rect>
+<rect x="360" y="827" width="22" height="22" fill="#fbe5e5" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / argentina_audience_pct: 0.1204</title></rect>
+<rect x="382" y="827" width="22" height="22" fill="#6a94f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / estimated_argentina_reach: -0.6846</title></rect>
+<rect x="404" y="827" width="22" height="22" fill="#6f98f2" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / non_follower_reach_pct: -0.6623</title></rect>
+<rect x="426" y="827" width="22" height="22" fill="#6792f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / likes_per_1000: -0.6987</title></rect>
+<rect x="448" y="827" width="22" height="22" fill="#e45757" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / comments_per_1000: 0.7720</title></rect>
+<rect x="470" y="827" width="22" height="22" fill="#e24c4c" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / saves_per_1000: 0.8229</title></rect>
+<rect x="492" y="827" width="22" height="22" fill="#8faff5" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / shares_per_1000: -0.5118</title></rect>
+<rect x="514" y="827" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / total_engagement_per_1000: -0.1925</title></rect>
+<rect x="536" y="827" width="22" height="22" fill="#e45555" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / profile_visits_per_1000: 0.7814</title></rect>
+<rect x="558" y="827" width="22" height="22" fill="#5585ef" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / price_usd: -0.7816</title></rect>
+<rect x="580" y="827" width="22" height="22" fill="#5585ef" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / price_ars: -0.7816</title></rect>
+<rect x="602" y="827" width="22" height="22" fill="#f1f5fe" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / sponsored_posts_pct: -0.0652</title></rect>
+<rect x="624" y="827" width="22" height="22" fill="#fdf1f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / organic_posts_pct: 0.0652</title></rect>
+<rect x="646" y="827" width="22" height="22" fill="#ccdbfa" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / topic_football_pct: -0.2322</title></rect>
+<rect x="668" y="827" width="22" height="22" fill="#c9d8fa" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / topic_makeup_pct: -0.2477</title></rect>
+<rect x="690" y="827" width="22" height="22" fill="#ef9999" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / topic_dogs_pct: 0.4681</title></rect>
+<rect x="712" y="827" width="22" height="22" fill="#fefeff" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / topic_art_pct: -0.0067</title></rect>
+<rect x="734" y="827" width="22" height="22" fill="#e66666" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / content_tutorial_pct: 0.7040</title></rect>
+<rect x="756" y="827" width="22" height="22" fill="#ea8080" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / content_review_pct: 0.5873</title></rect>
+<rect x="778" y="827" width="22" height="22" fill="#5f8df0" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / content_entertainment_pct: -0.7338</title></rect>
+<rect x="800" y="827" width="22" height="22" fill="#f4bcbc" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / content_showcase_pct: 0.3090</title></rect>
+<rect x="822" y="827" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / average_caption_words: 1.0000</title></rect>
+<rect x="844" y="827" width="22" height="22" fill="#e45656" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / average_watch_time_seconds: 0.7777</title></rect>
+<rect x="866" y="827" width="22" height="22" fill="#5585ef" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / video_posts_pct: -0.7813</title></rect>
+<rect x="888" y="827" width="22" height="22" fill="#5988f0" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / short_form_posts_pct: -0.7618</title></rect>
+<rect x="910" y="827" width="22" height="22" fill="#4f81ef" stroke="#e5e7eb" stroke-width="0.5"><title>average_caption_words / trend_posts_pct: -0.8070</title></rect>
+<rect x="250" y="849" width="22" height="22" fill="#6a94f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / followers: -0.6848</title></rect>
+<rect x="272" y="849" width="22" height="22" fill="#6490f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / average_reach: -0.7126</title></rect>
+<rect x="294" y="849" width="22" height="22" fill="#6591f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / average_impressions: -0.7066</title></rect>
+<rect x="316" y="849" width="22" height="22" fill="#6691f1" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / average_video_views: -0.7037</title></rect>
+<rect x="338" y="849" width="22" height="22" fill="#fafcff" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / monthly_posts: -0.0209</title></rect>
+<rect x="360" y="849" width="22" height="22" fill="#fae1e1" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / argentina_audience_pct: 0.1375</title></rect>
+<rect x="382" y="849" width="22" height="22" fill="#84a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / estimated_argentina_reach: -0.5665</title></rect>
+<rect x="404" y="849" width="22" height="22" fill="#a2bcf6" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / non_follower_reach_pct: -0.4266</title></rect>
+<rect x="426" y="849" width="22" height="22" fill="#89aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / likes_per_1000: -0.5433</title></rect>
+<rect x="448" y="849" width="22" height="22" fill="#ec8787" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / comments_per_1000: 0.5535</title></rect>
+<rect x="470" y="849" width="22" height="22" fill="#e97676" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / saves_per_1000: 0.6318</title></rect>
+<rect x="492" y="849" width="22" height="22" fill="#bccff9" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / shares_per_1000: -0.3087</title></rect>
+<rect x="514" y="849" width="22" height="22" fill="#e7eefd" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / total_engagement_per_1000: -0.1115</title></rect>
+<rect x="536" y="849" width="22" height="22" fill="#ea7c7c" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / profile_visits_per_1000: 0.6040</title></rect>
+<rect x="558" y="849" width="22" height="22" fill="#769df2" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / price_usd: -0.6291</title></rect>
+<rect x="580" y="849" width="22" height="22" fill="#769df2" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / price_ars: -0.6291</title></rect>
+<rect x="602" y="849" width="22" height="22" fill="#dee8fc" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / sponsored_posts_pct: -0.1491</title></rect>
+<rect x="624" y="849" width="22" height="22" fill="#fadfdf" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / organic_posts_pct: 0.1491</title></rect>
+<rect x="646" y="849" width="22" height="22" fill="#d1defb" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / topic_football_pct: -0.2101</title></rect>
+<rect x="668" y="849" width="22" height="22" fill="#e8effd" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / topic_makeup_pct: -0.1032</title></rect>
+<rect x="690" y="849" width="22" height="22" fill="#f1aaaa" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / topic_dogs_pct: 0.3918</title></rect>
+<rect x="712" y="849" width="22" height="22" fill="#e9effd" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / topic_art_pct: -0.1019</title></rect>
+<rect x="734" y="849" width="22" height="22" fill="#f0a1a1" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / content_tutorial_pct: 0.4349</title></rect>
+<rect x="756" y="849" width="22" height="22" fill="#f4bdbd" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / content_review_pct: 0.3045</title></rect>
+<rect x="778" y="849" width="22" height="22" fill="#a4bef7" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / content_entertainment_pct: -0.4172</title></rect>
+<rect x="800" y="849" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / content_showcase_pct: 0.1349</title></rect>
+<rect x="822" y="849" width="22" height="22" fill="#e45656" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / average_caption_words: 0.7777</title></rect>
+<rect x="844" y="849" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / average_watch_time_seconds: 1.0000</title></rect>
+<rect x="866" y="849" width="22" height="22" fill="#799ff3" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / video_posts_pct: -0.6138</title></rect>
+<rect x="888" y="849" width="22" height="22" fill="#759df2" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / short_form_posts_pct: -0.6311</title></rect>
+<rect x="910" y="849" width="22" height="22" fill="#7099f2" stroke="#e5e7eb" stroke-width="0.5"><title>average_watch_time_seconds / trend_posts_pct: -0.6544</title></rect>
+<rect x="250" y="871" width="22" height="22" fill="#e86e6e" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / followers: 0.6694</title></rect>
+<rect x="272" y="871" width="22" height="22" fill="#e76868" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / average_reach: 0.6956</title></rect>
+<rect x="294" y="871" width="22" height="22" fill="#e66666" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / average_impressions: 0.7045</title></rect>
+<rect x="316" y="871" width="22" height="22" fill="#e66565" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / average_video_views: 0.7095</title></rect>
+<rect x="338" y="871" width="22" height="22" fill="#f8d1d1" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / monthly_posts: 0.2112</title></rect>
+<rect x="360" y="871" width="22" height="22" fill="#d4e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / argentina_audience_pct: -0.1950</title></rect>
+<rect x="382" y="871" width="22" height="22" fill="#ec8a8a" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / estimated_argentina_reach: 0.5401</title></rect>
+<rect x="404" y="871" width="22" height="22" fill="#e45959" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / non_follower_reach_pct: 0.7635</title></rect>
+<rect x="426" y="871" width="22" height="22" fill="#e14242" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / likes_per_1000: 0.8700</title></rect>
+<rect x="448" y="871" width="22" height="22" fill="#7fa3f3" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / comments_per_1000: -0.5894</title></rect>
+<rect x="470" y="871" width="22" height="22" fill="#5e8cf0" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / saves_per_1000: -0.7375</title></rect>
+<rect x="492" y="871" width="22" height="22" fill="#e56060" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / shares_per_1000: 0.7309</title></rect>
+<rect x="514" y="871" width="22" height="22" fill="#eb8686" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / total_engagement_per_1000: 0.5580</title></rect>
+<rect x="536" y="871" width="22" height="22" fill="#759cf2" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / profile_visits_per_1000: -0.6319</title></rect>
+<rect x="558" y="871" width="22" height="22" fill="#e97474" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / price_usd: 0.6414</title></rect>
+<rect x="580" y="871" width="22" height="22" fill="#e97474" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / price_ars: 0.6414</title></rect>
+<rect x="602" y="871" width="22" height="22" fill="#fbfcff" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / sponsored_posts_pct: -0.0173</title></rect>
+<rect x="624" y="871" width="22" height="22" fill="#fefbfb" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / organic_posts_pct: 0.0173</title></rect>
+<rect x="646" y="871" width="22" height="22" fill="#fcecec" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / topic_football_pct: 0.0898</title></rect>
+<rect x="668" y="871" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / topic_makeup_pct: 0.2186</title></rect>
+<rect x="690" y="871" width="22" height="22" fill="#9db9f6" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / topic_dogs_pct: -0.4477</title></rect>
+<rect x="712" y="871" width="22" height="22" fill="#f8d7d7" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / topic_art_pct: 0.1863</title></rect>
+<rect x="734" y="871" width="22" height="22" fill="#8bacf4" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / content_tutorial_pct: -0.5305</title></rect>
+<rect x="756" y="871" width="22" height="22" fill="#7da2f3" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / content_review_pct: -0.5941</title></rect>
+<rect x="778" y="871" width="22" height="22" fill="#ea7f7f" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / content_entertainment_pct: 0.5895</title></rect>
+<rect x="800" y="871" width="22" height="22" fill="#d5e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / content_showcase_pct: -0.1924</title></rect>
+<rect x="822" y="871" width="22" height="22" fill="#5585ef" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / average_caption_words: -0.7813</title></rect>
+<rect x="844" y="871" width="22" height="22" fill="#799ff3" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / average_watch_time_seconds: -0.6138</title></rect>
+<rect x="866" y="871" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / video_posts_pct: 1.0000</title></rect>
+<rect x="888" y="871" width="22" height="22" fill="#dd2c2c" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / short_form_posts_pct: 0.9708</title></rect>
+<rect x="910" y="871" width="22" height="22" fill="#de3131" stroke="#e5e7eb" stroke-width="0.5"><title>video_posts_pct / trend_posts_pct: 0.9515</title></rect>
+<rect x="250" y="893" width="22" height="22" fill="#e87070" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / followers: 0.6608</title></rect>
+<rect x="272" y="893" width="22" height="22" fill="#e76b6b" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / average_reach: 0.6798</title></rect>
+<rect x="294" y="893" width="22" height="22" fill="#e76969" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / average_impressions: 0.6903</title></rect>
+<rect x="316" y="893" width="22" height="22" fill="#e76969" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / average_video_views: 0.6925</title></rect>
+<rect x="338" y="893" width="22" height="22" fill="#f7d0d0" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / monthly_posts: 0.2150</title></rect>
+<rect x="360" y="893" width="22" height="22" fill="#d4e1fb" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / argentina_audience_pct: -0.1955</title></rect>
+<rect x="382" y="893" width="22" height="22" fill="#ec8c8c" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / estimated_argentina_reach: 0.5297</title></rect>
+<rect x="404" y="893" width="22" height="22" fill="#e35454" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / non_follower_reach_pct: 0.7860</title></rect>
+<rect x="426" y="893" width="22" height="22" fill="#df3b3b" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / likes_per_1000: 0.9012</title></rect>
+<rect x="448" y="893" width="22" height="22" fill="#81a4f3" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / comments_per_1000: -0.5802</title></rect>
+<rect x="470" y="893" width="22" height="22" fill="#618ef1" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / saves_per_1000: -0.7240</title></rect>
+<rect x="492" y="893" width="22" height="22" fill="#e66464" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / shares_per_1000: 0.7163</title></rect>
+<rect x="514" y="893" width="22" height="22" fill="#ea8080" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / total_engagement_per_1000: 0.5872</title></rect>
+<rect x="536" y="893" width="22" height="22" fill="#779ef3" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / profile_visits_per_1000: -0.6223</title></rect>
+<rect x="558" y="893" width="22" height="22" fill="#e87070" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / price_usd: 0.6570</title></rect>
+<rect x="580" y="893" width="22" height="22" fill="#e87070" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / price_ars: 0.6570</title></rect>
+<rect x="602" y="893" width="22" height="22" fill="#fffefe" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / sponsored_posts_pct: 0.0042</title></rect>
+<rect x="624" y="893" width="22" height="22" fill="#fefeff" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / organic_posts_pct: -0.0042</title></rect>
+<rect x="646" y="893" width="22" height="22" fill="#fbe5e5" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / topic_football_pct: 0.1209</title></rect>
+<rect x="668" y="893" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / topic_makeup_pct: 0.1342</title></rect>
+<rect x="690" y="893" width="22" height="22" fill="#9bb7f6" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / topic_dogs_pct: -0.4586</title></rect>
+<rect x="712" y="893" width="22" height="22" fill="#f6c8c8" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / topic_art_pct: 0.2554</title></rect>
+<rect x="734" y="893" width="22" height="22" fill="#89aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / content_tutorial_pct: -0.5424</title></rect>
+<rect x="756" y="893" width="22" height="22" fill="#88aaf4" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / content_review_pct: -0.5469</title></rect>
+<rect x="778" y="893" width="22" height="22" fill="#eb8484" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / content_entertainment_pct: 0.5656</title></rect>
+<rect x="800" y="893" width="22" height="22" fill="#e1e9fc" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / content_showcase_pct: -0.1395</title></rect>
+<rect x="822" y="893" width="22" height="22" fill="#5988f0" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / average_caption_words: -0.7618</title></rect>
+<rect x="844" y="893" width="22" height="22" fill="#759df2" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / average_watch_time_seconds: -0.6311</title></rect>
+<rect x="866" y="893" width="22" height="22" fill="#dd2c2c" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / video_posts_pct: 0.9708</title></rect>
+<rect x="888" y="893" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / short_form_posts_pct: 1.0000</title></rect>
+<rect x="910" y="893" width="22" height="22" fill="#dd2e2e" stroke="#e5e7eb" stroke-width="0.5"><title>short_form_posts_pct / trend_posts_pct: 0.9608</title></rect>
+<rect x="250" y="915" width="22" height="22" fill="#e76c6c" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / followers: 0.6755</title></rect>
+<rect x="272" y="915" width="22" height="22" fill="#e56060" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / average_reach: 0.7338</title></rect>
+<rect x="294" y="915" width="22" height="22" fill="#e55e5e" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / average_impressions: 0.7415</title></rect>
+<rect x="316" y="915" width="22" height="22" fill="#e55d5d" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / average_video_views: 0.7477</title></rect>
+<rect x="338" y="915" width="22" height="22" fill="#f7cfcf" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / monthly_posts: 0.2189</title></rect>
+<rect x="360" y="915" width="22" height="22" fill="#dce6fc" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / argentina_audience_pct: -0.1610</title></rect>
+<rect x="382" y="915" width="22" height="22" fill="#eb8585" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / estimated_argentina_reach: 0.5637</title></rect>
+<rect x="404" y="915" width="22" height="22" fill="#e45656" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / non_follower_reach_pct: 0.7780</title></rect>
+<rect x="426" y="915" width="22" height="22" fill="#e04141" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / likes_per_1000: 0.8762</title></rect>
+<rect x="448" y="915" width="22" height="22" fill="#7ca1f3" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / comments_per_1000: -0.6024</title></rect>
+<rect x="470" y="915" width="22" height="22" fill="#5d8bf0" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / saves_per_1000: -0.7441</title></rect>
+<rect x="492" y="915" width="22" height="22" fill="#e76767" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / shares_per_1000: 0.6988</title></rect>
+<rect x="514" y="915" width="22" height="22" fill="#ec8a8a" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / total_engagement_per_1000: 0.5378</title></rect>
+<rect x="536" y="915" width="22" height="22" fill="#6c96f2" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / profile_visits_per_1000: -0.6731</title></rect>
+<rect x="558" y="915" width="22" height="22" fill="#e66161" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / price_usd: 0.7278</title></rect>
+<rect x="580" y="915" width="22" height="22" fill="#e66161" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / price_ars: 0.7278</title></rect>
+<rect x="602" y="915" width="22" height="22" fill="#fef7f7" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / sponsored_posts_pct: 0.0377</title></rect>
+<rect x="624" y="915" width="22" height="22" fill="#f7f9fe" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / organic_posts_pct: -0.0377</title></rect>
+<rect x="646" y="915" width="22" height="22" fill="#f9dada" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / topic_football_pct: 0.1696</title></rect>
+<rect x="668" y="915" width="22" height="22" fill="#fae2e2" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / topic_makeup_pct: 0.1338</title></rect>
+<rect x="690" y="915" width="22" height="22" fill="#9db9f6" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / topic_dogs_pct: -0.4499</title></rect>
+<rect x="712" y="915" width="22" height="22" fill="#f8d7d7" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / topic_art_pct: 0.1865</title></rect>
+<rect x="734" y="915" width="22" height="22" fill="#83a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / content_tutorial_pct: -0.5671</title></rect>
+<rect x="756" y="915" width="22" height="22" fill="#84a7f4" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / content_review_pct: -0.5637</title></rect>
+<rect x="778" y="915" width="22" height="22" fill="#ea7d7d" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / content_entertainment_pct: 0.5980</title></rect>
+<rect x="800" y="915" width="22" height="22" fill="#d9e4fb" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / content_showcase_pct: -0.1761</title></rect>
+<rect x="822" y="915" width="22" height="22" fill="#4f81ef" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / average_caption_words: -0.8070</title></rect>
+<rect x="844" y="915" width="22" height="22" fill="#7099f2" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / average_watch_time_seconds: -0.6544</title></rect>
+<rect x="866" y="915" width="22" height="22" fill="#de3131" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / video_posts_pct: 0.9515</title></rect>
+<rect x="888" y="915" width="22" height="22" fill="#dd2e2e" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / short_form_posts_pct: 0.9608</title></rect>
+<rect x="910" y="915" width="22" height="22" fill="#dc2626" stroke="#e5e7eb" stroke-width="0.5"><title>trend_posts_pct / trend_posts_pct: 1.0000</title></rect>
+<rect x="967" y="255.00" width="18" height="7.25" fill="#dc2626"/>
+<rect x="967" y="261.75" width="18" height="7.25" fill="#dd2a2a"/>
+<rect x="967" y="268.50" width="18" height="7.25" fill="#dd2f2f"/>
+<rect x="967" y="275.26" width="18" height="7.25" fill="#de3333"/>
+<rect x="967" y="282.01" width="18" height="7.25" fill="#df3737"/>
+<rect x="967" y="288.76" width="18" height="7.25" fill="#e03c3c"/>
+<rect x="967" y="295.51" width="18" height="7.25" fill="#e04040"/>
+<rect x="967" y="302.27" width="18" height="7.25" fill="#e14444"/>
+<rect x="967" y="309.02" width="18" height="7.25" fill="#e24949"/>
+<rect x="967" y="315.77" width="18" height="7.25" fill="#e24d4d"/>
+<rect x="967" y="322.52" width="18" height="7.25" fill="#e35151"/>
+<rect x="967" y="329.28" width="18" height="7.25" fill="#e45656"/>
+<rect x="967" y="336.03" width="18" height="7.25" fill="#e45a5a"/>
+<rect x="967" y="342.78" width="18" height="7.25" fill="#e55e5e"/>
+<rect x="967" y="349.53" width="18" height="7.25" fill="#e66363"/>
+<rect x="967" y="356.29" width="18" height="7.25" fill="#e66767"/>
+<rect x="967" y="363.04" width="18" height="7.25" fill="#e76b6b"/>
+<rect x="967" y="369.79" width="18" height="7.25" fill="#e87070"/>
+<rect x="967" y="376.54" width="18" height="7.25" fill="#e97474"/>
+<rect x="967" y="383.30" width="18" height="7.25" fill="#e97878"/>
+<rect x="967" y="390.05" width="18" height="7.25" fill="#ea7d7d"/>
+<rect x="967" y="396.80" width="18" height="7.25" fill="#eb8181"/>
+<rect x="967" y="403.55" width="18" height="7.25" fill="#eb8585"/>
+<rect x="967" y="410.31" width="18" height="7.25" fill="#ec8a8a"/>
+<rect x="967" y="417.06" width="18" height="7.25" fill="#ed8e8e"/>
+<rect x="967" y="423.81" width="18" height="7.25" fill="#ee9292"/>
+<rect x="967" y="430.56" width="18" height="7.25" fill="#ee9797"/>
+<rect x="967" y="437.32" width="18" height="7.25" fill="#ef9b9b"/>
+<rect x="967" y="444.07" width="18" height="7.25" fill="#f0a0a0"/>
+<rect x="967" y="450.82" width="18" height="7.25" fill="#f0a4a4"/>
+<rect x="967" y="457.57" width="18" height="7.25" fill="#f1a8a8"/>
+<rect x="967" y="464.33" width="18" height="7.25" fill="#f2adad"/>
+<rect x="967" y="471.08" width="18" height="7.25" fill="#f2b1b1"/>
+<rect x="967" y="477.83" width="18" height="7.25" fill="#f3b5b5"/>
+<rect x="967" y="484.58" width="18" height="7.25" fill="#f4baba"/>
+<rect x="967" y="491.34" width="18" height="7.25" fill="#f4bebe"/>
+<rect x="967" y="498.09" width="18" height="7.25" fill="#f5c2c2"/>
+<rect x="967" y="504.84" width="18" height="7.25" fill="#f6c7c7"/>
+<rect x="967" y="511.59" width="18" height="7.25" fill="#f7cbcb"/>
+<rect x="967" y="518.35" width="18" height="7.25" fill="#f7cfcf"/>
+<rect x="967" y="525.10" width="18" height="7.25" fill="#f8d4d4"/>
+<rect x="967" y="531.85" width="18" height="7.25" fill="#f9d8d8"/>
+<rect x="967" y="538.60" width="18" height="7.25" fill="#f9dcdc"/>
+<rect x="967" y="545.36" width="18" height="7.25" fill="#fae1e1"/>
+<rect x="967" y="552.11" width="18" height="7.25" fill="#fbe5e5"/>
+<rect x="967" y="558.86" width="18" height="7.25" fill="#fce9e9"/>
+<rect x="967" y="565.61" width="18" height="7.25" fill="#fceeee"/>
+<rect x="967" y="572.37" width="18" height="7.25" fill="#fdf2f2"/>
+<rect x="967" y="579.12" width="18" height="7.25" fill="#fef6f6"/>
+<rect x="967" y="585.87" width="18" height="7.25" fill="#fefbfb"/>
+<rect x="967" y="592.62" width="18" height="7.25" fill="#ffffff"/>
+<rect x="967" y="599.38" width="18" height="7.25" fill="#fbfcff"/>
+<rect x="967" y="606.13" width="18" height="7.25" fill="#f6f9fe"/>
+<rect x="967" y="612.88" width="18" height="7.25" fill="#f2f6fe"/>
+<rect x="967" y="619.63" width="18" height="7.25" fill="#eef3fd"/>
+<rect x="967" y="626.39" width="18" height="7.25" fill="#e9effd"/>
+<rect x="967" y="633.14" width="18" height="7.25" fill="#e5ecfd"/>
+<rect x="967" y="639.89" width="18" height="7.25" fill="#e0e9fc"/>
+<rect x="967" y="646.64" width="18" height="7.25" fill="#dce6fc"/>
+<rect x="967" y="653.40" width="18" height="7.25" fill="#d8e3fb"/>
+<rect x="967" y="660.15" width="18" height="7.25" fill="#d3e0fb"/>
+<rect x="967" y="666.90" width="18" height="7.25" fill="#cfddfb"/>
+<rect x="967" y="673.65" width="18" height="7.25" fill="#cbdafa"/>
+<rect x="967" y="680.41" width="18" height="7.25" fill="#c6d6fa"/>
+<rect x="967" y="687.16" width="18" height="7.25" fill="#c2d3f9"/>
+<rect x="967" y="693.91" width="18" height="7.25" fill="#bed0f9"/>
+<rect x="967" y="700.66" width="18" height="7.25" fill="#b9cdf9"/>
+<rect x="967" y="707.42" width="18" height="7.25" fill="#b5caf8"/>
+<rect x="967" y="714.17" width="18" height="7.25" fill="#b1c7f8"/>
+<rect x="967" y="720.92" width="18" height="7.25" fill="#acc4f7"/>
+<rect x="967" y="727.67" width="18" height="7.25" fill="#a8c1f7"/>
+<rect x="967" y="734.43" width="18" height="7.25" fill="#a3bdf7"/>
+<rect x="967" y="741.18" width="18" height="7.25" fill="#9fbaf6"/>
+<rect x="967" y="747.93" width="18" height="7.25" fill="#9bb7f6"/>
+<rect x="967" y="754.68" width="18" height="7.25" fill="#96b4f5"/>
+<rect x="967" y="761.44" width="18" height="7.25" fill="#92b1f5"/>
+<rect x="967" y="768.19" width="18" height="7.25" fill="#8eaef5"/>
+<rect x="967" y="774.94" width="18" height="7.25" fill="#89abf4"/>
+<rect x="967" y="781.69" width="18" height="7.25" fill="#85a8f4"/>
+<rect x="967" y="788.45" width="18" height="7.25" fill="#81a5f3"/>
+<rect x="967" y="795.20" width="18" height="7.25" fill="#7ca1f3"/>
+<rect x="967" y="801.95" width="18" height="7.25" fill="#789ef3"/>
+<rect x="967" y="808.70" width="18" height="7.25" fill="#739bf2"/>
+<rect x="967" y="815.46" width="18" height="7.25" fill="#6f98f2"/>
+<rect x="967" y="822.21" width="18" height="7.25" fill="#6b95f1"/>
+<rect x="967" y="828.96" width="18" height="7.25" fill="#6692f1"/>
+<rect x="967" y="835.71" width="18" height="7.25" fill="#628ff1"/>
+<rect x="967" y="842.47" width="18" height="7.25" fill="#5e8cf0"/>
+<rect x="967" y="849.22" width="18" height="7.25" fill="#5988f0"/>
+<rect x="967" y="855.97" width="18" height="7.25" fill="#5585ef"/>
+<rect x="967" y="862.72" width="18" height="7.25" fill="#5182ef"/>
+<rect x="967" y="869.48" width="18" height="7.25" fill="#4c7fef"/>
+<rect x="967" y="876.23" width="18" height="7.25" fill="#487cee"/>
+<rect x="967" y="882.98" width="18" height="7.25" fill="#4479ee"/>
+<rect x="967" y="889.73" width="18" height="7.25" fill="#3f76ed"/>
+<rect x="967" y="896.49" width="18" height="7.25" fill="#3b73ed"/>
+<rect x="967" y="903.24" width="18" height="7.25" fill="#366fed"/>
+<rect x="967" y="909.99" width="18" height="7.25" fill="#326cec"/>
+<rect x="967" y="916.74" width="18" height="7.25" fill="#2e69ec"/>
+<rect x="967" y="923.50" width="18" height="7.25" fill="#2966eb"/>
+<rect x="967" y="930.25" width="18" height="7.25" fill="#2563eb"/>
+<text x="993" y="259.0" class="label">1</text>
+<text x="993" y="429.5" class="label">0.5</text>
+<text x="993" y="600.0" class="label">0</text>
+<text x="993" y="770.5" class="label">-0.5</text>
+<text x="993" y="941.0" class="label">-1</text>
+</svg>
