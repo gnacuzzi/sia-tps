@@ -41,6 +41,23 @@ python3 scripts/compare_engagement_pca.py
 
 El informe comparativo queda en `docs/pca-engagement/README.md`.
 
+La red de Kohonen está implementada en `src/sia_tp4/kohonen.py`. Estandariza
+las 15 entradas, permite configurar la grilla y el entrenamiento, y expone el
+mapa de hits, la matriz U y los mapas por variable. Cada JSON representa una
+sola corrida; la configuración base está en `configs/kohonen/base.json`. Cuando
+corresponda ejecutarla, su informe se genera con:
+
+```bash
+python3 scripts/analyze_kohonen.py
+```
+
+Para los experimentos se crearán otros JSON y se indicarán mediante `--config`.
+Cada nombre de corrida produce por defecto una carpeta diferente dentro de
+`docs/kohonen-creadores/`; `--output` permite sobrescribir ese destino. También
+puede cambiarse el dataset con `--data`. Su diseño y las decisiones pendientes
+están documentados en `docs/kohonen.md`. Todavía no se ejecutó el entrenamiento
+ni se eligieron hiperparámetros finales.
+
 Para ejecutar las pruebas:
 
 ```bash

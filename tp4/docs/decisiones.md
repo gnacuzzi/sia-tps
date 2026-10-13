@@ -6,10 +6,9 @@ validaciones pendientes. El informe cuantitativo que las respalda está en
 
 ## Estado de la selección
 
-Se acordó un conjunto base de 15 variables y se ejecutó la primera variante de
-PCA. No es todavía la representación definitiva para todos los modelos: antes
-de entrenar Kohonen y Oja se debe interpretar el resultado y completar la
-comparación de representaciones de engagement definida más abajo.
+Se confirmó el conjunto de 15 variables para PCA, Kohonen y Oja. La comparación
+de representaciones de engagement ya está ejecutada y se decidió conservar el
+engagement total como entrada principal.
 
 ## Variables base
 
@@ -49,8 +48,8 @@ caracterizar regiones y tomar decisiones de campaña.
 - `topic_art_pct`: complemento de los otros tres porcentajes temáticos.
 - `content_showcase_pct`: complemento de los otros tres tipos de contenido.
 - `likes_per_1000`, `comments_per_1000`, `saves_per_1000` y
-  `shares_per_1000`: explican la composición del engagement y forman la variante
-  comparativa pendiente.
+  `shares_per_1000`: explican la composición del engagement y se usaron en la
+  variante comparativa.
 - `video_posts_pct`, `short_form_posts_pct` y `trend_posts_pct`: permiten
   interpretar el formato de los perfiles sin darle tres veces ese peso al
   entrenamiento.
@@ -97,15 +96,12 @@ interacciones muestra una oposición entre likes y guardados que el total
 oculta, pero no cambia sustancialmente la organización global de los
 creadores.
 
-La recomendación pendiente de confirmación es conservar el engagement total
-como entrada principal y las cuatro interacciones como auxiliares. Esto evita
+Se decidió conservar el engagement total como entrada principal y las cuatro
+interacciones como auxiliares. Esto evita
 darle cuatro columnas al mismo bloque, mantiene el conjunto en 15 variables y
 preserva la interpretación. Las interacciones individuales se usarán para
 caracterizar regiones o para reabrir la selección si una campaña futura exige
 una acción específica.
-
-La comparación está ejecutada; falta confirmar la recomendación antes de fijar
-las entradas de Kohonen y Oja.
 
 ### Precio en USD
 
@@ -180,6 +176,7 @@ precisamente los creadores relevantes para una campaña.
 ## Próximo paso acordado
 
 La primera variante de PCA y la comparación de engagement están implementadas
-y documentadas. El siguiente paso es confirmar la recomendación sobre
-engagement y comenzar la implementación configurable de Kohonen sobre las 15
-variables estandarizadas.
+y documentadas. La implementación configurable de Kohonen sobre las 15
+variables también está preparada, pero todavía no fue ejecutada. El siguiente
+paso será diseñar y correr la comparación de hiperparámetros documentada en
+`docs/kohonen.md`.

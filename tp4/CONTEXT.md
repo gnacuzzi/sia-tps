@@ -19,13 +19,15 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
 
 - Existe un primer EDA reproducible en `scripts/analyze_creators.py`; genera el
   informe `docs/eda-creadores/README.md`, tablas CSV y visualizaciones SVG.
-  PCA ya está implementado sobre la selección base. Todavía no se implementaron
-  Kohonen, Oja ni Hopfield.
+  PCA ya está implementado sobre la selección base. Kohonen está implementado
+  de forma configurable, pero todavía no se ejecutó sobre los datos. Oja y
+  Hopfield no están implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
-  está en `docs/pca-engagement/`; falta confirmar su recomendación antes de
-  fijar las entradas definitivas de Kohonen y Oja.
+  está en `docs/pca-engagement/`. Se confirmó el engagement total como entrada
+  principal y las cuatro interacciones como auxiliares, por lo que las 15
+  variables base quedan fijadas para Kohonen y Oja.
 - El TP4 tiene configuración Python, pruebas y resultados de la primera
   ejecución de PCA en `docs/pca-creadores/`.
 - El material disponible alcanza para resolver el ejercicio 1 completo:
@@ -254,11 +256,12 @@ distancias altas pueden marcar fronteras entre regiones o un mapa mal
 organizado, según el patrón completo y la ocupación. No debe concluirse que
 "todo valor alto es malo" sin mirar el contexto.
 
-**Ambigüedad a resolver:** la fórmula de las diapositivas define el vecindario
-con distancia estrictamente menor que `R`, pero la explicación dice que en una
-grilla rectangular `R=1` incluye los cuatro vecinos a distancia 1. Antes de
-implementar hay que fijar y documentar una convención coherente (por ejemplo,
-inclusión del borde) y validarla con un caso pequeño.
+La fórmula de las diapositivas define el vecindario con distancia estrictamente
+menor que `R`, pero la explicación dice que en una grilla rectangular `R=1`
+incluye los cuatro vecinos a distancia 1. La implementación resolvió la
+ambigüedad incluyendo el borde (`distancia <= R`): con radio 1 se actualizan la
+ganadora y sus cuatro vecinas ortogonales. La convención está documentada en
+`docs/kohonen.md` y cubierta por una prueba pequeña.
 
 El enunciado exige evaluar la performance, pero el material disponible no fija
 una única métrica numérica de selección para SOM. No introducir silenciosamente
@@ -334,15 +337,12 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
 
 ## Decisiones todavía abiertas
 
-- Resultado de la comparación entre engagement total y sus cuatro componentes.
-- Confirmación de las 15 variables base después de interpretar PCA.
 - Cantidad de componentes conservadas y criterio de varianza explicada.
-- Convención exacta del vecindario de Kohonen.
 - Grilla, inicialización, schedules, épocas y criterio final de comparación de
   SOM.
 - Tasa/schedule, épocas y criterio de convergencia de Oja.
 - Supuestos comerciales concretos para traducir regiones a cada campaña.
-- Estructura de código, CLI, configuración, tests y formato de resultados.
+- CLI y formato de resultados de los métodos todavía no implementados.
 
 Ninguna de estas decisiones debe cerrarse sólo por conveniencia de código: se
 debe registrar la evidencia, la alternativa considerada y su efecto en la
