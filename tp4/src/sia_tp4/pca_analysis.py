@@ -142,6 +142,11 @@ def _save_figure(figure, path: Path) -> None:
     figure.savefig(
         path, format="svg", bbox_inches="tight", metadata={"Date": None}
     )
+    svg = path.read_text(encoding="utf-8")
+    path.write_text(
+        "\n".join(line.rstrip() for line in svg.splitlines()) + "\n",
+        encoding="utf-8",
+    )
 
 
 def write_plots(
@@ -188,7 +193,7 @@ def write_plots(
     )
     axis.set_xticks(np.arange(shown), _component_names(shown))
     axis.set_yticks(np.arange(len(result.feature_names)), result.feature_names)
-    axis.set_title("Cargas de las variables en las componentes conservadas")
+    axis.set_title("Cargas de las variables en las primeras componentes")
     for row in range(len(result.feature_names)):
         for column in range(shown):
             value = result.loadings[row, column]
@@ -205,7 +210,7 @@ def write_plots(
     _save_figure(figure, generated / "cargas.svg")
     plt.close(figure)
 
-    figure, axis = plt.subplots(figsize=(11, 8))
+    figure, axis = plt.subplots(figsize=(13, 8))
     colors = np.log10(dataset.followers + 1)
     scatter = axis.scatter(
         result.scores[:, 0],
@@ -230,10 +235,12 @@ def write_plots(
     score_extent = max(np.max(np.abs(result.scores[:, :2])), 1.0)
     loading_extent = max(np.max(np.abs(result.loadings[:, :2])), 1e-12)
     arrow_scale = score_extent * 0.80 / loading_extent
+    arrow_ends = []
     for variable, (x_loading, y_loading) in zip(
         result.feature_names, result.loadings[:, :2]
     ):
         x_end, y_end = x_loading * arrow_scale, y_loading * arrow_scale
+        arrow_ends.append((x_end, y_end))
         axis.arrow(
             0,
             0,
@@ -245,13 +252,31 @@ def write_plots(
             head_width=0.10,
             length_includes_head=True,
         )
-        axis.text(
-            x_end * 1.04,
-            y_end * 1.04,
-            variable,
+        short_label = (
+            variable.replace("_per_1000", "")
+            .replace("_pct", "")
+            .replace("average_", "")
+        )
+        axis.annotate(
+            short_label,
+            (x_end, y_end),
+            xytext=(4 if x_end >= 0 else -4, 4 if y_end >= 0 else -4),
+            textcoords="offset points",
+            ha="left" if x_end >= 0 else "right",
+            va="bottom" if y_end >= 0 else "top",
             color="#8B0000",
             fontsize=7,
         )
+    x_values = np.concatenate(
+        (result.scores[:, 0], np.asarray(arrow_ends)[:, 0])
+    )
+    y_values = np.concatenate(
+        (result.scores[:, 1], np.asarray(arrow_ends)[:, 1])
+    )
+    x_padding = max(np.ptp(x_values) * 0.16, 0.5)
+    y_padding = max(np.ptp(y_values) * 0.12, 0.5)
+    axis.set_xlim(x_values.min() - x_padding, x_values.max() + x_padding)
+    axis.set_ylim(y_values.min() - y_padding, y_values.max() + y_padding)
     axis.axhline(0, color="#777777", linewidth=0.8)
     axis.axvline(0, color="#777777", linewidth=0.8)
     axis.set(

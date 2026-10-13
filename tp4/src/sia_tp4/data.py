@@ -28,6 +28,23 @@ BASE_FEATURES: Tuple[str, ...] = (
     "average_watch_time_seconds",
 )
 
+ENGAGEMENT_COMPONENTS: Tuple[str, ...] = (
+    "likes_per_1000",
+    "comments_per_1000",
+    "saves_per_1000",
+    "shares_per_1000",
+)
+
+ENGAGEMENT_COMPONENT_FEATURES: Tuple[str, ...] = tuple(
+    feature
+    for base_feature in BASE_FEATURES
+    for feature in (
+        ENGAGEMENT_COMPONENTS
+        if base_feature == "total_engagement_per_1000"
+        else (base_feature,)
+    )
+)
+
 
 @dataclass(frozen=True)
 class CreatorDataset:

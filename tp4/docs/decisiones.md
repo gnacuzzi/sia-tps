@@ -80,7 +80,7 @@ composición: en estos datos los likes representan entre 45 % y 74 % del total,
 los comentarios entre 1 % y 12 %, los guardados entre 7 % y 43 % y los
 compartidos entre 0,5 % y 24 %.
 
-Queda registrado como experimento obligatorio:
+Se ejecutó el siguiente experimento acordado:
 
 1. ejecutar PCA con el conjunto base y engagement total;
 2. ejecutar otra variante reemplazando el total por likes, comentarios,
@@ -90,7 +90,22 @@ Queda registrado como experimento obligatorio:
 5. elegir la representación final según cuánto cambien PCA y los perfiles y
    según cuál resulte más interpretable para las campañas.
 
-La comparación debe resolverse antes de fijar las entradas de Kohonen y Oja.
+El informe está en `docs/pca-engagement/README.md`. Los scores de PC1 y PC2
+entre variantes tienen correlaciones de 0,986 y 0,982, respectivamente, y la
+correlación entre las distancias del plano PC1-PC2 es 0,965. Separar las
+interacciones muestra una oposición entre likes y guardados que el total
+oculta, pero no cambia sustancialmente la organización global de los
+creadores.
+
+La recomendación pendiente de confirmación es conservar el engagement total
+como entrada principal y las cuatro interacciones como auxiliares. Esto evita
+darle cuatro columnas al mismo bloque, mantiene el conjunto en 15 variables y
+preserva la interpretación. Las interacciones individuales se usarán para
+caracterizar regiones o para reabrir la selección si una campaña futura exige
+una acción específica.
+
+La comparación está ejecutada; falta confirmar la recomendación antes de fijar
+las entradas de Kohonen y Oja.
 
 ### Precio en USD
 
@@ -164,8 +179,7 @@ precisamente los creadores relevantes para una campaña.
 
 ## Próximo paso acordado
 
-La primera variante de PCA está implementada y documentada en
-`docs/pca-creadores/README.md`. El siguiente paso es interpretar sus
-componentes y decidir cuántas conservar. Después se ejecutará la variante que
-reemplaza el engagement total por sus cuatro componentes antes de fijar las
-entradas definitivas de Kohonen y Oja.
+La primera variante de PCA y la comparación de engagement están implementadas
+y documentadas. El siguiente paso es confirmar la recomendación sobre
+engagement y comenzar la implementación configurable de Kohonen sobre las 15
+variables estandarizadas.

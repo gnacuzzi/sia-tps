@@ -23,8 +23,9 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   Kohonen, Oja ni Hopfield.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
-  Permanece pendiente una comparación controlada entre engagement total y sus
-  cuatro componentes antes de fijar las entradas definitivas de Kohonen y Oja.
+  La comparación controlada entre engagement total y sus cuatro componentes
+  está en `docs/pca-engagement/`; falta confirmar su recomendación antes de
+  fijar las entradas definitivas de Kohonen y Oja.
 - El TP4 tiene configuración Python, pruebas y resultados de la primera
   ejecución de PCA en `docs/pca-creadores/`.
 - El material disponible alcanza para resolver el ejercicio 1 completo:

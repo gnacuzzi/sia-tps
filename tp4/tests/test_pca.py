@@ -5,7 +5,13 @@ import csv
 import numpy as np
 import pytest
 
-from sia_tp4.data import load_creator_dataset
+from sia_tp4.data import (
+    BASE_FEATURES,
+    ENGAGEMENT_COMPONENT_FEATURES,
+    ENGAGEMENT_COMPONENTS,
+    load_creator_dataset,
+)
+from sia_tp4.engagement_comparison import pairwise_distance_correlation
 from sia_tp4.pca import Standardizer, fit_pca
 
 
@@ -72,3 +78,20 @@ def test_loader_preserves_requested_order_and_rejects_duplicate_ids(tmp_path):
     path.write_text(text, encoding="utf-8")
     with pytest.raises(ValueError, match="creator_id debe ser único"):
         load_creator_dataset(path, ("y", "x"))
+
+
+def test_engagement_variant_replaces_total_without_changing_other_features():
+    expected = list(BASE_FEATURES)
+    position = expected.index("total_engagement_per_1000")
+    expected[position : position + 1] = ENGAGEMENT_COMPONENTS
+
+    assert ENGAGEMENT_COMPONENT_FEATURES == tuple(expected)
+    assert len(ENGAGEMENT_COMPONENT_FEATURES) == 18
+    assert "total_engagement_per_1000" not in ENGAGEMENT_COMPONENT_FEATURES
+
+
+def test_pairwise_distance_correlation_detects_same_geometry():
+    scores = np.asarray([[0.0, 0.0], [1.0, 0.0], [0.0, 2.0], [2.0, 2.0]])
+    rotated = scores @ np.asarray([[0.0, -1.0], [1.0, 0.0]])
+
+    assert pairwise_distance_correlation(scores, rotated) == pytest.approx(1.0)

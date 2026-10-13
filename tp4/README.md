@@ -32,6 +32,15 @@ umbral del 80 % es sólo una referencia exploratoria y puede modificarse:
 python3 scripts/analyze_pca.py --variance-threshold 0.85
 ```
 
+La comparación entre engagement total y sus cuatro componentes se reproduce
+con:
+
+```bash
+python3 scripts/compare_engagement_pca.py
+```
+
+El informe comparativo queda en `docs/pca-engagement/README.md`.
+
 Para ejecutar las pruebas:
 
 ```bash
