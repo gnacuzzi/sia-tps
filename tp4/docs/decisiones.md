@@ -6,12 +6,10 @@ validaciones pendientes. El informe cuantitativo que las respalda está en
 
 ## Estado de la selección
 
-Se acordó un conjunto base de 15 variables para la primera ejecución de PCA.
-No es todavía la representación definitiva para todos los modelos: antes de
-entrenar Kohonen y Oja se debe completar la comparación de representaciones de
-engagement definida más abajo.
-
-No se implementará PCA hasta revisar y aceptar el EDA actualizado.
+Se acordó un conjunto base de 15 variables y se ejecutó la primera variante de
+PCA. No es todavía la representación definitiva para todos los modelos: antes
+de entrenar Kohonen y Oja se debe interpretar el resultado y completar la
+comparación de representaciones de engagement definida más abajo.
 
 ## Variables base
 
@@ -166,6 +164,8 @@ precisamente los creadores relevantes para una campaña.
 
 ## Próximo paso acordado
 
-El EDA descriptivo es suficiente para comenzar con las 15 variables base. El
-reporte profundiza ahora sus correlaciones y distribuciones específicas. El
-próximo método será PCA, pero queda postergado hasta revisar este cierre del EDA.
+La primera variante de PCA está implementada y documentada en
+`docs/pca-creadores/README.md`. El siguiente paso es interpretar sus
+componentes y decidir cuántas conservar. Después se ejecutará la variante que
+reemplaza el engagement total por sus cuatro componentes antes de fijar las
+entradas definitivas de Kohonen y Oja.

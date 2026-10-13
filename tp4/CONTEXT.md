@@ -19,13 +19,14 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
 
 - Existe un primer EDA reproducible en `scripts/analyze_creators.py`; genera el
   informe `docs/eda-creadores/README.md`, tablas CSV y visualizaciones SVG.
-  Todavía no se implementaron PCA, Kohonen, Oja ni Hopfield.
+  PCA ya está implementado sobre la selección base. Todavía no se implementaron
+  Kohonen, Oja ni Hopfield.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   Permanece pendiente una comparación controlada entre engagement total y sus
   cuatro componentes antes de fijar las entradas definitivas de Kohonen y Oja.
-- Todavía no hay configuración, entorno Python ni resultados de modelos del
-  TP4. El `README.md` principal sigue vacío.
+- El TP4 tiene configuración Python, pruebas y resultados de la primera
+  ejecución de PCA en `docs/pca-creadores/`.
 - El material disponible alcanza para resolver el ejercicio 1 completo:
   introducción al aprendizaje no supervisado, Kohonen, autovalores y
   autovectores, PCA, Oja y Sanger.
@@ -320,7 +321,8 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
 3. Proponer y justificar un conjunto de variables sin redundancias exactas,
    dejando identificadores sólo como metadatos.
 4. Ajustar una única estandarización reproducible.
-5. Implementar PCA y producir varianza explicada, cargas, scores y biplot.
+5. Interpretar la primera ejecución de PCA, comparar la variante de engagement
+   y decidir cuántas componentes conservar.
 6. Implementar y validar Kohonen primero sobre un caso sintético pequeño;
    después comparar configuraciones sobre creadores.
 7. Implementar y validar Oja; comparar su dirección e índice con PCA.
