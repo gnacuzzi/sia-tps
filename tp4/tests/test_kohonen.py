@@ -9,6 +9,11 @@ from sia_tp4.kohonen import (
     _neighborhood_mask,
     fit_kohonen,
 )
+from sia_tp4.kohonen_analysis import KohonenRun
+from sia_tp4.kohonen_synthetic import (
+    generate_synthetic_data,
+    validate_synthetic,
+)
 from sia_tp4.pca import Standardizer
 
 
@@ -111,3 +116,37 @@ def test_component_plane_can_return_original_units():
     )
     with pytest.raises(ValueError, match="variable desconocida"):
         model.component_plane("missing")
+
+
+def test_synthetic_validation_recovers_four_known_clusters():
+    run = KohonenRun(
+        "synthetic-test",
+        KohonenConfig(
+            grid_size=4,
+            epochs=150,
+            learning_rate_start=0.5,
+            learning_rate_end=0.05,
+            radius_start=np.sqrt(18),
+            radius_end=1.0,
+            initialization="sample",
+            seed=7,
+        ),
+    )
+
+    validation = validate_synthetic(run)
+
+    assert validation.passed
+    assert validation.hit_map.sum() == 120
+    assert validation.purity >= 0.95
+    assert (
+        validation.mean_within_cluster_grid_distance
+        < validation.mean_between_cluster_grid_distance
+    )
+
+
+def test_synthetic_data_is_reproducible():
+    first_values, first_labels = generate_synthetic_data(seed=11)
+    second_values, second_labels = generate_synthetic_data(seed=11)
+
+    np.testing.assert_array_equal(first_values, second_values)
+    np.testing.assert_array_equal(first_labels, second_labels)

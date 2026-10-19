@@ -45,7 +45,24 @@ El modelo permite obtener, sin volver a entrenarlo:
 - el perfil completo de cada neurona, en z-scores o en unidades originales;
 - el mapa de una variable individual para caracterizar regiones.
 
-## Decisiones que siguen abiertas
+## Validación sintética
+
+Antes de aplicar la red a los creadores se ejecutó un caso controlado con cuatro
+nubes bidimensionales separadas. Las etiquetas verdaderas sólo se usaron para
+validar el resultado y nunca entraron al entrenamiento.
+
+La validación asignó las 120 muestras, reprodujo exactamente los pesos con la
+misma semilla, obtuvo pureza 1,000 en las neuronas ocupadas y dejó las muestras
+del mismo grupo mucho más cerca en la grilla que las de grupos diferentes
+(0,645 frente a 2,802). El máximo error entre un centro conocido y su prototipo
+más cercano fue 0,153.
+
+El script reproducible está en `scripts/validate_kohonen.py`, su configuración
+única en `configs/kohonen/synthetic.json` y el informe con gráficos y CSV en
+`docs/kohonen-sintetico/README.md`. Estas métricas aprovechan etiquetas conocidas
+y no se trasladan como criterio de selección al dataset real.
+
+## Experimentos que siguen abiertos
 
 Cada archivo JSON representa exactamente una corrida. El archivo inicial está
 en `configs/kohonen/base.json` y contiene un solo valor para cada campo de

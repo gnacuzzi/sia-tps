@@ -1,0 +1,11 @@
+metric,value
+all_samples_assigned,True
+reproducible,True
+finite_weights,True
+finite_u_matrix,True
+cluster_purity,1.0
+mean_within_cluster_grid_distance,0.6448906550456195
+mean_between_cluster_grid_distance,2.802443726962846
+maximum_center_error,0.15312727893365705
+known_structure_recovered,True
+validation_passed,True

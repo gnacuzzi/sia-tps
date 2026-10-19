@@ -20,8 +20,8 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
 - Existe un primer EDA reproducible en `scripts/analyze_creators.py`; genera el
   informe `docs/eda-creadores/README.md`, tablas CSV y visualizaciones SVG.
   PCA ya está implementado sobre la selección base. Kohonen está implementado
-  de forma configurable, pero todavía no se ejecutó sobre los datos. Oja y
-  Hopfield no están implementados.
+  de forma configurable y pasó una validación sintética reproducible; todavía
+  no se ejecutó sobre los creadores. Oja y Hopfield no están implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
@@ -327,8 +327,8 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
 4. Ajustar una única estandarización reproducible.
 5. Interpretar la primera ejecución de PCA, comparar la variante de engagement
    y decidir cuántas componentes conservar.
-6. Implementar y validar Kohonen primero sobre un caso sintético pequeño;
-   después comparar configuraciones sobre creadores.
+6. Implementar y validar Kohonen primero sobre un caso sintético pequeño
+   (completado); después comparar configuraciones sobre creadores.
 7. Implementar y validar Oja; comparar su dirección e índice con PCA.
 8. Caracterizar regiones/candidatos para las cuatro campañas y contrastar con
    el baseline de `followers`.

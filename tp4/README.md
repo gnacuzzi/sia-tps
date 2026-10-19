@@ -52,6 +52,15 @@ corresponda ejecutarla, su informe se genera con:
 python3 scripts/analyze_kohonen.py
 ```
 
+Antes de usar los creadores, la implementación se valida con cuatro grupos
+sintéticos conocidos:
+
+```bash
+python3 scripts/validate_kohonen.py
+```
+
+El resultado reproducible está en `docs/kohonen-sintetico/README.md`.
+
 Para los experimentos se crearán otros JSON y se indicarán mediante `--config`.
 Cada nombre de corrida produce por defecto una carpeta diferente dentro de
 `docs/kohonen-creadores/`; `--output` permite sobrescribir ese destino. También
