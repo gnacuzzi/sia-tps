@@ -257,3 +257,20 @@ semillas. La corrida central ocupa 24 de 25 neuronas, frente a 23 de 25 en la
 decreciente, y sus regiones resultan algo más limpias. La semilla 2 se usa sólo
 para las figuras; no se interpreta como semilla óptima. El estudio completo
 está en `docs/kohonen-experimentos/07-interpretation/README.md`.
+
+La interpretación final etiqueta cada prototipo por su afinidad temática
+dominante. Así aparecen zonas de belleza en el extremo superior izquierdo,
+fútbol hacia la parte superior y central derecha, perros abajo a la izquierda
+y arte abajo a la derecha. Las celdas cuya afinidad máxima no llega al 35 % se
+marcan como transiciones y no como perfiles puros.
+
+Al colorear el biplot PC1-PC2 con esas regiones, el 70 % de los creadores queda
+más cerca del centro de su propia región que del de las otras. La coincidencia
+es parcial: el plano explica 49,90 % de la varianza, mientras que Kohonen usa
+las 15 dimensiones. La Matriz U respalda algunas fronteras temáticas: las
+distancias entre vecinas promedian 1,89 al cruzar de región y 1,62 dentro de
+ella. No todas las distancias altas cambian de tema, porque también pueden
+separar alcance, precio, respuesta o formato. Por eso se leen junto con los
+mapas por variable. Las tablas reproducibles están en
+`generated/regiones_kohonen_pca.csv` y `generated/fronteras_matriz_u.csv`
+dentro del mismo estudio.

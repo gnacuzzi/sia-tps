@@ -145,8 +145,10 @@ python3 scripts/analyze_kohonen_finalists.py
 ```
 
 Produce mapas comparables para las 15 variables, variables reconstruidas y
-auxiliares, además de asignaciones y perfiles neuronales. El informe queda en
-`docs/kohonen-experimentos/07-interpretation/README.md`.
+auxiliares, además de asignaciones y perfiles neuronales. También etiqueta las
+regiones por tema dominante, colorea con ellas el biplot PC1-PC2 y compara las
+distancias entre neuronas vecinas dentro y fuera de esas regiones. El informe
+queda en `docs/kohonen-experimentos/07-interpretation/README.md`.
 
 Para ejecutar las pruebas:
 

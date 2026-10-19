@@ -13,6 +13,7 @@ import numpy as np
 from .data import CreatorDataset, load_creator_dataset
 from .kohonen_analysis import KohonenRun, KohonenRunResult, load_run, run_kohonen
 from .kohonen_epoch_experiment import EPOCH_PROFILES, SELECTED_EPOCHS
+from .pca import PCAResult, fit_pca
 from .pca_analysis import _load_pyplot, _save_figure
 
 
@@ -68,6 +69,19 @@ FEATURE_GROUPS = (
         ),
     ),
 )
+
+REGION_LABELS = {
+    "football": "Fútbol",
+    "makeup": "Belleza",
+    "dogs": "Perros",
+    "art": "Arte",
+}
+REGION_COLORS = {
+    "football": "#4C78A8",
+    "makeup": "#E45756",
+    "dogs": "#59A14F",
+    "art": "#F28E2B",
+}
 
 
 @dataclass(frozen=True)
@@ -270,6 +284,143 @@ def _plane(
     if feature == "followers":
         return _followers_map(dataset, result), "promedio observado (auxiliar)"
     raise ValueError(f"variable desconocida: {feature}")
+
+
+def dominant_topic_regions(
+    result: KohonenRunResult,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Etiquetar cada neurona por su mayor afinidad temática prototípica."""
+
+    feature_names = result.model.feature_names
+    indexes = {name: feature_names.index(name) for name in feature_names}
+    original = result.model.prototypes(original_scale=True)
+    topic_planes = np.stack(
+        (
+            original[:, :, indexes["topic_football_pct"]],
+            original[:, :, indexes["topic_makeup_pct"]],
+            original[:, :, indexes["topic_dogs_pct"]],
+            100
+            - original[:, :, indexes["topic_football_pct"]]
+            - original[:, :, indexes["topic_makeup_pct"]]
+            - original[:, :, indexes["topic_dogs_pct"]],
+        ),
+        axis=-1,
+    )
+    topics = np.asarray(("football", "makeup", "dogs", "art"), dtype=object)
+    dominant_indexes = np.argmax(topic_planes, axis=-1)
+    return topics[dominant_indexes], np.max(topic_planes, axis=-1)
+
+
+def pca_region_analysis(
+    dataset: CreatorDataset,
+    result: KohonenRunResult,
+) -> tuple[PCAResult, np.ndarray, list[dict], dict]:
+    """Cruzar las regiones temáticas del SOM con la proyección PCA."""
+
+    pca = fit_pca(dataset.values, dataset.feature_names)
+    region_map, strengths = dominant_topic_regions(result)
+    labels = np.asarray(
+        [region_map[row, column] for row, column in result.assignments]
+    )
+    rows = []
+    centroids = {}
+    for region in REGION_LABELS:
+        member_indexes = np.flatnonzero(labels == region)
+        scores = pca.scores[member_indexes, :2]
+        centroid = scores.mean(axis=0)
+        centroids[region] = centroid
+        standardized_means = pca.standardized_values[member_indexes].mean(axis=0)
+        positive = np.argsort(standardized_means)[::-1][:3]
+        negative = np.argsort(standardized_means)[:3]
+        rows.append(
+            {
+                "region": region,
+                "region_label": REGION_LABELS[region],
+                "creator_count": len(member_indexes),
+                "creator_ids": ";".join(dataset.creator_ids[i] for i in member_indexes),
+                "pc1_mean": float(centroid[0]),
+                "pc1_std": float(np.std(scores[:, 0], ddof=1)),
+                "pc2_mean": float(centroid[1]),
+                "pc2_std": float(np.std(scores[:, 1], ddof=1)),
+                "highest_z_features": ";".join(
+                    f"{dataset.feature_names[i]}:{standardized_means[i]:.3f}"
+                    for i in positive
+                ),
+                "lowest_z_features": ";".join(
+                    f"{dataset.feature_names[i]}:{standardized_means[i]:.3f}"
+                    for i in negative
+                ),
+            }
+        )
+    centroid_matrix = np.asarray([centroids[label] for label in labels])
+    own_distances = np.linalg.norm(pca.scores[:, :2] - centroid_matrix, axis=1)
+    nearest = []
+    ordered_regions = tuple(REGION_LABELS)
+    for score in pca.scores[:, :2]:
+        nearest.append(
+            min(
+                ordered_regions,
+                key=lambda region: np.linalg.norm(score - centroids[region]),
+            )
+        )
+    metrics = {
+        "pc12_explained_variance_pct": float(
+            100 * pca.cumulative_explained_variance[1]
+        ),
+        "nearest_centroid_agreement_pct": float(
+            100 * np.mean(np.asarray(nearest) == labels)
+        ),
+        "mean_own_centroid_distance": float(np.mean(own_distances)),
+        "weak_topic_cells": int(np.sum(strengths < 35)),
+    }
+    return pca, labels, rows, metrics
+
+
+def u_matrix_edge_analysis(result: KohonenRunResult) -> tuple[list[dict], dict]:
+    """Comparar distancias de vecindad dentro y entre regiones temáticas."""
+
+    region_map, _ = dominant_topic_regions(result)
+    weights = result.model.weights
+    size = result.run.config.grid_size
+    rows = []
+    for row in range(size):
+        for column in range(size):
+            for row_delta, column_delta in ((0, 1), (1, 0)):
+                neighbor_row = row + row_delta
+                neighbor_column = column + column_delta
+                if neighbor_row >= size or neighbor_column >= size:
+                    continue
+                source_region = str(region_map[row, column])
+                target_region = str(region_map[neighbor_row, neighbor_column])
+                rows.append(
+                    {
+                        "source": f"({row},{column})",
+                        "target": f"({neighbor_row},{neighbor_column})",
+                        "source_region": source_region,
+                        "target_region": target_region,
+                        "crosses_region": source_region != target_region,
+                        "distance": float(
+                            np.linalg.norm(
+                                weights[row, column]
+                                - weights[neighbor_row, neighbor_column]
+                            )
+                        ),
+                    }
+                )
+    distances = np.asarray([item["distance"] for item in rows])
+    boundary = np.asarray([item["crosses_region"] for item in rows])
+    threshold = float(np.quantile(distances, 0.75))
+    metrics = {
+        "edge_count": len(rows),
+        "boundary_edge_count": int(np.sum(boundary)),
+        "within_region_mean": float(np.mean(distances[~boundary])),
+        "between_region_mean": float(np.mean(distances[boundary])),
+        "upper_quartile_threshold": threshold,
+        "upper_quartile_boundary_pct": float(
+            100 * np.mean(boundary[distances >= threshold])
+        ),
+    }
+    return rows, metrics
 
 
 def write_tables(
@@ -597,11 +748,162 @@ def write_feature_groups(
         plt.close(figure)
 
 
+def write_pca_comparison_plot(
+    output: Path,
+    dataset: CreatorDataset,
+    result: KohonenRunResult,
+    pca: PCAResult,
+    labels: np.ndarray,
+) -> None:
+    """Mostrar regiones del SOM y los mismos creadores sobre PC1-PC2."""
+
+    plt = _load_pyplot()
+    region_map, strengths = dominant_topic_regions(result)
+    size = result.run.config.grid_size
+    region_indexes = {region: index for index, region in enumerate(REGION_LABELS)}
+    numeric_map = np.vectorize(region_indexes.get)(region_map)
+    from matplotlib.colors import ListedColormap
+
+    figure, (grid_axis, pca_axis) = plt.subplots(1, 2, figsize=(17, 7.5))
+    grid_axis.imshow(
+        numeric_map,
+        cmap=ListedColormap([REGION_COLORS[key] for key in REGION_LABELS]),
+        vmin=-0.5,
+        vmax=len(REGION_LABELS) - 0.5,
+        alpha=0.82,
+    )
+    for row in range(size):
+        for column in range(size):
+            creator_indexes = np.flatnonzero(
+                np.all(result.assignments == (row, column), axis=1)
+            )
+            creator_ids = ", ".join(dataset.creator_ids[i] for i in creator_indexes)
+            grid_axis.text(
+                column,
+                row,
+                f"{REGION_LABELS[str(region_map[row, column])]}\n"
+                f"{strengths[row, column]:.0f}% | {len(creator_indexes)} hits\n"
+                f"{creator_ids or '—'}",
+                ha="center",
+                va="center",
+                fontsize=6.3,
+            )
+    grid_axis.set(
+        title="Regiones según el tema dominante del prototipo",
+        xlabel="Columna",
+        ylabel="Fila",
+        xticks=range(size),
+        yticks=range(size),
+    )
+
+    for region, label in REGION_LABELS.items():
+        indexes = labels == region
+        points = pca.scores[indexes, :2]
+        pca_axis.scatter(
+            points[:, 0],
+            points[:, 1],
+            color=REGION_COLORS[region],
+            label=f"{label} ({len(points)})",
+            s=55,
+            alpha=0.82,
+        )
+        centroid = points.mean(axis=0)
+        pca_axis.scatter(
+            centroid[0],
+            centroid[1],
+            color=REGION_COLORS[region],
+            marker="X",
+            s=190,
+            edgecolor="black",
+            linewidth=0.8,
+        )
+    for creator_id, (pc1, pc2) in zip(dataset.creator_ids, pca.scores[:, :2]):
+        pca_axis.annotate(
+            creator_id,
+            (pc1, pc2),
+            xytext=(3, 3),
+            textcoords="offset points",
+            fontsize=5.7,
+            alpha=0.7,
+        )
+    score_extent = max(np.max(np.abs(pca.scores[:, :2])), 1.0)
+    loading_extent = max(np.max(np.abs(pca.loadings[:, :2])), 1e-12)
+    arrow_scale = score_extent * 0.72 / loading_extent
+    for feature, (pc1_loading, pc2_loading) in zip(
+        pca.feature_names, pca.loadings[:, :2]
+    ):
+        end = np.asarray((pc1_loading, pc2_loading)) * arrow_scale
+        pca_axis.arrow(
+            0,
+            0,
+            end[0],
+            end[1],
+            color="#6B1E1E",
+            alpha=0.52,
+            width=0.008,
+            head_width=0.09,
+            length_includes_head=True,
+        )
+        short_label = (
+            feature.replace("_per_1000", "")
+            .replace("_pct", "")
+            .replace("average_", "")
+        )
+        pca_axis.annotate(
+            short_label,
+            end,
+            fontsize=6,
+            color="#6B1E1E",
+            ha="left" if end[0] >= 0 else "right",
+        )
+    pca_axis.axhline(0, color="#777777", linewidth=0.8)
+    pca_axis.axvline(0, color="#777777", linewidth=0.8)
+    pca_axis.set(
+        title="PC1-PC2 coloreado por región de Kohonen",
+        xlabel=f"PC1 ({pca.explained_variance_ratio[0] * 100:.1f} %)",
+        ylabel=f"PC2 ({pca.explained_variance_ratio[1] * 100:.1f} %)",
+    )
+    pca_axis.grid(alpha=0.2)
+    pca_axis.legend(fontsize=8)
+    figure.suptitle("Comparación entre las regiones de Kohonen y el biplot")
+    figure.tight_layout()
+    _save_both(figure, output / "generated" / "comparacion_kohonen_pca")
+    plt.close(figure)
+
+
+def write_case_use_analysis(
+    output: Path,
+    dataset: CreatorDataset,
+    result: KohonenRunResult,
+) -> tuple[list[dict], dict, list[dict], dict]:
+    """Generar tablas y figura para interpretar Kohonen en el caso de uso."""
+
+    generated = output / "generated"
+    pca, labels, region_rows, pca_metrics = pca_region_analysis(dataset, result)
+    edge_rows, edge_metrics = u_matrix_edge_analysis(result)
+    _write_csv(
+        generated / "regiones_kohonen_pca.csv",
+        list(region_rows[0]),
+        region_rows,
+    )
+    _write_csv(
+        generated / "fronteras_matriz_u.csv",
+        list(edge_rows[0]),
+        edge_rows,
+    )
+    write_pca_comparison_plot(output, dataset, result, pca, labels)
+    return region_rows, pca_metrics, edge_rows, edge_metrics
+
+
 def write_report(
     output: Path,
     results: Sequence[KohonenRunResult],
     interpretation: Sequence[dict],
     campaigns: Sequence[dict],
+    region_rows: Sequence[dict],
+    pca_metrics: dict,
+    edge_rows: Sequence[dict],
+    edge_metrics: dict,
 ) -> None:
     rows = "\n".join(
         "| {} | {} | {:.4f} | {}/{} | {} |".format(
@@ -629,6 +931,22 @@ def write_report(
         "{total_engagement_per_1000:.1f} | {profile_visits_per_1000:.1f} | "
         "{price_usd:.0f} |".format(**row)
         for row in selected_campaigns
+    )
+    pca_rows = "\n".join(
+        "| {region_label} | {creator_count} | {pc1_mean:+.2f} ± {pc1_std:.2f} | "
+        "{pc2_mean:+.2f} ± {pc2_std:.2f} | `{highest_z_features}` | "
+        "`{lowest_z_features}` |".format(**row)
+        for row in region_rows
+    )
+    largest_edges = sorted(
+        edge_rows, key=lambda item: item["distance"], reverse=True
+    )[:5]
+    edge_rows_markdown = "\n".join(
+        "| {source}–{target} | {source_region} → {target_region} | "
+        "{distance:.2f} | {crosses} |".format(
+            **row, crosses="Sí" if row["crosses_region"] else "No"
+        )
+        for row in largest_edges
     )
     report = f"""# Experimento 7: interpretación de las candidatas
 
@@ -694,11 +1012,80 @@ Estas celdas son puntos de partida interpretativos, no un ranking automático:
 para recomendar creadores concretos todavía deben leerse sus valores reales y
 compararse con el baseline de followers.
 
+## Regiones de la grilla y comparación con PCA
+
+Para hacer reproducible la noción de región, cada neurona se etiqueta con el
+tema de mayor porcentaje en su prototipo. Las celdas vecinas con la misma
+etiqueta forman zonas temáticas. Esta regla produce una zona de belleza en el
+extremo superior izquierdo, fútbol hacia la parte superior y central derecha,
+perros en el sector inferior izquierdo y arte en el inferior derecho. Hay
+**{pca_metrics['weak_topic_cells']} celdas de transición** cuya afinidad máxima
+es menor que 35 %; no deben leerse como ejemplos puros aunque se les asigne la
+etiqueta dominante.
+
+![Comparación Kohonen-PCA](generated/comparacion_kohonen_pca.png)
+
+| Región | Creadores | PC1 (media ± DE) | PC2 (media ± DE) | Tres variables relativamente altas | Tres relativamente bajas |
+| --- | ---: | ---: | ---: | --- | --- |
+{pca_rows}
+
+Las variables de las dos últimas columnas son medias z-score de los creadores
+de cada región: describen diferencias relativas al catálogo, no porcentajes ni
+un ranking. En conjunto, las regiones reflejan cuatro perfiles:
+
+- **Fútbol:** perfiles de mayor escala, precio, alcance fuera de seguidores y
+  contenido de entretenimiento; quedan mayormente hacia PC1 positivo y PC2
+  positivo.
+- **Belleza:** también tiende a PC1 positivo por escala y precio, pero se
+  desplaza hacia PC2 negativo frente a fútbol por audiencia argentina y la
+  oposición temática entre maquillaje y fútbol.
+- **Perros:** se concentra hacia PC1 y PC2 negativos, con menor escala y precio,
+  pero mayor profundidad, visitas y contenido tutorial.
+- **Arte:** ocupa una zona intermedia, principalmente con PC1 negativo y PC2
+  positivo; es la región menos extrema en PC1-PC2 y por eso presenta mayor
+  solapamiento visual.
+
+PC1 y PC2 explican juntas **{pca_metrics['pc12_explained_variance_pct']:.2f} %**
+de la varianza. El **{pca_metrics['nearest_centroid_agreement_pct']:.1f} %** de
+los creadores queda más cerca, en ese plano, del centro de su propia región de
+Kohonen que de los otros tres centros. Es una comparación descriptiva, no una
+métrica usada para entrenar ni elegir la red. Hay coincidencia parcial y
+coherente, pero no identidad: Kohonen organizó las 15 variables y el biplot
+sólo muestra 49,90 % de esa información.
+
+## Lectura de la Matriz U
+
+La Matriz U de cada celda promedia las distancias euclídeas entre su prototipo
+y los de sus vecinas ortogonales, siempre sobre las 15 variables
+estandarizadas. Un valor alto indica un cambio multivariado pronunciado y se
+interpreta como una posible frontera; no significa por sí solo que la neurona
+o el entrenamiento sean malos.
+
+En la grilla elegida hay {edge_metrics['edge_count']} pares de vecinas:
+{edge_metrics['boundary_edge_count']} cruzan entre etiquetas temáticas. La
+distancia media es **{edge_metrics['within_region_mean']:.2f}** dentro de una
+región y **{edge_metrics['between_region_mean']:.2f}** al cruzar una región.
+Entre las aristas del cuartil superior (distancia ≥
+{edge_metrics['upper_quartile_threshold']:.2f}),
+**{edge_metrics['upper_quartile_boundary_pct']:.1f} %** cruza una etiqueta.
+
+| Vecinas | Regiones | Distancia | Cruza región |
+| --- | --- | ---: | --- |
+{edge_rows_markdown}
+
+La relación no tiene que ser perfecta: una frontera puede deberse a alcance,
+precio, formato o respuesta comercial aunque ambas neuronas compartan tema; y
+una transición temática puede ser gradual en las otras variables. Por eso la
+Matriz U se interpreta junto con los mapas por variable y no como un mapa de
+clases verdaderas.
+
 Los valores completos están en `generated/perfiles_neuronas.csv`; las
 asignaciones, en `generated/asignaciones_finalistas.csv`; y el criterio para
 elegir las semillas, en `generated/seleccion_representantes.csv`. Los resúmenes
 cuantitativos están en `generated/resumen_interpretabilidad.csv` y
-`generated/regiones_campanas.csv`.
+`generated/regiones_campanas.csv`. El cruce con PCA queda en
+`generated/regiones_kohonen_pca.csv`, y las 40 distancias entre vecinas, en
+`generated/fronteras_matriz_u.csv`.
 """
     (output / "README.md").write_text(report, encoding="utf-8")
 
@@ -717,7 +1104,24 @@ def main(argv: Sequence[str] | None = None) -> None:
     write_hit_u_plot(args.output, results)
     write_creator_plot(args.output, dataset, results)
     write_feature_groups(args.output, dataset, results)
-    write_report(args.output, results, interpretation, campaigns)
+    selected_result = next(
+        result
+        for result in results
+        if _profile_for_run(result.run) == "k5-constant-global"
+    )
+    region_rows, pca_metrics, edge_rows, edge_metrics = write_case_use_analysis(
+        args.output, dataset, selected_result
+    )
+    write_report(
+        args.output,
+        results,
+        interpretation,
+        campaigns,
+        region_rows,
+        pca_metrics,
+        edge_rows,
+        edge_metrics,
+    )
     print(f"Estudio interpretativo generado en {args.output / 'README.md'}")
 
 

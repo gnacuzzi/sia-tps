@@ -37,7 +37,9 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   El estudio de mapas por variable eligió finalmente `k = 5`, tasa constante
   `0.2`, radio inicial igual al diámetro con descenso hasta 1, 150 épocas e
   inicialización `sample`. La semilla 2 sólo representa el caso central en las
-  figuras; las decisiones usan cinco semillas.
+  figuras; las decisiones usan cinco semillas. La interpretación del caso de
+  uso también está cerrada: se caracterizaron cuatro regiones temáticas, se
+  compararon con PC1-PC2 y se cuantificaron las fronteras de la Matriz U.
   Oja y Hopfield no están implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.

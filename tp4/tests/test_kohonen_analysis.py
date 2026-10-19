@@ -6,15 +6,16 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from sia_tp4.data import CreatorDataset
+from sia_tp4.data import BASE_FEATURES, CreatorDataset
 from sia_tp4.kohonen_analysis import (
     KohonenRun,
+    KohonenRunResult,
     load_run,
     parse_args,
     run_kohonen,
     write_tables,
 )
-from sia_tp4.kohonen import KohonenConfig
+from sia_tp4.kohonen import KohonenConfig, KohonenModel
 from sia_tp4.kohonen_grid_experiment import (
     GridRunMetrics,
     aggregate_metrics,
@@ -51,9 +52,12 @@ from sia_tp4.kohonen_initialization_experiment import (
 )
 from sia_tp4.kohonen_interpretation import (
     InterpretationMetrics,
+    dominant_topic_regions,
     load_interpretation_runs,
     select_representatives,
+    u_matrix_edge_analysis,
 )
+from sia_tp4.pca import Standardizer
 
 
 def _raw_run(name="grid-2"):
@@ -480,3 +484,49 @@ def test_interpretation_selects_central_seed_per_profile():
 
     assert len(selected) == 4
     assert {metric.seed for metric in selected} == {2}
+
+
+def test_interpretation_labels_topics_and_compares_neighbor_boundaries():
+    feature_indexes = {name: index for index, name in enumerate(BASE_FEATURES)}
+    weights = np.zeros((2, 2, len(BASE_FEATURES)), dtype=float)
+    topics = (
+        (70.0, 10.0, 10.0),
+        (10.0, 70.0, 10.0),
+        (10.0, 10.0, 70.0),
+        (10.0, 10.0, 10.0),
+    )
+    for (row, column), values in zip(np.ndindex(2, 2), topics):
+        for feature, value in zip(
+            ("topic_football_pct", "topic_makeup_pct", "topic_dogs_pct"),
+            values,
+        ):
+            weights[row, column, feature_indexes[feature]] = value
+    config = KohonenConfig(
+        grid_size=2,
+        epochs=1,
+        learning_rate_start=0.2,
+        learning_rate_end=0.2,
+        radius_start=1.0,
+    )
+    standardizer = Standardizer(
+        BASE_FEATURES,
+        np.zeros(len(BASE_FEATURES)),
+        np.ones(len(BASE_FEATURES)),
+    )
+    model = KohonenModel(weights, BASE_FEATURES, standardizer, config)
+    result = KohonenRunResult(
+        KohonenRun("topics", config),
+        model,
+        np.asarray(((0, 0), (0, 1), (1, 0), (1, 1))),
+        np.ones((2, 2), dtype=int),
+        model.u_matrix(),
+        0.0,
+    )
+
+    region_map, strengths = dominant_topic_regions(result)
+    edges, metrics = u_matrix_edge_analysis(result)
+
+    assert region_map.tolist() == [["football", "makeup"], ["dogs", "art"]]
+    assert strengths.tolist() == [[70.0, 70.0], [70.0, 70.0]]
+    assert len(edges) == 4
+    assert metrics["boundary_edge_count"] == 4
