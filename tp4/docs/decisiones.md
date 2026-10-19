@@ -184,21 +184,21 @@ Este corte pertenece a la representación reducida de PCA. Kohonen y Oja siguen
 recibiendo las 15 variables estandarizadas: Kohonen agrupa considerando todas
 ellas y Oja aprende una dirección que se compara con PC1.
 
-## Próximo paso acordado
+## Recorrido experimental de Kohonen
 
 PCA queda cerrado con 8 componentes y 90,00 % de varianza acumulada; la
 comparación de engagement también está implementada y documentada. Kohonen fue
 validado con cuatro grupos sintéticos y su primer barrido sobre los creadores
 comparó `k = 2, ..., 8` con cinco semillas por tamaño. La lectura conjunta del
 error de cuantización, la ocupación y la concentración de hits dejó `k = 4` y
-`k = 5` como candidatos. El siguiente paso es compararlos al variar los demás
-hiperparámetros según el protocolo documentado en `docs/kohonen.md`.
+`k = 5` como candidatos para los experimentos posteriores.
 
 La verificación posterior cruzó los siete tamaños con siete tasas constantes y
 cinco semillas. Mostró que las tasas altas empeoran el error y la estabilidad,
 y que la región útil queda entre `0.05` y `0.2`. Para el experimento de tasa
-decreciente se conservan `k = 4, η = 0.05`, `k = 5, η = 0.2` y, como control de
-la interacción, `k = 6, η = 0.1`. Todavía no se eligió una configuración final.
+decreciente se conservaron `k = 4, η = 0.05`, `k = 5, η = 0.2` y, como control
+de la interacción, `k = 6, η = 0.1`. Esa fue una etapa intermedia, no la
+configuración final.
 
 Esos tres puntos no se usaron como único recorte: se ejecutó además la
 comparación completa de las 245 configuraciones constantes contra las mismas
@@ -241,3 +241,15 @@ concentración. Sus reducciones de error en `k = 5` decreciente y `k = 6`
 vinieron acompañadas por 10,4 y 5,6 puntos porcentuales adicionales de unidades
 muertas, respectivamente, y mayor variabilidad. No hay evidencia suficiente
 para reabrir tasa y radio específicamente para esa inicialización.
+
+La comparación final de mapas elige **`k5-constant-global`**: `k = 5`, tasa
+constante `0.2`, radio inicial igual al diámetro con descenso hasta 1, 150
+épocas e inicialización `sample`. `k = 5` reduce cerca de 9 % el error de
+`k = 4` y sus neuronas ocupadas tienen mayor especialización temática media
+(48,7 % frente a 41–45 %), con regiones interpretables para las cuatro
+campañas. La alternativa decreciente reduce el error menos de 1 % adicional,
+pero es más variable y deja más huecos en la corrida representativa.
+
+La semilla 2 queda únicamente como corrida central para visualizar y describir
+la configuración elegida. Las conclusiones de hiperparámetros usan los
+promedios y desvíos de cinco semillas.

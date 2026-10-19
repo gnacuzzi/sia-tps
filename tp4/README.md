@@ -137,6 +137,17 @@ Compara `sample` y `uniform` sobre las cinco finalistas, con 150 épocas y cinco
 semillas: 50 corridas. El informe queda en
 `docs/kohonen-experimentos/06-initialization/README.md`.
 
+El estudio interpretativo de las cuatro candidatas `k = 4` y `k = 5` se
+genera con:
+
+```bash
+python3 scripts/analyze_kohonen_finalists.py
+```
+
+Produce mapas comparables para las 15 variables, variables reconstruidas y
+auxiliares, además de asignaciones y perfiles neuronales. El informe queda en
+`docs/kohonen-experimentos/07-interpretation/README.md`.
+
 Para ejecutar las pruebas:
 
 ```bash

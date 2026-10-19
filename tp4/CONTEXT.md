@@ -34,6 +34,10 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   La comparación posterior de 50 corridas entre inicialización `sample` y
   `uniform` confirmó `sample`: `uniform` obtuvo algunas reducciones aisladas de
   error a costa de más unidades muertas y mayor variabilidad.
+  El estudio de mapas por variable eligió finalmente `k = 5`, tasa constante
+  `0.2`, radio inicial igual al diámetro con descenso hasta 1, 150 épocas e
+  inicialización `sample`. La semilla 2 sólo representa el caso central en las
+  figuras; las decisiones usan cinco semillas.
   Oja y Hopfield no están implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.

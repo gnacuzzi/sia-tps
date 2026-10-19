@@ -49,6 +49,11 @@ from sia_tp4.kohonen_initialization_experiment import (
     initialization_differences,
     load_initialization_runs,
 )
+from sia_tp4.kohonen_interpretation import (
+    InterpretationMetrics,
+    load_interpretation_runs,
+    select_representatives,
+)
 
 
 def _raw_run(name="grid-2"):
@@ -433,3 +438,45 @@ def test_initialization_differences_are_uniform_minus_sample():
         row["quantization_error_delta_mean"] == pytest.approx(-1.0)
         for row in differences
     )
+
+
+def test_interpretation_loads_four_sample_profiles_with_five_seeds():
+    config_directory = (
+        Path(__file__).parents[1]
+        / "configs"
+        / "kohonen"
+        / "06-initialization"
+    )
+
+    runs = load_interpretation_runs(config_directory)
+
+    assert len(runs) == 20
+    assert {run.config.grid_size for run in runs} == {4, 5}
+    assert {run.config.initialization for run in runs} == {"sample"}
+
+
+def test_interpretation_selects_central_seed_per_profile():
+    profiles = (
+        "k4-constant-local",
+        "k4-decay-middle",
+        "k5-constant-global",
+        "k5-decay-wide",
+    )
+    metrics = []
+    for profile in profiles:
+        for seed in range(5):
+            metrics.append(
+                InterpretationMetrics(
+                    f"{profile}-{seed}",
+                    profile,
+                    seed,
+                    2.0 + seed,
+                    5.0 + seed,
+                    10.0 + seed,
+                )
+            )
+
+    selected = select_representatives(metrics)
+
+    assert len(selected) == 4
+    assert {metric.seed for metric in selected} == {2}

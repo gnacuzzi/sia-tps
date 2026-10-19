@@ -1,0 +1,5 @@
+profile,run,occupied_units,mean_dominant_topic_pct,dominant_football_units,dominant_makeup_units,dominant_dogs_units,dominant_art_units,maximum_football_pct,maximum_makeup_pct,maximum_dogs_pct,maximum_art_pct
+k4-constant-local,k4-constant-local-sample-seed-04,16,41.36050039879233,5,4,5,2,54.06890846638731,48.130804499759165,59.10438769212524,37.53355781522149
+k4-decay-middle,k4-decay-middle-sample-seed-03,16,44.49447971326262,5,3,5,3,59.14294303399004,58.55727994882059,59.63938418749988,39.19796497633786
+k5-constant-global,k5-constant-global-sample-seed-02,24,48.6816415339743,10,6,5,3,68.10640648936794,68.87427723272769,68.80125063010102,46.91645363479978
+k5-decay-wide,k5-decay-wide-sample-seed-01,23,49.87054265349333,9,3,7,4,69.32530357804346,71.5143705822193,70.74546898278606,55.17688700537351

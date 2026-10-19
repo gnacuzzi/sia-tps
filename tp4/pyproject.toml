@@ -23,6 +23,7 @@ sia-tp4-kohonen-rate-schedule = "sia_tp4.kohonen_rate_schedule_experiment:main"
 sia-tp4-kohonen-radius = "sia_tp4.kohonen_radius_experiment:main"
 sia-tp4-kohonen-epochs = "sia_tp4.kohonen_epoch_experiment:main"
 sia-tp4-kohonen-initialization = "sia_tp4.kohonen_initialization_experiment:main"
+sia-tp4-kohonen-interpretation = "sia_tp4.kohonen_interpretation:main"
 sia-tp4-kohonen-synthetic = "sia_tp4.kohonen_synthetic:main"
 sia-tp4-pca = "sia_tp4.pca_analysis:main"
 

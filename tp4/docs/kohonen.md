@@ -196,7 +196,7 @@ por configuración. Los dos mapas `k = 4` quedaron completamente ocupados. En
 continuas. En `k = 6` la fragmentación persiste; sólo avanza el descenso
 `0.7 → 0.07` con radio completo como caso de frontera.
 
-El barrido de épocas se hará así sobre cinco configuraciones: dos de `k = 4`,
+El barrido de épocas se realizó sobre cinco configuraciones: dos de `k = 4`,
 dos de `k = 5` y el control `k = 6`. Las matrices y su criterio de selección
 están en `docs/kohonen-experimentos/04-radius/README.md`.
 
@@ -229,3 +229,31 @@ agregó 5,6 puntos. También aumentó la variabilidad entre semillas. Por eso no
 se reabren los barridos de tasa y radio: la evidencia no muestra una mejora
 global que justifique buscar una región propia para `uniform`. El informe está
 en `docs/kohonen-experimentos/06-initialization/README.md`.
+
+### Interpretación y configuración final
+
+Las cuatro candidatas `k = 4` y `k = 5` se compararon mediante sus 15 mapas de
+variables, arte y showcase reconstruidos, alcance argentino estimado,
+followers, matriz U, ocupación y creadores asignados. Los mapas de una misma
+variable usan escalas compartidas y una semilla central por configuración.
+
+Se elige **`k5-constant-global`**:
+
+- grilla `5 × 5`;
+- tasa constante `0.2`;
+- radio inicial igual al diámetro de la grilla y descenso lineal hasta 1;
+- 150 épocas;
+- inicialización `sample` y mezcla por época.
+
+Las grillas `k = 5` reducen el error cerca de 9 % respecto de `k = 4` y la
+resolución adicional tiene significado: el tema dominante de sus prototipos
+ocupados promedia alrededor de 49 %, frente a 41–45 % en `k = 4`. Se observan
+regiones continuas y diferenciadas de fútbol, belleza, perros y arte, junto con
+gradientes de alcance, respuesta comercial y contenido.
+
+Entre las dos variantes `k = 5`, la constante pierde menos de 1 % de error
+frente a la decreciente, pero presenta menor concentración y variabilidad entre
+semillas. La corrida central ocupa 24 de 25 neuronas, frente a 23 de 25 en la
+decreciente, y sus regiones resultan algo más limpias. La semilla 2 se usa sólo
+para las figuras; no se interpreta como semilla óptima. El estudio completo
+está en `docs/kohonen-experimentos/07-interpretation/README.md`.
