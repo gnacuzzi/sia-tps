@@ -85,6 +85,25 @@ def test_hit_map_assigns_every_sample_once():
     assert np.all(hits >= 0)
 
 
+def test_quantization_error_uses_standardized_distance_to_bmu():
+    values = np.asarray([[0.0], [2.0]])
+    standardizer = Standardizer.fit(values, ("a",))
+    weights = np.asarray(
+        [
+            [[-1 / np.sqrt(2)], [1 / np.sqrt(2)]],
+            [[-1 / np.sqrt(2)], [1 / np.sqrt(2)]],
+        ]
+    )
+    model = KohonenModel(
+        weights,
+        ("a",),
+        standardizer,
+        _config(grid_size=2),
+    )
+
+    assert model.quantization_error(values) == pytest.approx(0.0)
+
+
 def test_u_matrix_uses_four_orthogonal_neighbors():
     reference = np.asarray(
         [[0.0, 0.0], [1.0, 1.0], [2.0, 2.0]]

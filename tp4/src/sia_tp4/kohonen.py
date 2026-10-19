@@ -98,6 +98,22 @@ class KohonenModel:
             hits[row, column] += 1
         return hits
 
+    def quantization_error(self, values: np.ndarray) -> float:
+        """Promediar la distancia de cada muestra a su BMU.
+
+        El cálculo se realiza en el mismo espacio estandarizado usado durante
+        el entrenamiento, para que ninguna variable domine por su escala.
+        """
+
+        standardized = self.standardizer.transform(values)
+        distances = []
+        for sample in standardized:
+            row, column = self._standardized_bmu(sample)
+            distances.append(
+                float(np.linalg.norm(sample - self.weights[row, column]))
+            )
+        return float(np.mean(distances))
+
     def u_matrix(self) -> np.ndarray:
         """Promediar distancias a las vecinas ortogonales de cada neurona."""
 

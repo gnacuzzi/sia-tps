@@ -188,6 +188,8 @@ ellas y Oja aprende una dirección que se compara con PC1.
 
 PCA queda cerrado con 8 componentes y 90,00 % de varianza acumulada; la
 comparación de engagement también está implementada y documentada. Kohonen fue
-validado con cuatro grupos sintéticos y todavía no se ejecutó sobre los
-creadores. El siguiente paso es definir y correr el protocolo de comparación de
-hiperparámetros documentado en `docs/kohonen.md`.
+validado con cuatro grupos sintéticos y su primer barrido sobre los creadores
+comparó `k = 2, ..., 8` con cinco semillas por tamaño. La lectura conjunta del
+error de cuantización, la ocupación y la concentración de hits dejó `k = 4` y
+`k = 5` como candidatos. El siguiente paso es compararlos al variar los demás
+hiperparámetros según el protocolo documentado en `docs/kohonen.md`.

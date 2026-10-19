@@ -48,6 +48,7 @@ class KohonenRunResult:
     assignments: np.ndarray
     hit_map: np.ndarray
     u_matrix: np.ndarray
+    quantization_error: float
 
     @property
     def occupied_units(self) -> int:
@@ -125,6 +126,7 @@ def run_kohonen(
         assignments=model.map_samples(dataset.values),
         hit_map=model.hit_map(dataset.values),
         u_matrix=model.u_matrix(),
+        quantization_error=model.quantization_error(dataset.values),
     )
 
 
@@ -167,6 +169,7 @@ def write_tables(
             "occupied_units",
             "dead_units",
             "maximum_hits",
+            "quantization_error",
             "mean_u_distance",
         ],
         [
@@ -176,6 +179,7 @@ def write_tables(
                 "occupied_units": result.occupied_units,
                 "dead_units": result.dead_units,
                 "maximum_hits": int(result.hit_map.max()),
+                "quantization_error": result.quantization_error,
                 "mean_u_distance": float(result.u_matrix.mean()),
             }
         ],
@@ -421,14 +425,17 @@ z-score por variable. La BMU se obtiene por distancia euclídea.
 
 ## Configuración
 
-| Corrida | Grilla | Épocas | Tasa | Radio | Inicialización | Semilla | Ocupadas | Muertas | Máximo de hits |
-| --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: | ---: |
-| `{result.run.name}` | {config.grid_size}x{config.grid_size} | {config.epochs} | {config.learning_rate_start:g} → {config.learning_rate_end:g} | {config.radius_start:g} → {config.radius_end:g} | {config.initialization} | {config.seed} | {result.occupied_units}/{result.hit_map.size} | {result.dead_units} | {int(result.hit_map.max())} |
+| Corrida | Grilla | Épocas | Tasa | Radio | Inicialización | Semilla | Error de cuantización | Ocupadas | Muertas | Máximo de hits |
+| --- | ---: | ---: | ---: | ---: | --- | ---: | ---: | ---: | ---: | ---: |
+| `{result.run.name}` | {config.grid_size}x{config.grid_size} | {config.epochs} | {config.learning_rate_start:g} → {config.learning_rate_end:g} | {config.radius_start:g} → {config.radius_end:g} | {config.initialization} | {config.seed} | {result.quantization_error:.4f} | {result.occupied_units}/{result.hit_map.size} | {result.dead_units} | {int(result.hit_map.max())} |
 
-La cantidad de unidades muertas por sí sola no define la mejor configuración.
-Debe leerse junto con la concentración de hits, la matriz U y los mapas por
-variable. La comparación con otras configuraciones se realizará mediante otras
-corridas, cada una con su propio JSON y directorio de salida. `followers` no
+El error de cuantización es la distancia euclídea media entre cada muestra y
+su BMU, calculada sobre los z-scores; cuanto menor, mejor representa el mapa a
+los datos. No alcanza por sí solo para elegir la grilla, porque puede disminuir
+simplemente al agregar neuronas. Debe leerse junto con las unidades muertas, la
+concentración de hits, la matriz U y los mapas por variable. La comparación con
+otras configuraciones se realiza mediante otras corridas, cada una con su
+propio JSON y directorio de salida. `followers` no
 participa del entrenamiento: su mapa se muestra únicamente para comparar contra
 el criterio actual de la agencia.
 

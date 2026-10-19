@@ -1,8 +1,9 @@
 # Implementación de Kohonen
 
 El algoritmo está en `src/sia_tp4/kohonen.py` y el runner experimental en
-`src/sia_tp4/kohonen_analysis.py`. Quedaron preparados, pero no se ejecutaron
-todavía sobre los creadores ni se eligieron hiperparámetros finales.
+`src/sia_tp4/kohonen_analysis.py`. La implementación se validó y ya se ejecutó
+el primer barrido de tamaños de grilla sobre los creadores. Todavía no se
+eligieron los hiperparámetros finales.
 
 ## Entradas y entrenamiento
 
@@ -40,6 +41,7 @@ El modelo permite obtener, sin volver a entrenarlo:
 - la BMU de una muestra;
 - las coordenadas asignadas a todas las muestras;
 - el mapa de hits u ocupación;
+- el error de cuantización, como distancia media de cada muestra a su BMU;
 - la matriz U, calculada como el promedio de distancias a las vecinas
   ortogonales;
 - el perfil completo de cada neurona, en z-scores o en unidades originales;
@@ -62,7 +64,7 @@ El script reproducible está en `scripts/validate_kohonen.py`, su configuración
 `docs/kohonen-sintetico/README.md`. Estas métricas aprovechan etiquetas conocidas
 y no se trasladan como criterio de selección al dataset real.
 
-## Experimentos que siguen abiertos
+## Protocolo experimental
 
 Cada archivo JSON representa exactamente una corrida. El archivo inicial está
 en `configs/kohonen/base.json` y contiene un solo valor para cada campo de
@@ -70,9 +72,8 @@ en `configs/kohonen/base.json` y contiene un solo valor para cada campo de
 El parser rechaza listas de corridas, campos desconocidos y valores que no
 respetan las restricciones del algoritmo.
 
-Durante los experimentos se copiará ese archivo para crear configuraciones
-separadas. Por ejemplo, `01-grid-3.json` y `02-grid-4.json` diferirán sólo en la
-grilla y el radio inicial. Cada una se ejecutará con su propio `--config`; por
+Durante los experimentos se copia ese archivo para crear configuraciones
+separadas. Cada una se ejecuta con su propio `--config`; por
 defecto, el nombre de la corrida define un directorio de salida diferente. Así
 queda claro qué cambió entre corridas y se evitan productos cartesianos
 implícitos de hiperparámetros.
@@ -84,11 +85,39 @@ radio inicial es el diámetro de la grilla, por lo que inicialmente puede
 cubrirla completa, y decrece hasta 1. Estos valores son puntos de partida, no
 una configuración seleccionada.
 
-Cada corrida genera asignaciones, mapa de hits, matriz U, prototipos, mapas de
-las 15 variables, grilla con identificadores y followers promedio usados sólo
-como baseline. También crea un resumen y un informe individual. La comparación
-entre informes se implementará al comenzar el experimento, cuando estén
-definidas las variantes concretas.
+Cada corrida individual genera asignaciones, mapa de hits, matriz U,
+prototipos, mapas de las 15 variables, grilla con identificadores y followers
+promedio usados sólo como baseline. También crea un resumen y un informe
+individual.
 
-La elección no se hará con una única cifra: se analizarán ocupación, unidades
+El primer barrido está definido por 35 JSON en `configs/kohonen/01-grid/`:
+`k = 2, ..., 8`, con semillas `0, ..., 4`. Las épocas, las tasas, el radio final,
+la inicialización y la mezcla se mantienen fijos. El radio inicial es el
+diámetro de cada grilla; cambia sólo para conservar la misma cobertura relativa
+al comparar tamaños distintos.
+
+`scripts/experiment_kohonen_grid.py` ejecuta esos archivos y genera el informe
+en `docs/kohonen-experimentos/01-grid/README.md`. Se grafican por separado el
+error de cuantización, las unidades muertas, la concentración máxima de hits y
+las unidades ocupadas, usando media y desvío de las cinco semillas.
+
+Para poder inspeccionar las grillas sin mostrar 35 figuras casi iguales, el
+informe incluye un mapa de hits y una matriz U por cada `k`. La corrida mostrada
+es la que queda más cerca de la mediana del error de cuantización entre sus
+cinco semillas; la elección es reproducible y evita privilegiar siempre una
+semilla fija. Los valores numéricos de esas matrices también quedan en CSV.
+
+El error de cuantización no se presentó en clase como regla única de selección.
+Se incorpora como métrica auxiliar porque usa la misma distancia entre muestra
+y BMU del algoritmo. Siempre disminuye al representar los datos con más
+neuronas, por lo que se interpreta junto con la ocupación y los mapas, sin crear
+un puntaje combinado arbitrario.
+
+La primera corrida deja `k = 4` y `k = 5` como candidatos. En `k = 6`, las
+unidades muertas suben de 9,6 % a 21,1 %, mientras que la concentración máxima
+sólo baja de 8,8 % a 8,4 %. Los tamaños mayores continúan reduciendo el error de
+cuantización, pero fragmentan más el mapa. Los dos candidatos deben continuar a
+la comparación de los demás hiperparámetros antes de fijar uno.
+
+La elección no se hace con una única cifra: se analizan ocupación, unidades
 muertas, matriz U, mapas por variable, estabilidad e interpretación comercial.

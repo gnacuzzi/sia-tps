@@ -20,8 +20,9 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
 - Existe un primer EDA reproducible en `scripts/analyze_creators.py`; genera el
   informe `docs/eda-creadores/README.md`, tablas CSV y visualizaciones SVG.
   PCA ya está implementado sobre la selección base. Kohonen está implementado
-  de forma configurable y pasó una validación sintética reproducible; todavía
-  no se ejecutó sobre los creadores. Oja y Hopfield no están implementados.
+  de forma configurable, pasó una validación sintética reproducible y tiene un
+  primer barrido de `k = 2, ..., 8` con cinco semillas. Oja y Hopfield no están
+  implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
@@ -265,8 +266,10 @@ ganadora y sus cuatro vecinas ortogonales. La convención está documentada en
 
 El enunciado exige evaluar la performance, pero el material disponible no fija
 una única métrica numérica de selección para SOM. No introducir silenciosamente
-métricas avanzadas externas a clase. Primero sostener la comparación con las
-evidencias enseñadas arriba y consultar/acordar cualquier métrica adicional.
+métricas avanzadas externas a clase. Se acordó usar el error de cuantización
+como apoyo explícito, porque deriva directamente de la distancia a la BMU, pero
+nunca como criterio único. Primero sostener la comparación con las evidencias
+enseñadas arriba y consultar/acordar cualquier métrica adicional.
 
 ### Regla de Oja
 

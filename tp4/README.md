@@ -65,8 +65,18 @@ Para los experimentos se crearán otros JSON y se indicarán mediante `--config`
 Cada nombre de corrida produce por defecto una carpeta diferente dentro de
 `docs/kohonen-creadores/`; `--output` permite sobrescribir ese destino. También
 puede cambiarse el dataset con `--data`. Su diseño y las decisiones pendientes
-están documentados en `docs/kohonen.md`. Todavía no se ejecutó el entrenamiento
-ni se eligieron hiperparámetros finales.
+están documentados en `docs/kohonen.md`.
+
+El primer experimento compara `k = 2, ..., 8` con cinco semillas por tamaño:
+
+```bash
+python3 scripts/experiment_kohonen_grid.py
+```
+
+Cada una de las 35 corridas conserva su propio JSON dentro de
+`configs/kohonen/01-grid/`. El informe reproducible queda en
+`docs/kohonen-experimentos/01-grid/README.md`. Esta primera etapa dejó `k = 4`
+y `k = 5` como candidatos, pero todavía no fijó los hiperparámetros finales.
 
 Para ejecutar las pruebas:
 
