@@ -1,0 +1,12 @@
+{
+  "name": "k05-decay-eta-90-radius-100-seed-04",
+  "grid_size": 5,
+  "epochs": 150,
+  "learning_rate_start": 0.9,
+  "learning_rate_end": 0.09,
+  "radius_start": 5.656854249492381,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 4
+}

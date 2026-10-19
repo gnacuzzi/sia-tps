@@ -33,6 +33,11 @@ from sia_tp4.kohonen_rate_schedule_experiment import (
     schedule_differences,
     validate_matching_designs,
 )
+from sia_tp4.kohonen_radius_experiment import (
+    RadiusRunMetrics,
+    aggregate_metrics as aggregate_radius_metrics,
+    load_radius_runs,
+)
 
 
 def _raw_run(name="grid-2"):
@@ -264,3 +269,33 @@ def test_schedule_difference_subtracts_constant_from_decay():
     assert differences[0]["quantization_error_delta"] == pytest.approx(-1.0)
     assert differences[0]["dead_units_pct_delta"] == pytest.approx(-6.25)
     assert differences[0]["maximum_hits_pct_delta"] == pytest.approx(-2.0)
+
+
+def test_radius_experiment_covers_selected_design():
+    config_directory = (
+        Path(__file__).parents[1] / "configs" / "kohonen" / "04-radius"
+    )
+
+    runs = load_radius_runs(config_directory)
+
+    assert len(runs) == 300
+    assert {run.config.grid_size for run in runs} == {4, 5, 6}
+
+
+def test_radius_metrics_include_runtime_in_aggregation():
+    metrics = [
+        RadiusRunMetrics(
+            "a", 4, "constant", 0.1, 0.1, 0.5, 2.0, 1.0, 0,
+            0.1, 2.0, 14, 2, 12.5, 4, 8.0, 1.5,
+        ),
+        RadiusRunMetrics(
+            "b", 4, "constant", 0.1, 0.1, 0.5, 2.0, 1.0, 1,
+            0.3, 4.0, 14, 2, 12.5, 4, 8.0, 1.7,
+        ),
+    ]
+
+    aggregate = aggregate_radius_metrics(metrics)
+
+    assert aggregate[0]["training_seconds_mean"] == pytest.approx(0.2)
+    assert aggregate[0]["training_seconds_std"] == pytest.approx(np.sqrt(0.02))
+    assert aggregate[0]["mean_u_distance_mean"] == pytest.approx(1.6)

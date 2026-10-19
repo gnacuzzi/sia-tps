@@ -207,3 +207,15 @@ El descenso resultó útil con tasas iniciales altas para `k = 4` y `k = 5`, per
 no dominó las tasas constantes bajas en `k = 6`. Se conservan regiones de esos
 tres tamaños para estudiar radio y épocas; `k = 2–3` siguen demasiado
 concentrados y `k = 7–8`, demasiado fragmentados.
+
+El barrido posterior de radio ejecutó las 300 combinaciones previstas. En
+`k = 6`, los radios locales lograron menor error dejando hasta 37,8 % de
+unidades muertas; los radios amplios mejoraron la ocupación, pero el tamaño
+siguió menos aprovechado que `k = 4` y `k = 5`. En estos dos tamaños no aparece
+un único radio ganador para todas las tasas. Se conservaron configuraciones
+representativas con buena ocupación y estabilidad para comparar sus mapas de
+hits y matrices U antes de decidir.
+
+El tiempo de entrenamiento se registró como criterio auxiliar. Las diferencias
+observadas son de milisegundos y no justifican elegir una configuración de
+menor calidad. Sólo se usará como desempate entre resultados equivalentes.

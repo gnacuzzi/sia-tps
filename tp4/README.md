@@ -100,6 +100,20 @@ python3 scripts/experiment_kohonen_rate_schedule.py
 El informe de las 490 redes queda en
 `docs/kohonen-experimentos/03-rate-schedule/README.md`.
 
+El siguiente experimento compara el radio inicial en las regiones útiles de
+`k = 4`, `k = 5` y `k = 6`:
+
+```bash
+python3 scripts/generate_kohonen_radius_configs.py
+python3 scripts/experiment_kohonen_radius.py
+```
+
+Son 300 corridas: cuatro perfiles de tasa por tamaño, cinco radios y cinco
+semillas. Se registran métricas de calidad y tiempo de entrenamiento, pero se
+generan únicamente curvas agregadas para no almacenar cientos de mapas
+redundantes. El informe queda en
+`docs/kohonen-experimentos/04-radius/README.md`.
+
 Para ejecutar las pruebas:
 
 ```bash

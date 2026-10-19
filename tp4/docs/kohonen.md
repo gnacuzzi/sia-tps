@@ -150,3 +150,41 @@ todavía un único schedule. La evidencia completa está en
 
 La elección no se hace con una única cifra: se analizan ocupación, unidades
 muertas, matriz U, mapas por variable, estabilidad e interpretación comercial.
+
+### Radio inicial
+
+El cuarto experimento conserva `k = 4`, `k = 5` y `k = 6`, con cuatro perfiles
+de tasa relevantes para cada tamaño. Para cada combinación compara cinco radios
+iniciales y cinco semillas, en total 300 corridas. Los radios corresponden al
+0 %, 25 %, 50 %, 75 % y 100 % del recorrido entre `R = 1` y el diámetro de la
+grilla. Todos decrecen linealmente hasta 1; el primer caso equivale a mantener
+`R = 1` constante.
+
+La variación del radio surge del material de clase: se puede elegir una
+cobertura inicial amplia y disminuirla hasta el vecindario mínimo. No es una
+condición literal del enunciado, sino un hiperparámetro enseñado que afecta la
+organización topológica y por eso debe justificarse.
+
+El resultado muestra una interacción con el tamaño y la tasa. En `k = 4` hay
+varias alternativas casi equivalentes. En `k = 5`, radios intermedios o amplios
+mejoran sustancialmente la ocupación para ciertas tasas sin cambiar demasiado
+el error. En `k = 6`, los errores más bajos con radios locales son engañosos:
+dejan entre 28,9 % y 37,8 % de la grilla vacía. Los radios amplios reducen esa
+fracción hasta aproximadamente 15,6–22,2 %, pero no eliminan la desventaja de
+ocupación respecto de los tamaños menores.
+
+También se midió el tiempo de entrenamiento. Las medias por configuración
+quedaron en el orden de decenas de milisegundos y las diferencias fueron muy
+pequeñas frente a las diferencias de calidad. El tiempo es dependiente de la
+máquina y sólo actúa como desempate si dos mapas resultan equivalentes; la
+performance principal se evalúa con error, ocupación, estabilidad y estructura
+interpretable. El costo por época de esta implementación crece aproximadamente
+como `N × d × k²`: cantidad de muestras por variables por neuronas. Con sólo 50
+creadores, el costo observado no limita la elección, pero queda medido para no
+suponer que será irrelevante en datasets mayores. Los datos y gráficos completos están en
+`docs/kohonen-experimentos/04-radius/README.md`.
+
+El paso siguiente es generar mapas de hits y matrices U únicamente para las
+configuraciones representativas de estas regiones. Así se evita versionar las
+figuras de las 300 corridas sin perder trazabilidad: todos sus JSON, métricas
+individuales y promedios quedan conservados.

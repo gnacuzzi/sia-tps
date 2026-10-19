@@ -20,6 +20,7 @@ sia-tp4-kohonen = "sia_tp4.kohonen_analysis:main"
 sia-tp4-kohonen-grid = "sia_tp4.kohonen_grid_experiment:main"
 sia-tp4-kohonen-rate = "sia_tp4.kohonen_rate_experiment:main"
 sia-tp4-kohonen-rate-schedule = "sia_tp4.kohonen_rate_schedule_experiment:main"
+sia-tp4-kohonen-radius = "sia_tp4.kohonen_radius_experiment:main"
 sia-tp4-kohonen-synthetic = "sia_tp4.kohonen_synthetic:main"
 sia-tp4-pca = "sia_tp4.pca_analysis:main"
 

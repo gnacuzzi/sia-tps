@@ -1,0 +1,12 @@
+{
+  "name": "k05-constant-eta-20-radius-050-seed-00",
+  "grid_size": 5,
+  "epochs": 150,
+  "learning_rate_start": 0.2,
+  "learning_rate_end": 0.2,
+  "radius_start": 3.3284271247461903,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 0
+}

@@ -24,6 +24,8 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   primer barrido de `k = 2, ..., 8` con cinco semillas. También se comparó la
   interacción completa entre esos tamaños y siete tasas constantes, y luego
   cada combinación contra una disminución lineal al 10 % de la tasa inicial.
+  El barrido de radio inicial ya ejecutó otras 300 corridas sobre `k = 4–6`,
+  cuatro perfiles de tasa por tamaño, cinco radios y cinco semillas.
   Oja y Hopfield no están implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.

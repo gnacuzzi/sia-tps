@@ -1,0 +1,12 @@
+{
+  "name": "k06-decay-eta-90-radius-075-seed-02",
+  "grid_size": 6,
+  "epochs": 150,
+  "learning_rate_start": 0.9,
+  "learning_rate_end": 0.09,
+  "radius_start": 5.553300858899107,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 2
+}
