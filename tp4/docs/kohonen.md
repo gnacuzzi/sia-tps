@@ -188,3 +188,14 @@ El paso siguiente es generar mapas de hits y matrices U únicamente para las
 configuraciones representativas de estas regiones. Así se evita versionar las
 figuras de las 300 corridas sin perder trazabilidad: todos sus JSON, métricas
 individuales y promedios quedan conservados.
+
+La validación visual se realizó sobre nueve compromisos y una semilla central
+por configuración. Los dos mapas `k = 4` quedaron completamente ocupados. En
+`k = 5` avanzan la tasa constante `0.2` con radio inicial completo y el descenso
+`0.7 → 0.07` con radio al 75 %, que combinaron pocos huecos y matrices U
+continuas. En `k = 6` la fragmentación persiste; sólo avanza el descenso
+`0.7 → 0.07` con radio completo como caso de frontera.
+
+El barrido de épocas se hará así sobre cinco configuraciones: dos de `k = 4`,
+dos de `k = 5` y el control `k = 6`. Las matrices y su criterio de selección
+están en `docs/kohonen-experimentos/04-radius/README.md`.

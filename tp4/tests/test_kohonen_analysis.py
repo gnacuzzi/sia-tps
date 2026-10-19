@@ -37,6 +37,7 @@ from sia_tp4.kohonen_radius_experiment import (
     RadiusRunMetrics,
     aggregate_metrics as aggregate_radius_metrics,
     load_radius_runs,
+    select_representative_runs as select_radius_representative_runs,
 )
 
 
@@ -299,3 +300,52 @@ def test_radius_metrics_include_runtime_in_aggregation():
     assert aggregate[0]["training_seconds_mean"] == pytest.approx(0.2)
     assert aggregate[0]["training_seconds_std"] == pytest.approx(np.sqrt(0.02))
     assert aggregate[0]["mean_u_distance_mean"] == pytest.approx(1.6)
+
+
+def test_radius_representative_is_central_across_selection_metrics():
+    runs = []
+    metrics = []
+    profiles = (
+        (4, 0.1, 0.1, 0.0),
+        (4, 0.3, 0.03, 0.5),
+        (5, 0.2, 0.2, 1.0),
+        (5, 0.7, 0.07, 0.5),
+        (5, 0.7, 0.07, 0.75),
+        (5, 0.9, 0.09, 0.0),
+        (6, 0.1, 0.1, 1.0),
+        (6, 0.7, 0.07, 1.0),
+        (6, 0.9, 0.09, 0.75),
+    )
+    for profile_index, (grid, rate_start, rate_end, radius_fraction) in enumerate(profiles):
+        diameter = np.sqrt(2) * (grid - 1)
+        radius_start = 1 + radius_fraction * (diameter - 1)
+        for seed in range(5):
+            name = f"profile-{profile_index}-seed-{seed}"
+            runs.append(
+                KohonenRun(
+                    name,
+                    KohonenConfig(
+                        grid_size=grid,
+                        epochs=150,
+                        learning_rate_start=rate_start,
+                        learning_rate_end=rate_end,
+                        radius_start=radius_start,
+                        radius_end=1.0,
+                        seed=seed,
+                    ),
+                )
+            )
+            offset = seed
+            metrics.append(
+                RadiusRunMetrics(
+                    name, grid, "constant" if rate_start == rate_end else "decay",
+                    rate_start, rate_end, radius_fraction, radius_start, 1.0,
+                    seed, 0.1, 2.0 + offset, 10, 2 + offset,
+                    10.0 + offset, 4 + offset, 8.0 + offset, 1.5,
+                )
+            )
+
+    selected = select_radius_representative_runs(runs, metrics)
+
+    assert len(selected) == 9
+    assert {run.config.seed for run in selected} == {2}

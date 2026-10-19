@@ -219,3 +219,11 @@ hits y matrices U antes de decidir.
 El tiempo de entrenamiento se registró como criterio auxiliar. Las diferencias
 observadas son de milisegundos y no justifican elegir una configuración de
 menor calidad. Sólo se usará como desempate entre resultados equivalentes.
+
+La inspección de nueve mapas representativos cerró el recorte previo a épocas.
+Avanzan cinco configuraciones: las dos alternativas `k = 4`; en `k = 5`, la
+tasa constante `0.2` con radio completo y el descenso `0.7 → 0.07` con radio al
+75 %; y, como control `k = 6`, el descenso `0.7 → 0.07` con radio completo. Los
+mapas `k = 4` quedaron totalmente ocupados, las dos alternativas `k = 5`
+mantuvieron pocos huecos y estructura continua, y `k = 6` conservó suficiente
+fragmentación como para no tratarlo todavía como candidato principal.

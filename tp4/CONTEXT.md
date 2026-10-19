@@ -26,6 +26,9 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   cada combinación contra una disminución lineal al 10 % de la tasa inicial.
   El barrido de radio inicial ya ejecutó otras 300 corridas sobre `k = 4–6`,
   cuatro perfiles de tasa por tamaño, cinco radios y cinco semillas.
+  La inspección posterior de nueve mapas de hits y matrices U redujo el próximo
+  barrido de épocas a cinco configuraciones: dos `k = 4`, dos `k = 5` y una
+  `k = 6` conservada como control de frontera.
   Oja y Hopfield no están implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.

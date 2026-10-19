@@ -12,7 +12,12 @@ from typing import Iterable, Sequence
 import numpy as np
 
 from .data import CreatorDataset, load_creator_dataset
-from .kohonen_analysis import KohonenRun, load_run, run_kohonen
+from .kohonen_analysis import (
+    KohonenRun,
+    KohonenRunResult,
+    load_run,
+    run_kohonen,
+)
 from .pca_analysis import _load_pyplot, _save_figure
 
 
@@ -22,6 +27,17 @@ EXPECTED_RATE_PROFILES = {
     6: {(0.1, 0.1), (0.2, 0.2), (0.7, 0.07), (0.9, 0.09)},
 }
 EXPECTED_RADIUS_FRACTIONS = {0.0, 0.25, 0.5, 0.75, 1.0}
+FINALIST_PROFILES = (
+    (4, 0.1, 0.1, 0.0),
+    (4, 0.3, 0.03, 0.5),
+    (5, 0.2, 0.2, 1.0),
+    (5, 0.7, 0.07, 0.5),
+    (5, 0.7, 0.07, 0.75),
+    (5, 0.9, 0.09, 0.0),
+    (6, 0.1, 0.1, 1.0),
+    (6, 0.7, 0.07, 1.0),
+    (6, 0.9, 0.09, 0.75),
+)
 
 
 @dataclass(frozen=True)
@@ -213,9 +229,51 @@ def aggregate_metrics(metrics: Sequence[RadiusRunMetrics]) -> list[dict]:
     return rows
 
 
+def _matches_profile(
+    metric: RadiusRunMetrics,
+    profile: tuple[int, float, float, float],
+) -> bool:
+    grid_size, rate_start, rate_end, radius_fraction = profile
+    return (
+        metric.grid_size == grid_size
+        and np.isclose(metric.learning_rate_start, rate_start)
+        and np.isclose(metric.learning_rate_end, rate_end)
+        and np.isclose(metric.radius_fraction, radius_fraction)
+    )
+
+
+def select_representative_runs(
+    runs: Sequence[KohonenRun], metrics: Sequence[RadiusRunMetrics]
+) -> list[KohonenRun]:
+    """Elegir una semilla central por cada configuración finalista."""
+
+    runs_by_name = {run.name: run for run in runs}
+    fields = ("quantization_error", "dead_units_pct", "maximum_hits_pct")
+    selected = []
+    for profile in FINALIST_PROFILES:
+        group = [metric for metric in metrics if _matches_profile(metric, profile)]
+        if len(group) != 5:
+            raise ValueError(
+                f"la configuración finalista {profile} debe tener cinco semillas"
+            )
+        values = np.asarray(
+            [[getattr(metric, field) for field in fields] for metric in group]
+        )
+        medians = np.median(values, axis=0)
+        scales = np.std(values, axis=0, ddof=1)
+        scales[scales == 0] = 1.0
+        distances = np.abs((values - medians) / scales).sum(axis=1)
+        representative = min(
+            zip(distances, group),
+            key=lambda item: (item[0], item[1].run),
+        )[1]
+        selected.append(runs_by_name[representative.run])
+    return selected
+
+
 def _write_csv(path: Path, fieldnames: Sequence[str], rows: Iterable[dict]) -> None:
     with path.open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=fieldnames)
+        writer = csv.DictWriter(stream, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -236,6 +294,36 @@ def write_tables(
         generated / "resumen_radio.csv",
         list(aggregate[0]),
         aggregate,
+    )
+
+
+def write_representative_table(
+    output: Path, results: Sequence[KohonenRunResult]
+) -> None:
+    rows = []
+    for result in results:
+        config = result.run.config
+        for row in range(config.grid_size):
+            for column in range(config.grid_size):
+                rows.append(
+                    {
+                        "run": result.run.name,
+                        "grid_size": config.grid_size,
+                        "learning_rate_start": config.learning_rate_start,
+                        "learning_rate_end": config.learning_rate_end,
+                        "radius_start": config.radius_start,
+                        "radius_end": config.radius_end,
+                        "seed": config.seed,
+                        "row": row,
+                        "column": column,
+                        "hits": int(result.hit_map[row, column]),
+                        "u_distance": float(result.u_matrix[row, column]),
+                    }
+                )
+    _write_csv(
+        output / "generated" / "matrices_finalistas.csv",
+        list(rows[0]),
+        rows,
     )
 
 
@@ -349,6 +437,92 @@ def write_runtime_curves(output: Path, aggregate: Sequence[dict]) -> None:
     plt.close(figure)
 
 
+def _finalist_label(result: KohonenRunResult) -> str:
+    config = result.run.config
+    rate = (
+        f"η={config.learning_rate_start:g}"
+        if config.learning_rate_start == config.learning_rate_end
+        else f"η={config.learning_rate_start:g}→{config.learning_rate_end:g}"
+    )
+    diameter = np.sqrt(2) * (config.grid_size - 1)
+    radius_fraction = (config.radius_start - 1) / (diameter - 1)
+    return (
+        f"k={config.grid_size}, {rate}, radio={radius_fraction:.0%}\n"
+        f"semilla={config.seed}, QE={result.quantization_error:.3f}"
+    )
+
+
+def write_representative_plots(
+    output: Path, results: Sequence[KohonenRunResult]
+) -> None:
+    plt = _load_pyplot()
+    definitions = (
+        (
+            "hit_map",
+            "Mapas de hits de las configuraciones finalistas",
+            "Creadores asignados a la neurona",
+            "mapas_hits_finalistas",
+        ),
+        (
+            "u_matrix",
+            "Matrices U de las configuraciones finalistas",
+            "Distancia media a las neuronas vecinas",
+            "matrices_u_finalistas",
+        ),
+    )
+    for matrix_name, title, colorbar_label, filename in definitions:
+        matrices = [getattr(result, matrix_name) for result in results]
+        all_values = np.concatenate([matrix.ravel() for matrix in matrices])
+        minimum = 0.0 if matrix_name == "hit_map" else float(all_values.min())
+        maximum = float(all_values.max())
+        figure, axes = plt.subplots(3, 3, figsize=(14, 13), squeeze=False)
+        colored = None
+        for axis, result, matrix in zip(axes.flat, results, matrices):
+            size = matrix.shape[0]
+            rows, columns = np.indices(matrix.shape)
+            colored = axis.scatter(
+                columns.ravel(),
+                rows.ravel(),
+                c=matrix.ravel(),
+                s=(210 / size) ** 2,
+                cmap="turbo",
+                vmin=minimum,
+                vmax=maximum,
+                edgecolors="black",
+                linewidths=0.6,
+            )
+            for row in range(size):
+                for column in range(size):
+                    label = (
+                        f"{int(matrix[row, column])}"
+                        if matrix_name == "hit_map"
+                        else f"{matrix[row, column]:.1f}"
+                    )
+                    axis.text(
+                        column,
+                        row,
+                        label,
+                        ha="center",
+                        va="center",
+                        fontsize=max(6, 10 - size // 2),
+                    )
+            axis.set_title(_finalist_label(result), fontsize=9)
+            axis.set_xticks(range(size))
+            axis.set_yticks(range(size))
+            axis.set_xlim(-0.6, size - 0.4)
+            axis.set_ylim(size - 0.4, -0.6)
+            axis.set_aspect("equal")
+        figure.suptitle(title)
+        figure.colorbar(
+            colored,
+            ax=list(axes.flat),
+            label=colorbar_label,
+            shrink=0.8,
+        )
+        _save_both(figure, output / "generated" / filename)
+        plt.close(figure)
+
+
 def _minimum_error_rows(aggregate: Sequence[dict]) -> list[dict]:
     profiles = sorted(
         {
@@ -375,7 +549,11 @@ def _minimum_error_rows(aggregate: Sequence[dict]) -> list[dict]:
     ]
 
 
-def write_report(output: Path, aggregate: Sequence[dict]) -> None:
+def write_report(
+    output: Path,
+    aggregate: Sequence[dict],
+    representative_results: Sequence[KohonenRunResult],
+) -> None:
     table_rows = "\n".join(
         "| {grid_size} | {schedule} | {learning_rate_start:g} → "
         "{learning_rate_end:g} | {radius_fraction:.0%} | "
@@ -388,6 +566,17 @@ def write_report(output: Path, aggregate: Sequence[dict]) -> None:
     )
     minimum_runtime = min(row["training_seconds_mean"] for row in aggregate)
     maximum_runtime = max(row["training_seconds_mean"] for row in aggregate)
+    representative_rows = "\n".join(
+        "| `{}` | {} | {:.4f} | {}/{} | {} |".format(
+            result.run.name,
+            result.run.config.seed,
+            result.quantization_error,
+            result.occupied_units,
+            result.hit_map.size,
+            int(result.hit_map.max()),
+        )
+        for result in representative_results
+    )
     report = f"""# Experimento 4: radio inicial
 
 Se compararon `k = 4`, `k = 5` y `k = 6`, cuatro perfiles de tasa por tamaño,
@@ -429,6 +618,45 @@ Por lo tanto, el barrido no justifica elegir el mínimo error aislado. Primero
 se filtran soluciones con ocupación razonable y estabilidad entre semillas;
 luego se comparan sus mapas de hits y matrices U.
 
+## Mapas de las configuraciones finalistas
+
+Se conservaron nueve compromisos: dos de `k = 4`, cuatro de `k = 5` y tres de
+`k = 6`. Para cada uno se muestra la semilla más central respecto de error,
+unidades muertas y concentración máxima, luego de normalizar la variabilidad
+de cada métrica. No se eligió la mejor semilla.
+
+| Corrida representativa | Semilla | Error | Ocupadas | Máximo de hits |
+| --- | ---: | ---: | ---: | ---: |
+{representative_rows}
+
+![Mapas de hits finalistas](generated/mapas_hits_finalistas.png)
+
+![Matrices U finalistas](generated/matrices_u_finalistas.png)
+
+Los valores dibujados también están disponibles en
+`generated/matrices_finalistas.csv`.
+
+### Validación visual y paso a épocas
+
+- Los dos mapas `k = 4` representativos ocupan sus 16 neuronas y distribuyen
+  los hits sin una celda dominante. El radio local constante produce contrastes
+  más marcados en la matriz U; el descenso `0.3 → 0.03` con radio intermedio
+  genera una transición más suave. Ambos pasan al barrido de épocas para no
+  decidir anticipadamente entre separación y continuidad topológica.
+- En `k = 5`, `η = 0.2` con radio completo y `0.7 → 0.07` con radio al 75 %
+  presentan sólo una y dos celdas vacías, respectivamente, y matrices U con
+  regiones continuas. El radio al 50 % deja más huecos y la tasa `0.9 → 0.09`
+  con radio local fue menos estable entre semillas; no avanzan.
+- En `k = 6` siguen apareciendo varias unidades vacías. El descenso
+  `0.7 → 0.07` con radio completo es el representante mejor ocupado y se
+  conserva únicamente como control de frontera. Las otras dos alternativas no
+  aportan una mejora visual que compense la fragmentación.
+
+Por lo tanto, el barrido de épocas continúa con cinco configuraciones: las dos
+de `k = 4`, las dos seleccionadas de `k = 5` y una de `k = 6`. Esta reducción
+se apoya conjuntamente en las cinco semillas y en los mapas representativos;
+no convierte una sola figura en criterio de selección.
+
 ## Performance computacional
 
 La consigna usa “performance” principalmente para pedir una justificación de
@@ -459,11 +687,17 @@ def main(argv: Sequence[str] | None = None) -> None:
     runs = load_radius_runs(args.configs)
     metrics = evaluate_runs(dataset, runs)
     aggregate = aggregate_metrics(metrics)
+    representative_runs = select_representative_runs(runs, metrics)
+    representative_results = [
+        run_kohonen(dataset, run) for run in representative_runs
+    ]
     args.output.mkdir(parents=True, exist_ok=True)
     write_tables(args.output, metrics, aggregate)
+    write_representative_table(args.output, representative_results)
     write_quality_curves(args.output, aggregate)
     write_runtime_curves(args.output, aggregate)
-    write_report(args.output, aggregate)
+    write_representative_plots(args.output, representative_results)
+    write_report(args.output, aggregate, representative_results)
     print(f"Informe del radio generado en {args.output / 'README.md'}")
 
 
