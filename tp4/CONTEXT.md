@@ -29,6 +29,8 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   La inspección posterior de nueve mapas de hits y matrices U redujo el próximo
   barrido de épocas a cinco configuraciones: dos `k = 4`, dos `k = 5` y una
   `k = 6` conservada como control de frontera.
+  El barrido de 25, 50, 100, 150, 250 y 400 épocas ya se ejecutó y confirmó 150
+  como compromiso entre error, ocupación, estabilidad y tiempo.
   Oja y Hopfield no están implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.

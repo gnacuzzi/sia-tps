@@ -199,3 +199,18 @@ continuas. En `k = 6` la fragmentación persiste; sólo avanza el descenso
 El barrido de épocas se hará así sobre cinco configuraciones: dos de `k = 4`,
 dos de `k = 5` y el control `k = 6`. Las matrices y su criterio de selección
 están en `docs/kohonen-experimentos/04-radius/README.md`.
+
+### Cantidad de épocas
+
+Las cinco finalistas se entrenaron durante `25`, `50`, `100`, `150`, `250` y
+`400` épocas, con cinco semillas: 150 corridas independientes. Se eligieron
+**150 épocas** porque constituyen el primer punto con buena ocupación conjunta:
+1,2 % de unidades muertas en las variantes `k = 4`, 4,8 % en las `k = 5` y
+15,6 % en el control `k = 6`.
+
+Las 400 épocas cuestan alrededor de 2,6–2,7 veces más y no ofrecen una mejora
+consistente. `k = 4` ya está en una meseta; `k = 5` muestra cambios pequeños y
+variables; y `k = 6` baja el error a costa de aumentar sus unidades muertas de
+15,6 % a 26,1 %. Esta última observación vuelve a mostrar por qué no se debe
+optimizar solamente el error de cuantización. El informe reproducible está en
+`docs/kohonen-experimentos/05-epochs/README.md`.

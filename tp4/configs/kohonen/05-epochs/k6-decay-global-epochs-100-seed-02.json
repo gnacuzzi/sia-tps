@@ -1,0 +1,12 @@
+{
+  "name": "k6-decay-global-epochs-100-seed-02",
+  "grid_size": 6,
+  "epochs": 100,
+  "learning_rate_start": 0.7,
+  "learning_rate_end": 0.07,
+  "radius_start": 7.0710678118654755,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 2
+}

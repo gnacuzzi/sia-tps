@@ -114,6 +114,18 @@ generan únicamente curvas agregadas para no almacenar cientos de mapas
 redundantes. El informe queda en
 `docs/kohonen-experimentos/04-radius/README.md`.
 
+El barrido posterior compara seis cantidades de épocas sobre las cinco
+configuraciones finalistas:
+
+```bash
+python3 scripts/generate_kohonen_epoch_configs.py
+python3 scripts/experiment_kohonen_epochs.py
+```
+
+Son 150 corridas independientes: `25`, `50`, `100`, `150`, `250` y `400`
+épocas, con cinco semillas. El informe queda en
+`docs/kohonen-experimentos/05-epochs/README.md`.
+
 Para ejecutar las pruebas:
 
 ```bash

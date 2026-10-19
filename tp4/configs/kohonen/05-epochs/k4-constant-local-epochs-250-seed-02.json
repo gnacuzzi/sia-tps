@@ -1,0 +1,12 @@
+{
+  "name": "k4-constant-local-epochs-250-seed-02",
+  "grid_size": 4,
+  "epochs": 250,
+  "learning_rate_start": 0.1,
+  "learning_rate_end": 0.1,
+  "radius_start": 1.0,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 2
+}

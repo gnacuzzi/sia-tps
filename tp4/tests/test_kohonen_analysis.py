@@ -39,6 +39,11 @@ from sia_tp4.kohonen_radius_experiment import (
     load_radius_runs,
     select_representative_runs as select_radius_representative_runs,
 )
+from sia_tp4.kohonen_epoch_experiment import (
+    EpochRunMetrics,
+    aggregate_metrics as aggregate_epoch_metrics,
+    load_epoch_runs,
+)
 
 
 def _raw_run(name="grid-2"):
@@ -349,3 +354,33 @@ def test_radius_representative_is_central_across_selection_metrics():
 
     assert len(selected) == 9
     assert {run.config.seed for run in selected} == {2}
+
+
+def test_epoch_experiment_covers_finalists_epochs_and_seeds():
+    config_directory = (
+        Path(__file__).parents[1] / "configs" / "kohonen" / "05-epochs"
+    )
+
+    runs = load_epoch_runs(config_directory)
+
+    assert len(runs) == 150
+    assert {run.config.epochs for run in runs} == {25, 50, 100, 150, 250, 400}
+    assert {run.config.seed for run in runs} == set(range(5))
+
+
+def test_epoch_metrics_are_aggregated_by_profile_and_epochs():
+    metrics = []
+    for seed in range(5):
+        metrics.append(
+            EpochRunMetrics(
+                f"run-{seed}", "profile", 4, 100, 0.1, 0.1, 0.0, 1.0,
+                1.0, seed, 0.1 + seed, 2.0 + seed, 14, 2, 12.5, 4,
+                8.0, 1.5,
+            )
+        )
+
+    aggregate = aggregate_epoch_metrics(metrics)
+
+    assert len(aggregate) == 1
+    assert aggregate[0]["epochs"] == 100
+    assert aggregate[0]["quantization_error_mean"] == pytest.approx(4.0)

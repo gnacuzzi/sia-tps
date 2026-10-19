@@ -1,0 +1,12 @@
+{
+  "name": "k5-decay-wide-epochs-150-seed-00",
+  "grid_size": 5,
+  "epochs": 150,
+  "learning_rate_start": 0.7,
+  "learning_rate_end": 0.07,
+  "radius_start": 4.492640687119286,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 0
+}
