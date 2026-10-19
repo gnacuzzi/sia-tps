@@ -1,0 +1,12 @@
+{
+  "name": "k4-decay-middle-sample-seed-01",
+  "grid_size": 4,
+  "epochs": 150,
+  "learning_rate_start": 0.3,
+  "learning_rate_end": 0.03,
+  "radius_start": 2.621320343559643,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 1
+}

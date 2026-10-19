@@ -1,0 +1,12 @@
+{
+  "name": "k5-constant-global-sample-seed-02",
+  "grid_size": 5,
+  "epochs": 150,
+  "learning_rate_start": 0.2,
+  "learning_rate_end": 0.2,
+  "radius_start": 5.656854249492381,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 2
+}

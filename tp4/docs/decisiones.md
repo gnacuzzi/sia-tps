@@ -234,3 +234,10 @@ El barrido de 25 a 400 épocas fijó **150 épocas**. En ese punto las variantes
 veces sin mejorar conjuntamente error, ocupación y estabilidad. En particular,
 `k = 6` reduce su error pero aumenta las unidades muertas a 26,1 %, por lo que
 no se interpreta como una mejora del mapa.
+
+La comparación de 50 corridas de inicialización conserva **`sample`** frente a
+`uniform`. En ningún perfil `uniform` mejoró simultáneamente error, ocupación y
+concentración. Sus reducciones de error en `k = 5` decreciente y `k = 6`
+vinieron acompañadas por 10,4 y 5,6 puntos porcentuales adicionales de unidades
+muertas, respectivamente, y mayor variabilidad. No hay evidencia suficiente
+para reabrir tasa y radio específicamente para esa inicialización.

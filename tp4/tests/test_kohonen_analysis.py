@@ -44,6 +44,11 @@ from sia_tp4.kohonen_epoch_experiment import (
     aggregate_metrics as aggregate_epoch_metrics,
     load_epoch_runs,
 )
+from sia_tp4.kohonen_initialization_experiment import (
+    InitializationRunMetrics,
+    initialization_differences,
+    load_initialization_runs,
+)
 
 
 def _raw_run(name="grid-2"):
@@ -384,3 +389,47 @@ def test_epoch_metrics_are_aggregated_by_profile_and_epochs():
     assert len(aggregate) == 1
     assert aggregate[0]["epochs"] == 100
     assert aggregate[0]["quantization_error_mean"] == pytest.approx(4.0)
+
+
+def test_initialization_experiment_covers_both_methods_and_five_seeds():
+    config_directory = (
+        Path(__file__).parents[1]
+        / "configs"
+        / "kohonen"
+        / "06-initialization"
+    )
+
+    runs = load_initialization_runs(config_directory)
+
+    assert len(runs) == 50
+    assert {run.config.initialization for run in runs} == {"sample", "uniform"}
+    assert {run.config.seed for run in runs} == set(range(5))
+
+
+def test_initialization_differences_are_uniform_minus_sample():
+    metrics = []
+    profiles = (
+        "k4-constant-local",
+        "k4-decay-middle",
+        "k5-constant-global",
+        "k5-decay-wide",
+        "k6-decay-global",
+    )
+    for profile in profiles:
+        for initialization, error in (("sample", 3.0), ("uniform", 2.0)):
+            for seed in range(5):
+                metrics.append(
+                    InitializationRunMetrics(
+                        f"{profile}-{initialization}-{seed}", profile,
+                        initialization, 4, seed, 0.1, error, 14, 2, 12.5,
+                        4, 8.0, 1.5,
+                    )
+                )
+
+    differences = initialization_differences(metrics)
+
+    assert len(differences) == 5
+    assert all(
+        row["quantization_error_delta_mean"] == pytest.approx(-1.0)
+        for row in differences
+    )

@@ -214,3 +214,18 @@ variables; y `k = 6` baja el error a costa de aumentar sus unidades muertas de
 15,6 % a 26,1 %. Esta última observación vuelve a mostrar por qué no se debe
 optimizar solamente el error de cuantización. El informe reproducible está en
 `docs/kohonen-experimentos/05-epochs/README.md`.
+
+### Inicialización
+
+Las inicializaciones `sample` y `uniform` se compararon sobre las cinco
+finalistas, con 150 épocas y cinco semillas: 50 corridas. Se conserva
+**`sample`** porque `uniform` no mejoró conjuntamente error, ocupación y
+concentración en ningún perfil.
+
+La aparente ventaja de `uniform` en algunos errores estuvo acompañada por mapas
+más vacíos: en `k = 5` decreciente redujo el error en 0,0464 pero agregó 10,4
+puntos porcentuales de unidades muertas; en `k = 6`, la reducción de 0,0222
+agregó 5,6 puntos. También aumentó la variabilidad entre semillas. Por eso no
+se reabren los barridos de tasa y radio: la evidencia no muestra una mejora
+global que justifique buscar una región propia para `uniform`. El informe está
+en `docs/kohonen-experimentos/06-initialization/README.md`.

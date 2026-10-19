@@ -126,6 +126,17 @@ Son 150 corridas independientes: `25`, `50`, `100`, `150`, `250` y `400`
 épocas, con cinco semillas. El informe queda en
 `docs/kohonen-experimentos/05-epochs/README.md`.
 
+La comparación controlada de inicialización se reproduce con:
+
+```bash
+python3 scripts/generate_kohonen_initialization_configs.py
+python3 scripts/experiment_kohonen_initialization.py
+```
+
+Compara `sample` y `uniform` sobre las cinco finalistas, con 150 épocas y cinco
+semillas: 50 corridas. El informe queda en
+`docs/kohonen-experimentos/06-initialization/README.md`.
+
 Para ejecutar las pruebas:
 
 ```bash
