@@ -191,10 +191,10 @@ Procedimiento visto en clase:
    varianza explicada y la interpretación.
 
 Los autovalores expresan la varianza de cada componente. La proporción explicada
-por la componente `i` es `lambda_i / sum(lambda)`. No hay un umbral obligatorio
-en el enunciado: el 80 % mencionado en clase fue un ejemplo. La reducción debe
-justificarse con la curva o tabla de varianza explicada y con lo que se pierde o
-conserva.
+por la componente `i` es `lambda_i / sum(lambda)`. Una aclaración docente
+posterior indicó superar el 80 % y acercarse al 90 %. Se adoptan 8 componentes,
+que explican 90,00 %; 6 alcanzaban 81,48 % y 7, 86,24 %. La reducción se
+justifica además con la curva, las cargas y lo que se pierde o conserva.
 
 Las cargas permiten nombrar o describir cada componente. En un biplot PC1-PC2:
 
@@ -337,7 +337,6 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
 
 ## Decisiones todavía abiertas
 
-- Cantidad de componentes conservadas y criterio de varianza explicada.
 - Grilla, inicialización, schedules, épocas y criterio final de comparación de
   SOM.
 - Tasa/schedule, épocas y criterio de convergencia de Oja.

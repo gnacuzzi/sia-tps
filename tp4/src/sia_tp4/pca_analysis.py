@@ -32,8 +32,8 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--variance-threshold",
         type=float,
-        default=0.80,
-        help="Umbral exploratorio de varianza acumulada (por defecto, 0.80).",
+        default=0.90,
+        help="Umbral de varianza acumulada acordado (por defecto, 0.90).",
     )
     return parser.parse_args(argv)
 
@@ -360,11 +360,11 @@ y scores no cambia la solución de PCA.
 
 ## Varianza explicada
 
-Como referencia exploratoria, el menor número que alcanza al menos
+Según el criterio acordado en clase, el menor número que alcanza al menos
 {threshold * 100:.0f} % de varianza acumulada es **{selected_count} componentes**,
 con {result.cumulative_explained_variance[selected_count - 1] * 100:.2f} %.
-El 80 % no es un requisito del enunciado y esta cantidad todavía debe evaluarse
-por interpretabilidad y por la información que se perdería.
+Se adopta este corte porque supera el 80 % y se acerca al 90 % solicitado, sin
+conservar automáticamente las 15 componentes.
 
 | Componente | Varianza | Acumulada | Tres cargas de mayor magnitud |
 | --- | ---: | ---: | --- |
@@ -393,9 +393,9 @@ ninguna carga de un signo alcanza ese valor, se muestra la mayor de ese signo:
 PC1 ofrece la oposición más clara: perfiles de mayor escala, costo,
 descubrimiento y entretenimiento frente a perfiles de mayor profundidad e
 interés posterior. Las componentes siguientes separan ejes temáticos,
-comerciales y de actividad más específicos. Esta interpretación es provisional
-hasta compararla con la variante de engagement y con las necesidades de las
-cuatro campañas.
+comerciales y de actividad más específicos. Las últimas componentes retenidas
+son más específicas y tienen cargas más repartidas, pero permiten conservar el
+porcentaje de información acordado.
 
 ## Proyección de los creadores
 
@@ -408,17 +408,13 @@ representan las cargas y fueron reescaladas únicamente para poder dibujarlas
 junto con los scores. El color usa `followers` como referencia externa y no
 afecta PCA.
 
-## Decisión pendiente
+## Decisión adoptada
 
-Este resultado completa la primera variante con engagement total. Antes de
-fijar las entradas de Kohonen y Oja corresponde:
-
-1. interpretar las componentes en términos de campañas;
-2. comprobar si {selected_count} componentes conservan dimensiones útiles y no
-   sólo el porcentaje de varianza;
-3. ejecutar la variante que reemplaza engagement total por sus cuatro
-   componentes y comparar varianza, cargas y perfiles;
-4. decidir si las 15 variables base siguen siendo la representación final.
+Se conservan **{selected_count} componentes**, que reúnen
+**{result.cumulative_explained_variance[selected_count - 1] * 100:.2f} %** de la
+varianza. La comparación de engagement confirmó además las 15 variables base.
+Esta reducción describe la representación PCA: Kohonen y Oja reciben las 15
+variables estandarizadas, y Oja se compara específicamente con PC1.
 
 ## Archivos generados
 

@@ -1,8 +1,8 @@
 metric,value
 base_feature_count,15
 component_feature_count,18
-base_components_for_threshold,6
-component_components_for_threshold,7
+base_components_for_threshold,8
+component_components_for_threshold,10
 base_pc1_variance,0.376280460096471
 component_pc1_variance,0.4299450961689289
 base_pc1_pc2_variance,0.4990411120527348
@@ -10,4 +10,4 @@ component_pc1_pc2_variance,0.5359412782819426
 pc1_score_correlation,0.9863411329652348
 pc2_score_correlation,0.9820113322416719
 pc1_pc2_distance_correlation,0.964640972827441
-retained_distance_correlation,0.9499192408934828
+retained_distance_correlation,0.9599562950763375

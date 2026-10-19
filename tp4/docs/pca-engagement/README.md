@@ -18,14 +18,14 @@ eso, cambia el peso relativo de esa familia.
 | Variables | 15 | 18 |
 | Varianza de PC1 | 37.63 % | 42.99 % |
 | Varianza acumulada PC1-PC2 | 49.90 % | 53.59 % |
-| Componentes para superar 80 % | 6 | 7 |
+| Componentes para superar 90 % | 8 | 10 |
 
 ![Varianza acumulada comparada](generated/varianza_comparada.svg)
 
-La variante B necesita 7 componentes para
-alcanzar 84.11 %.
-La variante A necesita 6 para alcanzar
-81.48 %.
+La variante B necesita 10 componentes para
+alcanzar 92.07 %.
+La variante A necesita 8 para alcanzar
+90.00 %.
 Esto no define una ganadora porque parten de 18 y 15 dimensiones distintas.
 
 ## Estabilidad de los perfiles
@@ -34,7 +34,7 @@ Esto no define una ganadora porque parten de 18 y 15 dimensiones distintas.
 - Correlación absoluta entre scores de PC2: **0.982**.
 - Correlación de distancias en el plano PC1-PC2: **0.965**.
 - Correlación de distancias usando las componentes que superan el umbral:
-  **0.950**.
+  **0.960**.
 
 ![Scores comparados](generated/scores_comparados.svg)
 
@@ -70,7 +70,7 @@ auxiliar.
 El PCA completo de la variante B se encuentra en
 `variante-componentes/generated/`, con cargas, scores, autovectores y biplot.
 
-## Recomendación para discutir
+## Decisión adoptada
 
 La evidencia favorece conservar **engagement total** como entrada principal:
 
@@ -84,5 +84,6 @@ describir regiones de Kohonen o revisar una campaña que valore específicamente
 guardados, comentarios o compartidos. Si una necesidad comercial futura exige
 esa distinción, se puede reabrir la selección.
 
-Esta es una recomendación del análisis y queda pendiente de confirmación antes
-de fijar las entradas definitivas de Kohonen y Oja.
+Esta representación fue confirmada: las 15 variables base son las entradas de
+Kohonen y Oja, mientras que las cuatro interacciones individuales quedan como
+auxiliares de interpretación.

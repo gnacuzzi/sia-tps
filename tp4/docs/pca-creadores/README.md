@@ -20,11 +20,11 @@ y scores no cambia la solución de PCA.
 
 ## Varianza explicada
 
-Como referencia exploratoria, el menor número que alcanza al menos
-80 % de varianza acumulada es **6 componentes**,
-con 81.48 %.
-El 80 % no es un requisito del enunciado y esta cantidad todavía debe evaluarse
-por interpretabilidad y por la información que se perdería.
+Según el criterio acordado en clase, el menor número que alcanza al menos
+90 % de varianza acumulada es **8 componentes**,
+con 90.00 %.
+Se adopta este corte porque supera el 80 % y se acerca al 90 % solicitado, sin
+conservar automáticamente las 15 componentes.
 
 | Componente | Varianza | Acumulada | Tres cargas de mayor magnitud |
 | --- | ---: | ---: | --- |
@@ -34,6 +34,8 @@ por interpretabilidad y por la información que se perdería.
 | PC4 | 9.26 % | 69.10 % | `topic_makeup_pct` (+0.613), `argentina_audience_pct` (-0.613), `monthly_posts` (+0.568) |
 | PC5 | 6.29 % | 75.39 % | `content_entertainment_pct` (+0.409), `sponsored_posts_pct` (+0.389), `content_tutorial_pct` (-0.337) |
 | PC6 | 6.09 % | 81.48 % | `total_engagement_per_1000` (+0.561), `monthly_posts` (-0.412), `content_review_pct` (-0.339) |
+| PC7 | 4.77 % | 86.24 % | `argentina_audience_pct` (+0.375), `topic_dogs_pct` (-0.368), `average_watch_time_seconds` (+0.335) |
+| PC8 | 3.76 % | 90.00 % | `content_tutorial_pct` (+0.370), `content_review_pct` (-0.294), `profile_visits_per_1000` (+0.292) |
 
 ![Varianza explicada](generated/varianza_explicada.svg)
 
@@ -59,13 +61,15 @@ ninguna carga de un signo alcanza ese valor, se muestra la mayor de ese signo:
 - **PC4:** dirección positiva asociada con `topic_makeup_pct`, `monthly_posts`; dirección negativa asociada con `argentina_audience_pct`, `topic_football_pct`.
 - **PC5:** dirección positiva asociada con `content_entertainment_pct`; dirección negativa asociada con `content_tutorial_pct`.
 - **PC6:** dirección positiva asociada con `total_engagement_per_1000`; dirección negativa asociada con `monthly_posts`.
+- **PC7:** dirección positiva asociada con `argentina_audience_pct`; dirección negativa asociada con `topic_dogs_pct`.
+- **PC8:** dirección positiva asociada con `content_tutorial_pct`; dirección negativa asociada con `content_review_pct`.
 
 PC1 ofrece la oposición más clara: perfiles de mayor escala, costo,
 descubrimiento y entretenimiento frente a perfiles de mayor profundidad e
 interés posterior. Las componentes siguientes separan ejes temáticos,
-comerciales y de actividad más específicos. Esta interpretación es provisional
-hasta compararla con la variante de engagement y con las necesidades de las
-cuatro campañas.
+comerciales y de actividad más específicos. Las últimas componentes retenidas
+son más específicas y tienen cargas más repartidas, pero permiten conservar el
+porcentaje de información acordado.
 
 ## Proyección de los creadores
 
@@ -78,17 +82,13 @@ representan las cargas y fueron reescaladas únicamente para poder dibujarlas
 junto con los scores. El color usa `followers` como referencia externa y no
 afecta PCA.
 
-## Decisión pendiente
+## Decisión adoptada
 
-Este resultado completa la primera variante con engagement total. Antes de
-fijar las entradas de Kohonen y Oja corresponde:
-
-1. interpretar las componentes en términos de campañas;
-2. comprobar si 6 componentes conservan dimensiones útiles y no
-   sólo el porcentaje de varianza;
-3. ejecutar la variante que reemplaza engagement total por sus cuatro
-   componentes y comparar varianza, cargas y perfiles;
-4. decidir si las 15 variables base siguen siendo la representación final.
+Se conservan **8 componentes**, que reúnen
+**90.00 %** de la
+varianza. La comparación de engagement confirmó además las 15 variables base.
+Esta reducción describe la representación PCA: Kohonen y Oja reciben las 15
+variables estandarizadas, y Oja se compara específicamente con PC1.
 
 ## Archivos generados
 

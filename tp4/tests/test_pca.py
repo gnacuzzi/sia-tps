@@ -12,7 +12,9 @@ from sia_tp4.data import (
     load_creator_dataset,
 )
 from sia_tp4.engagement_comparison import pairwise_distance_correlation
+from sia_tp4.engagement_comparison import parse_args as parse_engagement_args
 from sia_tp4.pca import Standardizer, fit_pca
+from sia_tp4.pca_analysis import parse_args as parse_pca_args
 
 
 def test_standardizer_uses_sample_statistics_and_can_invert():
@@ -54,6 +56,11 @@ def test_component_count_uses_first_component_reaching_threshold():
     assert result.component_count(1.00) == 2
     with pytest.raises(ValueError):
         result.component_count(0.0)
+
+
+def test_pca_commands_default_to_ninety_percent_variance():
+    assert parse_pca_args([]).variance_threshold == pytest.approx(0.90)
+    assert parse_engagement_args([]).variance_threshold == pytest.approx(0.90)
 
 
 def test_loader_preserves_requested_order_and_rejects_duplicate_ids(tmp_path):

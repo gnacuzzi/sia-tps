@@ -55,8 +55,8 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--variance-threshold",
         type=float,
-        default=0.80,
-        help="Umbral exploratorio de varianza acumulada (por defecto, 0.80).",
+        default=0.90,
+        help="Umbral de varianza acumulada acordado (por defecto, 0.90).",
     )
     return parser.parse_args(argv)
 
@@ -89,7 +89,9 @@ def pairwise_distance_correlation(
     return _pearson(left_distances, right_distances)
 
 
-def compare_engagement(data_path: Path | str, threshold: float = 0.80) -> EngagementComparison:
+def compare_engagement(
+    data_path: Path | str, threshold: float = 0.90
+) -> EngagementComparison:
     base_dataset = load_creator_dataset(data_path, BASE_FEATURES)
     component_dataset = load_creator_dataset(
         data_path, ENGAGEMENT_COMPONENT_FEATURES
@@ -141,7 +143,9 @@ def compare_engagement(data_path: Path | str, threshold: float = 0.80) -> Engage
 
 def _write_csv(path: Path, fieldnames: Sequence[str], rows: Sequence[dict]) -> None:
     with path.open("w", encoding="utf-8", newline="") as stream:
-        writer = csv.DictWriter(stream, fieldnames=fieldnames)
+        writer = csv.DictWriter(
+            stream, fieldnames=fieldnames, lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(rows)
 
@@ -351,7 +355,7 @@ auxiliar.
 El PCA completo de la variante B se encuentra en
 `variante-componentes/generated/`, con cargas, scores, autovectores y biplot.
 
-## Recomendación para discutir
+## Decisión adoptada
 
 La evidencia favorece conservar **engagement total** como entrada principal:
 
@@ -365,8 +369,9 @@ describir regiones de Kohonen o revisar una campaña que valore específicamente
 guardados, comentarios o compartidos. Si una necesidad comercial futura exige
 esa distinción, se puede reabrir la selección.
 
-Esta es una recomendación del análisis y queda pendiente de confirmación antes
-de fijar las entradas definitivas de Kohonen y Oja.
+Esta representación fue confirmada: las 15 variables base son las entradas de
+Kohonen y Oja, mientras que las cuatro interacciones individuales quedan como
+auxiliares de interpretación.
 """
     output.mkdir(parents=True, exist_ok=True)
     (output / "README.md").write_text(report, encoding="utf-8")

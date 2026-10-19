@@ -173,10 +173,21 @@ No se eliminan automáticamente observaciones marcadas por la regla de 1,5 IQR.
 En las variables temáticas, esos casos representan especialización y pueden ser
 precisamente los creadores relevantes para una campaña.
 
+### Componentes conservadas en PCA
+
+La aclaración docente fija como criterio superar el 80 % de varianza acumulada
+y acercarse al 90 %. Con las 15 variables elegidas, 6 componentes explican
+81,48 %, 7 explican 86,24 % y 8 explican 90,00 %. Se conservan por lo tanto
+**8 componentes**.
+
+Este corte pertenece a la representación reducida de PCA. Kohonen y Oja siguen
+recibiendo las 15 variables estandarizadas: Kohonen agrupa considerando todas
+ellas y Oja aprende una dirección que se compara con PC1.
+
 ## Próximo paso acordado
 
-La primera variante de PCA y la comparación de engagement están implementadas
-y documentadas. La implementación configurable de Kohonen sobre las 15
-variables también está preparada, pero todavía no fue ejecutada. El siguiente
-paso será diseñar y correr la comparación de hiperparámetros documentada en
-`docs/kohonen.md`.
+PCA queda cerrado con 8 componentes y 90,00 % de varianza acumulada; la
+comparación de engagement también está implementada y documentada. Kohonen está
+preparado sobre las 15 variables, pero todavía no fue ejecutado. El siguiente
+paso es validarlo con datos sintéticos antes de diseñar y correr la comparación
+de hiperparámetros documentada en `docs/kohonen.md`.

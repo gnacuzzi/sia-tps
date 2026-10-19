@@ -26,10 +26,11 @@ python3 scripts/analyze_pca.py
 
 Genera el informe en `docs/pca-creadores/README.md`, junto con tablas de
 varianza, cargas, autovectores, scores y los gráficos correspondientes. El
-umbral del 80 % es sólo una referencia exploratoria y puede modificarse:
+umbral acordado es 90 %, que en estos datos conserva 8 componentes. Puede
+indicarse otro umbral de forma explícita:
 
 ```bash
-python3 scripts/analyze_pca.py --variance-threshold 0.85
+python3 scripts/analyze_pca.py --variance-threshold 0.90
 ```
 
 La comparación entre engagement total y sus cuatro componentes se reproduce
