@@ -1,0 +1,12 @@
+{
+  "name": "k04-eta-90-decay-seed-02",
+  "grid_size": 4,
+  "epochs": 150,
+  "learning_rate_start": 0.9,
+  "learning_rate_end": 0.09000000000000001,
+  "radius_start": 4.242640687119286,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 2
+}

@@ -26,6 +26,13 @@ from sia_tp4.kohonen_rate_experiment import (
     aggregate_metrics as aggregate_rate_metrics,
     load_rate_runs,
 )
+from sia_tp4.kohonen_rate_schedule_experiment import (
+    ScheduleRunMetrics,
+    aggregate_metrics as aggregate_schedule_metrics,
+    load_decay_runs,
+    schedule_differences,
+    validate_matching_designs,
+)
 
 
 def _raw_run(name="grid-2"):
@@ -218,3 +225,42 @@ def test_rate_metrics_are_aggregated_by_k_and_rate():
     assert aggregate[0]["grid_size"] == 4
     assert aggregate[0]["learning_rate"] == 0.2
     assert aggregate[0]["quantization_error_mean"] == pytest.approx(2.0)
+
+
+def test_decay_experiment_matches_constant_design():
+    root = Path(__file__).parents[1] / "configs" / "kohonen"
+    constant_runs = load_rate_runs(root / "02-rate")
+    decay_runs = load_decay_runs(root / "03-rate-decay")
+
+    validate_matching_designs(constant_runs, decay_runs)
+
+    assert len(decay_runs) == 245
+    assert all(
+        run.config.learning_rate_end
+        == pytest.approx(run.config.learning_rate_start * 0.1)
+        for run in decay_runs
+    )
+
+
+def test_schedule_difference_subtracts_constant_from_decay():
+    metrics = [
+        ScheduleRunMetrics(
+            "constant-a", "constant", 4, 0.2, 0.2, 0, 2.0, 14, 2, 12.5, 4, 8.0
+        ),
+        ScheduleRunMetrics(
+            "constant-b", "constant", 4, 0.2, 0.2, 1, 4.0, 14, 2, 12.5, 4, 8.0
+        ),
+        ScheduleRunMetrics(
+            "decay-a", "decay", 4, 0.2, 0.02, 0, 1.0, 15, 1, 6.25, 3, 6.0
+        ),
+        ScheduleRunMetrics(
+            "decay-b", "decay", 4, 0.2, 0.02, 1, 3.0, 15, 1, 6.25, 3, 6.0
+        ),
+    ]
+
+    aggregate = aggregate_schedule_metrics(metrics)
+    differences = schedule_differences(aggregate)
+
+    assert differences[0]["quantization_error_delta"] == pytest.approx(-1.0)
+    assert differences[0]["dead_units_pct_delta"] == pytest.approx(-6.25)
+    assert differences[0]["maximum_hits_pct_delta"] == pytest.approx(-2.0)

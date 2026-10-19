@@ -1,0 +1,12 @@
+{
+  "name": "k08-eta-20-decay-seed-01",
+  "grid_size": 8,
+  "epochs": 150,
+  "learning_rate_start": 0.2,
+  "learning_rate_end": 0.020000000000000004,
+  "radius_start": 9.899494936611665,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 1
+}

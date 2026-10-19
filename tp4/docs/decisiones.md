@@ -199,3 +199,11 @@ cinco semillas. Mostró que las tasas altas empeoran el error y la estabilidad,
 y que la región útil queda entre `0.05` y `0.2`. Para el experimento de tasa
 decreciente se conservan `k = 4, η = 0.05`, `k = 5, η = 0.2` y, como control de
 la interacción, `k = 6, η = 0.1`. Todavía no se eligió una configuración final.
+
+Esos tres puntos no se usaron como único recorte: se ejecutó además la
+comparación completa de las 245 configuraciones constantes contra las mismas
+245 configuraciones con disminución lineal hasta el 10 % de la tasa inicial.
+El descenso resultó útil con tasas iniciales altas para `k = 4` y `k = 5`, pero
+no dominó las tasas constantes bajas en `k = 6`. Se conservan regiones de esos
+tres tamaños para estudiar radio y épocas; `k = 2–3` siguen demasiado
+concentrados y `k = 7–8`, demasiado fragmentados.

@@ -134,5 +134,19 @@ decreciente se conservan tres puntos: `k = 4, η = 0.05`; `k = 5, η = 0.2`; y
 ganador. Los resultados y gráficos están en
 `docs/kohonen-experimentos/02-rate/README.md`.
 
+### Tasa constante frente a decreciente
+
+La comparación completa repite los 245 pares de tamaño, tasa inicial y semilla
+con disminución lineal hasta el 10 % de la tasa inicial, y los enfrenta con las
+245 tasas constantes. Se reentrenan las 490 redes mediante el mismo pipeline;
+el radio decrece de igual manera en ambos grupos.
+
+El descenso hace aprovechables tasas iniciales altas en `k = 4` y `k = 5`, pero
+no gana para toda la grilla. En `k = 6`, las tasas constantes bajas conservan
+mejor ocupación. Para los siguientes experimentos se mantienen regiones de
+`k = 4`, `k = 5` y `k = 6` con alternativas constantes y decrecientes, sin fijar
+todavía un único schedule. La evidencia completa está en
+`docs/kohonen-experimentos/03-rate-schedule/README.md`.
+
 La elección no se hace con una única cifra: se analizan ocupación, unidades
 muertas, matriz U, mapas por variable, estabilidad e interpretación comercial.

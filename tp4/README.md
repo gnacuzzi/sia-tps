@@ -89,6 +89,17 @@ El generador crea un JSON por corrida y el segundo comando compara los 245
 casos de `k = 2, ..., 8`, siete tasas constantes y cinco semillas. El informe
 queda en `docs/kohonen-experimentos/02-rate/README.md`.
 
+La comparación completa entre tasa constante y disminución lineal al 10 % se
+reproduce con:
+
+```bash
+python3 scripts/generate_kohonen_decay_configs.py
+python3 scripts/experiment_kohonen_rate_schedule.py
+```
+
+El informe de las 490 redes queda en
+`docs/kohonen-experimentos/03-rate-schedule/README.md`.
+
 Para ejecutar las pruebas:
 
 ```bash
