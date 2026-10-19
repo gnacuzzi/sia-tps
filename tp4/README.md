@@ -78,6 +78,17 @@ Cada una de las 35 corridas conserva su propio JSON dentro de
 `docs/kohonen-experimentos/01-grid/README.md`. Esta primera etapa dejó `k = 4`
 y `k = 5` como candidatos, pero todavía no fijó los hiperparámetros finales.
 
+Para comprobar la interacción entre el tamaño y la tasa se ejecuta:
+
+```bash
+python3 scripts/generate_kohonen_rate_configs.py
+python3 scripts/experiment_kohonen_rate.py
+```
+
+El generador crea un JSON por corrida y el segundo comando compara los 245
+casos de `k = 2, ..., 8`, siete tasas constantes y cinco semillas. El informe
+queda en `docs/kohonen-experimentos/02-rate/README.md`.
+
 Para ejecutar las pruebas:
 
 ```bash

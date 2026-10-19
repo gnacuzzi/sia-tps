@@ -21,6 +21,11 @@ from sia_tp4.kohonen_grid_experiment import (
     load_grid_runs,
     select_representative_runs,
 )
+from sia_tp4.kohonen_rate_experiment import (
+    RateRunMetrics,
+    aggregate_metrics as aggregate_rate_metrics,
+    load_rate_runs,
+)
 
 
 def _raw_run(name="grid-2"):
@@ -170,3 +175,46 @@ def _raw_run_config(seed):
         radius_end=1.0,
         seed=seed,
     )
+
+
+def test_rate_experiment_covers_every_k_rate_and_seed():
+    config_directory = (
+        Path(__file__).parents[1] / "configs" / "kohonen" / "02-rate"
+    )
+
+    runs = load_rate_runs(config_directory)
+    combinations = {
+        (
+            run.config.grid_size,
+            run.config.learning_rate_start,
+            run.config.seed,
+        )
+        for run in runs
+    }
+
+    assert len(runs) == 245
+    assert {combination[0] for combination in combinations} == set(range(2, 9))
+    assert {combination[1] for combination in combinations} == {
+        0.05,
+        0.1,
+        0.2,
+        0.3,
+        0.5,
+        0.7,
+        0.9,
+    }
+    assert {combination[2] for combination in combinations} == set(range(5))
+
+
+def test_rate_metrics_are_aggregated_by_k_and_rate():
+    metrics = [
+        RateRunMetrics("a", 4, 0.2, 0, 1.0, 12, 4, 25.0, 3, 6.0),
+        RateRunMetrics("b", 4, 0.2, 1, 3.0, 14, 2, 12.5, 4, 8.0),
+    ]
+
+    aggregate = aggregate_rate_metrics(metrics)
+
+    assert len(aggregate) == 1
+    assert aggregate[0]["grid_size"] == 4
+    assert aggregate[0]["learning_rate"] == 0.2
+    assert aggregate[0]["quantization_error_mean"] == pytest.approx(2.0)

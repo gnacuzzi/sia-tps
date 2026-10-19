@@ -193,3 +193,9 @@ comparó `k = 2, ..., 8` con cinco semillas por tamaño. La lectura conjunta del
 error de cuantización, la ocupación y la concentración de hits dejó `k = 4` y
 `k = 5` como candidatos. El siguiente paso es compararlos al variar los demás
 hiperparámetros según el protocolo documentado en `docs/kohonen.md`.
+
+La verificación posterior cruzó los siete tamaños con siete tasas constantes y
+cinco semillas. Mostró que las tasas altas empeoran el error y la estabilidad,
+y que la región útil queda entre `0.05` y `0.2`. Para el experimento de tasa
+decreciente se conservan `k = 4, η = 0.05`, `k = 5, η = 0.2` y, como control de
+la interacción, `k = 6, η = 0.1`. Todavía no se eligió una configuración final.

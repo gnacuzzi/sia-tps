@@ -119,5 +119,20 @@ sólo baja de 8,8 % a 8,4 %. Los tamaños mayores continúan reduciendo el error
 cuantización, pero fragmentan más el mapa. Los dos candidatos deben continuar a
 la comparación de los demás hiperparámetros antes de fijar uno.
 
+### Interacción entre tamaño y tasa constante
+
+El segundo experimento vuelve a incluir `k = 2, ..., 8` y cruza cada tamaño con
+`η = 0.05, 0.1, 0.2, 0.3, 0.5, 0.7, 0.9`, siempre constante, usando cinco
+semillas. Son 245 corridas independientes definidas en
+`configs/kohonen/02-rate/`. Esto permite verificar que un tamaño descartado en
+el primer barrido no mejore sustancialmente con otra tasa.
+
+Las tasas altas aumentaron el error y la dispersión. La región útil quedó entre
+`0.05` y `0.2`, pero depende del tamaño. Para comparar tasa constante contra
+decreciente se conservan tres puntos: `k = 4, η = 0.05`; `k = 5, η = 0.2`; y
+`k = 6, η = 0.1`. El tercero funciona como control de la interacción y no como
+ganador. Los resultados y gráficos están en
+`docs/kohonen-experimentos/02-rate/README.md`.
+
 La elección no se hace con una única cifra: se analizan ocupación, unidades
 muertas, matriz U, mapas por variable, estabilidad e interpretación comercial.

@@ -1,0 +1,12 @@
+{
+  "name": "k03-eta-05-seed-01",
+  "grid_size": 3,
+  "epochs": 150,
+  "learning_rate_start": 0.05,
+  "learning_rate_end": 0.05,
+  "radius_start": 2.8284271247461903,
+  "radius_end": 1.0,
+  "initialization": "sample",
+  "shuffle": true,
+  "seed": 1
+}

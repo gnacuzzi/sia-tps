@@ -21,8 +21,9 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   informe `docs/eda-creadores/README.md`, tablas CSV y visualizaciones SVG.
   PCA ya está implementado sobre la selección base. Kohonen está implementado
   de forma configurable, pasó una validación sintética reproducible y tiene un
-  primer barrido de `k = 2, ..., 8` con cinco semillas. Oja y Hopfield no están
-  implementados.
+  primer barrido de `k = 2, ..., 8` con cinco semillas. También se comparó la
+  interacción completa entre esos tamaños y siete tasas constantes. Oja y
+  Hopfield no están implementados.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
