@@ -351,3 +351,25 @@ El perfil decreciente desde `0.005` aprende más rápido, pero estabiliza la nor
 más lejos de 1. La tasa constante `0.001` también converge, aunque mantiene un
 error de norma cercano a 0.00231. Por eso la elección final considera
 conjuntamente dirección, proyecciones, norma y estabilidad entre semillas.
+
+### Interpretación final del índice
+
+Las diez corridas de la configuración elegida confirman que Oja reproduce PC1:
+la diferencia absoluta máxima entre el peso de la corrida representativa y el
+autovector es 0.000341, y la correlación entre sus índices y los scores de PC1
+es 0.999999962. Se usa una semilla central respecto de las medianas de las tres
+métricas, no la mejor corrida aislada.
+
+El índice ubica a cada creador sobre el principal eje de variabilidad de las 15
+entradas estandarizadas. En la orientación elegida, valores altos describen
+mayor escala, precio, descubrimiento y entretenimiento; valores bajos,
+profundidad, visitas al perfil, tutoriales, reviews, tiempo de reproducción y
+contenido de perros. Esta orientación se fija sólo para comunicar: invertir
+todos los signos produce la misma solución.
+
+No se usará el máximo como selección automática para cualquier campaña. PC1
+explica 37.63 % de la varianza y no representa ventas, adopciones ni retorno de
+inversión. Además, un índice alto puede implicar mayor precio y no garantiza
+afinidad temática. La decisión debe combinar este eje con las regiones de
+Kohonen, las componentes temáticas, la audiencia argentina, el objetivo de la
+campaña, el costo y la saturación comercial.

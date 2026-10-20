@@ -1,0 +1,8 @@
+{
+  "name": "oja-final",
+  "epochs": 100,
+  "learning_rate_start": 0.001,
+  "learning_rate_end": 0.0001,
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "shuffle": true
+}

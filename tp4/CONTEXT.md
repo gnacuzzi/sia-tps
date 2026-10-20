@@ -40,7 +40,14 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   figuras; las decisiones usan cinco semillas. La interpretación del caso de
   uso también está cerrada: se caracterizaron cuatro regiones temáticas, se
   compararon con PC1-PC2 y se cuantificaron las fronteras de la Matriz U.
-  Oja y Hopfield no están implementados.
+  Oja también está implementado y validado. El barrido de tasa comparó ocho
+  valores, dos schedules y diez semillas; el barrido posterior comparó ocho
+  cantidades de épocas para tres perfiles finalistas. Se eligieron 100 épocas
+  y descenso lineal de `0.001` a `0.0001`. En diez semillas, la similitud media
+  con el autovector de PC1 es 0.999999847 y la correlación media entre el índice
+  y los scores de PC1 es 0.999999962. El análisis final compara pesos,
+  proyecciones y creadores e interpreta por qué el índice no es un ranking
+  universal. Hopfield todavía no está implementado.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
@@ -350,7 +357,8 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
    y decidir cuántas componentes conservar.
 6. Implementar y validar Kohonen primero sobre un caso sintético pequeño
    (completado); después comparar configuraciones sobre creadores.
-7. Implementar y validar Oja; comparar su dirección e índice con PCA.
+7. Implementar y validar Oja; comparar su dirección e índice con PCA
+   (completado).
 8. Caracterizar regiones/candidatos para las cuatro campañas y contrastar con
    el baseline de `followers`.
 9. Documentar mantenimiento, llegada de datos mensuales y limitaciones.
@@ -358,11 +366,10 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
 
 ## Decisiones todavía abiertas
 
-- Grilla, inicialización, schedules, épocas y criterio final de comparación de
-  SOM.
-- Tasa/schedule, épocas y criterio de convergencia de Oja.
-- Supuestos comerciales concretos para traducir regiones a cada campaña.
-- CLI y formato de resultados de los métodos todavía no implementados.
+- Síntesis final de candidatos y trade-offs para las cuatro campañas.
+- Mantenimiento ante nuevos creadores, variables y actualizaciones mensuales.
+- Implementación, CLI y formato de resultados de Hopfield cuando se habilite
+  el ejercicio 2.
 
 Ninguna de estas decisiones debe cerrarse sólo por conveniencia de código: se
 debe registrar la evidencia, la alternativa considerada y su efecto en la
