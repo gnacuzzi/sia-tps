@@ -3,6 +3,11 @@
   "kohonen_stability_config": "../kohonen/stability.json",
   "oja_config": "../oja/final.json",
   "primary_stability_classes": ["estable", "fronterizo"],
+  "baseline": {
+    "feature": "followers",
+    "scope": "global",
+    "order": "descending"
+  },
   "campaigns": [
     {
       "name": "futbol",

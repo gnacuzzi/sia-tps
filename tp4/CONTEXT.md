@@ -57,6 +57,11 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   completas y conserva estabilidad, datos originales, PC1-PC2 y Oja sin crear
   un ranking. Los conjuntos contienen 17 creadores para fútbol, 8 para belleza,
   13 para perros y 12 para arte; 47 de los 50 son estables o fronterizos.
+  Esos candidatos primarios ya se compararon con un top global por followers de
+  igual `K` para cada campaña. La salida incluye detalle individual, agregados,
+  costo y gráficos. La selección regional aumenta la afinidad temática y reduce
+  el costo, pero sacrifica volumen de alcance; no se infieren ventas ni
+  adopciones porque no existe esa variable objetivo.
   Hopfield todavía no está implementado.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
@@ -369,15 +374,13 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
    (completado); después comparar configuraciones sobre creadores.
 7. Implementar y validar Oja; comparar su dirección e índice con PCA
    (completado).
-8. Caracterizar regiones/candidatos para las cuatro campañas (completado) y
-   contrastar con el baseline de `followers` (pendiente).
+8. Caracterizar regiones/candidatos para las cuatro campañas y contrastar con
+   el baseline de `followers` usando el mismo `K` (completado).
 9. Documentar mantenimiento, llegada de datos mensuales y limitaciones.
 10. Recién después de la clase correspondiente, incorporar Hopfield.
 
 ## Decisiones todavía abiertas
 
-- Contraste de igual cantidad de candidatos regionales y baseline por
-  `followers`, con trade-offs para las cuatro campañas.
 - Mantenimiento ante nuevos creadores, variables y actualizaciones mensuales.
 - Implementación, CLI y formato de resultados de Hopfield cuando se habilite
   el ejercicio 2.

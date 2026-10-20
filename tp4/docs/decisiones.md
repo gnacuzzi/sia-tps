@@ -449,7 +449,40 @@ había excluido de las 15 entradas para evitar la dependencia lineal exacta de
 los cuatro porcentajes temáticos.
 
 Esta etapa no elige automáticamente un creador. Produce conjuntos auditables y
-perfiles regionales para que el próximo contraste seleccione la misma cantidad
-de candidatos que el baseline por `followers` y haga explícitos los trade-offs
-de alcance, afinidad, respuesta, formato y costo. El protocolo y las salidas
-quedan en `configs/campaigns/synthesis.json` y `docs/campanas-creadores/`.
+perfiles regionales. El contraste posterior usa la misma cantidad de candidatos
+que el baseline por `followers` y hace explícitos los trade-offs de alcance,
+afinidad, respuesta, formato y costo. El protocolo y las salidas quedan en
+`configs/campaigns/synthesis.json` y `docs/campanas-creadores/`.
+
+### Comparación con el baseline por followers
+
+Para cada campaña se fija `K` como la cantidad de candidatos regionales
+estables o fronterizos. El baseline selecciona los `K` creadores con más
+followers de todo el catálogo. Usar el mismo tamaño evita que una estrategia
+parezca superior sólo por contener más creadores. Los empates en followers se
+resuelven por `creator_id` para que el resultado sea determinista.
+
+La comparación individual conserva ambos conjuntos, el solapamiento, la región
+modal, la estabilidad y las variables originales. La comparación agregada
+informa afinidad temática, alcance, alcance argentino estimado, interacción,
+visitas al perfil, formatos, saturación patrocinada y costo. Las sumas de
+audiencia se describen como no deduplicadas porque no se conoce el solapamiento
+real entre seguidores de distintos creadores.
+
+Los resultados muestran un trade-off consistente:
+
+- fútbol (`K = 15`) comparte 7 creadores con el baseline. La afinidad media
+  aumenta de 31.7 % a 56.1 %, el alcance argentino estimado disminuye 29.5 % y
+  el costo total disminuye 27.2 %;
+- belleza (`K = 8`) comparte 4 creadores. La afinidad aumenta de 39.6 % a
+  69.1 %, el alcance argentino disminuye 45.5 % y el costo disminuye 21.8 %;
+- perros (`K = 13`) no comparte creadores. La afinidad aumenta de 15.6 % a
+  64.9 %, el alcance argentino disminuye 88.9 % y el costo disminuye 85.8 %;
+- arte (`K = 11`) tampoco comparte creadores. La afinidad aumenta de 14.2 % a
+  51.8 %, el alcance argentino disminuye 76.2 % y el costo disminuye 64.4 %.
+
+Estos datos no demuestran que una estrategia produzca más ventas o adopciones.
+El catálogo no contiene conversiones ni una variable objetivo supervisada. La
+comparación sólo permite discutir composición, afinidad, escala, respuesta y
+costo observados. La elección final depende del objetivo de cada campaña y no
+se automatiza con un único indicador.

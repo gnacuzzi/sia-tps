@@ -36,6 +36,10 @@ CAMPAIGN_COLORS = {
     "perros": "#59A14F",
     "arte": "#F28E2B",
 }
+STRATEGY_LABELS = {
+    "regional_kohonen": "Región Kohonen",
+    "baseline_followers": "Top followers",
+}
 RAW_FEATURES = (
     "followers",
     "average_reach",
@@ -95,6 +99,15 @@ class CampaignDefinition:
 
 
 @dataclass(frozen=True)
+class BaselineDefinition:
+    """Regla observable y reproducible para la estrategia de referencia."""
+
+    feature: str
+    scope: str
+    order: str
+
+
+@dataclass(frozen=True)
 class SynthesisDesign:
     """Fuentes reproducibles y regla de inclusión primaria."""
 
@@ -102,6 +115,7 @@ class SynthesisDesign:
     kohonen_stability_config: Path
     oja_config: Path
     primary_stability_classes: tuple[str, ...]
+    baseline: BaselineDefinition
     campaigns: tuple[CampaignDefinition, ...]
 
 
@@ -143,6 +157,7 @@ def load_design(path: Path | str) -> SynthesisDesign:
         "kohonen_stability_config",
         "oja_config",
         "primary_stability_classes",
+        "baseline",
         "campaigns",
     }
     unknown = set(raw) - expected
@@ -163,6 +178,15 @@ def load_design(path: Path | str) -> SynthesisDesign:
         or not set(primary).issubset(STABILITY_CLASSES)
     ):
         raise ValueError("primary_stability_classes contiene valores inválidos")
+    baseline = raw["baseline"]
+    if not isinstance(baseline, dict) or baseline != {
+        "feature": "followers",
+        "scope": "global",
+        "order": "descending",
+    }:
+        raise ValueError(
+            "el baseline debe ser el top global descendente por followers"
+        )
     campaign_documents = raw["campaigns"]
     if not isinstance(campaign_documents, list) or len(campaign_documents) != 4:
         raise ValueError("se requieren exactamente cuatro campañas")
@@ -195,6 +219,7 @@ def load_design(path: Path | str) -> SynthesisDesign:
         kohonen_stability_config=stability_path,
         oja_config=oja_path,
         primary_stability_classes=tuple(primary),
+        baseline=BaselineDefinition(**baseline),
         campaigns=tuple(campaigns),
     )
 
@@ -412,6 +437,194 @@ def build_region_summaries(
     return rows
 
 
+def build_shortlist_comparison(
+    dataset: CreatorDataset,
+    original_rows: dict[str, dict[str, float]],
+    stability_rows: Sequence[dict],
+    creator_rows: Sequence[dict],
+    campaigns: Sequence[CampaignDefinition],
+    pca_scores: np.ndarray,
+    oja_indices: np.ndarray,
+) -> list[dict]:
+    """Comparar cada conjunto regional con un top global de igual tamaño."""
+
+    stability_by_id = {row["creator_id"]: row for row in stability_rows}
+    index_by_id = {
+        creator_id: index for index, creator_id in enumerate(dataset.creator_ids)
+    }
+    names_by_id = dict(zip(dataset.creator_ids, dataset.names))
+    followers_order = sorted(
+        dataset.creator_ids,
+        key=lambda creator_id: (
+            -original_rows[creator_id]["followers"],
+            creator_id,
+        ),
+    )
+    followers_position = {
+        creator_id: position
+        for position, creator_id in enumerate(followers_order, start=1)
+    }
+    rows = []
+    for campaign in campaigns:
+        regional = [
+            row
+            for row in creator_rows
+            if row["campaign"] == campaign.name and row["primary_candidate"]
+        ]
+        regional_ids = {row["creator_id"] for row in regional}
+        k = len(regional_ids)
+        if k == 0:
+            raise ValueError(f"la campaña {campaign.name} no tiene candidatos primarios")
+        baseline_ids = set(followers_order[:k])
+        selections = (
+            (
+                "regional_kohonen",
+                sorted(
+                    regional_ids,
+                    key=lambda creator_id: (
+                        STABILITY_CLASSES.index(
+                            stability_by_id[creator_id]["region_stability_class"]
+                        ),
+                        creator_id,
+                    ),
+                ),
+            ),
+            ("baseline_followers", followers_order[:k]),
+        )
+        for strategy, selected_ids in selections:
+            other_ids = baseline_ids if strategy == "regional_kohonen" else regional_ids
+            for creator_id in selected_ids:
+                stability = stability_by_id[creator_id]
+                index = index_by_id[creator_id]
+                modal_regions = stability["modal_region"].split(";")
+                rows.append(
+                    {
+                        "campaign": campaign.name,
+                        "campaign_label": campaign.label,
+                        "strategy": strategy,
+                        "strategy_label": STRATEGY_LABELS[strategy],
+                        "k": k,
+                        "creator_id": creator_id,
+                        "name": names_by_id[creator_id],
+                        "in_both_strategies": creator_id in other_ids,
+                        "global_followers_position": followers_position[creator_id],
+                        "campaign_region_match": campaign.region in modal_regions,
+                        "modal_region": stability["modal_region"],
+                        "region_stability_class": stability[
+                            "region_stability_class"
+                        ],
+                        "region_stability_count": stability[
+                            "region_stability_count"
+                        ],
+                        "region_stability_pct": stability["region_stability_pct"],
+                        "topic_feature": campaign.topic_feature,
+                        "topic_affinity_pct": original_rows[creator_id][
+                            campaign.topic_feature
+                        ],
+                        "pc1_score": float(pca_scores[index, 0]),
+                        "pc2_score": float(pca_scores[index, 1]),
+                        "oja_index": float(oja_indices[index]),
+                        **original_rows[creator_id],
+                    }
+                )
+    return rows
+
+
+def build_strategy_summaries(
+    comparison_rows: Sequence[dict],
+    campaigns: Sequence[CampaignDefinition],
+) -> list[dict]:
+    """Agregar las dos estrategias conservando métricas y costos observados."""
+
+    rows = []
+    for campaign in campaigns:
+        campaign_rows = [
+            row for row in comparison_rows if row["campaign"] == campaign.name
+        ]
+        for strategy in STRATEGY_LABELS:
+            members = [row for row in campaign_rows if row["strategy"] == strategy]
+            k = len(members)
+            overlap_count = sum(row["in_both_strategies"] for row in members)
+            rows.append(
+                {
+                    "campaign": campaign.name,
+                    "campaign_label": campaign.label,
+                    "strategy": strategy,
+                    "strategy_label": STRATEGY_LABELS[strategy],
+                    "k": k,
+                    "overlap_count": overlap_count,
+                    "overlap_pct": 100 * overlap_count / k,
+                    "campaign_region_match_count": sum(
+                        row["campaign_region_match"] for row in members
+                    ),
+                    "stable_count": sum(
+                        row["region_stability_class"] == "estable"
+                        for row in members
+                    ),
+                    "frontier_count": sum(
+                        row["region_stability_class"] == "fronterizo"
+                        for row in members
+                    ),
+                    "unstable_count": sum(
+                        row["region_stability_class"] == "inestable"
+                        for row in members
+                    ),
+                    "sum_followers": float(sum(row["followers"] for row in members)),
+                    "sum_average_reach": float(
+                        sum(row["average_reach"] for row in members)
+                    ),
+                    "sum_estimated_argentina_reach": float(
+                        sum(row["estimated_argentina_reach"] for row in members)
+                    ),
+                    "mean_argentina_audience_pct": float(
+                        np.mean([row["argentina_audience_pct"] for row in members])
+                    ),
+                    "mean_non_follower_reach_pct": float(
+                        np.mean([row["non_follower_reach_pct"] for row in members])
+                    ),
+                    "mean_total_engagement_per_1000": float(
+                        np.mean(
+                            [row["total_engagement_per_1000"] for row in members]
+                        )
+                    ),
+                    "mean_profile_visits_per_1000": float(
+                        np.mean([row["profile_visits_per_1000"] for row in members])
+                    ),
+                    "total_price_usd": float(sum(row["price_usd"] for row in members)),
+                    "mean_price_usd": float(
+                        np.mean([row["price_usd"] for row in members])
+                    ),
+                    "mean_sponsored_posts_pct": float(
+                        np.mean([row["sponsored_posts_pct"] for row in members])
+                    ),
+                    "mean_topic_affinity_pct": float(
+                        np.mean([row["topic_affinity_pct"] for row in members])
+                    ),
+                    "mean_content_tutorial_pct": float(
+                        np.mean([row["content_tutorial_pct"] for row in members])
+                    ),
+                    "mean_content_review_pct": float(
+                        np.mean([row["content_review_pct"] for row in members])
+                    ),
+                    "mean_content_entertainment_pct": float(
+                        np.mean(
+                            [row["content_entertainment_pct"] for row in members]
+                        )
+                    ),
+                    "mean_content_showcase_pct": float(
+                        np.mean([row["content_showcase_pct"] for row in members])
+                    ),
+                    "mean_pc1_score": float(
+                        np.mean([row["pc1_score"] for row in members])
+                    ),
+                    "mean_oja_index": float(
+                        np.mean([row["oja_index"] for row in members])
+                    ),
+                }
+            )
+    return rows
+
+
 def _write_csv(path: Path, rows: Sequence[dict]) -> None:
     if not rows:
         raise ValueError(f"no hay filas para escribir en {path}")
@@ -426,12 +639,16 @@ def write_tables(
     creator_rows: Sequence[dict],
     profile_rows: Sequence[dict],
     summary_rows: Sequence[dict],
+    comparison_rows: Sequence[dict],
+    strategy_summaries: Sequence[dict],
 ) -> None:
     generated = output / "generated"
     generated.mkdir(parents=True, exist_ok=True)
     _write_csv(generated / "creadores_por_campana.csv", creator_rows)
     _write_csv(generated / "perfiles_estandarizados.csv", profile_rows)
     _write_csv(generated / "resumen_regiones.csv", summary_rows)
+    _write_csv(generated / "shortlists_comparadas.csv", comparison_rows)
+    _write_csv(generated / "comparacion_followers.csv", strategy_summaries)
 
 
 def write_plots(
@@ -549,6 +766,103 @@ def write_plots(
     _save_figure(figure, generated / "regiones_pca_estabilidad.svg")
 
 
+def write_strategy_plots(
+    output: Path,
+    strategy_summaries: Sequence[dict],
+    campaigns: Sequence[CampaignDefinition],
+) -> None:
+    """Comparar estrategias en unidades observadas y mostrar su solapamiento."""
+
+    plt = _load_pyplot()
+    generated = output / "generated"
+    lookup = {
+        (row["campaign"], row["strategy"]): row for row in strategy_summaries
+    }
+    campaign_names = [campaign.name for campaign in campaigns]
+    campaign_labels = [campaign.label for campaign in campaigns]
+    positions = np.arange(len(campaigns))
+    width = 0.36
+    chart_metrics = (
+        ("sum_followers", "Suma de followers", 1_000_000, "millones"),
+        (
+            "sum_estimated_argentina_reach",
+            "Suma de alcance argentino estimado",
+            1_000,
+            "miles",
+        ),
+        ("mean_topic_affinity_pct", "Afinidad temática media", 1, "%"),
+        (
+            "mean_total_engagement_per_1000",
+            "Engagement medio",
+            1,
+            "por 1000",
+        ),
+        (
+            "mean_profile_visits_per_1000",
+            "Visitas al perfil medias",
+            1,
+            "por 1000",
+        ),
+        ("total_price_usd", "Costo total", 1_000, "miles de USD"),
+    )
+    figure, axes = plt.subplots(3, 2, figsize=(12, 11))
+    for axis, (metric, title, divisor, unit) in zip(axes.flat, chart_metrics):
+        regional_values = [
+            lookup[(campaign, "regional_kohonen")][metric] / divisor
+            for campaign in campaign_names
+        ]
+        baseline_values = [
+            lookup[(campaign, "baseline_followers")][metric] / divisor
+            for campaign in campaign_names
+        ]
+        axis.bar(
+            positions - width / 2,
+            regional_values,
+            width,
+            color="#4C78A8",
+            label=STRATEGY_LABELS["regional_kohonen"],
+        )
+        axis.bar(
+            positions + width / 2,
+            baseline_values,
+            width,
+            color="#B9B9B9",
+            label=STRATEGY_LABELS["baseline_followers"],
+        )
+        axis.set_xticks(positions, campaign_labels)
+        axis.set_title(title)
+        axis.set_ylabel(unit)
+        axis.grid(axis="y", alpha=0.2)
+        axis.set_axisbelow(True)
+    handles, labels = axes.flat[0].get_legend_handles_labels()
+    figure.legend(handles, labels, loc="upper center", ncol=2, frameon=False)
+    figure.suptitle("Regiones temáticas frente al baseline por followers", y=0.995)
+    figure.tight_layout(rect=(0, 0, 1, 0.965))
+    _save_figure(figure, generated / "comparacion_estrategias.svg")
+
+    regional_summaries = [
+        lookup[(campaign.name, "regional_kohonen")] for campaign in campaigns
+    ]
+    overlap_pct = [row["overlap_pct"] for row in regional_summaries]
+    figure, axis = plt.subplots(figsize=(8, 4.8))
+    bars = axis.barh(campaign_labels, overlap_pct, color="#4C78A8")
+    axis.set_xlim(0, 100)
+    axis.set_xlabel("Porcentaje de creadores presentes en ambas estrategias")
+    axis.set_title("Solapamiento de las shortlists con igual K")
+    axis.grid(axis="x", alpha=0.2)
+    axis.set_axisbelow(True)
+    for bar, row in zip(bars, regional_summaries):
+        axis.text(
+            min(bar.get_width() + 2, 96),
+            bar.get_y() + bar.get_height() / 2,
+            f"{row['overlap_count']}/{row['k']}",
+            va="center",
+            fontsize=9,
+        )
+    figure.tight_layout()
+    _save_figure(figure, generated / "solapamiento_shortlists.svg")
+
+
 def _format_candidates(rows: Sequence[dict], category: str) -> str:
     selected = [
         f"{row['creator_id']} ({row['name']})"
@@ -558,11 +872,23 @@ def _format_candidates(rows: Sequence[dict], category: str) -> str:
     return ", ".join(selected) if selected else "ninguno"
 
 
+def _format_ids(rows: Sequence[dict]) -> str:
+    return ", ".join(f"{row['creator_id']} ({row['name']})" for row in rows) or "ninguno"
+
+
+def _percent_change(value: float, baseline: float) -> float:
+    if baseline == 0:
+        raise ValueError("no se puede calcular variación porcentual con baseline cero")
+    return 100 * (value - baseline) / baseline
+
+
 def write_report(
     output: Path,
     design: SynthesisDesign,
     creator_rows: Sequence[dict],
     summary_rows: Sequence[dict],
+    comparison_rows: Sequence[dict],
+    strategy_summaries: Sequence[dict],
     pca: PCAResult,
     oja_correlation: float,
 ) -> None:
@@ -589,6 +915,60 @@ def write_report(
 - Creadores inestables, conservados con advertencia: {_format_candidates(members, 'inestable')}.
 """
         )
+    strategy_lookup = {
+        (row["campaign"], row["strategy"]): row for row in strategy_summaries
+    }
+    comparison_table_rows = []
+    comparison_sections = []
+    for campaign in design.campaigns:
+        regional = strategy_lookup[(campaign.name, "regional_kohonen")]
+        baseline = strategy_lookup[(campaign.name, "baseline_followers")]
+        comparison_table_rows.append(
+            "| {label} | {k} | {overlap}/{k} ({overlap_pct:.1f} %) | "
+            "{regional_affinity:.1f} / {baseline_affinity:.1f} | "
+            "{regional_reach:,.0f} / {baseline_reach:,.0f} | "
+            "{regional_engagement:.1f} / {baseline_engagement:.1f} | "
+            "{regional_cost:,.0f} / {baseline_cost:,.0f} |".format(
+                label=campaign.label,
+                k=regional["k"],
+                overlap=regional["overlap_count"],
+                overlap_pct=regional["overlap_pct"],
+                regional_affinity=regional["mean_topic_affinity_pct"],
+                baseline_affinity=baseline["mean_topic_affinity_pct"],
+                regional_reach=regional["sum_estimated_argentina_reach"],
+                baseline_reach=baseline["sum_estimated_argentina_reach"],
+                regional_engagement=regional["mean_total_engagement_per_1000"],
+                baseline_engagement=baseline["mean_total_engagement_per_1000"],
+                regional_cost=regional["total_price_usd"],
+                baseline_cost=baseline["total_price_usd"],
+            )
+        )
+        campaign_comparison = [
+            row for row in comparison_rows if row["campaign"] == campaign.name
+        ]
+        regional_only = [
+            row
+            for row in campaign_comparison
+            if row["strategy"] == "regional_kohonen"
+            and not row["in_both_strategies"]
+        ]
+        baseline_only = [
+            row
+            for row in campaign_comparison
+            if row["strategy"] == "baseline_followers"
+            and not row["in_both_strategies"]
+        ]
+        comparison_sections.append(
+            f"""### {campaign.label}
+
+- Afinidad temática: **{regional['mean_topic_affinity_pct']:.1f} %** regional frente a **{baseline['mean_topic_affinity_pct']:.1f} %** por followers ({regional['mean_topic_affinity_pct'] - baseline['mean_topic_affinity_pct']:+.1f} puntos porcentuales).
+- Suma de alcance argentino estimado: **{regional['sum_estimated_argentina_reach']:,.0f}** frente a **{baseline['sum_estimated_argentina_reach']:,.0f}** ({_percent_change(regional['sum_estimated_argentina_reach'], baseline['sum_estimated_argentina_reach']):+.1f} %).
+- Engagement medio: **{regional['mean_total_engagement_per_1000']:.1f}** frente a **{baseline['mean_total_engagement_per_1000']:.1f}** por 1000 ({_percent_change(regional['mean_total_engagement_per_1000'], baseline['mean_total_engagement_per_1000']):+.1f} %).
+- Costo total: **USD {regional['total_price_usd']:,.0f}** frente a **USD {baseline['total_price_usd']:,.0f}** ({_percent_change(regional['total_price_usd'], baseline['total_price_usd']):+.1f} %).
+- Sólo en la shortlist regional: {_format_ids(regional_only)}.
+- Sólo en el baseline: {_format_ids(baseline_only)}.
+"""
+        )
     explained = 100 * pca.cumulative_explained_variance[1]
     report = f"""# Síntesis regional para las cuatro campañas
 
@@ -602,8 +982,8 @@ los inestables permanecen visibles, pero con una advertencia explícita.
 La tabla maestra conserva las 31 variables numéricas originales en sus unidades,
 los conteos de región de las diez semillas, los scores de PC1-PC2 y el índice de
 Oja. No se calcula un puntaje compuesto ni se ordena a los creadores como
-mejores o peores. `followers` queda como dato auxiliar para la comparación
-posterior con la estrategia actual de la agencia.
+mejores o peores. `followers` se usa únicamente para construir el baseline
+global de igual tamaño que cada conjunto regional.
 
 ## Integración de modelos
 
@@ -627,13 +1007,35 @@ un score comercial.
 ![Perfiles de regiones](generated/perfiles_regiones.svg)
 
 {''.join(campaign_sections)}
+## Comparación con el baseline por followers
+
+Para cada campaña, `K` es la cantidad de candidatos regionales estables o
+fronterizos. El baseline toma los `K` creadores con más followers de todo el
+catálogo. De este modo ambas estrategias tienen el mismo tamaño y la diferencia
+no se explica por comparar conjuntos de distinta cantidad.
+
+| Campaña | K | Solapamiento | Afinidad regional / baseline (%) | Alcance argentino regional / baseline | Engagement regional / baseline (por 1000) | Costo regional / baseline (USD) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(comparison_table_rows)}
+
+Las sumas de followers, alcance y alcance argentino son volúmenes descriptivos
+no deduplicados: el dataset no permite conocer cuánta audiencia comparten dos
+creadores. El costo es la suma de `price_usd` de los integrantes de cada
+shortlist.
+
+![Comparación de estrategias](generated/comparacion_estrategias.svg)
+
+![Solapamiento](generated/solapamiento_shortlists.svg)
+
+{''.join(comparison_sections)}
 ## Alcance de esta etapa
 
 Esta síntesis define conjuntos de candidatos y hace visibles sus perfiles y su
-estabilidad. Todavía no elige un ganador ni compara formalmente con el top por
-`followers`. La etapa siguiente debe usar estos mismos conjuntos para una
-comparación de igual cantidad de creadores y mostrar los trade-offs de alcance,
-afinidad, respuesta, formato y costo.
+estabilidad. La comparación muestra diferencias observadas de composición,
+alcance, afinidad, interacción, formato y costo. No estima ventas, adopciones ni
+retorno de inversión porque el dataset no contiene esas variables objetivo.
+Tampoco elige automáticamente un ganador: la estrategia apropiada depende del
+objetivo declarado para cada campaña.
 
 ## Archivos reproducibles
 
@@ -641,6 +1043,8 @@ afinidad, respuesta, formato y costo.
   variables originales, PCA y Oja;
 - `generated/resumen_regiones.csv`: tamaños, estabilidad, ejes y medias/medianas;
 - `generated/perfiles_estandarizados.csv`: perfil z-score completo de cada región.
+- `generated/shortlists_comparadas.csv`: comparación individual con igual `K`;
+- `generated/comparacion_followers.csv`: resultados agregados por estrategia.
 """
     output.mkdir(parents=True, exist_ok=True)
     (output / "README.md").write_text(report, encoding="utf-8")
@@ -677,13 +1081,35 @@ def run_analysis(data: Path, config: Path, output: Path) -> list[dict]:
     summary_rows = build_region_summaries(
         creator_rows, profile_rows, design.campaigns
     )
-    write_tables(output, creator_rows, profile_rows, summary_rows)
+    comparison_rows = build_shortlist_comparison(
+        dataset,
+        original_rows,
+        stability_rows,
+        creator_rows,
+        design.campaigns,
+        pca.scores,
+        representative.indices,
+    )
+    strategy_summaries = build_strategy_summaries(
+        comparison_rows, design.campaigns
+    )
+    write_tables(
+        output,
+        creator_rows,
+        profile_rows,
+        summary_rows,
+        comparison_rows,
+        strategy_summaries,
+    )
     write_plots(output, dataset, creator_rows, profile_rows, design.campaigns)
+    write_strategy_plots(output, strategy_summaries, design.campaigns)
     write_report(
         output,
         design,
         creator_rows,
         summary_rows,
+        comparison_rows,
+        strategy_summaries,
         pca,
         representative.score_correlation,
     )

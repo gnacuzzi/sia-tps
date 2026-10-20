@@ -174,7 +174,10 @@ El protocolo está en `configs/campaigns/synthesis.json`. Genera un único infor
 en `docs/campanas-creadores/` con tablas agregadas y dos gráficos. La región
 modal de cada creador define su campaña; no se usa una única neurona ni se crea
 un ranking automático. Los casos estables y fronterizos quedan como candidatos
-primarios y los inestables permanecen visibles con esa advertencia.
+primarios y los inestables permanecen visibles con esa advertencia. Para cada
+campaña también compara esos candidatos contra el top global por `followers`
+con el mismo `K`, tanto por creador como en forma agregada, e incluye el costo y
+dos gráficos comparativos.
 
 Para ejecutar las pruebas:
 
