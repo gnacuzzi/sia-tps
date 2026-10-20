@@ -328,3 +328,26 @@ Para estudiar la cantidad de épocas se conservan tres finalistas:
 
 El informe reproducible, las corridas individuales, los agregados por época y
 los gráficos comparativos quedan en `docs/oja-experimentos/01-rate/`.
+
+### Resultado de la etapa 2: cantidad de épocas
+
+Se compararon 5, 10, 25, 50, 100, 150, 250 y 500 épocas para los tres perfiles
+finalistas de tasa, con 10 semillas por combinación y 240 corridas en total. No
+hubo divergencias.
+
+Se elige **100 épocas con descenso lineal de `0.001` a `0.0001`**. La similitud
+media con PC1 fue 0.999999847 y el peor valor entre las 10 semillas fue
+0.999999638. La correlación media entre las proyecciones de Oja y los scores de
+PC1 fue 0.999999962, y el error medio de la norma respecto de 1 fue 0.000446.
+
+A las 50 épocas el promedio ya era alto, pero la peor semilla todavía quedaba
+en 0.997114. En cambio, desde 100 épocas todas las semillas forman una meseta
+prácticamente perfecta. Extender hasta 500 épocas multiplica por cinco el
+entrenamiento y mejora la similitud media sólo en aproximadamente `1.2e-7`; la
+reducción adicional del error de norma es 0.000156. No se justifica ese costo
+adicional para una diferencia sin efecto interpretativo.
+
+El perfil decreciente desde `0.005` aprende más rápido, pero estabiliza la norma
+más lejos de 1. La tasa constante `0.001` también converge, aunque mantiene un
+error de norma cercano a 0.00231. Por eso la elección final considera
+conjuntamente dirección, proyecciones, norma y estabilidad entre semillas.

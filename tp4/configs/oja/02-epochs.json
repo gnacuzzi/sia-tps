@@ -1,0 +1,23 @@
+{
+  "name": "oja-stage-2-epochs",
+  "epochs": [5, 10, 25, 50, 100, 150, 250, 500],
+  "profiles": [
+    {
+      "name": "decay-eta-0001",
+      "learning_rate_start": 0.001,
+      "learning_rate_end_ratio": 0.1
+    },
+    {
+      "name": "decay-eta-0005",
+      "learning_rate_start": 0.005,
+      "learning_rate_end_ratio": 0.1
+    },
+    {
+      "name": "constant-eta-0001",
+      "learning_rate_start": 0.001,
+      "learning_rate_end_ratio": 1.0
+    }
+  ],
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "shuffle": true
+}
