@@ -91,6 +91,10 @@ def test_load_design_references_the_existing_reproducible_protocols():
     assert design.baseline.feature == "followers"
     assert design.baseline.scope == "global"
     assert design.baseline.order == "descending"
+    assert design.candidate_protocol.candidate_count == 3
+    assert design.candidate_protocol.response_feature_by_campaign["perros"] == (
+        "profile_visits_per_1000"
+    )
     assert design.kohonen_stability_config.is_file()
     assert design.oja_config.is_file()
 
@@ -184,6 +188,7 @@ def test_profiles_summaries_and_tables_are_aggregated(tmp_path):
         summaries,
         comparison,
         strategy_summaries,
+        [{"campaign": "prueba", "creator_id": "A"}],
     )
 
     generated = tmp_path / "generated"
@@ -193,6 +198,7 @@ def test_profiles_summaries_and_tables_are_aggregated(tmp_path):
         "resumen_regiones.csv",
         "shortlists_comparadas.csv",
         "comparacion_followers.csv",
+        "candidatos_finales.csv",
     }
     assert len(profiles) == 4 * len(BASE_FEATURES)
     assert summaries[2]["fronterizo_count"] == 1

@@ -8,6 +8,16 @@
     "scope": "global",
     "order": "descending"
   },
+  "candidate_protocol": {
+    "candidate_count": 3,
+    "roles": ["alcance", "equilibrio", "especializacion_eficiencia"],
+    "response_feature_by_campaign": {
+      "futbol": "total_engagement_per_1000",
+      "belleza": "total_engagement_per_1000",
+      "perros": "profile_visits_per_1000",
+      "arte": "total_engagement_per_1000"
+    }
+  },
   "campaigns": [
     {
       "name": "futbol",

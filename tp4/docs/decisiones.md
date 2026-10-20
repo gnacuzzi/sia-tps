@@ -486,3 +486,34 @@ El catálogo no contiene conversiones ni una variable objetivo supervisada. La
 comparación sólo permite discutir composición, afinidad, escala, respuesta y
 costo observados. La elección final depende del objetivo de cada campaña y no
 se automatiza con un único indicador.
+
+### Protocolo de candidatos finales
+
+Se proponen tres perfiles complementarios por campaña sin construir un score.
+Los tres deben pertenecer al conjunto regional primario y tener afinidad
+temática al menos igual a la mediana de ese conjunto:
+
+- **alcance:** mayor alcance argentino estimado;
+- **equilibrio:** respuesta al menos mediana y costo no mayor a la mediana;
+  entre quienes cumplen, mayor alcance argentino restante;
+- **especialización y eficiencia:** menor costo entre los candidatos restantes.
+
+Excluir los candidatos ya elegidos garantiza tres alternativas distintas y
+hace que cada una represente un trade-off. Los empates se resuelven por
+`creator_id`. Para fútbol, belleza y arte la respuesta descriptiva es engagement
+por 1000. Para perros se usan visitas al perfil por 1000 como aproximación a una
+acción de consideración o consulta, sin equipararla con una adopción.
+
+Los candidatos resultantes son:
+
+- fútbol: `INF021` para alcance, `INF041` para equilibrio e `INF027` para
+  especialización y eficiencia; los tres son regionalmente estables;
+- belleza: `INF006`, `INF022` e `INF038`; el último es fronterizo;
+- perros: `INF039`, `INF023` e `INF043`; los tres son estables;
+- arte: `INF024`, `INF012` e `INF016`; los dos últimos son fronterizos.
+
+Estos roles no forman un podio. El perfil de alcance acepta más costo o menor
+respuesta para preservar escala; el equilibrado satisface simultáneamente los
+umbrales; el de eficiencia reduce costo a cambio de alcance. Los fronterizos se
+conservan con una advertencia explícita y deben revisarse cuando cambien los
+datos.

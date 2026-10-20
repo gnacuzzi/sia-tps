@@ -61,7 +61,12 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   igual `K` para cada campaña. La salida incluye detalle individual, agregados,
   costo y gráficos. La selección regional aumenta la afinidad temática y reduce
   el costo, pero sacrifica volumen de alcance; no se infieren ventas ni
-  adopciones porque no existe esa variable objetivo.
+  adopciones porque no existe esa variable objetivo. Dentro de cada conjunto se
+  proponen además tres candidatos reproducibles: alcance, equilibrio y
+  especialización/eficiencia. Todos superan la afinidad temática mediana y no se
+  usa un score compuesto. Los candidatos de fútbol son `INF021`, `INF041` e
+  `INF027`; los de belleza `INF006`, `INF022` e `INF038`; los de perros
+  `INF039`, `INF023` e `INF043`; y los de arte `INF024`, `INF012` e `INF016`.
   Hopfield todavía no está implementado.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.

@@ -12,6 +12,11 @@ from typing import Sequence
 import numpy as np
 from matplotlib.lines import Line2D
 
+from .campaign_candidates import (
+    CandidateProtocol,
+    load_candidate_protocol,
+    select_final_candidates,
+)
 from .data import BASE_FEATURES, CreatorDataset, load_creator_dataset
 from .kohonen_stability import (
     TOPICS,
@@ -116,6 +121,7 @@ class SynthesisDesign:
     oja_config: Path
     primary_stability_classes: tuple[str, ...]
     baseline: BaselineDefinition
+    candidate_protocol: CandidateProtocol
     campaigns: tuple[CampaignDefinition, ...]
 
 
@@ -158,6 +164,7 @@ def load_design(path: Path | str) -> SynthesisDesign:
         "oja_config",
         "primary_stability_classes",
         "baseline",
+        "candidate_protocol",
         "campaigns",
     }
     unknown = set(raw) - expected
@@ -208,6 +215,9 @@ def load_design(path: Path | str) -> SynthesisDesign:
         raise ValueError("las campañas deben cubrir las cuatro regiones temáticas")
     if any(item.topic_feature not in RAW_FEATURES for item in campaigns):
         raise ValueError("cada topic_feature debe existir en los datos originales")
+    candidate_protocol = load_candidate_protocol(
+        raw["candidate_protocol"], [campaign.name for campaign in campaigns]
+    )
 
     base = path.parent
     stability_path = base / Path(raw["kohonen_stability_config"])
@@ -220,6 +230,7 @@ def load_design(path: Path | str) -> SynthesisDesign:
         oja_config=oja_path,
         primary_stability_classes=tuple(primary),
         baseline=BaselineDefinition(**baseline),
+        candidate_protocol=candidate_protocol,
         campaigns=tuple(campaigns),
     )
 
@@ -641,6 +652,7 @@ def write_tables(
     summary_rows: Sequence[dict],
     comparison_rows: Sequence[dict],
     strategy_summaries: Sequence[dict],
+    candidate_rows: Sequence[dict],
 ) -> None:
     generated = output / "generated"
     generated.mkdir(parents=True, exist_ok=True)
@@ -649,6 +661,7 @@ def write_tables(
     _write_csv(generated / "resumen_regiones.csv", summary_rows)
     _write_csv(generated / "shortlists_comparadas.csv", comparison_rows)
     _write_csv(generated / "comparacion_followers.csv", strategy_summaries)
+    _write_csv(generated / "candidatos_finales.csv", candidate_rows)
 
 
 def write_plots(
@@ -882,6 +895,14 @@ def _percent_change(value: float, baseline: float) -> float:
     return 100 * (value - baseline) / baseline
 
 
+def _relative_position(value: float, baseline: float, reference: str) -> str:
+    change = _percent_change(value, baseline)
+    if abs(change) < 0.05:
+        return f"igual a {reference}"
+    direction = "por encima de" if change > 0 else "por debajo de"
+    return f"{abs(change):.1f} % {direction} {reference}"
+
+
 def write_report(
     output: Path,
     design: SynthesisDesign,
@@ -889,6 +910,7 @@ def write_report(
     summary_rows: Sequence[dict],
     comparison_rows: Sequence[dict],
     strategy_summaries: Sequence[dict],
+    candidate_rows: Sequence[dict],
     pca: PCAResult,
     oja_correlation: float,
 ) -> None:
@@ -969,6 +991,79 @@ def write_report(
 - Sólo en el baseline: {_format_ids(baseline_only)}.
 """
         )
+    content_labels = {
+        "content_tutorial_pct": "tutorial",
+        "content_review_pct": "review",
+        "content_entertainment_pct": "entretenimiento",
+        "content_showcase_pct": "showcase",
+    }
+    candidate_sections = []
+    for campaign in design.campaigns:
+        finalists = [
+            row for row in candidate_rows if row["campaign"] == campaign.name
+        ]
+        reach_finalist = next(row for row in finalists if row["role"] == "alcance")
+        finalist_table = []
+        finalist_notes = []
+        for row in finalists:
+            response_label = (
+                "visitas al perfil por 1000"
+                if row["response_feature"] == "profile_visits_per_1000"
+                else "engagement por 1000"
+            )
+            warning = (
+                " Sí es fronterizo, por lo que conviene validar su región cuando se actualicen los datos."
+                if row["frontier_warning"]
+                else ""
+            )
+            if row["role"] == "alcance":
+                tradeoff = (
+                    f"Su respuesta queda {_relative_position(row['response_value'], row['campaign_median_response_value'], 'la mediana regional')} "
+                    f"y su precio {_relative_position(row['price_usd'], row['campaign_median_price_usd'], 'esa mediana')}."
+                )
+            elif row["role"] == "equilibrio":
+                tradeoff = (
+                    "Cumple simultáneamente los umbrales de afinidad, respuesta y costo; "
+                    "cede escala frente al perfil de alcance."
+                )
+            else:
+                tradeoff = (
+                    f"Su costo queda {_relative_position(row['price_usd'], reach_finalist['price_usd'], 'el del perfil de alcance')} y conserva "
+                    f"{100 * row['estimated_argentina_reach'] / reach_finalist['estimated_argentina_reach']:.1f} % de su alcance argentino estimado."
+                )
+            finalist_table.append(
+                "| {role_label} | {creator_id} ({name}) | {stability} | "
+                "{reach:,.0f} | {affinity:.1f} % | {response:.1f} | "
+                "USD {price:,.0f} | {content} ({content_pct:.1f} %) |".format(
+                    role_label=row["role_label"],
+                    creator_id=row["creator_id"],
+                    name=row["name"],
+                    stability=row["region_stability_class"],
+                    reach=row["estimated_argentina_reach"],
+                    affinity=row["topic_affinity_pct"],
+                    response=row["response_value"],
+                    price=row["price_usd"],
+                    content=content_labels[row["dominant_content_feature"]],
+                    content_pct=row["dominant_content_pct"],
+                )
+            )
+            finalist_notes.append(
+                f"- **{row['role_label']} — {row['creator_id']} ({row['name']}):** "
+                f"{row['selection_rule']}. Registra {row['estimated_argentina_reach']:,.0f} "
+                f"de alcance argentino estimado, {row['topic_affinity_pct']:.1f} % de "
+                f"afinidad, {row['response_value']:.1f} de {response_label} y un costo "
+                f"de USD {row['price_usd']:,.0f}. {tradeoff}{warning}"
+            )
+        candidate_sections.append(
+            f"""### {campaign.label}
+
+| Perfil | Creador | Estabilidad | Alcance argentino | Afinidad | Respuesta observada | Precio | Formato dominante |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+{chr(10).join(finalist_table)}
+
+{chr(10).join(finalist_notes)}
+"""
+        )
     explained = 100 * pca.cumulative_explained_variance[1]
     report = f"""# Síntesis regional para las cuatro campañas
 
@@ -1028,6 +1123,23 @@ shortlist.
 ![Solapamiento](generated/solapamiento_shortlists.svg)
 
 {''.join(comparison_sections)}
+## Candidatos propuestos y trade-offs
+
+Se proponen tres perfiles complementarios dentro del conjunto regional primario.
+No se suman variables ni se asignan pesos. Los tres perfiles exigen afinidad
+temática al menos mediana dentro de su conjunto regional. El perfil de alcance
+maximiza el alcance argentino estimado. El perfil equilibrado exige además
+respuesta al menos mediana y costo no mayor a la mediana, y entre quienes
+cumplen elige el mayor alcance restante. El perfil de especialización y
+eficiencia elige el menor costo entre los restantes.
+
+Para fútbol, belleza y arte se usa engagement por 1000 como respuesta observada.
+Para perros se usan visitas al perfil por 1000, porque están más próximas a una
+acción de consideración o consulta. Ninguna de las dos variables mide ventas o
+adopciones. Los tres perfiles son opciones para objetivos distintos, no un
+podio ni un ranking general.
+
+{''.join(candidate_sections)}
 ## Alcance de esta etapa
 
 Esta síntesis define conjuntos de candidatos y hace visibles sus perfiles y su
@@ -1045,6 +1157,7 @@ objetivo declarado para cada campaña.
 - `generated/perfiles_estandarizados.csv`: perfil z-score completo de cada región.
 - `generated/shortlists_comparadas.csv`: comparación individual con igual `K`;
 - `generated/comparacion_followers.csv`: resultados agregados por estrategia.
+- `generated/candidatos_finales.csv`: tres perfiles reproducibles por campaña.
 """
     output.mkdir(parents=True, exist_ok=True)
     (output / "README.md").write_text(report, encoding="utf-8")
@@ -1093,6 +1206,9 @@ def run_analysis(data: Path, config: Path, output: Path) -> list[dict]:
     strategy_summaries = build_strategy_summaries(
         comparison_rows, design.campaigns
     )
+    candidate_rows = select_final_candidates(
+        creator_rows, design.campaigns, design.candidate_protocol
+    )
     write_tables(
         output,
         creator_rows,
@@ -1100,6 +1216,7 @@ def run_analysis(data: Path, config: Path, output: Path) -> list[dict]:
         summary_rows,
         comparison_rows,
         strategy_summaries,
+        candidate_rows,
     )
     write_plots(output, dataset, creator_rows, profile_rows, design.campaigns)
     write_strategy_plots(output, strategy_summaries, design.campaigns)
@@ -1110,6 +1227,7 @@ def run_analysis(data: Path, config: Path, output: Path) -> list[dict]:
         summary_rows,
         comparison_rows,
         strategy_summaries,
+        candidate_rows,
         pca,
         representative.score_correlation,
     )

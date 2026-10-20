@@ -126,6 +126,67 @@ shortlist.
 - Sólo en la shortlist regional: INF008 (@artealpaso), INF024 (@artequeinspira), INF029 (@canvasycafe), INF044 (@arteentusmanos), INF048 (@creatividadaldia), INF004 (@pincelcotidiano), INF009 (@futbolcononda), INF012 (@trazosyreels), INF013 (@canchaaldia), INF016 (@rinconcreativo), INF049 (@entrelienzos).
 - Sólo en el baseline: INF001 (@mateconideas), INF021 (@golconmate), INF002 (@brillourbano), INF010 (@maquillajereal), INF036 (@crearenreels), INF045 (@futbolsinvueltas), INF042 (@brilloytendencia), INF005 (@tribunacreativa), INF032 (@tallerurbano), INF038 (@cosmeticaconsciente), INF040 (@galeriacotidiana).
 
+## Candidatos propuestos y trade-offs
+
+Se proponen tres perfiles complementarios dentro del conjunto regional primario.
+No se suman variables ni se asignan pesos. Los tres perfiles exigen afinidad
+temática al menos mediana dentro de su conjunto regional. El perfil de alcance
+maximiza el alcance argentino estimado. El perfil equilibrado exige además
+respuesta al menos mediana y costo no mayor a la mediana, y entre quienes
+cumplen elige el mayor alcance restante. El perfil de especialización y
+eficiencia elige el menor costo entre los restantes.
+
+Para fútbol, belleza y arte se usa engagement por 1000 como respuesta observada.
+Para perros se usan visitas al perfil por 1000, porque están más próximas a una
+acción de consideración o consulta. Ninguna de las dos variables mide ventas o
+adopciones. Los tres perfiles son opciones para objetivos distintos, no un
+podio ni un ranking general.
+
+### Fútbol
+
+| Perfil | Creador | Estabilidad | Alcance argentino | Afinidad | Respuesta observada | Precio | Formato dominante |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| Alcance | INF021 (@golconmate) | estable | 207,994 | 82.2 % | 69.2 | USD 3,251 | entretenimiento (51.9 %) |
+| Equilibrio | INF041 (@jugadayestilo) | estable | 23,664 | 79.2 % | 71.6 | USD 1,067 | entretenimiento (63.3 %) |
+| Especialización y eficiencia | INF027 (@pasionalbirroja) | estable | 3,529 | 71.0 % | 62.6 | USD 239 | tutorial (40.9 %) |
+
+- **Alcance — INF021 (@golconmate):** afinidad al menos mediana; máximo alcance argentino estimado. Registra 207,994 de alcance argentino estimado, 82.2 % de afinidad, 69.2 de engagement por 1000 y un costo de USD 3,251. Su respuesta queda 3.3 % por debajo de la mediana regional y su precio 15.9 % por encima de esa mediana.
+- **Equilibrio — INF041 (@jugadayestilo):** afinidad y respuesta al menos medianas, costo no mayor a la mediana; máximo alcance argentino restante. Registra 23,664 de alcance argentino estimado, 79.2 % de afinidad, 71.6 de engagement por 1000 y un costo de USD 1,067. Cumple simultáneamente los umbrales de afinidad, respuesta y costo; cede escala frente al perfil de alcance.
+- **Especialización y eficiencia — INF027 (@pasionalbirroja):** afinidad al menos mediana; menor costo entre los candidatos restantes. Registra 3,529 de alcance argentino estimado, 71.0 % de afinidad, 62.6 de engagement por 1000 y un costo de USD 239. Su costo queda 92.7 % por debajo de el del perfil de alcance y conserva 1.7 % de su alcance argentino estimado.
+### Belleza
+
+| Perfil | Creador | Estabilidad | Alcance argentino | Afinidad | Respuesta observada | Precio | Formato dominante |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| Alcance | INF006 (@glamencasa) | estable | 51,469 | 74.1 % | 62.4 | USD 2,922 | entretenimiento (40.1 %) |
+| Equilibrio | INF022 (@bellezasimple) | estable | 28,118 | 77.8 % | 69.9 | USD 2,784 | entretenimiento (75.9 %) |
+| Especialización y eficiencia | INF038 (@cosmeticaconsciente) | fronterizo | 23,212 | 75.5 % | 65.8 | USD 1,016 | tutorial (57.9 %) |
+
+- **Alcance — INF006 (@glamencasa):** afinidad al menos mediana; máximo alcance argentino estimado. Registra 51,469 de alcance argentino estimado, 74.1 % de afinidad, 62.4 de engagement por 1000 y un costo de USD 2,922. Su respuesta queda 2.7 % por debajo de la mediana regional y su precio 2.4 % por encima de esa mediana.
+- **Equilibrio — INF022 (@bellezasimple):** afinidad y respuesta al menos medianas, costo no mayor a la mediana; máximo alcance argentino restante. Registra 28,118 de alcance argentino estimado, 77.8 % de afinidad, 69.9 de engagement por 1000 y un costo de USD 2,784. Cumple simultáneamente los umbrales de afinidad, respuesta y costo; cede escala frente al perfil de alcance.
+- **Especialización y eficiencia — INF038 (@cosmeticaconsciente):** afinidad al menos mediana; menor costo entre los candidatos restantes. Registra 23,212 de alcance argentino estimado, 75.5 % de afinidad, 65.8 de engagement por 1000 y un costo de USD 1,016. Su costo queda 65.2 % por debajo de el del perfil de alcance y conserva 45.1 % de su alcance argentino estimado. Sí es fronterizo, por lo que conviene validar su región cuando se actualicen los datos.
+### Perros
+
+| Perfil | Creador | Estabilidad | Alcance argentino | Afinidad | Respuesta observada | Precio | Formato dominante |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| Alcance | INF039 (@huellasargentinas) | estable | 18,721 | 72.6 % | 16.4 | USD 599 | entretenimiento (75.8 %) |
+| Equilibrio | INF023 (@clubdelasmascotas) | estable | 6,044 | 76.7 % | 22.2 | USD 256 | entretenimiento (30.9 %) |
+| Especialización y eficiencia | INF043 (@consejoscaninos) | estable | 2,863 | 82.0 % | 22.7 | USD 75 | tutorial (49.5 %) |
+
+- **Alcance — INF039 (@huellasargentinas):** afinidad al menos mediana; máximo alcance argentino estimado. Registra 18,721 de alcance argentino estimado, 72.6 % de afinidad, 16.4 de visitas al perfil por 1000 y un costo de USD 599. Su respuesta queda 18.9 % por debajo de la mediana regional y su precio 133.7 % por encima de esa mediana.
+- **Equilibrio — INF023 (@clubdelasmascotas):** afinidad y respuesta al menos medianas, costo no mayor a la mediana; máximo alcance argentino restante. Registra 6,044 de alcance argentino estimado, 76.7 % de afinidad, 22.2 de visitas al perfil por 1000 y un costo de USD 256. Cumple simultáneamente los umbrales de afinidad, respuesta y costo; cede escala frente al perfil de alcance.
+- **Especialización y eficiencia — INF043 (@consejoscaninos):** afinidad al menos mediana; menor costo entre los candidatos restantes. Registra 2,863 de alcance argentino estimado, 82.0 % de afinidad, 22.7 de visitas al perfil por 1000 y un costo de USD 75. Su costo queda 87.5 % por debajo de el del perfil de alcance y conserva 15.3 % de su alcance argentino estimado.
+### Arte
+
+| Perfil | Creador | Estabilidad | Alcance argentino | Afinidad | Respuesta observada | Precio | Formato dominante |
+| --- | --- | --- | ---: | ---: | ---: | ---: | --- |
+| Alcance | INF024 (@artequeinspira) | estable | 60,465 | 70.2 % | 67.9 | USD 2,489 | entretenimiento (35.0 %) |
+| Equilibrio | INF012 (@trazosyreels) | fronterizo | 10,367 | 60.6 % | 73.8 | USD 431 | review (33.6 %) |
+| Especialización y eficiencia | INF016 (@rinconcreativo) | fronterizo | 37,812 | 64.1 % | 67.2 | USD 1,056 | entretenimiento (44.2 %) |
+
+- **Alcance — INF024 (@artequeinspira):** afinidad al menos mediana; máximo alcance argentino estimado. Registra 60,465 de alcance argentino estimado, 70.2 % de afinidad, 67.9 de engagement por 1000 y un costo de USD 2,489. Su respuesta queda igual a la mediana regional y su precio 96.9 % por encima de esa mediana.
+- **Equilibrio — INF012 (@trazosyreels):** afinidad y respuesta al menos medianas, costo no mayor a la mediana; máximo alcance argentino restante. Registra 10,367 de alcance argentino estimado, 60.6 % de afinidad, 73.8 de engagement por 1000 y un costo de USD 431. Cumple simultáneamente los umbrales de afinidad, respuesta y costo; cede escala frente al perfil de alcance. Sí es fronterizo, por lo que conviene validar su región cuando se actualicen los datos.
+- **Especialización y eficiencia — INF016 (@rinconcreativo):** afinidad al menos mediana; menor costo entre los candidatos restantes. Registra 37,812 de alcance argentino estimado, 64.1 % de afinidad, 67.2 de engagement por 1000 y un costo de USD 1,056. Su costo queda 57.6 % por debajo de el del perfil de alcance y conserva 62.5 % de su alcance argentino estimado. Sí es fronterizo, por lo que conviene validar su región cuando se actualicen los datos.
+
 ## Alcance de esta etapa
 
 Esta síntesis define conjuntos de candidatos y hace visibles sus perfiles y su
@@ -143,3 +204,4 @@ objetivo declarado para cada campaña.
 - `generated/perfiles_estandarizados.csv`: perfil z-score completo de cada región.
 - `generated/shortlists_comparadas.csv`: comparación individual con igual `K`;
 - `generated/comparacion_followers.csv`: resultados agregados por estrategia.
+- `generated/candidatos_finales.csv`: tres perfiles reproducibles por campaña.

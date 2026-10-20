@@ -177,7 +177,9 @@ un ranking automático. Los casos estables y fronterizos quedan como candidatos
 primarios y los inestables permanecen visibles con esa advertencia. Para cada
 campaña también compara esos candidatos contra el top global por `followers`
 con el mismo `K`, tanto por creador como en forma agregada, e incluye el costo y
-dos gráficos comparativos.
+dos gráficos comparativos. Finalmente propone tres perfiles complementarios por
+campaña —alcance, equilibrio y especialización/eficiencia— mediante umbrales y
+ordenamientos explícitos, sin combinar las variables en un score.
 
 Para ejecutar las pruebas:
 
