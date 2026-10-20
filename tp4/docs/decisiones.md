@@ -301,3 +301,30 @@ ambigüedad de signo y cálculo de las proyecciones. El barrido no comenzará
 hasta acordar sus tasas y cantidad de épocas. Se versionarán configuraciones,
 tablas agregadas, el informe y un conjunto pequeño de gráficos comparativos;
 no se guardará una carpeta redundante por corrida.
+
+### Resultado de la etapa 1: tasa y schedule
+
+Se ejecutaron 160 corridas: ocho tasas iniciales entre `0.001` y `0.5`, tasa
+constante o descenso lineal hasta el 10 %, 250 épocas y 10 semillas. La menor
+tasa ya alcanzó el techo práctico de la comparación, por lo que no apareció un
+pico interior: con descenso, `eta = 0.001` obtuvo una similitud media con PC1 de
+0.99999994 y correlación media de índices de 0.99999998. Probar tasas menores
+aportaría principalmente una convergencia más lenta, porque ambas métricas ya
+están acotadas por 1.
+
+Las tasas constantes se degradaron progresivamente entre `0.005` y `0.05` y
+divergieron en las 10 semillas desde `0.1`. El descenso lineal mantuvo estables
+las tasas de hasta `0.05`, pero con `0.1` sólo convergieron 2 de 10 semillas y
+desde `0.2` divergieron todas. Esto muestra que disminuir la tasa reduce la
+oscilación final, pero no compensa de forma confiable una tasa inicial excesiva.
+
+Para estudiar la cantidad de épocas se conservan tres finalistas:
+
+- descenso `0.001 -> 0.0001`, por su precisión final y norma más cercana a 1;
+- descenso `0.005 -> 0.0005`, porque alcanza rápidamente una dirección muy
+  cercana a PC1 y termina con precisión casi perfecta;
+- tasa constante `0.001`, como control estable para aislar el efecto del
+  schedule.
+
+El informe reproducible, las corridas individuales, los agregados por época y
+los gráficos comparativos quedan en `docs/oja-experimentos/01-rate/`.

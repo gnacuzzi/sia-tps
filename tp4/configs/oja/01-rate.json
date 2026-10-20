@@ -1,0 +1,8 @@
+{
+  "name": "oja-stage-1-rate",
+  "epochs": 250,
+  "learning_rates": [0.001, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5],
+  "schedules": ["constant", "linear-10pct"],
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "shuffle": true
+}

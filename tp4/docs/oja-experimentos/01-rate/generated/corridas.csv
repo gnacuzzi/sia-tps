@@ -1,0 +1,161 @@
+run,learning_rate,schedule,seed,success,direction_similarity,score_correlation,weight_norm,norm_error,failure_reason
+eta-0.001-constant-seed-00,0.001,constant,0,True,0.9999873194200897,0.9999975342276116,1.0023068547613858,0.0023068547613858126,
+eta-0.001-constant-seed-01,0.001,constant,1,True,0.9999836579045466,0.9999979753391837,1.0023292826238703,0.0023292826238703324,
+eta-0.001-constant-seed-02,0.001,constant,2,True,0.9999902791838406,0.9999983428562478,1.002324558924849,0.002324558924849063,
+eta-0.001-constant-seed-03,0.001,constant,3,True,0.9999725743848787,0.9999938337450879,1.0023235414496487,0.002323541449648747,
+eta-0.001-constant-seed-04,0.001,constant,4,True,0.999986898244561,0.99999745407232,1.002324852914964,0.002324852914963982,
+eta-0.001-constant-seed-05,0.001,constant,5,True,0.9999892743791281,0.999998221847305,1.002327665426021,0.0023276654260209195,
+eta-0.001-constant-seed-06,0.001,constant,6,True,0.9999923522912085,0.9999987164047308,1.0023141548956815,0.0023141548956815416,
+eta-0.001-constant-seed-07,0.001,constant,7,True,0.9999882930189101,0.9999984710878789,1.0023108019786602,0.002310801978660182,
+eta-0.001-constant-seed-08,0.001,constant,8,True,0.9999920830459798,0.9999979818631218,1.0023261735656375,0.0023261735656374682,
+eta-0.001-constant-seed-09,0.001,constant,9,True,0.9999858959424586,0.9999969336734622,1.0023224658337706,0.002322465833770604,
+eta-0.005-constant-seed-00,0.005,constant,0,True,0.9980830738776005,0.9995931391348688,1.0111119439884655,0.01111194398846549,
+eta-0.005-constant-seed-01,0.005,constant,1,True,0.997626051422658,0.9996674507998121,1.0123981172500272,0.012398117250027152,
+eta-0.005-constant-seed-02,0.005,constant,2,True,0.9984281176969599,0.9997238597654937,1.0124307071245116,0.012430707124511553,
+eta-0.005-constant-seed-03,0.005,constant,3,True,0.9976004983427416,0.9994880636539213,1.0125821695282327,0.012582169528232656,
+eta-0.005-constant-seed-04,0.005,constant,4,True,0.9985672304149236,0.9997342404302104,1.0123732087519166,0.012373208751916609,
+eta-0.005-constant-seed-05,0.005,constant,5,True,0.9988721409927226,0.9997890666134596,1.0121257230907548,0.01212572309075477,
+eta-0.005-constant-seed-06,0.005,constant,6,True,0.9986337400086743,0.9997418758194683,1.0123157295264507,0.012315729526450658,
+eta-0.005-constant-seed-07,0.005,constant,7,True,0.9989797325252312,0.9998352911194531,1.0117458011788654,0.011745801178865367,
+eta-0.005-constant-seed-08,0.005,constant,8,True,0.9992738878361362,0.9998313428958101,1.0120923928579957,0.012092392857995682,
+eta-0.005-constant-seed-09,0.005,constant,9,True,0.9981942648238048,0.999653230972808,1.0124806985838213,0.012480698583821281,
+eta-0.01-constant-seed-00,0.01,constant,0,True,0.9901280638011544,0.9978752601453722,1.0220470784846118,0.02204707848461185,
+eta-0.01-constant-seed-01,0.01,constant,1,True,0.9879636121537155,0.9982061794028434,1.0269714386843496,0.02697143868434959,
+eta-0.01-constant-seed-02,0.01,constant,2,True,0.991286698466302,0.9984488880863652,1.0267267569819387,0.026726756981938715,
+eta-0.01-constant-seed-03,0.01,constant,3,True,0.9884669889548854,0.9975311460231703,1.0276760372442657,0.027676037244265705,
+eta-0.01-constant-seed-04,0.01,constant,4,True,0.9903830421507103,0.9981978861165903,1.0258751245944733,0.025875124594473276,
+eta-0.01-constant-seed-05,0.01,constant,5,True,0.9929772118985492,0.9986431276889386,1.0247725159049526,0.024772515904952552,
+eta-0.01-constant-seed-06,0.01,constant,6,True,0.9907434534925134,0.9980562261909093,1.0266118709020131,0.026611870902013113,
+eta-0.01-constant-seed-07,0.01,constant,7,True,0.9934922659974349,0.9987748893494978,1.0224458722610439,0.022445872261043887,
+eta-0.01-constant-seed-08,0.01,constant,8,True,0.9959744376656446,0.9991408472272303,1.0238480263333902,0.023848026333390226,
+eta-0.01-constant-seed-09,0.01,constant,9,True,0.9901621266869706,0.9979998911840687,1.0262243925885934,0.026224392588593437,
+eta-0.02-constant-seed-00,0.02,constant,0,True,0.9651103520033679,0.9921889295070276,1.0469669416018823,0.046966941601882306,
+eta-0.02-constant-seed-01,0.02,constant,1,True,0.948190222335843,0.9906053174985672,1.0623152515963272,0.062315251596327226,
+eta-0.02-constant-seed-02,0.02,constant,2,True,0.9683167849777375,0.9944724810760073,1.0592017080706928,0.059201708070692804,
+eta-0.02-constant-seed-03,0.02,constant,3,True,0.958498346157865,0.9908301683028238,1.0616455177387654,0.061645517738765365,
+eta-0.02-constant-seed-04,0.02,constant,4,True,0.9591792915760502,0.9919108316601766,1.052818179010889,0.05281817901088903,
+eta-0.02-constant-seed-05,0.02,constant,5,True,0.9692089397432243,0.9932174348018648,1.050034584511824,0.050034584511823965,
+eta-0.02-constant-seed-06,0.02,constant,6,True,0.9600388125307846,0.9909021339699267,1.0636042985300467,0.06360429853004668,
+eta-0.02-constant-seed-07,0.02,constant,7,True,0.9646557863210067,0.9918527909462231,1.035786992465603,0.03578699246560291,
+eta-0.02-constant-seed-08,0.02,constant,8,True,0.9806952263483798,0.996207824740871,1.0423201474019959,0.042320147401995856,
+eta-0.02-constant-seed-09,0.02,constant,9,True,0.9714138905790237,0.9942975855722889,1.0544984458924371,0.05449844589243713,
+eta-0.05-constant-seed-00,0.05,constant,0,True,0.8901075790906896,0.9720482270148358,1.148662985678823,0.14866298567882308,
+eta-0.05-constant-seed-01,0.05,constant,1,True,0.6974254662400413,0.9010105318212731,1.154379983908046,0.15437998390804597,
+eta-0.05-constant-seed-02,0.05,constant,2,True,0.8545495900263171,0.967735134408635,1.2374295115800455,0.23742951158004555,
+eta-0.05-constant-seed-03,0.05,constant,3,True,0.9076122398730634,0.980403596077228,1.1763506784965831,0.17635067849658315,
+eta-0.05-constant-seed-04,0.05,constant,4,True,0.8276975892736823,0.9545472990154714,1.1198030797475593,0.11980307974755933,
+eta-0.05-constant-seed-05,0.05,constant,5,True,0.8920803712174664,0.9726825203857218,1.1355849677521463,0.13558496775214635,
+eta-0.05-constant-seed-06,0.05,constant,6,True,0.7992829401037221,0.9483783919836112,1.2326381368954777,0.23263813689547774,
+eta-0.05-constant-seed-07,0.05,constant,7,True,0.863110305608001,0.9634119144745323,1.0480020708275306,0.04800207082753061,
+eta-0.05-constant-seed-08,0.05,constant,8,True,0.9052050473844909,0.9807366763850297,1.0836628739575733,0.08366287395757332,
+eta-0.05-constant-seed-09,0.05,constant,9,True,0.8987327558603124,0.9794011275806954,1.056803597504427,0.056803597504426984,
+eta-0.1-constant-seed-00,0.1,constant,0,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 6
+eta-0.1-constant-seed-01,0.1,constant,1,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 82
+eta-0.1-constant-seed-02,0.1,constant,2,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 21
+eta-0.1-constant-seed-03,0.1,constant,3,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 76
+eta-0.1-constant-seed-04,0.1,constant,4,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 13
+eta-0.1-constant-seed-05,0.1,constant,5,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 7
+eta-0.1-constant-seed-06,0.1,constant,6,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 3
+eta-0.1-constant-seed-07,0.1,constant,7,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 3
+eta-0.1-constant-seed-08,0.1,constant,8,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 40
+eta-0.1-constant-seed-09,0.1,constant,9,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 29
+eta-0.2-constant-seed-00,0.2,constant,0,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-01,0.2,constant,1,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-02,0.2,constant,2,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-03,0.2,constant,3,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-04,0.2,constant,4,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-05,0.2,constant,5,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-06,0.2,constant,6,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-07,0.2,constant,7,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-08,0.2,constant,8,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-constant-seed-09,0.2,constant,9,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-00,0.5,constant,0,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-01,0.5,constant,1,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-02,0.5,constant,2,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-03,0.5,constant,3,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-04,0.5,constant,4,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-05,0.5,constant,5,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-06,0.5,constant,6,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-07,0.5,constant,7,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-08,0.5,constant,8,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-constant-seed-09,0.5,constant,9,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.001-linear-10pct-seed-00,0.001,linear-10pct,0,True,0.9999999406314525,0.9999999838125054,1.0003375046815515,0.0003375046815514704,
+eta-0.001-linear-10pct-seed-01,0.001,linear-10pct,1,True,0.9999999719769151,0.9999999930258356,1.0003374536556568,0.0003374536556568497,
+eta-0.001-linear-10pct-seed-02,0.001,linear-10pct,2,True,0.9999999774195719,0.9999999941409501,1.0003375384449165,0.0003375384449164631,
+eta-0.001-linear-10pct-seed-03,0.001,linear-10pct,3,True,0.9999999011517705,0.9999999715580319,1.00033744345434,0.0003374434543399474,
+eta-0.001-linear-10pct-seed-04,0.001,linear-10pct,4,True,0.999999925793098,0.9999999797747188,1.0003374460691221,0.00033744606912211594,
+eta-0.001-linear-10pct-seed-05,0.001,linear-10pct,5,True,0.999999974964255,0.9999999945308139,1.0003375325241473,0.0003375325241472549,
+eta-0.001-linear-10pct-seed-06,0.001,linear-10pct,6,True,0.9999999303905264,0.9999999789471715,1.000337351018751,0.0003373510187509865,
+eta-0.001-linear-10pct-seed-07,0.001,linear-10pct,7,True,0.9999999455897565,0.9999999837894851,1.0003375036872921,0.0003375036872921289,
+eta-0.001-linear-10pct-seed-08,0.001,linear-10pct,8,True,0.9999999515816541,0.9999999874773624,1.000337561757104,0.00033756175710397684,
+eta-0.001-linear-10pct-seed-09,0.001,linear-10pct,9,True,0.9999999139302991,0.9999999788272843,1.0003374981630815,0.0003374981630814844,
+eta-0.005-linear-10pct-seed-00,0.005,linear-10pct,0,True,0.9999987974567487,0.9999997481963323,1.0012874817475799,0.0012874817475798661,
+eta-0.005-linear-10pct-seed-01,0.005,linear-10pct,1,True,0.9999987817596513,0.9999998223404173,1.001289055889049,0.00128905588904904,
+eta-0.005-linear-10pct-seed-02,0.005,linear-10pct,2,True,0.9999986575042523,0.9999997376937692,1.0012887160908446,0.0012887160908445772,
+eta-0.005-linear-10pct-seed-03,0.005,linear-10pct,3,True,0.9999975031683642,0.9999994422570575,1.0012890459415238,0.001289045941523792,
+eta-0.005-linear-10pct-seed-04,0.005,linear-10pct,4,True,0.9999984732633495,0.999999801560267,1.001289958830294,0.0012899588302939247,
+eta-0.005-linear-10pct-seed-05,0.005,linear-10pct,5,True,0.999998882476285,0.9999998447334579,1.0012911775091287,0.0012911775091286604,
+eta-0.005-linear-10pct-seed-06,0.005,linear-10pct,6,True,0.9999976103933794,0.9999994100561301,1.00128512818447,0.001285128184469908,
+eta-0.005-linear-10pct-seed-07,0.005,linear-10pct,7,True,0.9999985361882049,0.9999998092153229,1.0012856988972036,0.0012856988972036465,
+eta-0.005-linear-10pct-seed-08,0.005,linear-10pct,8,True,0.9999990589230633,0.9999998177995154,1.0012904929173878,0.0012904929173878088,
+eta-0.005-linear-10pct-seed-09,0.005,linear-10pct,9,True,0.9999988561169063,0.9999997119917448,1.0012875286685046,0.0012875286685045673,
+eta-0.01-linear-10pct-seed-00,0.01,linear-10pct,0,True,0.9999896623395221,0.9999980656451191,1.0024510449303996,0.002451044930399604,
+eta-0.01-linear-10pct-seed-01,0.01,linear-10pct,1,True,0.9999865369828876,0.9999983652089367,1.0024688465293514,0.0024688465293514206,
+eta-0.01-linear-10pct-seed-02,0.01,linear-10pct,2,True,0.9999906773974399,0.9999983411335195,1.0024625374394254,0.002462537439425372,
+eta-0.01-linear-10pct-seed-03,0.01,linear-10pct,3,True,0.9999750192219783,0.9999943304409138,1.002466642832862,0.0024666428328619094,
+eta-0.01-linear-10pct-seed-04,0.01,linear-10pct,4,True,0.9999867922290538,0.999997420842218,1.0024692562225332,0.002469256222533245,
+eta-0.01-linear-10pct-seed-05,0.01,linear-10pct,5,True,0.9999901453039258,0.9999984106734539,1.0024710946866147,0.002471094686614661,
+eta-0.01-linear-10pct-seed-06,0.01,linear-10pct,6,True,0.9999917138827586,0.9999984627001275,1.0024538245938086,0.0024538245938086067,
+eta-0.01-linear-10pct-seed-07,0.01,linear-10pct,7,True,0.9999888674241088,0.9999985974739937,1.0024493866824413,0.0024493866824413235,
+eta-0.01-linear-10pct-seed-08,0.01,linear-10pct,8,True,0.9999930967139309,0.9999982569593677,1.0024695532409564,0.0024695532409564347,
+eta-0.01-linear-10pct-seed-09,0.01,linear-10pct,9,True,0.9999870682832337,0.9999971009864639,1.002460485324653,0.002460485324653039,
+eta-0.02-linear-10pct-seed-00,0.02,linear-10pct,0,True,0.9998756325904936,0.9999737516972552,1.0047385055381584,0.004738505538158355,
+eta-0.02-linear-10pct-seed-01,0.02,linear-10pct,1,True,0.9998183343863825,0.9999758862039142,1.0048726304416884,0.004872630441688397,
+eta-0.02-linear-10pct-seed-02,0.02,linear-10pct,2,True,0.9999161165518321,0.9999864499347043,1.0048623582639098,0.004862358263909794,
+eta-0.02-linear-10pct-seed-03,0.02,linear-10pct,3,True,0.9997812862081923,0.9999511189348523,1.0048736983794266,0.004873698379426639,
+eta-0.02-linear-10pct-seed-04,0.02,linear-10pct,4,True,0.9999061677192834,0.9999813977593387,1.0048718915388009,0.004871891538800854,
+eta-0.02-linear-10pct-seed-05,0.02,linear-10pct,5,True,0.999916451700184,0.9999850805058453,1.0048699161941783,0.004869916194178314,
+eta-0.02-linear-10pct-seed-06,0.02,linear-10pct,6,True,0.9999470251508505,0.9999920123074485,1.004846404663766,0.0048464046637659575,
+eta-0.02-linear-10pct-seed-07,0.02,linear-10pct,7,True,0.9999129327444275,0.9999871008794005,1.0047960340483706,0.00479603404837059,
+eta-0.02-linear-10pct-seed-08,0.02,linear-10pct,8,True,0.9999384160724977,0.9999847103508254,1.0048713848337216,0.004871384833721626,
+eta-0.02-linear-10pct-seed-09,0.02,linear-10pct,9,True,0.9998707247091692,0.9999746946545611,1.0048571474868684,0.004857147486868385,
+eta-0.05-linear-10pct-seed-00,0.05,linear-10pct,0,True,0.9980959240076892,0.9995956485133843,1.011263742194777,0.011263742194776993,
+eta-0.05-linear-10pct-seed-01,0.05,linear-10pct,1,True,0.9976136904674058,0.9996644818599384,1.0125273152015255,0.012527315201525502,
+eta-0.05-linear-10pct-seed-02,0.05,linear-10pct,2,True,0.998429497716939,0.9997242609714891,1.012537738463157,0.012537738463157089,
+eta-0.05-linear-10pct-seed-03,0.05,linear-10pct,3,True,0.9975874224628838,0.9994850400610156,1.0127520091809605,0.012752009180960533,
+eta-0.05-linear-10pct-seed-04,0.05,linear-10pct,4,True,0.9985540420184998,0.9997308918021673,1.0125574627034193,0.012557462703419286,
+eta-0.05-linear-10pct-seed-05,0.05,linear-10pct,5,True,0.9988742422079314,0.9997886583366398,1.0122890157662336,0.012289015766233646,
+eta-0.05-linear-10pct-seed-06,0.05,linear-10pct,6,True,0.9986460540500234,0.9997455968210823,1.0124586288285506,0.012458628828550644,
+eta-0.05-linear-10pct-seed-07,0.05,linear-10pct,7,True,0.9989843004584957,0.999836323870828,1.0118934012925889,0.011893401292588868,
+eta-0.05-linear-10pct-seed-08,0.05,linear-10pct,8,True,0.9992668356726447,0.9998294823148467,1.0122612002642473,0.012261200264247263,
+eta-0.05-linear-10pct-seed-09,0.05,linear-10pct,9,True,0.9981996278434148,0.9996551408135361,1.012610768713001,0.012610768713001042,
+eta-0.1-linear-10pct-seed-00,0.1,linear-10pct,0,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 6
+eta-0.1-linear-10pct-seed-01,0.1,linear-10pct,1,True,0.9879162322702568,0.998203097872885,1.0270961529442764,0.027096152944276364,
+eta-0.1-linear-10pct-seed-02,0.1,linear-10pct,2,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 5
+eta-0.1-linear-10pct-seed-03,0.1,linear-10pct,3,True,0.9883993853413996,0.9975175547678939,1.0278924416403181,0.027892441640318122,
+eta-0.1-linear-10pct-seed-04,0.1,linear-10pct,4,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 13
+eta-0.1-linear-10pct-seed-05,0.1,linear-10pct,5,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 7
+eta-0.1-linear-10pct-seed-06,0.1,linear-10pct,6,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 3
+eta-0.1-linear-10pct-seed-07,0.1,linear-10pct,7,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 3
+eta-0.1-linear-10pct-seed-08,0.1,linear-10pct,8,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 15
+eta-0.1-linear-10pct-seed-09,0.1,linear-10pct,9,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 31
+eta-0.2-linear-10pct-seed-00,0.2,linear-10pct,0,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-01,0.2,linear-10pct,1,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-02,0.2,linear-10pct,2,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-03,0.2,linear-10pct,3,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-04,0.2,linear-10pct,4,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-05,0.2,linear-10pct,5,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-06,0.2,linear-10pct,6,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-07,0.2,linear-10pct,7,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-08,0.2,linear-10pct,8,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.2-linear-10pct-seed-09,0.2,linear-10pct,9,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-00,0.5,linear-10pct,0,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-01,0.5,linear-10pct,1,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-02,0.5,linear-10pct,2,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-03,0.5,linear-10pct,3,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-04,0.5,linear-10pct,4,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-05,0.5,linear-10pct,5,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-06,0.5,linear-10pct,6,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-07,0.5,linear-10pct,7,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-08,0.5,linear-10pct,8,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1
+eta-0.5-linear-10pct-seed-09,0.5,linear-10pct,9,False,nan,nan,nan,nan,Oja divergió y produjo pesos no finitos en la época 1

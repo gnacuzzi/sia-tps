@@ -80,8 +80,9 @@ def _linear_schedule(start: float, end: float, step: int, steps: int) -> float:
 def _oja_update(weights: np.ndarray, sample: np.ndarray, rate: float) -> np.ndarray:
     """Aplicar una actualización en línea de la regla vista en clase."""
 
-    output = float(sample @ weights)
-    return weights + rate * output * (sample - output * weights)
+    with np.errstate(divide="ignore", over="ignore", invalid="ignore"):
+        output = float(sample @ weights)
+        return weights + rate * output * (sample - output * weights)
 
 
 def align_sign(vector: np.ndarray, reference: np.ndarray) -> np.ndarray:
