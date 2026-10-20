@@ -87,6 +87,53 @@ def test_loader_preserves_requested_order_and_rejects_duplicate_ids(tmp_path):
         load_creator_dataset(path, ("y", "x"))
 
 
+def test_loader_accepts_a_new_creator_and_an_explicit_new_feature(tmp_path):
+    path = tmp_path / "creators.csv"
+    with path.open("w", encoding="utf-8", newline="") as stream:
+        writer = csv.DictWriter(
+            stream,
+            fieldnames=["creator_id", "name", "followers", "x", "y", "new_metric"],
+        )
+        writer.writeheader()
+        writer.writerows(
+            [
+                {
+                    "creator_id": "c1",
+                    "name": "Uno",
+                    "followers": 10,
+                    "x": 1,
+                    "y": 4,
+                    "new_metric": 100,
+                },
+                {
+                    "creator_id": "c2",
+                    "name": "Dos",
+                    "followers": 20,
+                    "x": 2,
+                    "y": 3,
+                    "new_metric": 200,
+                },
+                {
+                    "creator_id": "c3",
+                    "name": "Tres",
+                    "followers": 30,
+                    "x": 3,
+                    "y": 2,
+                    "new_metric": 300,
+                },
+            ]
+        )
+
+    unchanged_model = load_creator_dataset(path, ("y", "x"))
+    extended_model = load_creator_dataset(path, ("new_metric", "y", "x"))
+
+    assert unchanged_model.creator_ids == ("c1", "c2", "c3")
+    np.testing.assert_array_equal(
+        extended_model.values,
+        [[100.0, 4.0, 1.0], [200.0, 3.0, 2.0], [300.0, 2.0, 3.0]],
+    )
+
+
 def test_engagement_variant_replaces_total_without_changing_other_features():
     expected = list(BASE_FEATURES)
     position = expected.index("total_engagement_per_1000")

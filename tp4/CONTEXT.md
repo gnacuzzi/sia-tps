@@ -67,6 +67,10 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   usa un score compuesto. Los candidatos de fútbol son `INF021`, `INF041` e
   `INF027`; los de belleza `INF006`, `INF022` e `INF038`; los de perros
   `INF039`, `INF023` e `INF043`; y los de arte `INF024`, `INF012` e `INF016`.
+  El mantenimiento también está documentado: una actualización mensual o la
+  incorporación de creadores vuelve a entrenar el pipeline completo; campañas
+  o variables nuevas requieren revisar explícitamente el diseño. Los informes
+  canónicos se regeneran sin crear carpetas por mes o por semilla.
   Hopfield todavía no está implementado.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
@@ -381,18 +385,17 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
    (completado).
 8. Caracterizar regiones/candidatos para las cuatro campañas y contrastar con
    el baseline de `followers` usando el mismo `K` (completado).
-9. Documentar mantenimiento, llegada de datos mensuales y limitaciones.
+9. Documentar mantenimiento, llegada de datos mensuales y limitaciones
+   (completado).
 10. Recién después de la clase correspondiente, incorporar Hopfield.
 
 ## Decisiones todavía abiertas
 
-- Mantenimiento ante nuevos creadores, variables y actualizaciones mensuales.
 - Implementación, CLI y formato de resultados de Hopfield cuando se habilite
   el ejercicio 2.
 
-Ninguna de estas decisiones debe cerrarse sólo por conveniencia de código: se
-debe registrar la evidencia, la alternativa considerada y su efecto en la
-interpretación.
+Esa decisión no debe cerrarse sólo por conveniencia de código: se debe registrar
+la evidencia, la alternativa considerada y su efecto en la interpretación.
 
 ## Fuentes locales consultadas
 

@@ -181,6 +181,10 @@ dos gráficos comparativos. Finalmente propone tres perfiles complementarios por
 campaña —alcance, equilibrio y especialización/eficiencia— mediante umbrales y
 ordenamientos explícitos, sin combinar las variables en un score.
 
+El procedimiento para incorporar creadores, actualizar el catálogo cada mes y
+decidir cuándo revisar campañas, variables o hiperparámetros está documentado
+en `docs/mantenimiento.md`.
+
 Para ejecutar las pruebas:
 
 ```bash

@@ -517,3 +517,30 @@ respuesta para preservar escala; el equilibrado satisface simultáneamente los
 umbrales; el de eficiencia reduce costo a cambio de alcance. Los fronterizos se
 conservan con una advertencia explícita y deben revisarse cuando cambien los
 datos.
+
+## Mantenimiento del sistema
+
+El procedimiento operativo completo está en [`mantenimiento.md`](mantenimiento.md).
+Se adoptan estas decisiones para no comparar resultados producidos bajo
+supuestos incompatibles:
+
+- cada actualización mensual y cada alta de creadores vuelve a ajustar el
+  z-score, PCA, Kohonen y Oja sobre el catálogo completo;
+- los resultados canónicos de `docs/` se regeneran en su ubicación habitual y
+  Git conserva su historia; no se crea una carpeta por mes ni por semilla;
+- una campaña adicional se rechaza deliberadamente hasta extender la
+  configuración, las regiones y el reporte, en vez de forzarla dentro de una de
+  las cuatro campañas del enunciado;
+- una variable descriptiva nueva puede quedar fuera de los modelos, pero debe
+  declararse en el esquema del EDA; una entrada nueva obliga a repetir la
+  selección, PCA, Oja, Kohonen y la interpretación;
+- ante cambios rutinarios se prueban primero las configuraciones finalistas con
+  diez semillas. El barrido completo sólo se reabre si persiste una
+  inestabilidad general, cambian las entradas, aparece un tema nuevo o cambia
+  sustancialmente el tamaño del catálogo.
+
+No se implementa inferencia con modelos congelados porque el proyecto no
+persiste el estandarizador ni los modelos ajustados. Tampoco se fijan umbrales
+nuevos después de observar cada actualización: se conservan los criterios de
+estabilidad y de selección ya documentados para que la comparación sea
+auditable.

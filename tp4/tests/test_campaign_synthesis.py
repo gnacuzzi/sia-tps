@@ -1,7 +1,9 @@
 import csv
+import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from sia_tp4.campaign_synthesis import (
     RAW_FEATURES,
@@ -97,6 +99,27 @@ def test_load_design_references_the_existing_reproducible_protocols():
     )
     assert design.kohonen_stability_config.is_file()
     assert design.oja_config.is_file()
+
+
+def test_design_rejects_a_fifth_campaign_until_the_model_is_extended(tmp_path):
+    source = ROOT / "configs/campaigns/synthesis.json"
+    raw = json.loads(source.read_text(encoding="utf-8"))
+    raw["campaigns"].append(
+        {
+            "name": "nueva",
+            "label": "Nueva",
+            "region": "football",
+            "topic_feature": "topic_football_pct",
+        }
+    )
+    raw["candidate_protocol"]["response_feature_by_campaign"]["nueva"] = (
+        "total_engagement_per_1000"
+    )
+    path = tmp_path / "synthesis.json"
+    path.write_text(json.dumps(raw), encoding="utf-8")
+
+    with pytest.raises(ValueError, match="exactamente cuatro campañas"):
+        load_design(path)
 
 
 def test_load_original_rows_preserves_source_values():

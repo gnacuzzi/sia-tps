@@ -1149,6 +1149,9 @@ retorno de inversión porque el dataset no contiene esas variables objetivo.
 Tampoco elige automáticamente un ganador: la estrategia apropiada depende del
 objetivo declarado para cada campaña.
 
+El procedimiento para incorporar creadores, campañas, variables o una nueva
+actualización mensual está en [`../mantenimiento.md`](../mantenimiento.md).
+
 ## Archivos reproducibles
 
 - `generated/creadores_por_campana.csv`: unión por creador de estabilidad,
