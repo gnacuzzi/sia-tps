@@ -1064,6 +1064,42 @@ def write_report(
 {chr(10).join(finalist_notes)}
 """
         )
+    football_regional = strategy_lookup[("futbol", "regional_kohonen")]
+    football_baseline = strategy_lookup[("futbol", "baseline_followers")]
+    football_finalists = [
+        row for row in candidate_rows if row["campaign"] == "futbol"
+    ]
+    football_reach = next(
+        row for row in football_finalists if row["role"] == "alcance"
+    )
+    football_balanced = next(
+        row for row in football_finalists if row["role"] == "equilibrio"
+    )
+    football_efficiency = next(
+        row
+        for row in football_finalists
+        if row["role"] == "especializacion_eficiencia"
+    )
+    football_affinity_baseline = football_baseline["mean_topic_affinity_pct"]
+    football_affinity_regional = football_regional["mean_topic_affinity_pct"]
+    football_cost_reduction = abs(
+        _percent_change(
+            football_regional["total_price_usd"],
+            football_baseline["total_price_usd"],
+        )
+    )
+    football_engagement_gain = abs(
+        _percent_change(
+            football_regional["mean_total_engagement_per_1000"],
+            football_baseline["mean_total_engagement_per_1000"],
+        )
+    )
+    football_reach_reduction = abs(
+        _percent_change(
+            football_regional["sum_estimated_argentina_reach"],
+            football_baseline["sum_estimated_argentina_reach"],
+        )
+    )
     explained = 100 * pca.cumulative_explained_variance[1]
     report = f"""# Síntesis regional para las cuatro campañas
 
@@ -1140,6 +1176,34 @@ adopciones. Los tres perfiles son opciones para objetivos distintos, no un
 podio ni un ranking general.
 
 {''.join(candidate_sections)}
+## Decisión explícita para una campaña de fútbol
+
+Bajo el supuesto de una campaña genérica de ropa de entrenamiento que busca
+incorporar público nuevo, se prioriza **descubrimiento calificado dentro de la
+región de fútbol**, no alcance masivo sin filtro. La razón es el problema de
+partida: la estrategia por followers ya aporta visibilidad, pero no garantiza
+afinidad. Frente a ese baseline, la shortlist regional aumenta la afinidad
+media de **{football_affinity_baseline:.1f} %** a **{football_affinity_regional:.1f} %**,
+reduce el costo total **{football_cost_reduction:.1f} %** y mantiene un
+engagement medio **{football_engagement_gain:.1f} %** mayor, aunque resigna
+**{football_reach_reduction:.1f} %** del alcance argentino estimado.
+
+Dentro de esa región, el perfil equilibrado **{football_balanced['creator_id']} ({football_balanced['name']})**
+es la opción por defecto: es estable en las diez semillas, tiene **{football_balanced['topic_affinity_pct']:.1f} %**
+de afinidad con fútbol, **{football_balanced['non_follower_reach_pct']:.1f} %**
+de alcance proveniente de no seguidores, **{football_balanced['response_value']:.1f}**
+de engagement por 1000 y cuesta **USD {football_balanced['price_usd']:,.0f}**.
+No se afirma que vaya a producir más ventas porque el dataset no contiene
+conversiones.
+
+La prioridad cambia si cambia el objetivo declarado: para notoriedad masiva se
+prefiere **{football_reach['creator_id']} ({football_reach['name']})**, que maximiza
+el alcance argentino; para una pieza educativa de menor presupuesto se prefiere
+**{football_efficiency['creator_id']} ({football_efficiency['name']})**, cuyo
+formato dominante es tutorial y tiene el menor costo entre los candidatos
+restantes de alta afinidad. Estas alternativas son decisiones condicionadas,
+no un ranking universal.
+
 ## Alcance de esta etapa
 
 Esta síntesis define conjuntos de candidatos y hace visibles sus perfiles y su

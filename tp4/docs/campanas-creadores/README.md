@@ -187,6 +187,34 @@ podio ni un ranking general.
 - **Equilibrio — INF012 (@trazosyreels):** afinidad y respuesta al menos medianas, costo no mayor a la mediana; máximo alcance argentino restante. Registra 10,367 de alcance argentino estimado, 60.6 % de afinidad, 73.8 de engagement por 1000 y un costo de USD 431. Cumple simultáneamente los umbrales de afinidad, respuesta y costo; cede escala frente al perfil de alcance. Sí es fronterizo, por lo que conviene validar su región cuando se actualicen los datos.
 - **Especialización y eficiencia — INF016 (@rinconcreativo):** afinidad al menos mediana; menor costo entre los candidatos restantes. Registra 37,812 de alcance argentino estimado, 64.1 % de afinidad, 67.2 de engagement por 1000 y un costo de USD 1,056. Su costo queda 57.6 % por debajo de el del perfil de alcance y conserva 62.5 % de su alcance argentino estimado. Sí es fronterizo, por lo que conviene validar su región cuando se actualicen los datos.
 
+## Decisión explícita para una campaña de fútbol
+
+Bajo el supuesto de una campaña genérica de ropa de entrenamiento que busca
+incorporar público nuevo, se prioriza **descubrimiento calificado dentro de la
+región de fútbol**, no alcance masivo sin filtro. La razón es el problema de
+partida: la estrategia por followers ya aporta visibilidad, pero no garantiza
+afinidad. Frente a ese baseline, la shortlist regional aumenta la afinidad
+media de **31.7 %** a **56.1 %**,
+reduce el costo total **27.2 %** y mantiene un
+engagement medio **3.4 %** mayor, aunque resigna
+**29.5 %** del alcance argentino estimado.
+
+Dentro de esa región, el perfil equilibrado **INF041 (@jugadayestilo)**
+es la opción por defecto: es estable en las diez semillas, tiene **79.2 %**
+de afinidad con fútbol, **67.2 %**
+de alcance proveniente de no seguidores, **71.6**
+de engagement por 1000 y cuesta **USD 1,067**.
+No se afirma que vaya a producir más ventas porque el dataset no contiene
+conversiones.
+
+La prioridad cambia si cambia el objetivo declarado: para notoriedad masiva se
+prefiere **INF021 (@golconmate)**, que maximiza
+el alcance argentino; para una pieza educativa de menor presupuesto se prefiere
+**INF027 (@pasionalbirroja)**, cuyo
+formato dominante es tutorial y tiene el menor costo entre los candidatos
+restantes de alta afinidad. Estas alternativas son decisiones condicionadas,
+no un ranking universal.
+
 ## Alcance de esta etapa
 
 Esta síntesis define conjuntos de candidatos y hace visibles sus perfiles y su

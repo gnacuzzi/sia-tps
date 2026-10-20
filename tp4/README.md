@@ -45,8 +45,8 @@ El informe comparativo queda en `docs/pca-engagement/README.md`.
 La red de Kohonen está implementada en `src/sia_tp4/kohonen.py`. Estandariza
 las 15 entradas, permite configurar la grilla y el entrenamiento, y expone el
 mapa de hits, la matriz U y los mapas por variable. Cada JSON representa una
-sola corrida; la configuración base está en `configs/kohonen/base.json`. Cuando
-corresponda ejecutarla, su informe se genera con:
+sola corrida; la configuración base está en `configs/kohonen/base.json`. Su
+informe individual se genera con:
 
 ```bash
 python3 scripts/analyze_kohonen.py
@@ -61,10 +61,10 @@ python3 scripts/validate_kohonen.py
 
 El resultado reproducible está en `docs/kohonen-sintetico/README.md`.
 
-Para los experimentos se crearán otros JSON y se indicarán mediante `--config`.
+Los experimentos usan otros JSON indicados mediante `--config`.
 Cada nombre de corrida produce por defecto una carpeta diferente dentro de
 `docs/kohonen-creadores/`; `--output` permite sobrescribir ese destino. También
-puede cambiarse el dataset con `--data`. Su diseño y las decisiones pendientes
+puede cambiarse el dataset con `--data`. Su diseño y las decisiones adoptadas
 están documentados en `docs/kohonen.md`.
 
 El primer experimento compara `k = 2, ..., 8` con cinco semillas por tamaño:

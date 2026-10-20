@@ -725,8 +725,9 @@ Dentro de las 15 variables permanecen estas asociaciones con `|r| >= 0,70`:
 No hay redundancias exactas dentro de la selección. Las correlaciones restantes
 responden a relaciones comerciales o a las composiciones del dataset. Se
 conservan porque las variables tienen significados distintos que se necesitan
-para interpretar campañas. PCA permitirá observar cuánto de esa información se
-resume en las mismas componentes, pero todavía no se ejecuta en este informe.
+para interpretar campañas. El análisis PCA posterior muestra cuánto de esa
+información se resume en las mismas componentes y queda documentado en
+`docs/pca-creadores/README.md`.
 
 ## Variables auxiliares para interpretar
 
@@ -743,21 +744,17 @@ resultados:
 - `video_posts_pct`, `short_form_posts_pct` y `trend_posts_pct`, para describir
   el formato de las regiones sin darle tres veces ese peso al entrenamiento.
 
-## Conclusiones y próximos pasos
+## Conclusiones del EDA
 
 El dataset está completo y es pequeño, pero contiene escalas incompatibles,
 variables derivadas, composiciones cerradas y bloques con correlación muy alta.
 No conviene pasar las 31 variables numéricas directamente a los modelos.
 
-El EDA descriptivo ya es suficiente para cerrar una primera selección. No hace
-falta agregar más indicadores antes de avanzar. Se comenzará únicamente con
-z-score. No se aplicará una transformación logarítmica ahora; queda como opción
-si PCA resulta dominado por volumen o costo.
-
-El siguiente paso futuro será estandarizar una única matriz y realizar PCA con
-varianza explicada, cargas, scores y biplot. No se implementa en esta etapa. La
-comparación de representaciones de engagement queda registrada como experimento
-obligatorio antes de adoptar la selección definitiva para Kohonen y Oja.
+El EDA descriptivo permitió cerrar la selección de 15 variables. Los análisis
+posteriores usan únicamente z-score; no fue necesario agregar una
+transformación logarítmica. PCA incluye varianza explicada, cargas, scores y
+biplot, y la comparación de representaciones de engagement confirmó el total
+como entrada definitiva para PCA, Kohonen y Oja.
 
 ## Archivos generados
 

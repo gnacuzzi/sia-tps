@@ -1,8 +1,8 @@
 # Decisiones del TP4
 
-Este documento registra las decisiones acordadas, su justificación y las
-validaciones pendientes. El informe cuantitativo que las respalda está en
-`docs/eda-creadores/README.md`.
+Este documento registra las decisiones acordadas y su justificación. La
+evidencia cuantitativa se distribuye en los informes reproducibles de EDA, PCA,
+Kohonen, Oja y campañas dentro de `docs/`.
 
 ## Estado de la selección
 

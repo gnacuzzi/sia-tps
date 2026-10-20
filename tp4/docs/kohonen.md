@@ -1,9 +1,10 @@
 # Implementación de Kohonen
 
 El algoritmo está en `src/sia_tp4/kohonen.py` y el runner experimental en
-`src/sia_tp4/kohonen_analysis.py`. La implementación se validó y ya se ejecutó
-el primer barrido de tamaños de grilla sobre los creadores. Todavía no se
-eligieron los hiperparámetros finales.
+`src/sia_tp4/kohonen_analysis.py`. La implementación se validó y se completó el
+protocolo experimental. La configuración final es una grilla `5 x 5`, tasa
+constante `0.2`, radio inicial igual al diámetro con descenso hasta 1, 150
+épocas e inicialización `sample`.
 
 ## Entradas y entrenamiento
 
@@ -184,10 +185,10 @@ creadores, el costo observado no limita la elección, pero queda medido para no
 suponer que será irrelevante en datasets mayores. Los datos y gráficos completos están en
 `docs/kohonen-experimentos/04-radius/README.md`.
 
-El paso siguiente es generar mapas de hits y matrices U únicamente para las
-configuraciones representativas de estas regiones. Así se evita versionar las
-figuras de las 300 corridas sin perder trazabilidad: todos sus JSON, métricas
-individuales y promedios quedan conservados.
+El paso siguiente de esa secuencia fue generar mapas de hits y matrices U
+únicamente para las configuraciones representativas de esas regiones. Así se
+evitó versionar las figuras de las 300 corridas sin perder trazabilidad: todos
+sus JSON, métricas individuales y promedios quedaron conservados.
 
 La validación visual se realizó sobre nueve compromisos y una semilla central
 por configuración. Los dos mapas `k = 4` quedaron completamente ocupados. En
