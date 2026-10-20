@@ -417,3 +417,39 @@ síntesis de campañas partirá de la región temática completa y comparará de
 de ella las variables originales. No se repetirá todavía el barrido: primero se
 evaluará esta selección regional, y sólo si también resulta inestable se
 compararán con diez semillas las configuraciones finalistas.
+
+## Síntesis reproducible para las campañas
+
+Cada creador se asigna a la campaña correspondiente a su región temática modal
+en las diez semillas de Kohonen. Si hubiera un empate modal, se conserva en las
+dos regiones empatadas en vez de resolverlo arbitrariamente; no hubo empates en
+estos datos. La región completa constituye el conjunto de análisis. Los casos
+estables y fronterizos son candidatos primarios, mientras que los inestables se
+mantienen visibles con una advertencia y no se eliminan silenciosamente.
+
+La tabla maestra reúne las 31 variables numéricas en unidades originales, los
+cuatro conteos de pertenencia regional, la clase y porcentaje de estabilidad,
+PC1-PC2 y el índice representativo de Oja. No se construye un score compuesto
+ni un ranking: Oja confirma PC1 con correlación 0.999999962 y, por lo tanto, no
+constituye una segunda evidencia independiente que deba contarse dos veces.
+`followers` se conserva como variable auxiliar para el contraste posterior con
+la estrategia actual de la agencia.
+
+Los conjuntos obtenidos son:
+
+- fútbol: 17 creadores, 13 estables, 2 fronterizos y 2 inestables;
+- belleza: 8 creadores, 6 estables y 2 fronterizos;
+- perros: 13 creadores, 12 estables y 1 fronterizo;
+- arte: 12 creadores, 5 estables, 6 fronterizos y 1 inestable.
+
+Las afinidades temáticas originales medias son 53.1 % para fútbol, 69.1 % para
+belleza, 64.9 % para perros y 48.9 % para arte. La región de arte se interpreta
+también mediante `topic_art_pct`, conservada como variable auxiliar porque se
+había excluido de las 15 entradas para evitar la dependencia lineal exacta de
+los cuatro porcentajes temáticos.
+
+Esta etapa no elige automáticamente un creador. Produce conjuntos auditables y
+perfiles regionales para que el próximo contraste seleccione la misma cantidad
+de candidatos que el baseline por `followers` y haga explícitos los trade-offs
+de alcance, afinidad, respuesta, formato y costo. El protocolo y las salidas
+quedan en `configs/campaigns/synthesis.json` y `docs/campanas-creadores/`.

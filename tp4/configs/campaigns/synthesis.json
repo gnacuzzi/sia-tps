@@ -1,0 +1,32 @@
+{
+  "name": "campaign-region-synthesis",
+  "kohonen_stability_config": "../kohonen/stability.json",
+  "oja_config": "../oja/final.json",
+  "primary_stability_classes": ["estable", "fronterizo"],
+  "campaigns": [
+    {
+      "name": "futbol",
+      "label": "Fútbol",
+      "region": "football",
+      "topic_feature": "topic_football_pct"
+    },
+    {
+      "name": "belleza",
+      "label": "Belleza",
+      "region": "makeup",
+      "topic_feature": "topic_makeup_pct"
+    },
+    {
+      "name": "perros",
+      "label": "Perros",
+      "region": "dogs",
+      "topic_feature": "topic_dogs_pct"
+    },
+    {
+      "name": "arte",
+      "label": "Arte",
+      "region": "art",
+      "topic_feature": "topic_art_pct"
+    }
+  ]
+}

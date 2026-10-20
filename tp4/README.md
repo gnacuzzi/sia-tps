@@ -163,6 +163,19 @@ El diseño completo está en `configs/kohonen/stability.json`. El comando genera
 un único informe en `docs/kohonen-experimentos/08-stability/`, con tablas y
 gráficos agregados y sin una carpeta por semilla.
 
+La síntesis para las cuatro campañas integra los datos originales, las regiones
+temáticas completas de las diez redes de Kohonen, PC1-PC2 y el índice de Oja:
+
+```bash
+python3 scripts/analyze_campaigns.py
+```
+
+El protocolo está en `configs/campaigns/synthesis.json`. Genera un único informe
+en `docs/campanas-creadores/` con tablas agregadas y dos gráficos. La región
+modal de cada creador define su campaña; no se usa una única neurona ni se crea
+un ranking automático. Los casos estables y fronterizos quedan como candidatos
+primarios y los inestables permanecen visibles con esa advertencia.
+
 Para ejecutar las pruebas:
 
 ```bash

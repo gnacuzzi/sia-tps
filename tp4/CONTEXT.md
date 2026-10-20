@@ -52,7 +52,12 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   con el autovector de PC1 es 0.999999847 y la correlación media entre el índice
   y los scores de PC1 es 0.999999962. El análisis final compara pesos,
   proyecciones y creadores e interpreta por qué el índice no es un ranking
-  universal. Hopfield todavía no está implementado.
+  universal. La síntesis de las cuatro campañas también está implementada:
+  asigna cada creador a su región temática modal en diez semillas, usa regiones
+  completas y conserva estabilidad, datos originales, PC1-PC2 y Oja sin crear
+  un ranking. Los conjuntos contienen 17 creadores para fútbol, 8 para belleza,
+  13 para perros y 12 para arte; 47 de los 50 son estables o fronterizos.
+  Hopfield todavía no está implementado.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
@@ -364,14 +369,15 @@ debe usar ejemplos concretos del dataset y hacer visibles los trade-offs.
    (completado); después comparar configuraciones sobre creadores.
 7. Implementar y validar Oja; comparar su dirección e índice con PCA
    (completado).
-8. Caracterizar regiones/candidatos para las cuatro campañas y contrastar con
-   el baseline de `followers`.
+8. Caracterizar regiones/candidatos para las cuatro campañas (completado) y
+   contrastar con el baseline de `followers` (pendiente).
 9. Documentar mantenimiento, llegada de datos mensuales y limitaciones.
 10. Recién después de la clase correspondiente, incorporar Hopfield.
 
 ## Decisiones todavía abiertas
 
-- Síntesis final de candidatos y trade-offs para las cuatro campañas.
+- Contraste de igual cantidad de candidatos regionales y baseline por
+  `followers`, con trade-offs para las cuatro campañas.
 - Mantenimiento ante nuevos creadores, variables y actualizaciones mensuales.
 - Implementación, CLI y formato de resultados de Hopfield cuando se habilite
   el ejercicio 2.
