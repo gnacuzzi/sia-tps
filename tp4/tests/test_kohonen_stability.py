@@ -175,10 +175,17 @@ def test_tables_use_one_aggregate_directory(tmp_path):
         for seed in range(10)
     ]
 
-    creator_rows, _, campaign_rows = write_tables(
+    creator_rows, candidate_rows, campaign_rows = write_tables(
         tmp_path, _dataset(), results, _design()
     )
-    write_report(tmp_path, _design(), results, creator_rows, campaign_rows)
+    write_report(
+        tmp_path,
+        _design(),
+        results,
+        creator_rows,
+        candidate_rows,
+        campaign_rows,
+    )
 
     generated = tmp_path / "generated"
     assert sorted(path.name for path in generated.iterdir()) == [

@@ -1,0 +1,11 @@
+run,seed,quantization_error,occupied_units,weak_topic_cells
+k5-constant-global-stability-seed-00,0,2.286342844319655,25,5
+k5-constant-global-stability-seed-01,1,2.332540085773439,23,2
+k5-constant-global-stability-seed-02,2,2.3248675130573906,24,4
+k5-constant-global-stability-seed-03,3,2.3225660852661996,23,4
+k5-constant-global-stability-seed-04,4,2.3371811933180484,24,3
+k5-constant-global-stability-seed-05,5,2.313542048695078,21,2
+k5-constant-global-stability-seed-06,6,2.3264548451301077,23,2
+k5-constant-global-stability-seed-07,7,2.3270044129558047,23,3
+k5-constant-global-stability-seed-08,8,2.280490327744328,23,4
+k5-constant-global-stability-seed-09,9,2.2959184794263305,20,3

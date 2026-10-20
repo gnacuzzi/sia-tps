@@ -40,6 +40,11 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   figuras; las decisiones usan cinco semillas. La interpretación del caso de
   uso también está cerrada: se caracterizaron cuatro regiones temáticas, se
   compararon con PC1-PC2 y se cuantificaron las fronteras de la Matriz U.
+  La configuración final se repitió después con diez semillas para validar la
+  interpretación: 36 de 50 creadores conservaron su región temática en al menos
+  ocho corridas, 11 fueron fronterizos y sólo 3 inestables. La mejor celda por
+  campaña fue sensible a la semilla, aunque siempre mantuvo el tema esperado;
+  por eso la síntesis comercial usará regiones completas y no una única celda.
   Oja también está implementado y validado. El barrido de tasa comparó ocho
   valores, dos schedules y diez semillas; el barrido posterior comparó ocho
   cantidades de épocas para tres perfiles finalistas. Se eligieron 100 épocas

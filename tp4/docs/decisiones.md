@@ -396,3 +396,24 @@ separados por semilla. Si sólo cambian creadores fronterizos, se informará la
 incertidumbre. Si la inestabilidad es general o afecta a los candidatos
 principales, primero se repetirán con diez semillas las configuraciones
 finalistas; no se reabrirá automáticamente el barrido completo.
+
+### Resultado de estabilidad
+
+Con la configuración final y diez semillas, 36 de los 50 creadores resultaron
+estables en su región temática, 11 fronterizos y sólo 3 inestables. Las celdas
+de transición reunieron 60 de las 500 asignaciones creador-semilla. Además, las
+40 celdas elegidas como máxima afinidad para las cuatro campañas conservaron el
+tema dominante esperado.
+
+La selección de una única celda sí fue sensible: fútbol y perros produjeron 10
+shortlists distintas en 10 semillas, mientras que belleza y arte produjeron 9.
+Fútbol conservó un candidato estable y otro fronterizo; belleza cuatro
+fronterizos; perros ninguno estable o fronterizo; y arte uno estable y dos
+fronterizos. Esto no muestra un colapso de las regiones, sino que los creadores
+de un mismo tema se reparten entre neuronas internas diferentes.
+
+Por lo tanto, no se usará la neurona de máxima afinidad como selector final. La
+síntesis de campañas partirá de la región temática completa y comparará dentro
+de ella las variables originales. No se repetirá todavía el barrido: primero se
+evaluará esta selección regional, y sólo si también resulta inestable se
+compararán con diez semillas las configuraciones finalistas.

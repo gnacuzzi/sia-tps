@@ -403,6 +403,16 @@ def summarize_campaigns(
             "topic_pct_min": float(np.min(affinities)),
             "topic_pct_max": float(np.max(affinities)),
             "distinct_candidates": len(candidates),
+            "distinct_shortlists": len(
+                {
+                    tuple(sorted(shortlist.creator_indexes))
+                    for shortlist in shortlists
+                }
+            ),
+            "dominant_topic_matches": sum(
+                shortlist.dominant_region == shortlist.topic
+                for shortlist in shortlists
+            ),
         }
         for category in ("estable", "fronterizo", "inestable"):
             selected = [
@@ -529,6 +539,7 @@ def write_report(
     design: StabilityDesign,
     results: Sequence[SeedStabilityResult],
     creator_rows: Sequence[dict],
+    candidate_rows: Sequence[dict],
     campaign_rows: Sequence[dict],
 ) -> None:
     """Documentar el protocolo y dejar la interpretación trazable."""
@@ -541,11 +552,48 @@ def write_report(
     }
     campaign_table = "\n".join(
         "| {campaign} | {shortlist_size_mean:.1f} | {topic_pct_mean:.1f} | "
-        "{estable_count} | {fronterizo_count} | {inestable_count} |".format(
+        "{distinct_shortlists} | {estable_count} | {fronterizo_count} | "
+        "{inestable_count} |".format(
             **{**row, "campaign": CAMPAIGN_LABELS[row["campaign"]]}
         )
         for row in campaign_rows
     )
+    candidate_table = "\n".join(
+        "| {campaign} | `{stable}` | `{frontier}` |".format(
+            campaign=CAMPAIGN_LABELS[campaign],
+            stable=";".join(
+                row["creator_id"]
+                for row in candidate_rows
+                if row["campaign"] == campaign
+                and row["candidate_class"] == "estable"
+            )
+            or "ninguno",
+            frontier=";".join(
+                row["creator_id"]
+                for row in candidate_rows
+                if row["campaign"] == campaign
+                and row["candidate_class"] == "fronterizo"
+            )
+            or "ninguno",
+        )
+        for campaign, _ in CAMPAIGNS
+    )
+    transition_assignments = sum(
+        sum(result.creator_transition_flags) for result in results
+    )
+    total_assignments = len(creator_rows) * len(results)
+    unstable_creator_ids = ";".join(
+        row["creator_id"]
+        for row in creator_rows
+        if row["region_stability_class"] == "inestable"
+    )
+    matching_shortlists = sum(
+        row["dominant_topic_matches"] for row in campaign_rows
+    )
+    total_shortlists = len(CAMPAIGNS) * len(results)
+    distinct_shortlist_counts = [
+        row["distinct_shortlists"] for row in campaign_rows
+    ]
     parameters = design.kohonen_parameters
     configuration_summary = (
         f"grilla `{parameters['grid_size']} x {parameters['grid_size']}`, "
@@ -578,7 +626,14 @@ entrenar o volver a elegir automáticamente los hiperparámetros.
 
 De los {len(creator_rows)} creadores, **{class_counts['estable']}** son estables,
 **{class_counts['fronterizo']}** fronterizos y **{class_counts['inestable']}**
-inestables según su región temática modal.
+inestables según su región temática modal. Esto equivale a
+**{100 * class_counts['estable'] / len(creator_rows):.0f} %** estables y
+**{100 * (class_counts['estable'] + class_counts['fronterizo']) / len(creator_rows):.0f} %**
+entre estables y fronterizos. Los inestables son `{unstable_creator_ids}`.
+
+Hubo {transition_assignments} asignaciones a celdas de transición sobre
+{total_assignments} combinaciones creador-semilla
+({100 * transition_assignments / total_assignments:.1f} %).
 
 ![Estabilidad regional](generated/estabilidad_regiones.svg)
 
@@ -588,11 +643,34 @@ En cada semilla se selecciona, para cada campaña, la neurona ocupada cuyo
 prototipo tiene mayor afinidad con el tema correspondiente. La frecuencia indica
 cuántas veces aparece cada creador; no es un ranking de calidad comercial.
 
-| Campaña | Tamaño medio | Afinidad media (%) | Estables | Fronterizos | Inestables |
-| --- | ---: | ---: | ---: | ---: | ---: |
+| Campaña | Tamaño medio | Afinidad media (%) | Shortlists distintas | Estables | Fronterizos | Inestables |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
 {campaign_table}
 
 ![Frecuencia de shortlists](generated/frecuencia_shortlists.svg)
+
+| Campaña | Candidatos estables | Candidatos fronterizos |
+| --- | --- | --- |
+{candidate_table}
+
+Las {total_shortlists} celdas elegidas tienen como tema dominante el de su
+campaña en {matching_shortlists} casos. Sin embargo, cada campaña produjo entre
+{min(distinct_shortlist_counts)} y {max(distinct_shortlist_counts)} conjuntos
+distintos en las {len(results)} semillas. La semántica general se conserva, pero
+la partición interna de cada región entre neuronas no.
+
+## Decisión metodológica
+
+La inestabilidad de la shortlist estricta no alcanza para descartar la
+configuración: sólo {class_counts['inestable']} de {len(creator_rows)} creadores
+son regionalmente inestables y las celdas elegidas conservan el tema esperado.
+El siguiente análisis no debe tratar una única neurona como selector definitivo.
+Debe partir de la región temática completa y comparar dentro de ella las
+variables originales y los objetivos de cada campaña.
+
+No se reabre todavía el barrido de hiperparámetros. La comparación con las
+configuraciones finalistas queda condicionada a que la selección por región
+completa también resulte inestable o cambie las conclusiones comerciales.
 
 ## Archivos reproducibles
 
@@ -621,7 +699,14 @@ def run_analysis(
         output, dataset, results, design
     )
     write_plots(output, creator_rows, candidate_rows, len(design.seeds))
-    write_report(output, design, results, creator_rows, campaign_rows)
+    write_report(
+        output,
+        design,
+        results,
+        creator_rows,
+        candidate_rows,
+        campaign_rows,
+    )
     return creator_rows, candidate_rows, campaign_rows
 
 
