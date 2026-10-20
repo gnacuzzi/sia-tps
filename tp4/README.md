@@ -150,6 +150,19 @@ regiones por tema dominante, colorea con ellas el biplot PC1-PC2 y compara las
 distancias entre neuronas vecinas dentro y fuera de esas regiones. El informe
 queda en `docs/kohonen-experimentos/07-interpretation/README.md`.
 
+La robustez de la interpretación final se evalúa sin volver a buscar
+hiperparámetros. Se entrena únicamente la configuración elegida con diez
+semillas y se agregan la estabilidad temática por creador y la frecuencia de
+inclusión en las shortlists de las cuatro campañas:
+
+```bash
+python3 scripts/analyze_kohonen_stability.py
+```
+
+El diseño completo está en `configs/kohonen/stability.json`. El comando genera
+un único informe en `docs/kohonen-experimentos/08-stability/`, con tablas y
+gráficos agregados y sin una carpeta por semilla.
+
 Para ejecutar las pruebas:
 
 ```bash

@@ -373,3 +373,26 @@ inversión. Además, un índice alto puede implicar mayor precio y no garantiza
 afinidad temática. La decisión debe combinar este eje con las regiones de
 Kohonen, las componentes temáticas, la audiencia argentina, el objetivo de la
 campaña, el costo y la saturación comercial.
+
+## Protocolo de estabilidad para las campañas
+
+Antes de convertir las regiones de Kohonen en recomendaciones se repetirá sólo
+la configuración final con diez semillas (`0` a `9`). No se compararán
+coordenadas de la grilla, porque una solución equivalente puede rotarse o
+reflejarse: para cada creador se comparará el tema dominante del prototipo de su
+BMU. También se registrará, para cada campaña, cuántas semillas incluyen al
+creador en la neurona ocupada de mayor afinidad temática.
+
+Los umbrales se fijan antes de observar el resultado: entre 8 y 10 apariciones
+se considera estable, entre 6 y 7 fronterizo y entre 0 y 5 inestable. Las
+neuronas cuya afinidad temática máxima sea menor que 35 % se mantienen
+etiquetadas por su tema dominante, pero se señalan como transiciones. Este
+conteo es un diagnóstico descriptivo adicional y no un criterio para elegir de
+nuevo los hiperparámetros.
+
+La configuración, semillas y umbrales quedan en un único JSON. Los resultados
+se consolidan en tablas y gráficos agregados, sin guardar mapas o directorios
+separados por semilla. Si sólo cambian creadores fronterizos, se informará la
+incertidumbre. Si la inestabilidad es general o afecta a los candidatos
+principales, primero se repetirán con diez semillas las configuraciones
+finalistas; no se reabrirá automáticamente el barrido completo.

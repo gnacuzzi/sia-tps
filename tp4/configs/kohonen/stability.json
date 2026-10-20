@@ -1,0 +1,17 @@
+{
+  "name": "k5-constant-global-stability",
+  "seeds": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+  "stable_min_count": 8,
+  "frontier_min_count": 6,
+  "transition_threshold_pct": 35.0,
+  "kohonen": {
+    "grid_size": 5,
+    "epochs": 150,
+    "learning_rate_start": 0.2,
+    "learning_rate_end": 0.2,
+    "radius_start": 5.656854249492381,
+    "radius_end": 1.0,
+    "initialization": "sample",
+    "shuffle": true
+  }
+}
