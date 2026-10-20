@@ -9,6 +9,7 @@ from .data import (
 )
 from .pca import PCAResult, Standardizer, fit_pca
 from .kohonen import KohonenConfig, KohonenModel, fit_kohonen
+from .oja import OjaConfig, OjaModel, fit_oja
 
 __all__ = [
     "BASE_FEATURES",
@@ -17,9 +18,12 @@ __all__ = [
     "CreatorDataset",
     "KohonenConfig",
     "KohonenModel",
+    "OjaConfig",
+    "OjaModel",
     "PCAResult",
     "Standardizer",
     "fit_pca",
     "fit_kohonen",
+    "fit_oja",
     "load_creator_dataset",
 ]

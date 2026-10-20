@@ -253,3 +253,51 @@ pero es más variable y deja más huecos en la corrida representativa.
 La semilla 2 queda únicamente como corrida central para visualizar y describir
 la configuración elegida. Las conclusiones de hiperparámetros usan los
 promedios y desvíos de cinco semillas.
+
+## Protocolo acordado para Oja
+
+Oja utilizará las mismas 15 variables, en el mismo orden, y el mismo z-score
+muestral (`ddof=1`) que PCA. Reutilizar `Standardizer` evita que la comparación
+se vea afectada por dos implementaciones distintas del preprocesamiento y
+garantiza que los pesos de Oja y el autovector de PC1 pertenezcan al mismo
+espacio.
+
+La implementación sigue la actualización en línea vista en clase:
+`w <- w + eta * y * (x - y * w)`, con `y = x . w`. Los pesos se inicializan
+con una distribución uniforme entre 0 y 1. No se normalizan explícitamente
+después de cada actualización, porque la normalización aproximada es justamente
+el término que distingue la regla de Oja de la regla hebbiana sin cota; la norma
+debe tender a 1 como parte de la evidencia de convergencia.
+
+Las muestras se barajarán en cada época. El orden de una actualización en línea
+puede cambiar la trayectoria y el resultado finito, por lo que mantener siempre
+el orden del CSV introduciría una dependencia arbitraria. El generador queda
+controlado por una semilla para que tanto la inicialización como cada orden sean
+reproducibles.
+
+Se comparará una tasa constante con un descenso lineal hasta el 10 % de la tasa
+inicial. La clase propone experimentar tanto con tasa fija como decreciente,
+pero no prescribe una fórmula de descenso. Se adopta la lineal porque es
+simple, auditable y ya se utilizó para Kohonen; no se interpreta como una
+ventaja teórica sobre otros schedules.
+
+La convergencia se evaluará en conjunto mediante:
+
+- similitud de dirección con el autovector de PC1, ignorando el signo;
+- evolución de la norma de los pesos hacia 1;
+- correlación entre el índice de Oja y los scores de PC1 después de alinear el
+  signo;
+- estabilidad de estas medidas entre semillas.
+
+El experimento de Oja usará como mínimo 10 semillas por configuración. Las
+semillas no forman una serie temporal: se resumirán con boxplots o con
+promedios y barras de error, además de informar la dispersión y el peor caso.
+Las curvas por época mostrarán primero la trayectoria completa; sólo se
+agregará un zoom final si ayuda a distinguir configuraciones cercanas.
+
+Antes del barrido sobre creadores se validará la implementación con datos
+sintéticos de dirección principal conocida y con pruebas de reproducibilidad,
+ambigüedad de signo y cálculo de las proyecciones. El barrido no comenzará
+hasta acordar sus tasas y cantidad de épocas. Se versionarán configuraciones,
+tablas agregadas, el informe y un conjunto pequeño de gráficos comparativos;
+no se guardará una carpeta redundante por corrida.
