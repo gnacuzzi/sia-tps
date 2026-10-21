@@ -82,6 +82,30 @@ class LetterGroupScore:
     maximum_pair_count: int
 
 
+REPRESENTATIVE_CASES = (
+    (
+        "correct_high_noise",
+        "Correcta con mayor ruido",
+        "Mayor ruido con recuperación correcta en el grupo favorable",
+    ),
+    (
+        "first_spurious",
+        "Primer estado espurio",
+        "Menor ruido con estado fijo espurio en el grupo favorable",
+    ),
+    (
+        "first_cycle",
+        "Primer ciclo",
+        "Menor ruido con ciclo en el grupo favorable",
+    ),
+    (
+        "baseline_interference",
+        "Interferencia sin ruido",
+        "Primera letra incorrecta con 0 % de ruido en el grupo desfavorable",
+    ),
+)
+
+
 def load_design(path: Path | str) -> LetterExperimentDesign:
     """Leer y validar la configuración JSON del experimento."""
 
@@ -364,6 +388,74 @@ def summarize_by_letter(rows: Sequence[dict]) -> List[dict]:
     return summary
 
 
+def select_representative_rows(rows: Sequence[dict]) -> List[dict]:
+    """Elegir casos por reglas explícitas, sin selección visual posterior."""
+
+    selectors = {
+        "correct_high_noise": lambda row: (
+            row["group"] == "favorable" and row["outcome"] == "correct"
+        ),
+        "first_spurious": lambda row: (
+            row["group"] == "favorable"
+            and row["outcome"] == "spurious_fixed"
+        ),
+        "first_cycle": lambda row: (
+            row["group"] == "favorable" and row["outcome"] == "cycle"
+        ),
+        "baseline_interference": lambda row: (
+            row["group"] == "desfavorable"
+            and row["noise_level"] == 0.0
+            and row["outcome"] != "correct"
+        ),
+    }
+    selected = []
+    for case_id, title, criterion in REPRESENTATIVE_CASES:
+        candidates = [row for row in rows if selectors[case_id](row)]
+        if not candidates:
+            raise ValueError(f"no se encontró un caso para: {case_id}")
+        if case_id == "correct_high_noise":
+            candidates.sort(
+                key=lambda row: (-row["noise_level"], row["target"], row["seed"])
+            )
+        else:
+            candidates.sort(
+                key=lambda row: (row["noise_level"], row["target"], row["seed"])
+            )
+        chosen = dict(candidates[0])
+        chosen["case_id"] = case_id
+        chosen["case_title"] = title
+        chosen["selection_criterion"] = criterion
+        selected.append(chosen)
+    return selected
+
+
+def rebuild_representative_cases(
+    selected_rows: Sequence[dict],
+    groups: Mapping[str, Tuple[str, ...]],
+    max_iterations: int,
+) -> List[dict]:
+    """Reconstruir consultas y trayectorias desde la tabla de corridas."""
+
+    cases = []
+    for row in selected_rows:
+        letters = groups[row["group"]]
+        patterns = letter_matrix(letters)
+        model = fit_hopfield(patterns)
+        target_index = letters.index(row["target"])
+        target = patterns[target_index]
+        query = add_flip_noise(target, row["noise_level"], row["seed"])
+        result = model.recall(query, max_iterations=max_iterations)
+        cases.append(
+            {
+                "metadata": row,
+                "target": target,
+                "query": query,
+                "result": result,
+            }
+        )
+    return cases
+
+
 def _write_csv(path: Path, rows: Sequence[dict]) -> None:
     if not rows:
         raise ValueError("no hay filas para escribir")
@@ -379,6 +471,7 @@ def write_tables(
     rows: Sequence[dict],
     summary: Sequence[dict],
     letter_summary: Sequence[dict],
+    representative_rows: Sequence[dict],
 ) -> None:
     """Guardar resultados suficientes sin versionar las 14.950 combinaciones."""
 
@@ -400,6 +493,32 @@ def write_tables(
     _write_csv(generated / "corridas.csv", rows)
     _write_csv(generated / "resumen.csv", summary)
     _write_csv(generated / "resumen_por_letra.csv", letter_summary)
+    representative_fields = (
+        "case_id",
+        "case_title",
+        "selection_criterion",
+        "group",
+        "letters",
+        "target",
+        "noise_level",
+        "seed",
+        "outcome",
+        "status",
+        "iterations",
+        "matched_letter",
+        "flipped_pixels",
+        "final_pixel_errors",
+        "initial_energy",
+        "final_energy",
+        "energy_drop",
+    )
+    _write_csv(
+        generated / "casos_representativos.csv",
+        [
+            {field: row[field] for field in representative_fields}
+            for row in representative_rows
+        ],
+    )
 
 
 def _summary_arrays(
@@ -516,6 +635,86 @@ def write_plots(output: Path, summary: Sequence[dict]) -> None:
     plt.close(figure)
 
 
+def _mark_errors(axis, state: np.ndarray, target: np.ndarray) -> None:
+    """Enmarcar en rojo las celdas que difieren del patrón objetivo."""
+
+    from matplotlib.patches import Rectangle
+
+    for index in np.flatnonzero(state != target):
+        row, column = divmod(int(index), 5)
+        axis.add_patch(
+            Rectangle(
+                (column - 0.5, row - 0.5),
+                1,
+                1,
+                fill=False,
+                edgecolor="#ef4444",
+                linewidth=1.8,
+            )
+        )
+
+
+def write_representative_plots(output: Path, cases: Sequence[dict]) -> None:
+    """Mostrar evolución visual y energía de los casos preseleccionados."""
+
+    generated = output / "generated"
+    plt = _load_pyplot()
+    trajectories = []
+    for case in cases:
+        states = list(case["result"].states)
+        if len(states) >= 2 and np.array_equal(states[-1], states[-2]):
+            states = states[:-1]
+        trajectories.append([case["target"], *states])
+    columns = max(len(trajectory) for trajectory in trajectories)
+    figure, axes = plt.subplots(
+        len(cases), columns, figsize=(2.1 * columns, 2.1 * len(cases)), squeeze=False
+    )
+    for row_index, (case, trajectory) in enumerate(zip(cases, trajectories)):
+        metadata = case["metadata"]
+        for column_index, axis in enumerate(axes[row_index]):
+            axis.set_xticks([])
+            axis.set_yticks([])
+            if column_index >= len(trajectory):
+                axis.axis("off")
+                continue
+            state = trajectory[column_index]
+            axis.imshow(state.reshape(5, 5), cmap="binary", vmin=-1, vmax=1)
+            if column_index == 0:
+                title = "Objetivo"
+            else:
+                title = f"S({column_index - 1})"
+                _mark_errors(axis, state, case["target"])
+            axis.set_title(title, fontsize=9)
+        axes[row_index, 0].set_ylabel(
+            f"{metadata['case_title']}\n"
+            f"{metadata['target']} · {metadata['noise_level'] * 100:g} % · "
+            f"semilla {metadata['seed']}",
+            rotation=0,
+            ha="right",
+            va="center",
+            labelpad=8,
+            fontsize=9,
+        )
+    figure.suptitle("Evolución de casos seleccionados por reglas reproducibles")
+    figure.tight_layout()
+    _save_figure(figure, generated / "casos_representativos.svg")
+    plt.close(figure)
+
+    figure, axes = plt.subplots(2, 2, figsize=(10, 7), squeeze=False)
+    for axis, case in zip(axes.reshape(-1), cases):
+        metadata = case["metadata"]
+        energies = case["result"].energies
+        axis.plot(range(len(energies)), energies, marker="o", color="#3b82f6")
+        axis.set_title(metadata["case_title"])
+        axis.set_xlabel("Iteración")
+        axis.set_ylabel("Energía")
+        axis.set_xticks(range(len(energies)))
+        axis.grid(alpha=0.25)
+    figure.tight_layout()
+    _save_figure(figure, generated / "energia_casos_representativos.svg")
+    plt.close(figure)
+
+
 def write_report(
     output: Path,
     design: LetterExperimentDesign,
@@ -523,6 +722,7 @@ def write_report(
     groups: Mapping[str, Tuple[str, ...]],
     rows: Sequence[dict],
     summary: Sequence[dict],
+    representative_rows: Sequence[dict],
 ) -> None:
     """Documentar el diseño, los resultados y sus límites."""
 
@@ -613,6 +813,22 @@ altos de ruido no debe interpretarse como una mejora ni como robustez del grupo.
 
 ![Tipos de resultado](generated/resultados_vs_ruido.svg)
 
+## Casos representativos
+
+Los casos no se eligieron por su apariencia. Se aplicaron cuatro reglas antes
+de graficar: mayor ruido todavía recuperado, menor ruido con estado espurio,
+menor ruido con ciclo y primera interferencia sin ruido. Los desempates usan
+letra y semilla en orden ascendente.
+
+{chr(10).join(f"- **{row['case_title']}**: {row['target']}, {row['noise_level'] * 100:g} % de ruido, semilla {row['seed']}, resultado `{row['outcome']}`." for row in representative_rows)}
+
+Los bordes rojos señalan celdas distintas del objetivo. `S(0)` es la consulta
+ruidosa y los estados siguientes muestran la evolución de la red.
+
+![Evolución de casos representativos](generated/casos_representativos.svg)
+
+![Energía de casos representativos](generated/energia_casos_representativos.svg)
+
 Estas curvas describen robustez y modos de fallo; no se elige un "nivel óptimo"
 de ruido. Antes de extrapolar al caso QR se deben inspeccionar los resultados
 por letra y las trayectorias de energía de casos representativos.
@@ -624,7 +840,8 @@ por letra y las trayectorias de energía de casos representativos.
 - `generated/resumen.csv`: medias y desvíos agregados por semilla;
 - `generated/resumen_por_letra.csv`: resultados sin ocultar diferencias entre
   patrones;
-- tres gráficos SVG agregados, sin imágenes redundantes por corrida.
+- `generated/casos_representativos.csv`: reglas y corridas mostradas;
+- cinco gráficos SVG agregados, sin imágenes redundantes por corrida.
 """
     output.mkdir(parents=True, exist_ok=True)
     (output / "README.md").write_text(report, encoding="utf-8")
@@ -653,9 +870,29 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ranking, groups, rows = run_experiment(design)
     summary = summarize_runs(rows)
     letter_summary = summarize_by_letter(rows)
-    write_tables(args.output, ranking, rows, summary, letter_summary)
+    representative_rows = select_representative_rows(rows)
+    cases = rebuild_representative_cases(
+        representative_rows, groups, design.max_iterations
+    )
+    write_tables(
+        args.output,
+        ranking,
+        rows,
+        summary,
+        letter_summary,
+        representative_rows,
+    )
     write_plots(args.output, summary)
-    write_report(args.output, design, ranking, groups, rows, summary)
+    write_representative_plots(args.output, cases)
+    write_report(
+        args.output,
+        design,
+        ranking,
+        groups,
+        rows,
+        summary,
+        representative_rows,
+    )
     print(
         f"Informe generado en {args.output}; "
         f"grupo favorable={''.join(groups['favorable'])}; "

@@ -1,0 +1,5 @@
+case_id,case_title,selection_criterion,group,letters,target,noise_level,seed,outcome,status,iterations,matched_letter,flipped_pixels,final_pixel_errors,initial_energy,final_energy,energy_drop
+correct_high_noise,Correcta con mayor ruido,Mayor ruido con recuperación correcta en el grupo favorable,favorable,ORTV,O,0.5,2,correct,fixed_point,6,O,12,0,1.7600000000000011,-10.719999999999985,12.479999999999986
+first_spurious,Primer estado espurio,Menor ruido con estado fijo espurio en el grupo favorable,favorable,ORTV,R,0.2,2,spurious_fixed,fixed_point,2,,5,5,-5.600000000000003,-8.160000000000005,2.5600000000000023
+first_cycle,Primer ciclo,Menor ruido con ciclo en el grupo favorable,favorable,ORTV,R,0.3,6,cycle,cycle,4,,8,6,-1.2800000000000002,-7.840000000000006,6.560000000000006
+baseline_interference,Interferencia sin ruido,Primera letra incorrecta con 0 % de ruido en el grupo desfavorable,desfavorable,HMNW,H,0.0,0,other_stored,fixed_point,3,N,0,4,-27.83999999999977,-33.91999999999958,6.0799999999998136

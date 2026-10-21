@@ -14,7 +14,9 @@ from sia_tp4.hopfield_letters import (
     gram_matrix,
     load_design,
     rank_letter_groups,
+    rebuild_representative_cases,
     run_experiment,
+    select_representative_rows,
     summarize_by_letter,
     summarize_runs,
 )
@@ -23,7 +25,7 @@ from sia_tp4.hopfield_letters import (
 def _design():
     return LetterExperimentDesign(
         group_size=4,
-        noise_levels=(0.0, 0.2),
+        noise_levels=tuple(level / 20 for level in range(11)),
         seeds=tuple(range(10)),
         max_iterations=20,
     )
@@ -116,10 +118,28 @@ def test_experiment_is_reproducible_and_summary_uses_ten_seeds():
     assert first_ranking == second_ranking
     assert first_groups == second_groups
     assert first_rows == second_rows
-    assert len(first_rows) == 2 * 4 * 2 * 10
+    assert len(first_rows) == 2 * 4 * 11 * 10
     summary = summarize_runs(first_rows)
-    assert len(summary) == 2 * 2
+    assert len(summary) == 2 * 11
     assert all(row["seed_count"] == 10 for row in summary)
     letter_summary = summarize_by_letter(first_rows)
-    assert len(letter_summary) == 2 * 4 * 2
+    assert len(letter_summary) == 2 * 4 * 11
     assert all(row["seed_count"] == 10 for row in letter_summary)
+
+    selected = select_representative_rows(first_rows)
+    assert [row["case_id"] for row in selected] == [
+        "correct_high_noise",
+        "first_spurious",
+        "first_cycle",
+        "baseline_interference",
+    ]
+    assert selected[0]["noise_level"] == max(
+        row["noise_level"]
+        for row in first_rows
+        if row["group"] == "favorable" and row["outcome"] == "correct"
+    )
+    cases = rebuild_representative_cases(selected, first_groups, 20)
+    assert len(cases) == 4
+    assert all(
+        case["result"].status == case["metadata"]["status"] for case in cases
+    )

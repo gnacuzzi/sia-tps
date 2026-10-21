@@ -62,6 +62,25 @@ altos de ruido no debe interpretarse como una mejora ni como robustez del grupo.
 
 ![Tipos de resultado](generated/resultados_vs_ruido.svg)
 
+## Casos representativos
+
+Los casos no se eligieron por su apariencia. Se aplicaron cuatro reglas antes
+de graficar: mayor ruido todavía recuperado, menor ruido con estado espurio,
+menor ruido con ciclo y primera interferencia sin ruido. Los desempates usan
+letra y semilla en orden ascendente.
+
+- **Correcta con mayor ruido**: O, 50 % de ruido, semilla 2, resultado `correct`.
+- **Primer estado espurio**: R, 20 % de ruido, semilla 2, resultado `spurious_fixed`.
+- **Primer ciclo**: R, 30 % de ruido, semilla 6, resultado `cycle`.
+- **Interferencia sin ruido**: H, 0 % de ruido, semilla 0, resultado `other_stored`.
+
+Los bordes rojos señalan celdas distintas del objetivo. `S(0)` es la consulta
+ruidosa y los estados siguientes muestran la evolución de la red.
+
+![Evolución de casos representativos](generated/casos_representativos.svg)
+
+![Energía de casos representativos](generated/energia_casos_representativos.svg)
+
 Estas curvas describen robustez y modos de fallo; no se elige un "nivel óptimo"
 de ruido. Antes de extrapolar al caso QR se deben inspeccionar los resultados
 por letra y las trayectorias de energía de casos representativos.
@@ -73,4 +92,5 @@ por letra y las trayectorias de energía de casos representativos.
 - `generated/resumen.csv`: medias y desvíos agregados por semilla;
 - `generated/resumen_por_letra.csv`: resultados sin ocultar diferencias entre
   patrones;
-- tres gráficos SVG agregados, sin imágenes redundantes por corrida.
+- `generated/casos_representativos.csv`: reglas y corridas mostradas;
+- cinco gráficos SVG agregados, sin imágenes redundantes por corrida.
