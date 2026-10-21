@@ -1,0 +1,4 @@
+noise_type,target,noise_level,seed,selected_pixels,changed_pixels,outcome,attractor,status,matched_pattern,iterations,cycle_length,final_error_pixels,final_error_fraction,initial_energy,final_energy,energy_change,energy_non_increasing
+uniform_flip,beverages,0.25,0,342,342,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-473.1453615778025,-2172.879474068474,-1699.7341124906714,True
+uniform_erasure,beverages,0.25,0,342,181,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-970.2089116143354,-2172.879474068474,-1202.6705624541385,True
+edge_erasure,beverages,0.25,0,342,187,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-934.8341855369084,-2172.879474068474,-1238.0452885315653,True

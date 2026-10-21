@@ -76,8 +76,82 @@ El chequeo reproducible confirma que ninguno de los QR originales es un punto
 fijo cuando se almacenan los cinco juntos. Todos convergen al mismo estado
 fijo espurio. Por lo tanto, un barrido de ruido sobre esta red no puede
 interpretarse aisladamente como robustez frente a perturbaciones: ya existe
-interferencia con 0 % de ruido. El paso siguiente debe separar este efecto
-estudiando subconjuntos de uno a cinco patrones.
+interferencia con 0 % de ruido. El barrido siguiente conserva igualmente los
+cinco patrones, como exige la consigna, y esta línea de base se mantiene visible
+al interpretar sus resultados.
+
+## Consultas deterioradas
+
+Se comparan tres funciones sugeridas en clase sobre los mismos niveles y
+semillas:
+
+1. **Flip uniforme:** se eligen exactamente `round(nivel × 1369)` posiciones
+   sin reemplazo y se invierte su signo.
+2. **Borrado uniforme:** se elige la misma cantidad de posiciones de manera
+   uniforme y se las lleva a blanco (`-1`). Un píxel ya blanco no cambia.
+3. **Borrado hacia bordes:** también lleva las posiciones elegidas a blanco,
+   pero su peso de selección decrece linealmente con la distancia al borde. En
+   una imagen 37×37 el peso sin normalizar es `19 - distancia_al_borde`.
+
+El diseño usa niveles de 0 %, 5 %, 10 %, 15 %, 20 %, 25 %, 30 %, 35 %, 40 %, 45 %, 50 %,
+semillas 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 y un máximo de
+100 iteraciones como resguardo. El 0 % corresponde a las
+cinco consultas deterministas ya analizadas; para cada nivel positivo se
+evalúan los cinco QR con 10 semillas. En total se ejecutan
+1500 consultas aleatorias más las cinco consultas base.
+
+El nivel es **nominal**: indica cuántas posiciones se seleccionan. En el flip
+todas cambian; en los borrados sólo cambian efectivamente las que eran negras.
+Por eso también se informa el error real de entrada y no se supone que tres
+ruidos con el mismo porcentaje nominal tengan igual cantidad de alteraciones.
+
+Para las curvas se calcula primero cada métrica sobre los cinco QR de una
+semilla y después se muestran media y desvío estándar entre semillas. Las
+barras están acotadas al rango válido de cada métrica. No se conectan semillas
+como si fueran una secuencia temporal y no se elige un nivel de ruido óptimo.
+Cuando el desvío es cero, la barra coincide con el marcador y no tiene longitud
+visible; esto ocurre en toda la curva de recuperación.
+
+- **Flip uniforme**: a 50 % nominal modifica en promedio 684.0 píxeles; recuperación 0.0 %, error final 1058.5 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
+- **Borrado uniforme**: a 50 % nominal modifica en promedio 348.3 píxeles; recuperación 0.0 %, error final 143.0 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
+- **Borrado hacia bordes**: a 50 % nominal modifica en promedio 356.5 píxeles; recuperación 0.0 %, error final 143.0 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
+
+En **1458** corridas el destino fue el mismo espurio de
+0 %; en **42** fue su inverso y en
+**0** apareció otro destino. El inverso apareció en:
+**Flip uniforme al 50 % (42 de 50 corridas)**. En las demás condiciones se
+conserva el espurio base. Esto explica cualquier salto del error final sin
+confundirlo con una recuperación.
+
+![Recuperación frente al ruido](generated/recuperacion_vs_ruido.svg)
+
+![Error final frente al ruido](generated/error_final_vs_ruido.svg)
+
+![Daño efectivo de entrada](generated/error_entrada_vs_ruido.svg)
+
+![Tipos de resultado](generated/resultados_vs_ruido.svg)
+
+Las 1500 corridas presentaron **0** trayectorias
+con algún aumento de energía. Las trayectorias completas quedan en CSV para no
+seleccionar conclusiones a partir de un único ejemplo.
+
+## Comparación visual controlada
+
+Para mostrar cómo actúa cada función sin elegir casos por su resultado, se usa
+la primera etiqueta en el orden del dataset (**beverages**), el
+nivel positivo central configurado (**25 %**)
+y la menor semilla (**0**). La selección se fija antes de
+mirar el estado final.
+
+![Consultas con ruido controlado](generated/consultas_ruido_controlado.svg)
+
+![Energía de los casos controlados](generated/energia_ruido_controlado.svg)
+
+Como la recuperación base es 0/5, una eventual mejora al agregar ruido no
+significa que la red sea robusta: significa que alguna perturbación desplazó
+la consulta desde el atractor espurio hacia otro atractor. El análisis de
+capacidad mediante subconjuntos se reserva para la sección de limitaciones,
+después de completar el caso obligatorio con los cinco QR.
 
 ## Archivos generados
 
@@ -87,6 +161,15 @@ estudiando subconjuntos de uno a cinco patrones.
 - `generated/balance_pixeles.csv`: cantidad de módulos negros y blancos;
 - `generated/recuperacion_sin_ruido.csv`: resultado de cada consulta original;
 - `generated/energia_sin_ruido.csv`: energía y error en cada iteración;
+- `generated/corridas_ruido.csv`: una fila por consulta deteriorada;
+- `generated/energia_corridas_ruido.csv`: energía de todas las iteraciones;
+- `generated/resumen_ruido.csv`: medias y desvíos entre semillas;
+- `generated/resumen_ruido_por_qr.csv`: agregados sin ocultar diferencias entre QR;
+- `generated/casos_ruido_controlado.csv`: casos de la comparación visual;
 - `generated/matriz_gram_normalizada.svg`: visualización del Gram;
 - `generated/recuperacion_sin_ruido.svg`: objetivos, consultas y estados finales;
-- `generated/energia_sin_ruido.svg`: trayectorias de energía.
+- `generated/energia_sin_ruido.svg`: trayectorias de energía;
+- cuatro gráficos agregados para comparar ruido;
+- `generated/consultas_ruido_controlado.svg` y
+  `generated/energia_ruido_controlado.svg`: casos fijados sin selección por
+  resultado.

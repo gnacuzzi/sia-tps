@@ -1,5 +1,6 @@
 """Pruebas de carga y representación de los QR para Hopfield."""
 
+import json
 from pathlib import Path
 
 import numpy as np
@@ -7,13 +8,21 @@ import pytest
 
 from sia_tp4.hopfield_qr import (
     QR_FILENAMES,
+    QRExperimentDesign,
     _binary_grayscale,
+    add_qr_noise,
+    edge_sampling_weights,
     energy_trajectory_rows,
     gram_matrices,
+    load_design,
     load_qr_patterns,
     pairwise_similarity_rows,
     pixel_balance_rows,
+    run_noise_experiment,
     run_zero_noise_recall,
+    select_controlled_noise_cases,
+    summarize_noise_by_target,
+    summarize_noise_runs,
 )
 
 
@@ -131,3 +140,109 @@ def test_five_stored_qr_collapse_to_one_spurious_state_without_noise():
         for row in energy_rows
         if row["iteration"] == 0
     )
+
+
+def test_qr_design_defines_three_noises_and_at_least_ten_seeds():
+    path = Path(__file__).parents[1] / "configs" / "hopfield" / "qr.json"
+
+    design = load_design(path)
+
+    assert design.noise_types == (
+        "uniform_flip",
+        "uniform_erasure",
+        "edge_erasure",
+    )
+    assert design.noise_levels[0] == 0.0
+    assert len(design.seeds) >= 10
+
+
+def test_qr_design_rejects_fewer_than_ten_seeds(tmp_path):
+    path = tmp_path / "qr.json"
+    path.write_text(
+        json.dumps(
+            {
+                "noise_types": ["uniform_flip"],
+                "noise_levels": [0.0, 0.1],
+                "seeds": list(range(9)),
+                "max_iterations": 20,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(ValueError, match="al menos 10"):
+        load_design(path)
+
+
+def test_noise_functions_are_exact_directional_and_reproducible():
+    target = load_qr_patterns(DATA_DIRECTORY).vectors[0]
+
+    flipped, selected_flip, changed_flip = add_qr_noise(
+        target, "uniform_flip", 0.1, seed=3
+    )
+    repeated, _, _ = add_qr_noise(
+        target, "uniform_flip", 0.1, seed=3
+    )
+    erased, selected_erasure, changed_erasure = add_qr_noise(
+        target, "uniform_erasure", 0.1, seed=3
+    )
+
+    assert selected_flip == selected_erasure == round(0.1 * 37 * 37)
+    assert changed_flip == selected_flip
+    assert changed_erasure <= selected_erasure
+    np.testing.assert_array_equal(flipped, repeated)
+    assert np.all(erased[target == -1] == -1)
+    assert not np.any((target == -1) & (erased == 1))
+
+
+def test_edge_weights_are_symmetric_and_larger_at_the_border():
+    weights = edge_sampling_weights().reshape(37, 37)
+
+    assert weights.sum() == pytest.approx(1.0)
+    assert weights[0, 0] > weights[18, 18]
+    np.testing.assert_allclose(weights, weights[::-1, :])
+    np.testing.assert_allclose(weights, weights[:, ::-1])
+
+
+def test_noise_experiment_uses_ten_seeds_and_selects_cases_without_outcomes():
+    patterns = load_qr_patterns(DATA_DIRECTORY)
+    design = QRExperimentDesign(
+        noise_types=("uniform_flip",),
+        noise_levels=(0.0, 0.1),
+        seeds=tuple(range(10)),
+        max_iterations=20,
+    )
+    zero_rows, _ = run_zero_noise_recall(patterns, design.max_iterations)
+
+    rows, cases = run_noise_experiment(patterns, design)
+    summary = summarize_noise_runs(rows, zero_rows, design)
+    target_summary = summarize_noise_by_target(rows, zero_rows, design)
+    selected = select_controlled_noise_cases(cases, design, patterns.names[0])
+
+    assert len(rows) == 5 * 10
+    assert len(cases) == len(rows)
+    assert all(
+        row["attractor"]
+        in {
+            "baseline_spurious",
+            "inverse_baseline_spurious",
+            "other_spurious",
+            "cycle",
+            "max_iterations",
+            *(f"stored_{name}" for name in patterns.names),
+        }
+        for row in rows
+    )
+    assert len(summary) == 2
+    assert summary[0]["seed_count"] == 0
+    assert summary[1]["seed_count"] == 10
+    assert len(target_summary) == 5 * 2
+    assert all(
+        row["seed_count"] == 10
+        for row in target_summary
+        if row["noise_level"] > 0
+    )
+    assert len(selected) == 1
+    assert selected[0]["row"]["target"] == patterns.names[0]
+    assert selected[0]["row"]["noise_level"] == 0.1
+    assert selected[0]["row"]["seed"] == 0

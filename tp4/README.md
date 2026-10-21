@@ -212,9 +212,10 @@ python3 scripts/analyze_hopfield_qr.py
 
 El comando valida los cinco PNG, calcula las matrices de Gram cruda y
 normalizada, registra el balance de píxeles y prueba la recuperación de cada
-QR original después de almacenar los cinco juntos. El informe, las tablas y
-los gráficos quedan en `docs/hopfield-qr/`. El análisis con ruido todavía está
-pendiente.
+QR original después de almacenar los cinco juntos. Luego compara flip uniforme,
+borrado uniforme y borrado sesgado hacia los bordes con diez semillas por nivel.
+El diseño está en `configs/hopfield/qr.json`; el informe, las tablas y los
+gráficos quedan en `docs/hopfield-qr/`.
 
 El experimento controlado con letras 5×5 se reproduce mediante:
 
