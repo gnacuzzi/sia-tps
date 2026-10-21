@@ -203,8 +203,19 @@ model = fit_hopfield(patterns)
 result = model.recall(np.asarray([1, -1, -1, -1]))
 ```
 
-El ejemplo de letras, el análisis de ortogonalidad y los experimentos con los
-códigos QR todavía están pendientes.
+Los experimentos con los códigos QR todavía están pendientes.
+
+El experimento controlado con letras 5×5 se reproduce mediante:
+
+```bash
+python3 scripts/analyze_hopfield_letters.py
+```
+
+La configuración está en `configs/hopfield/letters.json` y exige al menos diez
+semillas. El script evalúa las 14.950 combinaciones de cuatro letras, conserva
+únicamente los extremos del ranking y compara el grupo más favorable con el
+más desfavorable bajo los mismos niveles y realizaciones de ruido. El informe,
+las tablas y tres gráficos agregados quedan en `docs/hopfield-letras/`.
 
 Para ejecutar las pruebas:
 

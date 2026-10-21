@@ -74,8 +74,10 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   El núcleo discreto de Hopfield ya está implementado y probado: construye la
   matriz de pesos de Hebb, actualiza el estado en forma sincrónica, conserva el
   valor previo ante activación cero, registra la energía y distingue estados
-  fijos, ciclos y corte por máximo de iteraciones. Todavía faltan el caso de
-  letras, los experimentos con ruido y el análisis de los códigos QR.
+  fijos, ciclos y corte por máximo de iteraciones. El caso controlado de letras
+  5×5 también está implementado: rankea exhaustivamente los grupos de cuatro
+  letras y compara los extremos con once niveles de ruido y diez semillas.
+  Todavía falta el análisis de los códigos QR.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
