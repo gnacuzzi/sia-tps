@@ -193,15 +193,20 @@ menor que cinco cuando se usa la regla de Hebb implementada. Con los resultados
 actuales todavía no puede determinarse cuántos QR sí puede almacenar ni si el
 resultado depende principalmente de la cantidad o de la combinación elegida.
 
-### Hipótesis que falta contrastar
+### Contraste de capacidad sin ruido
 
-La hipótesis para el próximo experimento es que los subconjuntos más pequeños
-y con menores productos internos cruzados tendrán más memorias estables y una
-mejor recuperación ante ruido. Para comprobarla será necesario entrenar redes
-con distintas combinaciones de los cinco QR, medir primero la estabilidad sin
-ruido y luego evaluar consultas deterioradas únicamente alrededor de las
-memorias que hayan resultado estables. Así se podrá separar la limitación de
-capacidad de la robustez frente al ruido sin cambiar el modelo pedido.
+El [barrido exhaustivo de capacidad](../hopfield-qr-capacidad/README.md)
+entrena una red para cada uno de los 31 subconjuntos no vacíos de los cinco QR.
+Los cinco patrones individuales y los diez pares son completamente estables;
+en cambio, ninguna combinación de tres, cuatro o cinco conserva uno de sus
+originales como punto fijo. La capacidad efectiva observada es entonces de dos
+QR para esta familia, codificación, regla de aprendizaje y dinámica, no una
+capacidad universal de una red de 1369 neuronas.
+
+El par más correlacionado también es estable, por lo que el peor producto
+interno aislado no explica el corte. Los 15 subconjuntos válidos quedan como
+candidatos para estudiar posteriormente la robustez frente al ruido sin
+confundirla con una falla que ya existe en la memoria sin perturbar.
 
 ## Archivos generados
 

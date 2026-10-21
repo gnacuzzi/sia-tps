@@ -1,0 +1,6 @@
+subset_size,subset_count,fully_stable_subset_count,fully_stable_subset_rate,query_count,stable_query_count,stable_query_rate,correct_query_count,correct_query_rate,min_mean_absolute_normalized_inner_product,max_mean_absolute_normalized_inner_product
+1,5,5,1.0,5,5,1.0,5,1.0,,
+2,10,10,1.0,20,20,1.0,20,1.0,0.5763330898466034,0.8597516435354273
+3,10,0,0.0,30,0,0.0,0,0.0,0.636717798879961,0.796445093742391
+4,5,0,0.0,20,0,0.0,0,0.0,0.6469442415388361,0.6956415875334795
+5,1,0,0.0,5,0,0.0,0,0.0,0.6701241782322863,0.6701241782322863

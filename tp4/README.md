@@ -217,6 +217,17 @@ borrado uniforme y borrado sesgado hacia los bordes con diez semillas por nivel.
 El diseño está en `configs/hopfield/qr.json`; el informe, las tablas y los
 gráficos quedan en `docs/hopfield-qr/`.
 
+El barrido de capacidad sin ruido enumera los 31 subconjuntos no vacíos de los
+cinco QR y consulta todos los patrones almacenados mediante:
+
+```bash
+python3 scripts/analyze_hopfield_qr_capacity.py
+```
+
+Su único resguardo numérico está en
+`configs/hopfield/qr_capacity.json`. Las 80 consultas, los agregados y los
+gráficos quedan en `docs/hopfield-qr-capacidad/`.
+
 El experimento controlado con letras 5×5 se reproduce mediante:
 
 ```bash
