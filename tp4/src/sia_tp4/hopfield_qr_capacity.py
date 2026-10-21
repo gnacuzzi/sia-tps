@@ -464,10 +464,10 @@ error de píxeles y energía para cada consulta, de modo que el criterio de
 capacidad no depende solamente del gráfico agregado.
 
 Los {len(valid)} subconjuntos completamente estables —los cinco individuales y
-los diez pares— son los candidatos definidos de antemano para el posterior
-barrido de robustez con ruido. Los restantes siguen documentados como evidencia
-de la limitación de capacidad, pero agregarles ruido no mediría recuperación
-alrededor de memorias estables.
+los diez pares— se usan en el
+[barrido de robustez con ruido](../hopfield-qr-robustez/README.md). Los
+restantes siguen documentados como evidencia de la limitación de capacidad,
+pero agregarles ruido no mediría recuperación alrededor de memorias estables.
 
 ## Archivos generados
 

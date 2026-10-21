@@ -76,6 +76,15 @@ def test_zero_local_field_preserves_the_previous_neuron_state():
     np.testing.assert_array_equal(updated, state)
 
 
+def test_roundoff_near_zero_preserves_the_previous_neuron_state():
+    weights = np.asarray([[0.0, 5e-16], [5e-16, 0.0]])
+    state = np.asarray([1, -1], dtype=np.int8)
+
+    updated = _update_state(weights, state)
+
+    np.testing.assert_array_equal(updated, state)
+
+
 def test_energy_matches_its_definition():
     patterns = np.asarray([[1, 1, -1, -1], [-1, -1, 1, 1]])
     state = np.asarray([1, -1, -1, -1])

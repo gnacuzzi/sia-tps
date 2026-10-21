@@ -298,7 +298,7 @@ uniform_flip,food,0.5,5,684,684,spurious_fixed,inverse_baseline_spurious,fixed_p
 uniform_flip,food,0.5,6,684,684,spurious_fixed,inverse_baseline_spurious,fixed_point,,3,,1298,0.9481373265157049,2.214755295836377,-2172.879474068474,-2175.09422936431,True
 uniform_flip,food,0.5,7,684,684,spurious_fixed,inverse_baseline_spurious,fixed_point,,3,,1298,0.9481373265157049,1.864134404674948,-2172.879474068474,-2174.743608473149,True
 uniform_flip,food,0.5,8,684,684,spurious_fixed,inverse_baseline_spurious,fixed_point,,3,,1298,0.9481373265157049,2.436815193571946,-2172.879474068474,-2175.3162892620458,True
-uniform_flip,food,0.5,9,684,684,spurious_fixed,inverse_baseline_spurious,fixed_point,,3,,1298,0.9481373265157049,2.1387874360847343,-2172.879474068474,-2175.0182615045587,True
+uniform_flip,food,0.5,9,684,684,spurious_fixed,inverse_baseline_spurious,fixed_point,,4,,1298,0.9481373265157049,2.1387874360847343,-2172.879474068474,-2175.0182615045587,True
 uniform_flip,specials,0.05,0,68,68,spurious_fixed,baseline_spurious,fixed_point,,2,,103,0.07523739956172389,-1586.9861212563314,-2172.879474068474,-585.8933528121424,True
 uniform_flip,specials,0.05,1,68,68,spurious_fixed,baseline_spurious,fixed_point,,2,,103,0.07523739956172389,-1609.037253469621,-2172.879474068474,-563.8422205988529,True
 uniform_flip,specials,0.05,2,68,68,spurious_fixed,baseline_spurious,fixed_point,,2,,103,0.07523739956172389,-1602.45726807883,-2172.879474068474,-570.4222059896438,True
@@ -546,7 +546,7 @@ uniform_erasure,beverages,0.25,3,342,180,spurious_fixed,baseline_spurious,fixed_
 uniform_erasure,beverages,0.25,4,342,170,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-1018.7173119065234,-2172.879474068474,-1154.1621621619506,True
 uniform_erasure,beverages,0.25,5,342,182,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-1002.1504747991453,-2172.879474068474,-1170.7289992693286,True
 uniform_erasure,beverages,0.25,6,342,175,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-1000.1373265157245,-2172.879474068474,-1172.7421475527494,True
-uniform_erasure,beverages,0.25,7,342,182,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-947.9970781592579,-2172.879474068474,-1224.882395909216,True
+uniform_erasure,beverages,0.25,7,342,182,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-947.9970781592579,-2172.879474068474,-1224.882395909216,True
 uniform_erasure,beverages,0.25,8,342,185,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-931.7662527392449,-2172.879474068474,-1241.113221329229,True
 uniform_erasure,beverages,0.25,9,342,164,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-1081.899196493808,-2172.879474068474,-1090.980277574666,True
 uniform_erasure,beverages,0.3,0,411,202,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-931.3981008035236,-2172.879474068474,-1241.4813732649504,True
@@ -569,7 +569,7 @@ uniform_erasure,beverages,0.35,6,479,244,spurious_fixed,baseline_spurious,fixed_
 uniform_erasure,beverages,0.35,7,479,244,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-680.5084002921961,-2172.879474068474,-1492.3710737762776,True
 uniform_erasure,beverages,0.35,8,479,242,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-678.6793279766383,-2172.879474068474,-1494.2001460918354,True
 uniform_erasure,beverages,0.35,9,479,242,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-759.2490869247788,-2172.879474068474,-1413.630387143695,True
-uniform_erasure,beverages,0.4,0,548,272,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-630.5157048940945,-2172.879474068474,-1542.3637691743793,True
+uniform_erasure,beverages,0.4,0,548,272,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-630.5157048940945,-2172.879474068474,-1542.3637691743793,True
 uniform_erasure,beverages,0.4,1,548,301,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-569.9751643535534,-2172.879474068474,-1602.9043097149206,True
 uniform_erasure,beverages,0.4,2,548,295,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-619.6464572680906,-2172.879474068474,-1553.2330168003832,True
 uniform_erasure,beverages,0.4,3,548,283,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-602.6121256391633,-2172.879474068474,-1570.2673484293105,True
@@ -1005,7 +1005,7 @@ edge_erasure,beverages,0.05,2,68,45,spurious_fixed,baseline_spurious,fixed_point
 edge_erasure,beverages,0.05,3,68,42,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-1550.5157048940316,-2172.879474068474,-622.3637691744423,True
 edge_erasure,beverages,0.05,4,68,34,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-1632.2804967128618,-2172.879474068474,-540.5989773556121,True
 edge_erasure,beverages,0.05,5,68,35,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-1638.6501095689514,-2172.879474068474,-534.2293644995225,True
-edge_erasure,beverages,0.05,6,68,34,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-1609.110299488614,-2172.879474068474,-563.76917457986,True
+edge_erasure,beverages,0.05,6,68,34,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-1609.110299488614,-2172.879474068474,-563.76917457986,True
 edge_erasure,beverages,0.05,7,68,33,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-1620.2951059166583,-2172.879474068474,-552.5843681518156,True
 edge_erasure,beverages,0.05,8,68,36,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-1599.1380569758292,-2172.879474068474,-573.7414170926447,True
 edge_erasure,beverages,0.05,9,68,32,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-1585.1599707815355,-2172.879474068474,-587.7195032869383,True
@@ -1145,7 +1145,7 @@ edge_erasure,dessert,0.25,2,342,178,spurious_fixed,baseline_spurious,fixed_point
 edge_erasure,dessert,0.25,3,342,188,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-887.3981008035238,-2172.879474068474,-1285.48137326495,True
 edge_erasure,dessert,0.25,4,342,181,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-914.0803506209079,-2172.879474068474,-1258.799123447566,True
 edge_erasure,dessert,0.25,5,342,178,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-948.075967859768,-2172.879474068474,-1224.803506208706,True
-edge_erasure,dessert,0.25,6,342,182,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-948.0438276114121,-2172.879474068474,-1224.8356464570618,True
+edge_erasure,dessert,0.25,6,342,182,spurious_fixed,baseline_spurious,fixed_point,,2,,225,0.1643535427319211,-948.0438276114121,-2172.879474068474,-1224.8356464570618,True
 edge_erasure,dessert,0.25,7,342,181,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-941.1365960555332,-2172.879474068474,-1231.7428780129408,True
 edge_erasure,dessert,0.25,8,342,181,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-954.4455807158697,-2172.879474068474,-1218.4338933526042,True
 edge_erasure,dessert,0.25,9,342,171,spurious_fixed,baseline_spurious,fixed_point,,3,,225,0.1643535427319211,-974.0189919649582,-2172.879474068474,-1198.8604821035156,True
@@ -1460,7 +1460,7 @@ edge_erasure,wine,0.3,7,411,221,spurious_fixed,baseline_spurious,fixed_point,,3,
 edge_erasure,wine,0.3,8,411,213,spurious_fixed,baseline_spurious,fixed_point,,2,,91,0.0664718772826881,-955.3046018992097,-2172.879474068474,-1217.5748721692642,True
 edge_erasure,wine,0.3,9,411,208,spurious_fixed,baseline_spurious,fixed_point,,2,,91,0.0664718772826881,-977.0956902848893,-2172.879474068474,-1195.7837837835846,True
 edge_erasure,wine,0.35,0,479,244,spurious_fixed,baseline_spurious,fixed_point,,2,,91,0.0664718772826881,-806.9656683710862,-2172.879474068474,-1365.9138056973877,True
-edge_erasure,wine,0.35,1,479,252,spurious_fixed,baseline_spurious,fixed_point,,3,,91,0.0664718772826881,-779.5295836377037,-2172.879474068474,-1393.3498904307703,True
+edge_erasure,wine,0.35,1,479,252,spurious_fixed,baseline_spurious,fixed_point,,2,,91,0.0664718772826881,-779.5295836377037,-2172.879474068474,-1393.3498904307703,True
 edge_erasure,wine,0.35,2,479,253,spurious_fixed,baseline_spurious,fixed_point,,3,,91,0.0664718772826881,-782.0452885317848,-2172.879474068474,-1390.8341855366891,True
 edge_erasure,wine,0.35,3,479,250,spurious_fixed,baseline_spurious,fixed_point,,3,,91,0.0664718772826881,-756.0467494521657,-2172.879474068474,-1416.832724616308,True
 edge_erasure,wine,0.35,4,479,247,spurious_fixed,baseline_spurious,fixed_point,,3,,91,0.0664718772826881,-804.7392257122119,-2172.879474068474,-1368.140248356262,True

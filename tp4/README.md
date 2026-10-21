@@ -228,6 +228,17 @@ Su único resguardo numérico está en
 `configs/hopfield/qr_capacity.json`. Las 80 consultas, los agregados y los
 gráficos quedan en `docs/hopfield-qr-capacidad/`.
 
+La robustez de los cinco conjuntos individuales y las diez duplas que resultan
+estables se evalúa con el mismo diseño de ruido mediante:
+
+```bash
+python3 scripts/analyze_hopfield_qr_robustness.py
+```
+
+El script reutiliza `configs/hopfield/qr.json` para mantener los tres ruidos,
+los niveles y las diez semillas del experimento principal. Sus tablas y
+gráficos quedan en `docs/hopfield-qr-robustez/`.
+
 El experimento controlado con letras 5×5 se reproduce mediante:
 
 ```bash

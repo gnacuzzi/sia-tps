@@ -48,7 +48,7 @@ Sin ruido, la recuperación correcta fue
 **100.0 %** para el grupo
 favorable y **25.0 %**
 para el desfavorable. Con 50 % de ruido fue
-**2.5 %** y
+**0.0 %** y
 **22.5 %**, respectivamente.
 
 El 25 % sin ruido del grupo desfavorable no representa una recuperación parcial
@@ -69,9 +69,9 @@ de graficar: mayor ruido todavía recuperado, menor ruido con estado espurio,
 menor ruido con ciclo y primera interferencia sin ruido. Los desempates usan
 letra y semilla en orden ascendente.
 
-- **Correcta con mayor ruido**: O, 50 % de ruido, semilla 2, resultado `correct`.
+- **Correcta con mayor ruido**: O, 40 % de ruido, semilla 4, resultado `correct`.
 - **Primer estado espurio**: R, 20 % de ruido, semilla 2, resultado `spurious_fixed`.
-- **Primer ciclo**: R, 30 % de ruido, semilla 6, resultado `cycle`.
+- **Primer ciclo**: T, 30 % de ruido, semilla 1, resultado `cycle`.
 - **Interferencia sin ruido**: H, 0 % de ruido, semilla 0, resultado `other_stored`.
 
 Los bordes rojos señalan celdas distintas del objetivo. `S(0)` es la consulta

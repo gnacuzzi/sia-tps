@@ -10,6 +10,7 @@ import numpy as np
 
 
 RecallStatus = Literal["fixed_point", "cycle", "max_iterations"]
+ZERO_FIELD_ATOL = 1e-12
 
 
 def _as_bipolar_matrix(patterns: np.ndarray) -> np.ndarray:
@@ -59,10 +60,20 @@ def _update_state(weights: np.ndarray, state: np.ndarray) -> np.ndarray:
         raise FloatingPointError(
             "la actualización de Hopfield produjo activaciones no finitas"
         )
+    zero_fields = np.isclose(
+        local_fields,
+        0.0,
+        rtol=0.0,
+        atol=ZERO_FIELD_ATOL,
+    )
     return np.where(
-        local_fields > 0,
-        1,
-        np.where(local_fields < 0, -1, state),
+        zero_fields,
+        state,
+        np.where(
+            local_fields > 0,
+            1,
+            -1,
+        ),
     ).astype(np.int8)
 
 

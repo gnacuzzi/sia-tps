@@ -204,9 +204,9 @@ QR para esta familia, codificación, regla de aprendizaje y dinámica, no una
 capacidad universal de una red de 1369 neuronas.
 
 El par más correlacionado también es estable, por lo que el peor producto
-interno aislado no explica el corte. Los 15 subconjuntos válidos quedan como
-candidatos para estudiar posteriormente la robustez frente al ruido sin
-confundirla con una falla que ya existe en la memoria sin perturbar.
+interno aislado no explica el corte. Los 15 subconjuntos válidos se evalúan en
+el [barrido de robustez](../hopfield-qr-robustez/README.md), sin confundir el
+efecto del ruido con una falla que ya existe en la memoria sin perturbar.
 
 ## Archivos generados
 

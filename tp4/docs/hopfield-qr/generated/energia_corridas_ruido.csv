@@ -318,7 +318,7 @@ uniform_flip,beverages,0.5,2,1,-1764.5463842219476,1206
 uniform_flip,beverages,0.5,2,2,-2172.879474068474,1144
 uniform_flip,beverages,0.5,2,3,-2172.879474068474,1144
 uniform_flip,beverages,0.5,3,0,1.4609203798392985,684
-uniform_flip,beverages,0.5,3,1,-2047.944485025402,1074
+uniform_flip,beverages,0.5,3,1,-2041.53104455791,1079
 uniform_flip,beverages,0.5,3,2,-2172.879474068474,1144
 uniform_flip,beverages,0.5,3,3,-2172.879474068474,1144
 uniform_flip,beverages,0.5,4,0,2.3959094229364513,684
@@ -657,7 +657,7 @@ uniform_flip,dessert,0.45,9,1,-1959.4127100071446,83
 uniform_flip,dessert,0.45,9,2,-2172.879474068474,225
 uniform_flip,dessert,0.45,9,3,-2172.879474068474,225
 uniform_flip,dessert,0.5,0,0,-1.0810810810810858,684
-uniform_flip,dessert,0.5,0,1,-2098.9685902116553,1089
+uniform_flip,dessert,0.5,0,1,-2094.4543462379534,1086
 uniform_flip,dessert,0.5,0,2,-2172.879474068474,1144
 uniform_flip,dessert,0.5,0,3,-2172.879474068474,1144
 uniform_flip,dessert,0.5,1,0,0.8327246165083994,684
@@ -673,7 +673,7 @@ uniform_flip,dessert,0.5,3,1,-2134.1008035060236,1088
 uniform_flip,dessert,0.5,3,2,-2172.879474068474,1144
 uniform_flip,dessert,0.5,3,3,-2172.879474068474,1144
 uniform_flip,dessert,0.5,4,0,2.2089116143170227,684
-uniform_flip,dessert,0.5,4,1,-1640.3593864133509,153
+uniform_flip,dessert,0.5,4,1,-1646.436815193482,148
 uniform_flip,dessert,0.5,4,2,-2172.879474068474,225
 uniform_flip,dessert,0.5,4,3,-2172.879474068474,225
 uniform_flip,dessert,0.5,5,0,-0.4002921840759712,684
@@ -681,7 +681,7 @@ uniform_flip,dessert,0.5,5,1,-2114.3024105184436,1088
 uniform_flip,dessert,0.5,5,2,-2172.879474068474,1144
 uniform_flip,dessert,0.5,5,3,-2172.879474068474,1144
 uniform_flip,dessert,0.5,6,0,1.4024835646457243,684
-uniform_flip,dessert,0.5,6,1,-2108.835646457085,1103
+uniform_flip,dessert,0.5,6,1,-2093.3060628193966,1093
 uniform_flip,dessert,0.5,6,2,-2172.879474068474,1144
 uniform_flip,dessert,0.5,6,3,-2172.879474068474,1144
 uniform_flip,dessert,0.5,7,0,2.2352081811541273,684
@@ -689,7 +689,7 @@ uniform_flip,dessert,0.5,7,1,-1974.0482103723803,1106
 uniform_flip,dessert,0.5,7,2,-2172.879474068474,1144
 uniform_flip,dessert,0.5,7,3,-2172.879474068474,1144
 uniform_flip,dessert,0.5,8,0,2.4192841490138806,684
-uniform_flip,dessert,0.5,8,1,-1968.9495982467456,261
+uniform_flip,dessert,0.5,8,1,-1996.7187728267274,252
 uniform_flip,dessert,0.5,8,2,-2172.879474068474,225
 uniform_flip,dessert,0.5,8,3,-2172.879474068474,225
 uniform_flip,dessert,0.5,9,0,2.235208181154127,684
@@ -959,7 +959,7 @@ uniform_flip,food,0.45,2,0,-26.883856829802813,616
 uniform_flip,food,0.45,2,1,-2172.879474068474,71
 uniform_flip,food,0.45,2,2,-2172.879474068474,71
 uniform_flip,food,0.45,3,0,-16.052593133674154,616
-uniform_flip,food,0.45,3,1,-2148.2775748719823,49
+uniform_flip,food,0.45,3,1,-2152.9233016798703,44
 uniform_flip,food,0.45,3,2,-2172.879474068474,71
 uniform_flip,food,0.45,3,3,-2172.879474068474,71
 uniform_flip,food,0.45,4,0,-25.040175310445665,616
@@ -983,11 +983,11 @@ uniform_flip,food,0.45,9,1,-2147.0737764789938,31
 uniform_flip,food,0.45,9,2,-2172.879474068474,71
 uniform_flip,food,0.45,9,3,-2172.879474068474,71
 uniform_flip,food,0.5,0,0,1.4959824689554542,684
-uniform_flip,food,0.5,0,1,-1896.6953981006534,1107
+uniform_flip,food,0.5,0,1,-1885.966398831116,1098
 uniform_flip,food,0.5,0,2,-2172.879474068474,1298
 uniform_flip,food,0.5,0,3,-2172.879474068474,1298
 uniform_flip,food,0.5,1,0,2.1095690284879502,684
-uniform_flip,food,0.5,1,1,-1903.1964937909358,1113
+uniform_flip,food,0.5,1,1,-1874.3550036521544,1086
 uniform_flip,food,0.5,1,2,-2172.879474068474,1298
 uniform_flip,food,0.5,1,3,-2172.879474068474,1298
 uniform_flip,food,0.5,2,0,1.259313367421475,684
@@ -1000,7 +1000,7 @@ uniform_flip,food,0.5,3,1,-1906.6822498172337,1111
 uniform_flip,food,0.5,3,2,-2172.879474068474,1298
 uniform_flip,food,0.5,3,3,-2172.879474068474,1298
 uniform_flip,food,0.5,4,0,2.454346238130025,684
-uniform_flip,food,0.5,4,1,-1724.9642074505816,1143
+uniform_flip,food,0.5,4,1,-1690.6793279765207,1155
 uniform_flip,food,0.5,4,2,-2172.879474068474,1298
 uniform_flip,food,0.5,4,3,-2172.879474068474,1298
 uniform_flip,food,0.5,5,0,1.0489408327246228,684
@@ -1016,13 +1016,14 @@ uniform_flip,food,0.5,7,1,-2056.955441928247,1251
 uniform_flip,food,0.5,7,2,-2172.879474068474,1298
 uniform_flip,food,0.5,7,3,-2172.879474068474,1298
 uniform_flip,food,0.5,8,0,2.436815193571946,684
-uniform_flip,food,0.5,8,1,-1693.764791818744,1063
+uniform_flip,food,0.5,8,1,-1689.3235938640353,1068
 uniform_flip,food,0.5,8,2,-2172.879474068474,1298
 uniform_flip,food,0.5,8,3,-2172.879474068474,1298
 uniform_flip,food,0.5,9,0,2.1387874360847343,684
-uniform_flip,food,0.5,9,1,-1770.7874360846195,1085
-uniform_flip,food,0.5,9,2,-2172.879474068474,1298
+uniform_flip,food,0.5,9,1,-1765.1862673483167,1079
+uniform_flip,food,0.5,9,2,-1959.4127100071446,1156
 uniform_flip,food,0.5,9,3,-2172.879474068474,1298
+uniform_flip,food,0.5,9,4,-2172.879474068474,1298
 uniform_flip,specials,0.05,0,0,-1586.9861212563314,68
 uniform_flip,specials,0.05,0,1,-2172.879474068474,103
 uniform_flip,specials,0.05,0,2,-2172.879474068474,103
@@ -1228,7 +1229,7 @@ uniform_flip,specials,0.35,7,0,-167.62016070124434,479
 uniform_flip,specials,0.35,7,1,-2172.879474068474,103
 uniform_flip,specials,0.35,7,2,-2172.879474068474,103
 uniform_flip,specials,0.35,8,0,-159.31628926223817,479
-uniform_flip,specials,0.35,8,1,-2165.9254930604434,96
+uniform_flip,specials,0.35,8,1,-2158.0365230093116,87
 uniform_flip,specials,0.35,8,2,-2172.879474068474,103
 uniform_flip,specials,0.35,8,3,-2172.879474068474,103
 uniform_flip,specials,0.35,9,0,-176.9671292914568,479
@@ -1303,11 +1304,11 @@ uniform_flip,specials,0.5,0,1,-1933.3177501824641,1103
 uniform_flip,specials,0.5,0,2,-2172.879474068474,1266
 uniform_flip,specials,0.5,0,3,-2172.879474068474,1266
 uniform_flip,specials,0.5,1,0,-0.32140248356464307,684
-uniform_flip,specials,0.5,1,1,-1930.6617969319132,1100
+uniform_flip,specials,0.5,1,1,-1928.4499634768376,1098
 uniform_flip,specials,0.5,1,2,-2172.879474068474,1266
 uniform_flip,specials,0.5,1,3,-2172.879474068474,1266
 uniform_flip,specials,0.5,2,0,2.103725346968592,684
-uniform_flip,specials,0.5,2,1,-2103.520818115235,131
+uniform_flip,specials,0.5,2,1,-2125.522279035612,143
 uniform_flip,specials,0.5,2,2,-2172.879474068474,103
 uniform_flip,specials,0.5,2,3,-2172.879474068474,103
 uniform_flip,specials,0.5,3,0,0.3886048210372558,684
@@ -1319,7 +1320,7 @@ uniform_flip,specials,0.5,4,1,-1801.8466033599973,264
 uniform_flip,specials,0.5,4,2,-2172.879474068474,103
 uniform_flip,specials,0.5,4,3,-2172.879474068474,103
 uniform_flip,specials,0.5,5,0,-1.2476260043827605,684
-uniform_flip,specials,0.5,5,1,-1895.3367421474106,1094
+uniform_flip,specials,0.5,5,1,-1936.7976625272372,1105
 uniform_flip,specials,0.5,5,2,-2172.879474068474,1266
 uniform_flip,specials,0.5,5,3,-2172.879474068474,1266
 uniform_flip,specials,0.5,6,0,1.8056975894813718,684
@@ -1331,7 +1332,7 @@ uniform_flip,specials,0.5,7,1,-1925.8991964936388,1096
 uniform_flip,specials,0.5,7,2,-2172.879474068474,1266
 uniform_flip,specials,0.5,7,3,-2172.879474068474,1266
 uniform_flip,specials,0.5,8,0,1.9284149013878737,684
-uniform_flip,specials,0.5,8,1,-1771.1205259312128,1116
+uniform_flip,specials,0.5,8,1,-1749.7618699779757,1073
 uniform_flip,specials,0.5,8,2,-2172.879474068474,1266
 uniform_flip,specials,0.5,8,3,-2172.879474068474,1266
 uniform_flip,specials,0.5,9,0,2.144631117604087,684
@@ -1498,7 +1499,7 @@ uniform_flip,wine,0.3,0,0,-339.45069393718774,411
 uniform_flip,wine,0.3,0,1,-2172.879474068474,91
 uniform_flip,wine,0.3,0,2,-2172.879474068474,91
 uniform_flip,wine,0.3,1,0,-292.3301680058496,411
-uniform_flip,wine,0.3,1,1,-2162.305332359199,77
+uniform_flip,wine,0.3,1,1,-2152.534696858835,58
 uniform_flip,wine,0.3,1,2,-2172.879474068474,91
 uniform_flip,wine,0.3,1,3,-2172.879474068474,91
 uniform_flip,wine,0.3,2,0,-326.1855368882453,411
@@ -1639,7 +1640,7 @@ uniform_flip,wine,0.5,0,1,-1916.8648648647106,1100
 uniform_flip,wine,0.5,0,2,-2172.879474068474,1278
 uniform_flip,wine,0.5,0,3,-2172.879474068474,1278
 uniform_flip,wine,0.5,1,0,1.7998539079620206,684
-uniform_flip,wine,0.5,1,1,-1790.4631117602935,1078
+uniform_flip,wine,0.5,1,1,-1789.7063550035361,1079
 uniform_flip,wine,0.5,1,2,-2172.879474068474,1278
 uniform_flip,wine,0.5,1,3,-2172.879474068474,1278
 uniform_flip,wine,0.5,2,0,1.9284149013878775,684
@@ -1651,7 +1652,7 @@ uniform_flip,wine,0.5,3,1,-1893.2710007303074,1079
 uniform_flip,wine,0.5,3,2,-2172.879474068474,1278
 uniform_flip,wine,0.5,3,3,-2172.879474068474,1278
 uniform_flip,wine,0.5,4,0,2.2936449963477012,684
-uniform_flip,wine,0.5,4,1,-1877.4638422204744,1206
+uniform_flip,wine,0.5,4,1,-1894.2293644995082,1210
 uniform_flip,wine,0.5,4,2,-2172.879474068474,1278
 uniform_flip,wine,0.5,4,3,-2172.879474068474,1278
 uniform_flip,wine,0.5,5,0,0.23374726077428903,684
@@ -1694,7 +1695,7 @@ uniform_erasure,beverages,0.05,5,0,-1618.9159970780959,34
 uniform_erasure,beverages,0.05,5,1,-2172.879474068474,225
 uniform_erasure,beverages,0.05,5,2,-2172.879474068474,225
 uniform_erasure,beverages,0.05,6,0,-1592.0759678596944,37
-uniform_erasure,beverages,0.05,6,1,-2167.8276113949923,223
+uniform_erasure,beverages,0.05,6,1,-1959.4127100071446,83
 uniform_erasure,beverages,0.05,6,2,-2172.879474068474,225
 uniform_erasure,beverages,0.05,6,3,-2172.879474068474,225
 uniform_erasure,beverages,0.05,7,0,-1641.2417823227863,31
@@ -1835,9 +1836,8 @@ uniform_erasure,beverages,0.25,6,1,-2141.0869247624205,212
 uniform_erasure,beverages,0.25,6,2,-2172.879474068474,225
 uniform_erasure,beverages,0.25,6,3,-2172.879474068474,225
 uniform_erasure,beverages,0.25,7,0,-947.9970781592579,182
-uniform_erasure,beverages,0.25,7,1,-2134.100803506026,209
+uniform_erasure,beverages,0.25,7,1,-2172.879474068474,225
 uniform_erasure,beverages,0.25,7,2,-2172.879474068474,225
-uniform_erasure,beverages,0.25,7,3,-2172.879474068474,225
 uniform_erasure,beverages,0.25,8,0,-931.7662527392449,185
 uniform_erasure,beverages,0.25,8,1,-2172.879474068474,225
 uniform_erasure,beverages,0.25,8,2,-2172.879474068474,225
@@ -1851,7 +1851,7 @@ uniform_erasure,beverages,0.3,1,0,-884.587289992714,198
 uniform_erasure,beverages,0.3,1,1,-2172.879474068474,225
 uniform_erasure,beverages,0.3,1,2,-2172.879474068474,225
 uniform_erasure,beverages,0.3,2,0,-858.103725346985,209
-uniform_erasure,beverages,0.3,2,1,-1979.9678597514787,113
+uniform_erasure,beverages,0.3,2,1,-1959.4127100071446,83
 uniform_erasure,beverages,0.3,2,2,-2172.879474068474,225
 uniform_erasure,beverages,0.3,2,3,-2172.879474068474,225
 uniform_erasure,beverages,0.3,3,0,-861.9547114682401,208
@@ -1916,9 +1916,8 @@ uniform_erasure,beverages,0.35,9,0,-759.2490869247788,242
 uniform_erasure,beverages,0.35,9,1,-2172.879474068474,225
 uniform_erasure,beverages,0.35,9,2,-2172.879474068474,225
 uniform_erasure,beverages,0.4,0,0,-630.5157048940945,272
-uniform_erasure,beverages,0.4,0,1,-2103.237399561544,195
+uniform_erasure,beverages,0.4,0,1,-2172.879474068474,225
 uniform_erasure,beverages,0.4,0,2,-2172.879474068474,225
-uniform_erasure,beverages,0.4,0,3,-2172.879474068474,225
 uniform_erasure,beverages,0.4,1,0,-569.9751643535534,301
 uniform_erasure,beverages,0.4,1,1,-2172.879474068474,225
 uniform_erasure,beverages,0.4,1,2,-2172.879474068474,225
@@ -1971,7 +1970,7 @@ uniform_erasure,beverages,0.45,5,0,-499.82761139518783,324
 uniform_erasure,beverages,0.45,5,1,-2172.879474068474,225
 uniform_erasure,beverages,0.45,5,2,-2172.879474068474,225
 uniform_erasure,beverages,0.45,6,0,-498.3959094229435,323
-uniform_erasure,beverages,0.45,6,1,-2090.8867786703845,189
+uniform_erasure,beverages,0.45,6,1,-1959.4127100071446,83
 uniform_erasure,beverages,0.45,6,2,-2172.879474068474,225
 uniform_erasure,beverages,0.45,6,3,-2172.879474068474,225
 uniform_erasure,beverages,0.45,7,0,-535.3601168736402,315
@@ -2335,7 +2334,7 @@ uniform_erasure,dessert,0.5,2,0,-416.555149744346,354
 uniform_erasure,dessert,0.5,2,1,-2172.879474068474,225
 uniform_erasure,dessert,0.5,2,2,-2172.879474068474,225
 uniform_erasure,dessert,0.5,3,0,-373.5924032140312,367
-uniform_erasure,dessert,0.5,3,1,-1959.8860482102118,84
+uniform_erasure,dessert,0.5,3,1,-1959.4127100071446,83
 uniform_erasure,dessert,0.5,3,2,-2172.879474068474,225
 uniform_erasure,dessert,0.5,3,3,-2172.879474068474,225
 uniform_erasure,dessert,0.5,4,0,-446.1796932067279,344
@@ -2467,7 +2466,7 @@ uniform_erasure,food,0.2,5,0,-1289.4287801314717,145
 uniform_erasure,food,0.2,5,1,-2172.879474068474,71
 uniform_erasure,food,0.2,5,2,-2172.879474068474,71
 uniform_erasure,food,0.2,6,0,-1187.3192111029944,155
-uniform_erasure,food,0.2,6,1,-2172.029218407409,70
+uniform_erasure,food,0.2,6,1,-2152.534696858835,38
 uniform_erasure,food,0.2,6,2,-2172.879474068474,71
 uniform_erasure,food,0.2,6,3,-2172.879474068474,71
 uniform_erasure,food,0.2,7,0,-1379.9620160700972,128
@@ -2618,7 +2617,7 @@ uniform_erasure,food,0.45,4,0,-559.2636961285718,338
 uniform_erasure,food,0.45,4,1,-2172.879474068474,71
 uniform_erasure,food,0.45,4,2,-2172.879474068474,71
 uniform_erasure,food,0.45,5,0,-586.5303140978937,317
-uniform_erasure,food,0.45,5,1,-2167.2344777207754,64
+uniform_erasure,food,0.45,5,1,-2152.534696858835,38
 uniform_erasure,food,0.45,5,2,-2172.879474068474,71
 uniform_erasure,food,0.45,5,3,-2172.879474068474,71
 uniform_erasure,food,0.45,6,0,-565.817384952532,329
@@ -3180,7 +3179,7 @@ uniform_erasure,wine,0.35,7,0,-759.6932067202445,259
 uniform_erasure,wine,0.35,7,1,-2172.879474068474,91
 uniform_erasure,wine,0.35,7,2,-2172.879474068474,91
 uniform_erasure,wine,0.35,8,0,-782.0774287801435,249
-uniform_erasure,wine,0.35,8,1,-2163.6406135863726,79
+uniform_erasure,wine,0.35,8,1,-2152.534696858835,58
 uniform_erasure,wine,0.35,8,2,-2172.879474068474,91
 uniform_erasure,wine,0.35,8,3,-2172.879474068474,91
 uniform_erasure,wine,0.35,9,0,-862.9159970781716,235
@@ -3311,9 +3310,8 @@ edge_erasure,beverages,0.05,5,0,-1638.6501095689514,35
 edge_erasure,beverages,0.05,5,1,-2172.879474068474,225
 edge_erasure,beverages,0.05,5,2,-2172.879474068474,225
 edge_erasure,beverages,0.05,6,0,-1609.110299488614,34
-edge_erasure,beverages,0.05,6,1,-2170.3462381298355,224
+edge_erasure,beverages,0.05,6,1,-2172.879474068474,225
 edge_erasure,beverages,0.05,6,2,-2172.879474068474,225
-edge_erasure,beverages,0.05,6,3,-2172.879474068474,225
 edge_erasure,beverages,0.05,7,0,-1620.2951059166583,33
 edge_erasure,beverages,0.05,7,1,-1959.4127100071446,83
 edge_erasure,beverages,0.05,7,2,-2172.879474068474,225
@@ -3729,7 +3727,7 @@ edge_erasure,dessert,0.15,2,0,-1265.268078889695,108
 edge_erasure,dessert,0.15,2,1,-2172.879474068474,225
 edge_erasure,dessert,0.15,2,2,-2172.879474068474,225
 edge_erasure,dessert,0.15,3,0,-1193.227173119072,117
-edge_erasure,dessert,0.15,3,1,-2150.6062819574486,216
+edge_erasure,dessert,0.15,3,1,-1959.4127100071446,83
 edge_erasure,dessert,0.15,3,2,-2172.879474068474,225
 edge_erasure,dessert,0.15,3,3,-2172.879474068474,225
 edge_erasure,dessert,0.15,4,0,-1253.189189189185,110
@@ -3814,9 +3812,8 @@ edge_erasure,dessert,0.25,5,1,-1959.4127100071446,83
 edge_erasure,dessert,0.25,5,2,-2172.879474068474,225
 edge_erasure,dessert,0.25,5,3,-2172.879474068474,225
 edge_erasure,dessert,0.25,6,0,-948.0438276114121,182
-edge_erasure,dessert,0.25,6,1,-2165.323593863948,222
+edge_erasure,dessert,0.25,6,1,-2172.879474068474,225
 edge_erasure,dessert,0.25,6,2,-2172.879474068474,225
-edge_erasure,dessert,0.25,6,3,-2172.879474068474,225
 edge_erasure,dessert,0.25,7,0,-941.1365960555332,181
 edge_erasure,dessert,0.25,7,1,-1959.4127100071446,83
 edge_erasure,dessert,0.25,7,2,-2172.879474068474,225
@@ -4784,7 +4781,7 @@ edge_erasure,wine,0.25,5,0,-1106.3257852447111,176
 edge_erasure,wine,0.25,5,1,-2172.879474068474,91
 edge_erasure,wine,0.25,5,2,-2172.879474068474,91
 edge_erasure,wine,0.25,6,0,-1090.41928414902,173
-edge_erasure,wine,0.25,6,1,-2170.3725346966708,88
+edge_erasure,wine,0.25,6,1,-2152.534696858835,58
 edge_erasure,wine,0.25,6,2,-2172.879474068474,91
 edge_erasure,wine,0.25,6,3,-2172.879474068474,91
 edge_erasure,wine,0.25,7,0,-1074.188458729007,178
@@ -4837,9 +4834,8 @@ edge_erasure,wine,0.35,0,0,-806.9656683710862,244
 edge_erasure,wine,0.35,0,1,-2172.879474068474,91
 edge_erasure,wine,0.35,0,2,-2172.879474068474,91
 edge_erasure,wine,0.35,1,0,-779.5295836377037,252
-edge_erasure,wine,0.35,1,1,-2169.5661066470016,87
+edge_erasure,wine,0.35,1,1,-2172.879474068474,91
 edge_erasure,wine,0.35,1,2,-2172.879474068474,91
-edge_erasure,wine,0.35,1,3,-2172.879474068474,91
 edge_erasure,wine,0.35,2,0,-782.0452885317848,253
 edge_erasure,wine,0.35,2,1,-2168.7742878011286,86
 edge_erasure,wine,0.35,2,2,-2172.879474068474,91
