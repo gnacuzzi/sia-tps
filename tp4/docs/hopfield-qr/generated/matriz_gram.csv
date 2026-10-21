@@ -1,0 +1,6 @@
+name,beverages,dessert,food,specials,wine
+beverages,1369,1037,821,813,789
+dessert,1037,1369,813,841,789
+food,821,813,1369,1049,1177
+specials,813,841,1049,1369,1045
+wine,789,789,1177,1045,1369

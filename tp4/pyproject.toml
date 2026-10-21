@@ -32,6 +32,7 @@ sia-tp4-oja-epochs = "sia_tp4.oja_epoch_experiment:main"
 sia-tp4-oja = "sia_tp4.oja_analysis:main"
 sia-tp4-campaigns = "sia_tp4.campaign_synthesis:main"
 sia-tp4-hopfield-letters = "sia_tp4.hopfield_letters:main"
+sia-tp4-hopfield-qr = "sia_tp4.hopfield_qr:main"
 
 [tool.pytest.ini_options]
 pythonpath = ["src"]

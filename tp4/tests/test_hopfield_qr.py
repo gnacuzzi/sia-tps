@@ -8,7 +8,10 @@ import pytest
 from sia_tp4.hopfield_qr import (
     QR_FILENAMES,
     _binary_grayscale,
+    gram_matrices,
     load_qr_patterns,
+    pairwise_similarity_rows,
+    pixel_balance_rows,
 )
 
 
@@ -58,3 +61,43 @@ def test_binary_validation_rejects_wrong_shape_channels_and_gray_values():
 def test_loader_reports_a_missing_expected_file(tmp_path):
     with pytest.raises(ValueError, match=QR_FILENAMES[0]):
         load_qr_patterns(tmp_path)
+
+
+def test_gram_matrix_is_symmetric_normalized_and_does_not_overflow():
+    patterns = load_qr_patterns(DATA_DIRECTORY)
+
+    gram, normalized = gram_matrices(patterns)
+
+    assert gram.dtype == np.int64
+    np.testing.assert_array_equal(gram, gram.T)
+    np.testing.assert_array_equal(np.diag(gram), 37 * 37)
+    np.testing.assert_allclose(normalized, gram / (37 * 37))
+    np.testing.assert_allclose(np.diag(normalized), 1.0)
+
+
+def test_pairwise_rows_cover_every_pair_and_match_bipolar_distance():
+    patterns = load_qr_patterns(DATA_DIRECTORY)
+
+    rows = pairwise_similarity_rows(patterns)
+
+    assert len(rows) == 10
+    for row in rows:
+        assert (
+            row["inner_product"]
+            == 37 * 37 - 2 * row["different_pixels"]
+        )
+    closest = max(rows, key=lambda row: row["absolute_inner_product"])
+    assert (closest["first"], closest["second"]) == ("food", "wine")
+    assert closest["inner_product"] == 1177
+
+
+def test_pixel_balance_accounts_for_every_pixel():
+    patterns = load_qr_patterns(DATA_DIRECTORY)
+
+    rows = pixel_balance_rows(patterns)
+
+    assert len(rows) == 5
+    assert all(
+        row["black_pixels"] + row["white_pixels"] == 37 * 37
+        for row in rows
+    )

@@ -203,7 +203,17 @@ model = fit_hopfield(patterns)
 result = model.recall(np.asarray([1, -1, -1, -1]))
 ```
 
-Los experimentos con los códigos QR todavía están pendientes.
+La carga bipolar y el análisis de ortogonalidad de los códigos QR se reproducen
+mediante:
+
+```bash
+python3 scripts/analyze_hopfield_qr.py
+```
+
+El comando valida los cinco PNG, calcula las matrices de Gram cruda y
+normalizada, registra el balance de píxeles y genera el informe en
+`docs/hopfield-qr/`. El entrenamiento y el análisis de recuperación todavía
+están pendientes.
 
 El experimento controlado con letras 5×5 se reproduce mediante:
 
