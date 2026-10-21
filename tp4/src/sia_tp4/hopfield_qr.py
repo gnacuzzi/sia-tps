@@ -1146,6 +1146,9 @@ def write_report(
     similarities = np.asarray(
         [row["normalized_inner_product"] for row in pairs]
     )
+    absolute_similarities = np.abs(similarities)
+    pattern_size = patterns.vectors.shape[1]
+    theoretical_capacity_reference = round(0.15 * pattern_size)
     closest = max(pairs, key=lambda row: row["absolute_inner_product"])
     minimum = min(row["absolute_inner_product"] for row in pairs)
     least_similar = [
@@ -1357,6 +1360,56 @@ significa que la red sea robusta: significa que alguna perturbación desplazó
 la consulta desde el atractor espurio hacia otro atractor. El análisis de
 capacidad mediante subconjuntos se reserva para la sección de limitaciones,
 después de completar el caso obligatorio con los cinco QR.
+
+## Limitaciones observadas e hipótesis de capacidad
+
+### Qué muestran los resultados actuales
+
+La red se entrenó con los cinco QR simultáneamente, tal como pide la consigna.
+Sin embargo, ninguno de los cinco patrones originales permanece estable al ser
+usado como consulta sin ruido: todos convergen al mismo punto fijo espurio.
+Además, ninguna de las {len(noise_rows)} consultas deterioradas recupera su QR
+objetivo. La mayor parte converge al mismo espurio encontrado sin ruido y, en
+los casos restantes, a su inverso.
+
+Este comportamiento es coherente con la interferencia anticipada por la matriz
+de Gram. Los productos internos normalizados fuera de la diagonal están entre
+{absolute_similarities.min():.3f} y {absolute_similarities.max():.3f}, con
+media {absolute_similarities.mean():.3f}: los QR comparten una fracción
+importante de sus píxeles y, por lo tanto, no constituyen patrones cercanos a
+la ortogonalidad. Al sumar sus productos externos, la regla de Hebb introduce
+términos cruzados que modifican los mínimos de energía de la red.
+
+Que la energía no aumente durante las actualizaciones confirma que la dinámica
+implementada desciende —o se mantiene— sobre la función de energía. No
+garantiza, en cambio, que el mínimo alcanzado sea una memoria deseada. En este
+caso, el punto fijo espurio es un atractor válido de la dinámica, aunque no
+coincida con ninguno de los cinco QR almacenados.
+
+### Capacidad teórica frente a capacidad efectiva
+
+En clase se presentó como referencia una capacidad del orden de 0.15 N
+patrones para una red de N neuronas. Para estos QR, N = {pattern_size}, lo que
+daría aproximadamente {theoretical_capacity_reference} patrones bajo
+condiciones favorables. Ese valor es una guía teórica, no una garantía
+independiente de los datos: supone patrones suficientemente separados y no
+contempla por sí solo la fuerte correlación observada aquí.
+
+Por eso, que la red falle con solo cinco patrones no contradice esa referencia.
+Muestra que la **capacidad efectiva** para este conjunto particular de QR es
+menor que cinco cuando se usa la regla de Hebb implementada. Con los resultados
+actuales todavía no puede determinarse cuántos QR sí puede almacenar ni si el
+resultado depende principalmente de la cantidad o de la combinación elegida.
+
+### Hipótesis que falta contrastar
+
+La hipótesis para el próximo experimento es que los subconjuntos más pequeños
+y con menores productos internos cruzados tendrán más memorias estables y una
+mejor recuperación ante ruido. Para comprobarla será necesario entrenar redes
+con distintas combinaciones de los cinco QR, medir primero la estabilidad sin
+ruido y luego evaluar consultas deterioradas únicamente alrededor de las
+memorias que hayan resultado estables. Así se podrá separar la limitación de
+capacidad de la robustez frente al ruido sin cambiar el modelo pedido.
 
 ## Archivos generados
 
