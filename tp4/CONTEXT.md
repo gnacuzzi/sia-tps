@@ -71,7 +71,11 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   incorporación de creadores vuelve a entrenar el pipeline completo; campañas
   o variables nuevas requieren revisar explícitamente el diseño. Los informes
   canónicos se regeneran sin crear carpetas por mes o por semilla.
-  Hopfield todavía no está implementado.
+  El núcleo discreto de Hopfield ya está implementado y probado: construye la
+  matriz de pesos de Hebb, actualiza el estado en forma sincrónica, conserva el
+  valor previo ante activación cero, registra la energía y distingue estados
+  fijos, ciclos y corte por máximo de iteraciones. Todavía faltan el caso de
+  letras, los experimentos con ruido y el análisis de los códigos QR.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
@@ -83,8 +87,8 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
 - El material disponible alcanza para resolver el ejercicio 1 completo:
   introducción al aprendizaje no supervisado, Kohonen, autovalores y
   autovectores, PCA, Oja y Sanger.
-- Todavía no hay clase de Hopfield en `docs/`. La presentación oral del
-  enunciado indicó expresamente postergar el ejercicio 2 hasta ver ese tema.
+- La clase de Hopfield, su transcripción y el ejemplo de ortogonalidad ya están
+  disponibles en `docs/` y habilitan el trabajo sobre el ejercicio 2.
 - Datos disponibles:
   - `datos/creadores.csv`, para el ejercicio 1;
   - cinco códigos QR en `datos/hopfield/`, para el ejercicio 2.
@@ -142,9 +146,9 @@ Antes de los QR, el enunciado recomienda validar la red con cuatro letras
 bipolares (`1` y `-1`) de 5 x 5, estudiar ortogonalidad y capacidad, y provocar
 o identificar un estado espurio con una consulta muy ruidosa.
 
-**Este ejercicio queda deliberadamente pendiente hasta disponer de la clase de
-Hopfield.** No inferir ahora reglas de actualización, energía, capacidad ni
-dinámica desde conocimiento externo.
+La implementación debe mantenerse dentro de las reglas de actualización,
+energía, capacidad y dinámica explicadas en la clase de Hopfield disponible en
+`docs/`.
 
 ## Dataset de creadores
 

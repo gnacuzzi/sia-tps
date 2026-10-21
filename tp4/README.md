@@ -185,6 +185,27 @@ El procedimiento para incorporar creadores, actualizar el catálogo cada mes y
 decidir cuándo revisar campañas, variables o hiperparámetros está documentado
 en `docs/mantenimiento.md`.
 
+## Memoria asociativa de Hopfield
+
+El núcleo discreto está implementado en `src/sia_tp4/hopfield.py`. Almacena
+patrones bipolares por fila, construye una matriz de pesos simétrica con
+diagonal cero y recupera una consulta mediante actualizaciones sincrónicas.
+Cada resultado conserva la trayectoria de estados y energías, e informa si
+terminó en un estado fijo, en un ciclo o por alcanzar el máximo de iteraciones.
+
+```python
+import numpy as np
+
+from sia_tp4.hopfield import fit_hopfield
+
+patterns = np.asarray([[1, 1, -1, -1], [-1, -1, 1, 1]])
+model = fit_hopfield(patterns)
+result = model.recall(np.asarray([1, -1, -1, -1]))
+```
+
+El ejemplo de letras, el análisis de ortogonalidad y los experimentos con los
+códigos QR todavía están pendientes.
+
 Para ejecutar las pruebas:
 
 ```bash

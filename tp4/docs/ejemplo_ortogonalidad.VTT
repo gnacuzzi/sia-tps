@@ -1,0 +1,594 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:04.740
+SANTIAGO REYES: Sí, tengo esto cargado. Si ya no lo tengo que correr ya de vuelta. Excelente.
+
+2
+00:00:05.790 --> 00:00:14.299
+SANTIAGO REYES: Bien, la idea. Acá. Esto es un ejercicio que en realidad está relacionado más que nada
+
+3
+00:00:14.600 --> 00:00:22.699
+SANTIAGO REYES: con la parte que bueno. Ahora es opcional, que de vez anteriores, no era opcional. Ahora es más más que opcional. Es una recomendación, mejor dicho.
+
+4
+00:00:22.880 --> 00:00:26.760
+SANTIAGO REYES: que empiecen por este lado, que
+
+5
+00:00:27.170 --> 00:00:31.480
+SANTIAGO REYES: traten de hacer esto por su cuenta
+
+6
+00:00:31.840 --> 00:00:38.220
+SANTIAGO REYES: y que lo que voy a hacer yo ahora, en este ejemplo lo repitan también.
+
+7
+00:00:38.870 --> 00:00:48.970
+SANTIAGO REYES: primero con los con los Q. R que tienen para el ejercicio 3 del T P y si desean explayarse un poco más, vamos a hablar de unas opciones de unas opcionales que se pueden hacer.
+
+8
+00:00:49.430 --> 00:00:52.140
+SANTIAGO REYES: Y bueno, esto también caería. En
+
+9
+00:00:52.250 --> 00:00:57.969
+SANTIAGO REYES: Tendría sentido hacerlo si van a empezar a generar Q. R y probar cosas opcionales.
+
+10
+00:00:58.550 --> 00:00:59.720
+SANTIAGO REYES: ¿qué es esto?
+
+11
+00:00:59.880 --> 00:01:03.179
+SANTIAGO REYES: Bueno, Como vimos en la clase de Hopkiel
+
+12
+00:01:03.920 --> 00:01:09.719
+SANTIAGO REYES: la Capaci, la capacidad de almacenamiento de la red está determinada por una serie de factores.
+
+13
+00:01:10.070 --> 00:01:14.280
+SANTIAGO REYES: Entre ellos es un porcentaje de
+
+14
+00:01:14.520 --> 00:01:18.220
+SANTIAGO REYES: el 15 por 100 era del
+
+15
+00:01:19.600 --> 00:01:28.389
+SANTIAGO REYES: de las neuronas, la cantidad de elementos que podemos almacenar bien y habíamos hablado de la ortogonalidad, o lo más cercano a ortogonalidad.
+
+16
+00:01:28.630 --> 00:01:34.649
+SANTIAGO REYES: Hemos que cuanto más cercano ortogonal sean nuestros patrones.
+
+17
+00:01:35.780 --> 00:01:45.170
+SANTIAGO REYES: Mejor va a reaccionar. La red mayor capacidad va a tener para almacenarlos y poder
+
+18
+00:01:45.700 --> 00:01:50.970
+SANTIAGO REYES: y poner y poder tenerlos correctamente, no caer en estados espurios o estados incorrectos.
+
+19
+00:01:52.920 --> 00:02:06.830
+SANTIAGO REYES: Esto de Acá es un ejemplito con las letras. Acá Pueden ver el código, inclusive de lo que estoy usando. No, no comparto el el notebook también porque queda grabada la clase. Y es suficiente poco código que
+
+20
+00:02:07.100 --> 00:02:11.960
+SANTIAGO REYES: lo pueden copiar y pegar, o sea, leer y escribir, o si
+
+21
+00:02:12.110 --> 00:02:15.130
+SANTIAGO REYES: si quieren hacer un o Cr, y levantarlo, levantarlo por ahí.
+
+22
+00:02:15.730 --> 00:02:20.850
+SANTIAGO REYES: Pero a acá lo que tengo hecho es un dataset de letras.
+
+23
+00:02:21.360 --> 00:02:23.079
+SANTIAGO REYES: Este ata sed de letras.
+
+24
+00:02:24.070 --> 00:02:27.789
+SANTIAGO REYES: Está y me deja ir para atrás.
+
+25
+00:02:30.770 --> 00:02:39.790
+SANTIAGO REYES: No, hasta Acá son letras, 1, 2, 3, 4, 5, por 1, 2, 3, 4, 5, 5 por 5,
+
+26
+00:02:39.940 --> 00:02:41.860
+SANTIAGO REYES: como dice la recomendación.
+
+27
+00:02:43.080 --> 00:02:45.120
+SANTIAGO REYES: Y yo acá tengo todo el abecedario
+
+28
+00:02:48.410 --> 00:02:58.390
+SANTIAGO REYES: que, corriendo este cachito de código de tespond se pueden renderear las letras Este mismo código.
+
+29
+00:02:59.240 --> 00:03:02.329
+SANTIAGO REYES: ¿dónde está le parecía no tanto pero el de
+
+30
+00:03:03.480 --> 00:03:09.600
+SANTIAGO REYES: este de acá el de Prints Letters. Ustedes lo pueden utilizar para para clientelar sus Qr, así tal cual como está,
+
+31
+00:03:09.790 --> 00:03:12.789
+SANTIAGO REYES: lo van a tener que mostrar en la presentación a los Q. R.
+
+32
+00:03:13.200 --> 00:03:18.830
+SANTIAGO REYES: Esta es una manera de levantarlo como una matriz, y que se Vean las letras compactas y coloridas, nada muy especial.
+
+33
+00:03:19.690 --> 00:03:21.999
+SANTIAGO REYES: Pero lo que tenemos acá son todas las letras.
+
+34
+00:03:22.110 --> 00:03:26.260
+SANTIAGO REYES: Y la idea de este ejercicio es encontrar
+
+35
+00:03:26.800 --> 00:03:29.800
+SANTIAGO REYES: con este, con estas poquitas líneas de código.
+
+36
+00:03:30.130 --> 00:03:36.880
+SANTIAGO REYES: encontrar las mejores combinaciones de 4 letras que se puedan usar para
+
+37
+00:03:37.410 --> 00:03:39.290
+SANTIAGO REYES: almacenar en una red de hopi.
+
+38
+00:03:39.400 --> 00:03:46.399
+SANTIAGO REYES: no de este tamaño de 25, 5 por 5, 25 caracteres. A
+
+39
+00:03:49.340 --> 00:03:57.949
+SANTIAGO REYES: hay letras que van a ser mejores entre Sí, digo un par de letras no que va a estar más cercano a ser ortogonal.
+
+40
+00:03:58.050 --> 00:04:00.690
+SANTIAGO REYES: Hay otro par de letras que van a hacer todo lo contrario.
+
+41
+00:04:00.950 --> 00:04:08.019
+SANTIAGO REYES: Digo siempre más cercano ortogonal, porque nunca van a ser de la venta ortogonales, ya que tenemos una cantidad impares
+
+42
+00:04:08.250 --> 00:04:21.859
+SANTIAGO REYES: de cada patrón es un número impar y está compuesto por unos o menos 1. Por lo tanto, el mínimo en valor absoluto el mínimo producto interno que se puede tener entre 2 letras es 1.
+
+43
+00:04:22.240 --> 00:04:30.420
+SANTIAGO REYES: Por lo tanto, si se cumpliesen condiciones ideales para este tipo de datos.
+
+44
+00:04:30.810 --> 00:04:33.129
+SANTIAGO REYES: Tendríamos de los 4
+
+45
+00:04:33.250 --> 00:04:42.029
+SANTIAGO REYES: de las 4 letras. Todas las combinaciones tendrían un producto interno de 1, No, es decir, un producto interno promedio en valor absoluto, no de 1.
+
+46
+00:04:42.920 --> 00:04:49.499
+SANTIAGO REYES: No se da el caso para, como por como tengo armado yo, el dataset. Si ustedes fuesen a armar otro data sed distinto, con letras
+
+47
+00:04:49.700 --> 00:04:53.069
+SANTIAGO REYES: de distinta manera. Capas pueden podrían conseguir eso.
+
+48
+00:04:53.290 --> 00:04:58.159
+SANTIAGO REYES: Pero la idea de hacer esto es explorar un poco cómo funciona la red de Hopefield.
+
+49
+00:04:58.810 --> 00:05:05.429
+SANTIAGO REYES: Con estos distintos grupos, el código que está acá es bastante bastante simple.
+
+50
+00:05:05.720 --> 00:05:07.040
+SANTIAGO REYES: Hemos
+
+51
+00:05:07.220 --> 00:05:13.399
+SANTIAGO REYES: de la lista de letras. Primero se plantean, se aplastan para que queden en vez de una matriz en un vector
+
+52
+00:05:14.590 --> 00:05:17.659
+SANTIAGO REYES: y después lo que estamos haciendo
+
+53
+00:05:18.080 --> 00:05:24.800
+SANTIAGO REYES: en este cachito de Código. Acá es ese vector armar esta
+
+54
+00:05:24.950 --> 00:05:31.079
+SANTIAGO REYES: matriz de ortogonalidad de Samo. Yo no tiene un nombre. Se llama matriz degram.
+
+55
+00:05:31.240 --> 00:05:34.200
+SANTIAGO REYES: Pero, bueno, esto te hace un poquito más descriptivo
+
+56
+00:05:34.680 --> 00:05:42.449
+SANTIAGO REYES: que, en definitiva, lo que está pasando acá es la es una matriz con las letras aplanadas multiplicado por la transpuesta traspuesta de sí misma.
+
+57
+00:05:42.570 --> 00:05:48.189
+SANTIAGO REYES: que nos da algo con esta forma de acá ya vamos a ver qué onda los ceros que básicamente.
+
+58
+00:05:48.430 --> 00:05:54.559
+SANTIAGO REYES: lo que tenemos en este valor acá es el producto interno de A B de A con C, de A con D,
+
+59
+00:05:54.970 --> 00:06:04.190
+SANTIAGO REYES: luego de acá tenemos. Bueno, ve con Ap, con C, B, con D, se con de.
+
+60
+00:06:04.710 --> 00:06:09.450
+SANTIAGO REYES: Y en el medio irían sería siempre 25, no
+
+61
+00:06:09.600 --> 00:06:13.280
+SANTIAGO REYES: lo que lo que debería estar acá en el medio, ya que son patrones de 5 por 5.
+
+62
+00:06:14.130 --> 00:06:18.729
+SANTIAGO REYES: ¿qué pasa por un tema de simplicidad, de cómo can calculo Ahora.
+
+63
+00:06:19.240 --> 00:06:23.010
+SANTIAGO REYES: los promedios, la piso, toda la diagonal en 0,
+
+64
+00:06:23.280 --> 00:06:35.800
+SANTIAGO REYES: porque 1 de los valores que yo quiero sacar de Acá es el producto interno promedio, es decir, tomando sería el promedio, en definitiva, de estos 1, 2, 3, 4, 5, 6,
+
+65
+00:06:36.370 --> 00:06:38.290
+SANTIAGO REYES: combinaciones que simétricas, matriz.
+
+66
+00:06:38.530 --> 00:06:41.249
+SANTIAGO REYES: Pero, bueno, si ignoramos los ceros.
+
+67
+00:06:41.370 --> 00:06:45.229
+SANTIAGO REYES: podemos hacer toda la suma y irla por el doble de números.
+
+68
+00:06:45.380 --> 00:06:56.260
+SANTIAGO REYES: Y queda el mismo promedio sin tener que empezar a targetear triángulos o buscar índices, o hacer algo muy especial. Simplemente es por eso. Es un para facilitar el cómputo que se llena la diagonal con ceros.
+
+69
+00:06:57.790 --> 00:07:02.150
+SANTIAGO REYES: Pero bueno, van a ver acá. Que yo acá estoy guardando 2 cosas. Y
+
+70
+00:07:02.890 --> 00:07:08.860
+SANTIAGO REYES: entre ellas no solamente el producto interno promedio, sino que también el máximo.
+
+71
+00:07:10.320 --> 00:07:11.590
+SANTIAGO REYES: ¿por qué digo esto?
+
+72
+00:07:13.160 --> 00:07:16.590
+SANTIAGO REYES: Si nosotros vemos acá primero el producto interno medio.
+
+73
+00:07:17.070 --> 00:07:24.520
+SANTIAGO REYES: Hay conjuntos que tienen el mismo producto interno, en este caso. Uno, 33 para el grupo a Ltb.
+
+74
+00:07:24.770 --> 00:07:26.920
+SANTIAGO REYES: Lo mismo para L, R. Tx
+
+75
+00:07:27.120 --> 00:07:35.670
+SANTIAGO REYES: Y por el otro lado, también tenemos repeticiones entre conjuntos malos. No entre comillas hemos.
+
+76
+00:07:35.970 --> 00:07:36.930
+SANTIAGO REYES: ¿qué pasa
+
+77
+00:07:39.260 --> 00:07:45.819
+SANTIAGO REYES: Sería lo mismo? Una cosa que venimos hablando todo el cuatrimestre que es cuando nosotros hacemos un promedio, perdemos variabilidad.
+
+78
+00:07:46.080 --> 00:07:55.940
+SANTIAGO REYES: Sería lo mismo, tener un conjunto que tenga 1, 33, Pero esté compuesto por más números
+
+79
+00:07:56.260 --> 00:08:04.780
+SANTIAGO REYES: más grandes o un número muy grande, y todos los demás chiquititos, o 1 que esté compuesto más justo, 1 con 33. No se puede dar por esa combinación, Pero si hay casos, por ejemplo.
+
+80
+00:08:05.160 --> 00:08:11.340
+SANTIAGO REYES: los que tienen 2 cha cha Bueno, esto lo vamos a ver acá. En este de acá. Bien.
+
+81
+00:08:11.760 --> 00:08:17.780
+SANTIAGO REYES: si hay casos, por ejemplo, en este que tiene 2 de producto interno medio que tiene
+
+82
+00:08:18.090 --> 00:08:24.690
+SANTIAGO REYES: el valor máximo. Son 3, y ese 3 aparece 3 veces mientras tanto. Acá este también tiene 2,
+
+83
+00:08:24.940 --> 00:08:29.700
+SANTIAGO REYES: y el valor máximo es 5, pero aparece una sola vez. Entonces, por más que tiene el mismo promedio.
+
+84
+00:08:29.960 --> 00:08:36.020
+SANTIAGO REYES: Hay pares que son peor a peor, dupla dentro de todas las combinaciones del conjunto
+
+85
+00:08:36.230 --> 00:08:43.480
+SANTIAGO REYES: que otros. Esto es una cosa que ustedes pueden explorar. Si de repente funciona mejor o funciona peor.
+
+86
+00:08:43.700 --> 00:08:50.439
+SANTIAGO REYES: ¿es preferible tener un promedio chico con un máximo mínimo más acotado o es preferible tener
+
+87
+00:08:51.290 --> 00:08:56.080
+SANTIAGO REYES: 3 pares buenos y 1 malo es un tipo de análisis que pueden hacer.
+
+88
+00:08:57.450 --> 00:09:04.529
+SANTIAGO REYES: y bueno, el resto del código acá es simplemente probar un poquito de patrones, ver cómo se ven.
+
+89
+00:09:04.720 --> 00:09:12.160
+SANTIAGO REYES: Y Y bueno, reconocer también que hay una realidad que es cuanto más parecidas son las letras.
+
+90
+00:09:12.500 --> 00:09:20.760
+SANTIAGO REYES: mayor va a ser su producto interno medio, entre comillas, menos ortogonal. Sería ese grupo
+
+91
+00:09:21.060 --> 00:09:23.529
+SANTIAGO REYES: tomando la el abuso de natación
+
+92
+00:09:24.170 --> 00:09:30.720
+SANTIAGO REYES: y versamente. Cuanto más distintas son las letras, mejor se comporta el grupo.
+
+93
+00:09:32.850 --> 00:09:34.740
+SANTIAGO REYES: Alguna consulta acerca de esto
+
+94
+00:09:52.600 --> 00:10:00.770
+SANTIAGO REYES: puede tomar el silencio como que no hay consultas. Y paso a hablar un poco de lo que decía: auge de los distintos que a pasar acá
+
+95
+00:10:01.560 --> 00:10:06.629
+SANTIAGO REYES: una vista más feliz. Esta está buena. Me gusta a ti en todas las letras y tantos hombros.
+
+96
+00:10:09.610 --> 00:10:12.650
+SANTIAGO REYES: Bueno, voy a pasar a hablar un poquito de
+
+97
+00:10:12.860 --> 00:10:18.019
+SANTIAGO REYES: qué cosas pueden hacer más como opcionales dentro del ejercicio de los Q. R.
+
+98
+00:10:19.400 --> 00:10:26.290
+SANTIAGO REYES: Obviamente, todo esto sería después de cumplir con el objetivo de evaluarlos.
+
+99
+00:10:27.370 --> 00:10:29.530
+SANTIAGO REYES: Cinco son 5, no 5. Q. R.
+
+100
+00:10:30.230 --> 00:10:39.370
+SANTIAGO REYES: No me acuerdo Ahora, la cantidad que sea de Qr, evaluarlo sin ruido. Primero, evaluar su capacidad de aprendizaje
+
+101
+00:10:39.500 --> 00:10:49.989
+SANTIAGO REYES: pueden graficar acá la fórmula de energía y presentar eso también. Y estaría, bueno mostrar visualmente la evaluación, la evolución, por lo menos en un caso de ejemplo.
+
+102
+00:10:50.170 --> 00:10:55.030
+SANTIAGO REYES: la evolución de cada Estado hasta llegar al resultado final al punto de estabilidad
+
+103
+00:10:56.390 --> 00:10:58.940
+SANTIAGO REYES: o, bueno, en su defecto punto de divergencia.
+
+104
+00:10:59.340 --> 00:11:04.600
+SANTIAGO REYES: Hemos eso, por un lado, como a
+
+105
+00:11:05.130 --> 00:11:11.390
+SANTIAGO REYES: como dice el enunciado, esto se hizo obligatorio tienen que incorporar ruido en este ejercicio y evaluar
+
+106
+00:11:11.630 --> 00:11:17.550
+SANTIAGO REYES: la capacidad de la red y qué capacidad tiene para tolerar ese ruido. Y acá es donde
+
+107
+00:11:17.740 --> 00:11:21.280
+SANTIAGO REYES: podemos hablar de cosas un poco más interesantes.
+
+108
+00:11:21.800 --> 00:11:24.149
+SANTIAGO REYES: En un principio, la
+
+109
+00:11:24.440 --> 00:11:30.510
+SANTIAGO REYES: lo que imagino que van a terminar haciendo todos, que va a ser como lo más estándar y y básico posible.
+
+110
+00:11:31.240 --> 00:11:32.519
+SANTIAGO REYES: Sería bueno nada
+
+111
+00:11:32.730 --> 00:11:45.170
+SANTIAGO REYES: ir introduciendo ruido. Probablemente saltan perros, ni siquiera saltan perros, simplemente un ruido uniforme de hay una probabilidad tanto que se dé vuelta un bit o no, y si era negro, ahora es blanco, si era blanco. Ahora es negro.
+
+112
+00:11:45.500 --> 00:11:51.779
+SANTIAGO REYES: que eso, hasta cierto punto va a funcionar. Y después de eso, ya empiezas a tirar estados espurios.
+
+113
+00:11:53.570 --> 00:11:57.770
+SANTIAGO REYES: Lo que lo que pueden evaluar ahí.
+
+114
+00:11:59.110 --> 00:12:02.249
+SANTIAGO REYES: Eso es lo más básico, pero que pueden evaluar acá es
+
+115
+00:12:02.760 --> 00:12:06.979
+SANTIAGO REYES: cambiar el tipo de ruido y probar distintas funciones de ruido
+
+116
+00:12:07.480 --> 00:12:15.749
+SANTIAGO REYES: para que sea más cercano a la realidad, no. O sea, si ustedes están, tienen un Q. R en Mcdonald's. El Q. R. Marcado pago
+
+117
+00:12:16.420 --> 00:12:21.480
+SANTIAGO REYES: no va a pasar que de repente un cuadradito blanco se ponga negro a menos que justo. No sé, Cayó un
+
+118
+00:12:21.650 --> 00:12:26.690
+SANTIAGO REYES: cachito de oreo de Makturri en el Qr, y se puso negro el cuadradito.
+
+119
+00:12:26.920 --> 00:12:31.389
+SANTIAGO REYES: Generalmente lo que termina pasando con impresiones, por ejemplo, es que se van desgastando.
+
+120
+00:12:31.660 --> 00:12:35.090
+SANTIAGO REYES: Y también ese desgaste no siempre es
+
+121
+00:12:35.290 --> 00:12:42.129
+SANTIAGO REYES: totalmente uniforme. Muchas veces las cosas se van desgastando de los bordes para adentro, entonces pueden probar
+
+122
+00:12:42.300 --> 00:12:44.320
+SANTIAGO REYES: una vez que ya hicieron lo base.
+
+123
+00:12:44.820 --> 00:12:58.829
+SANTIAGO REYES: cambiar un poquito la función de ruido y volver a correr eso para ver si tienen resultados distintos para ver si si las cosas se acercan más, o sea, si tienen mejores resultados en un caso más cercano al real, si tiene mayor tolerancia o menor tolerancia.
+
+124
+00:12:59.010 --> 00:13:00.080
+SANTIAGO REYES: Hemos
+
+125
+00:13:00.320 --> 00:13:15.090
+SANTIAGO REYES: pueden usar un ruido, o sea, una distribución, no cosa de que, por ejemplo, haya menor probabilidad de un radio, una menor probabilidad en el centro de que haya cambio de píxeles y mayor probabilidad en los costados o inclusive pueden probar un ruido que no sea
+
+126
+00:13:15.430 --> 00:13:24.369
+SANTIAGO REYES: que no que no pinte de negro, sino que hay una probabilidad de que pinta un pixel de blanco. Si el píxel, ese ya era blanco, sigue quedando blanco, entonces siempre van a tender.
+
+127
+00:13:24.900 --> 00:13:33.549
+SANTIAGO REYES: o sea, en su estado máximo, te queda un cuadrado en blanco. Pero, bueno, ese sería un ruido más representativo de la realidad. Este es el tipo de cosas que pueden probar también.
+
+128
+00:13:34.160 --> 00:13:40.029
+SANTIAGO REYES: Nada solamente cambiando el ruido. Y solamente con los ejemplos estos que
+
+129
+00:13:40.280 --> 00:13:42.049
+SANTIAGO REYES: que le dimos para el Pp
+
+130
+00:13:43.170 --> 00:13:49.149
+SANTIAGO REYES: como un caso extra. Todavía ahí pueden empezar a incorporar
+
+131
+00:13:49.600 --> 00:13:54.339
+SANTIAGO REYES: nuevos Q. R. No generar un Q. R. Es trial. No, no hace falta aclarar cómo se hace
+
+132
+00:13:54.550 --> 00:14:10.829
+SANTIAGO REYES: Lo que pueden probar acá. Es generar. Q: R, ustedes mismos? Qr: Es de verdad, No, No, no inventen o peor, todavía no le diga nada tipo clock que invente un cuadrado con forma. Q: R Simplemente agarren un texto y lo pasan por un generador de Q. R. Hay distintos tamaños de Qr.
+
+133
+00:14:10.930 --> 00:14:20.550
+SANTIAGO REYES: y dependiendo del contenido que tengan. Y el Q. R que usen. Pueden inclusive tener un Q R en sí que tenga mayor o menor redundancia.
+
+134
+00:14:20.820 --> 00:14:26.630
+SANTIAGO REYES: ¿por qué importa esto? Porque es posible que el Estado que encuentren si se llegan a extender así,
+
+135
+00:14:27.420 --> 00:14:31.769
+SANTIAGO REYES: por más que no sea exactamente el mismo patrón que ustedes almacenaron.
+
+136
+00:14:31.960 --> 00:14:33.799
+SANTIAGO REYES: Es posible que lo puedan escanear
+
+137
+00:14:33.910 --> 00:14:40.299
+SANTIAGO REYES: y que siga funcionando. Entonces ese es otro caso. Un layer más que tienen para explorar este ejercicio. Es decir.
+
+138
+00:14:40.410 --> 00:14:53.889
+SANTIAGO REYES: Ok, esto no necesariamente me da el estado que yo quiero encontrar un estado espurio, pero capaz estado oscuro que encuentra, sigue dando el mismo resultado, entonces ahí hay bastante como para explorar.
+
+139
+00:14:54.050 --> 00:15:00.830
+SANTIAGO REYES: Y sí, se pueden generar. Q Rs: ustedes mismos, Es donde entraría este tipo de análisis de agarrar y decir, generaron
+
+140
+00:15:01.580 --> 00:15:02.980
+SANTIAGO REYES: 20 Q. R.
+
+141
+00:15:03.770 --> 00:15:09.590
+SANTIAGO REYES: Pero bien, pueden probar todos contra todas las combinaciones. Calcular los productos internos entre cada combinación de Qr
+
+142
+00:15:09.850 --> 00:15:17.450
+SANTIAGO REYES: y evaluar justamente esto de que, ¿qué pasa si tengo un grupo más fuerte y
+
+143
+00:15:19.240 --> 00:15:23.420
+SANTIAGO REYES: más cercano a ser ortogonal entre sí y 1 menos
+
+144
+00:15:23.940 --> 00:15:28.509
+SANTIAGO REYES: cómo cómo su cómo es, cómo se maneja la red ante esos casos.
+
+145
+00:15:28.650 --> 00:15:36.779
+SANTIAGO REYES: Ahí tienen un montón como para probar. Y y para explorar. Es una red muy distinta a las otras que venimos viendo en la clase esta
+
+146
+00:15:36.940 --> 00:15:39.870
+SANTIAGO REYES: para toda la materia. Entonces está bueno.
+
+147
+00:15:40.290 --> 00:15:44.830
+SANTIAGO REYES: explorar un poquito más y entender cómo funciona. Se ganó un premio Nobel hace poco, no
+
+148
+00:15:45.140 --> 00:15:51.009
+SANTIAGO REYES: de física, técnicamente copio. Así nada salió interesante para chumbear y a entrar.
+

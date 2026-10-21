@@ -1,0 +1,2290 @@
+WEBVTT
+
+1
+00:00:03.310 --> 00:00:18.100
+Eugenia Sol Piñeiro: Bueno, vamos a ver el último modelo de red neuronal que nos queda, que es el modelo de Hotfill que se acuerdan que teníamos que resolver 3 problemas en 3 problemas principales: en aprendizaje no supervisado, agrupación o clustring que vimos un poco el modelo de Cojonen.
+
+2
+00:00:18.270 --> 00:00:24.940
+Eugenia Sol Piñeiro: Podemos reducción de dimensionalidad con P. S, A o como artes principales y hoja.
+
+3
+00:00:25.200 --> 00:00:31.359
+Eugenia Sol Piñeiro: Y hoy vamos a ver el otro que es de asociación de patrones que básicamente vamos a usar Hotfield
+
+4
+00:00:31.600 --> 00:00:33.660
+Eugenia Sol Piñeiro: como una de las posibles soluciones.
+
+5
+00:00:34.400 --> 00:00:36.709
+Eugenia Sol Piñeiro: Entonces, ¿en qué consiste esta arquitectura
+
+6
+00:00:36.850 --> 00:00:46.890
+Eugenia Sol Piñeiro: se basa en este concepto de memorias asociativas, que consiste básicamente en almacenar patrones en la red y recuperarlos
+
+7
+00:00:47.160 --> 00:00:52.670
+Eugenia Sol Piñeiro: si están asociados con otras informaciones. Estas informaciones van a ser los patrones que estén en la red.
+
+8
+00:00:52.780 --> 00:01:06.819
+Eugenia Sol Piñeiro: Entonces vamos a almacenar p patrones que vamos a llamar al patrón de entrada, el estímulo de la red para que responda con 1 de los patrones que tiene almacenados, que se le va a llamar el patrón de respuesta opción de salida.
+
+9
+00:01:07.600 --> 00:01:17.599
+Eugenia Sol Piñeiro: Entonces, en este caso, las memorias asociativas van a recuperar información justamente asociando con esos patrones que va a tener hobfile almacenados.
+
+10
+00:01:19.790 --> 00:01:22.859
+Eugenia Sol Piñeiro: Básicamente se basa en un modelo de red recurrente.
+
+11
+00:01:23.020 --> 00:01:29.810
+Eugenia Sol Piñeiro: Esto significa que hay retroalimentación entre las neuronas, es decir, todas están conectadas entre sí.
+
+12
+00:01:29.930 --> 00:01:46.880
+Eugenia Sol Piñeiro: A diferencia de la Fit Foward, no, que que solo tienen conexiones hacia adelante, acá las R. N. Tienen conexiones que también retroalimentan información anterior. En la secuencia de datos. Pueden usar información previa. Entonces son muy usadas en el área de deep Learning. También. Este es como una
+
+13
+00:01:47.400 --> 00:01:56.600
+Eugenia Sol Piñeiro: R. N. N. Muy simple, muy sencilla. También puede escalar, ¿no? Pero en este caso vamos a tener solo una capa donde todas las neuronas estaban conectadas con todas
+
+14
+00:01:57.550 --> 00:02:11.740
+Eugenia Sol Piñeiro: y tienen una particular característica de estas neuronas que primero no están conectadas con sí mismas. Y, segundo, tienen un conjunto de activación binario, es decir, las neuronas van a estar activas o inactivas
+
+15
+00:02:11.940 --> 00:02:18.549
+Eugenia Sol Piñeiro: activo. Lo vamos a representar con un 1 y el estado inactivo de la neurona con un 1.
+
+16
+00:02:18.790 --> 00:02:23.499
+Eugenia Sol Piñeiro: Esto va a ser muy importante. Ya vamos a ver por qué, pero solo pueden tomar esos valores
+
+17
+00:02:24.150 --> 00:02:33.750
+Eugenia Sol Piñeiro: y no están conectadas con sí misma. Entonces la conexión, digamos, de una neurona consiga, va a ser 0, y después las conexiones con las otras neuronas van a ser 1 o menos 1 sí.
+
+18
+00:02:36.670 --> 00:02:51.589
+Eugenia Sol Piñeiro: Bueno, Ahora bien, ¿Para qué me sirve esta red No, en particular, Vamos a ver un caso en que yo le doy un a la red un patrón como estímulo. Y mi objetivo va a ser asociarlo con alguno de los que tenga almacenados la red.
+
+19
+00:02:51.970 --> 00:03:01.330
+Eugenia Sol Piñeiro: Es decir, tiene que intentar resolver qué características tiene ese patrón para lograr que
+
+20
+00:03:01.940 --> 00:03:04.890
+Eugenia Sol Piñeiro: el output sea lo más similar al input posible.
+
+21
+00:03:04.980 --> 00:03:15.240
+Eugenia Sol Piñeiro: Esto, por lo general se suele hacer quizás con un patrón ruidoso. Entonces 1 lo que intenta hacer es justamente conseguir un auto y que esté limpio, no que sea similar, pero sin el ruido.
+
+22
+00:03:15.320 --> 00:03:29.190
+Eugenia Sol Piñeiro: Es un poco el el objetivo final que tiene la red, pero por lo pronto vamos a ver un ejemplo muy sencillo, ahora más manual. Así podemos hacer los cálculos a mano y después vamos a escalar un poco con el ejemplo del
+
+23
+00:03:29.540 --> 00:03:30.720
+Eugenia Sol Piñeiro: el trabajo práctico
+
+24
+00:03:32.310 --> 00:03:46.540
+Eugenia Sol Piñeiro: Supóngase que estos son nuestros patrones, que es lo que vamos a almacenar en la red. Fíjense que la notación es la misma que venimos usando, o sea, acá. Vamos a tener el Xxi. Supramu y los zeta donde los si superamo, van a ser
+
+25
+00:03:46.870 --> 00:03:49.489
+Eugenia Sol Piñeiro: los patrones que yo almaceno en mi red.
+
+26
+00:03:49.650 --> 00:03:52.499
+Eugenia Sol Piñeiro: En este caso, supóngase que tengo una imagen.
+
+27
+00:03:53.020 --> 00:03:54.720
+Eugenia Sol Piñeiro: Puede ser una imagen binaria
+
+28
+00:03:54.890 --> 00:04:01.029
+Eugenia Sol Piñeiro: donde va a representar el blanco con un 1 y el violeta con un menos 1.
+
+29
+00:04:01.170 --> 00:04:11.980
+Eugenia Sol Piñeiro: Entonces voy a formar este patrón. Si paso, digamos esta imagen a una rey. Por ejemplo, podría tener 1 1 menos 1 menos 1. Y este va a ser el primer patrón que voy a almacenar en mi red.
+
+30
+00:04:12.830 --> 00:04:17.160
+Eugenia Sol Piñeiro: Ahora vamos a ver cómo se almacena, qué significa que se almacena y a qué converge y demás. Pero
+
+31
+00:04:17.970 --> 00:04:22.980
+Eugenia Sol Piñeiro: voy a tener este patrón almacenado. Después voy a tener el 1 menos 1 1 1.
+
+32
+00:04:23.440 --> 00:04:32.299
+Eugenia Sol Piñeiro: Y el objetivo va a ser que entre este patrón de consulta va a ser mi estímulo que va a ser el 1 1 menos 1 menos 1.
+
+33
+00:04:32.690 --> 00:04:33.810
+Eugenia Sol Piñeiro: Entonces
+
+34
+00:04:34.420 --> 00:04:42.749
+Eugenia Sol Piñeiro: la la pregunta que nos vamos a hacer Es: bueno, ¿a qué patrón se lo puedo asociar? ¿qué patrón le puedo asignar? ¿cuál es el más parecido
+
+35
+00:04:42.880 --> 00:04:52.429
+Eugenia Sol Piñeiro: que 1 me podría decir, bueno, calculo la distancia, la distancia, la distancia coseno. Entre estos vectores y listo, el de menor distancia es el que yo quiero.
+
+36
+00:04:52.870 --> 00:04:57.969
+Eugenia Sol Piñeiro: pero vamos a hacerlo con redes neuronales. De hecho, esto puede ser mucho más complejo.
+
+37
+00:04:58.390 --> 00:05:05.809
+Eugenia Sol Piñeiro: Incluso acá. Ambos difieren en un 1 de los de los campos. ¿no? Entonces
+
+38
+00:05:06.460 --> 00:05:14.760
+Eugenia Sol Piñeiro: vamos a asumir que, por alguna razón, mi patrón está perturbado y quiero asociarlo con una red neuronal a algunos patrones que mi red ya aprendió.
+
+39
+00:05:17.610 --> 00:05:22.130
+Eugenia Sol Piñeiro: Bien, vamos a representar las neuronas con un vector de Estados
+
+40
+00:05:22.830 --> 00:05:32.109
+Eugenia Sol Piñeiro: donde de nuevo cada Estado va a tener un Estado más 1 o menos 1. Pero mi red de N. Neuronas va a terminar representado por la longitud
+
+41
+00:05:32.430 --> 00:05:37.160
+Eugenia Sol Piñeiro: de mis patrones. Es decir, si antes tenía 4, voy a tener 4 neuronas.
+
+42
+00:05:38.190 --> 00:05:45.610
+Eugenia Sol Piñeiro: Entonces voy a representar toda mi red en este vector de Estados de S. Uno hasta S. N. Que va a ser la longitud de mis patrones.
+
+43
+00:05:48.840 --> 00:05:55.629
+Eugenia Sol Piñeiro: Entonces vamos a ver el problema que queremos resolver. Vamos a ir paso a paso, resolviendo el problema con la red y demás numéricamente. Entonces
+
+44
+00:05:56.310 --> 00:06:01.210
+Eugenia Sol Piñeiro: supóngase que yo tengo mis patrones almacenados, logs y supramu que voy a tener mis p patrones.
+
+45
+00:06:01.310 --> 00:06:03.530
+Eugenia Sol Piñeiro: Y le doy un nuevo patrón. Z.
+
+46
+00:06:03.640 --> 00:06:08.850
+Eugenia Sol Piñeiro: Entonces quiero encontrar cuál es el patrón que está almacenado a mi red, que es más cercano a Z.
+
+47
+00:06:10.860 --> 00:06:13.519
+Eugenia Sol Piñeiro: Voy a buscar los pesos de mi red.
+
+48
+00:06:13.750 --> 00:06:21.330
+Eugenia Sol Piñeiro: De nuevo, vamos a tener los pesos sinápticos, Pero esta red tiene una característica particular muy importante que.
+
+49
+00:06:21.450 --> 00:06:31.559
+Eugenia Sol Piñeiro: en realidad, los pesos no se actualizan, sino que lo que se actualiza va a ser el Estado y el Estado adentro va a tener la información de los pesos, pero los pesos se van a calcular una sola vez
+
+50
+00:06:32.370 --> 00:06:35.769
+Eugenia Sol Piñeiro: y ya está. Y van a quedar fijos durante todo el entrenamiento.
+
+51
+00:06:36.000 --> 00:06:37.060
+Eugenia Sol Piñeiro: Entonces
+
+52
+00:06:37.930 --> 00:06:44.629
+Eugenia Sol Piñeiro: es es bastante distinto a como lo veníamos viendo. Va a ser importante también la característica de que, en particular.
+
+53
+00:06:45.210 --> 00:06:46.950
+Eugenia Sol Piñeiro: también es una red simétrica.
+
+54
+00:06:47.820 --> 00:06:57.999
+Eugenia Sol Piñeiro: ¿qué significa esto. Por ejemplo, yo voy a tener mi neurona y mi neurona. J:
+
+55
+00:06:59.010 --> 00:07:04.809
+Eugenia Sol Piñeiro: Entonces quiero calcular el peso que va desde W I A, W. J:
+
+56
+00:07:06.030 --> 00:07:09.550
+Eugenia Sol Piñeiro: Ahora vamos a ver cómo lo calculamos, pero tengo que calcular este peso
+
+57
+00:07:10.310 --> 00:07:16.760
+Eugenia Sol Piñeiro: después como es una red simétrica. No necesito calcular el W. J. I, Porque va a ser igual.
+
+58
+00:07:17.960 --> 00:07:23.919
+Eugenia Sol Piñeiro: Y, por ejemplo, ¿cuánto va a ser el W I, I,
+
+59
+00:07:27.210 --> 00:07:28.829
+Eugenia Sol Piñeiro: cuánto da doble ahí,
+
+60
+00:07:31.960 --> 00:07:39.349
+Eugenia Sol Piñeiro: qué característica tenía o lo mismo con doble? J: J: No, Claro. Cero.
+
+61
+00:07:40.780 --> 00:07:47.180
+Eugenia Sol Piñeiro: Entonces estos no los voy a tener en calcular, porque esto es importante de acero. No están conectadas con sí mismas. Entonces
+
+62
+00:07:47.670 --> 00:07:50.479
+Eugenia Sol Piñeiro: los W I me dan 0, no los calculo
+
+63
+00:07:50.690 --> 00:07:57.009
+Eugenia Sol Piñeiro: y los que son simétricos. Tampoco voy a perder costo en eso, porque es una red que es simétrica. Así que es lo mismo.
+
+64
+00:07:57.950 --> 00:08:02.169
+Eugenia Sol Piñeiro: Bien, esa es una característica importante. Ahora vamos a ver por qué,
+
+65
+00:08:05.290 --> 00:08:06.440
+Eugenia Sol Piñeiro: entonces.
+
+66
+00:08:07.680 --> 00:08:17.499
+Eugenia Sol Piñeiro: a términos de la red, es una red que es un perceptrón simple y va a tener la función de activación escalón, porque tenemos estos Estados que están activos o inactivos, no 1 o menos 1,
+
+67
+00:08:17.650 --> 00:08:23.299
+Eugenia Sol Piñeiro: entonces ya sabemos que cada par de neuronas se va a conectar por este peso. W. I J.
+
+68
+00:08:23.660 --> 00:08:26.330
+Eugenia Sol Piñeiro: Entonces al principio.
+
+69
+00:08:26.470 --> 00:08:35.150
+Eugenia Sol Piñeiro: para inicializar la red, lo que se va a hacer es asignar el patrón de consulta Z al primer estado. Entonces
+
+70
+00:08:35.260 --> 00:08:36.059
+Eugenia Sol Piñeiro: el
+
+71
+00:08:36.240 --> 00:08:43.980
+Eugenia Sol Piñeiro: esto, el S Cero, digamos, el primer Estado va a ser igual a mi patrón de consulta, No, por ejemplo, mi patrón ruidoso
+
+72
+00:08:44.190 --> 00:08:50.049
+Eugenia Sol Piñeiro: que yo quería encontrar arranca así inicializado, no arranca aleatorio, sino que arranca con el patrón de estímulo.
+
+73
+00:08:50.820 --> 00:09:04.319
+Eugenia Sol Piñeiro: Y quiero ver si hay algún conjunto de pesos que hagan que la red alcance alguno de los patrones que tiene almacenados. No quiero encontrar. Quiero que converja a algunos de los si que almacené
+
+74
+00:09:04.870 --> 00:09:23.549
+Eugenia Sol Piñeiro: hacer un paréntesis en el caso ideal converge a 1 de los patrones almacenados. Vamos a ver que no es el único caso y pueden pasar otras cosas, Pero por lo pronto, el camino feliz es que converja a el si supramu que es lo que yo almacené en mi red y lo asocie, logre justamente esa memoria asociativa.
+
+75
+00:09:25.150 --> 00:09:28.869
+Eugenia Sol Piñeiro: Bien, entonces vamos a buscar ese patrón.
+
+76
+00:09:29.580 --> 00:09:31.549
+Eugenia Sol Piñeiro: Vamos a calcular primero
+
+77
+00:09:31.670 --> 00:09:40.869
+Eugenia Sol Piñeiro: cómo se va a ir modificando esta red, porque habíamos dicho que justamente el W está fijo. Entonces, ¿qué es lo que va a cambiar? Si no voy a actualizar los pesos. Entonces
+
+78
+00:09:41.070 --> 00:09:51.329
+Eugenia Sol Piñeiro: lo que vamos a actualizar va a ser la activación que va a estar calculada como la sumatoria de los pesos por el Estado en ese momento
+
+79
+00:09:51.670 --> 00:09:57.360
+Eugenia Sol Piñeiro: con instinto de J. ¿por qué? Porque W y y O. W. J. J. Es 0.
+
+80
+00:09:57.580 --> 00:10:01.650
+Eugenia Sol Piñeiro: Entonces, como no hay conexiones con ellas mismas. No es necesario que calcule y jota.
+
+81
+00:10:02.810 --> 00:10:07.700
+Eugenia Sol Piñeiro: Bien, entonces esta va a ser la regla de actualización. Más importante.
+
+82
+00:10:10.160 --> 00:10:12.889
+Eugenia Sol Piñeiro: la neurona va a modificar el estado.
+
+83
+00:10:13.220 --> 00:10:14.740
+Eugenia Sol Piñeiro: Según esta regla.
+
+84
+00:10:15.290 --> 00:10:21.410
+Eugenia Sol Piñeiro: el Estado va a ser 1. Si la activación me da positiva y menos 1, Si me da negativa
+
+85
+00:10:21.680 --> 00:10:26.780
+Eugenia Sol Piñeiro: la activación que calculamos antes, entonces esto lo podemos resumir como el signo de H I
+
+86
+00:10:27.150 --> 00:10:33.940
+Eugenia Sol Piñeiro: de nuevo con H y distinto de 0, porque en este caso, si es 0, es porque permanece en estado previo y nosotros queremos avanzar, no en el estado
+
+87
+00:10:34.410 --> 00:10:39.450
+Eugenia Sol Piñeiro: en entonces es lo que va. Se va a ir actualizándose. Este vector de Estados.
+
+88
+00:10:39.710 --> 00:10:46.869
+Eugenia Sol Piñeiro: en un momento, este vector deja de actualizarse, deja de cambiar, y se lo llama que es un Estado estable.
+
+89
+00:10:47.000 --> 00:10:52.809
+Eugenia Sol Piñeiro: Y ya está la red. En ese momento converge, entonces va evolucionando la red
+
+90
+00:10:53.240 --> 00:10:59.309
+Eugenia Sol Piñeiro: hasta que ese vector justamente ya está. No se actualiza más, alcanzó su estado de estabilidad y se lo llama
+
+91
+00:10:59.590 --> 00:11:02.480
+Eugenia Sol Piñeiro: atractor también es un Estado atractor.
+
+92
+00:11:04.270 --> 00:11:07.189
+Eugenia Sol Piñeiro: De nuevo. Vamos a ver que hay estados que son atractores.
+
+93
+00:11:07.820 --> 00:11:18.810
+Eugenia Sol Piñeiro: pero no son los patrones almacenados, entonces puede llegar a pasar eso, pero vamos a ver en qué condiciones ideales deberíamos llegar a un Estado estable almacenado en la red.
+
+94
+00:11:22.890 --> 00:11:24.830
+Eugenia Sol Piñeiro: Bien, Vamos a ver la convergencia.
+
+95
+00:11:26.170 --> 00:11:32.059
+Eugenia Sol Piñeiro: Volvamos con nuestro ejemplo inicial. Tenemos este patrón que es menos 1, menos 1, 1, 1.
+
+96
+00:11:32.240 --> 00:11:35.260
+Eugenia Sol Piñeiro: Este Voy a almacenar solo un patrón en mi red
+
+97
+00:11:35.590 --> 00:11:40.569
+Eugenia Sol Piñeiro: a términos de lograr hacer el cálculo más sencillo. Pero en realidad esto se hace con n patrones.
+
+98
+00:11:40.770 --> 00:11:46.049
+Eugenia Sol Piñeiro: Entonces vamos a tener este patrón. P: Cuántas neuronas va a tener mi red?
+
+99
+00:11:51.010 --> 00:11:54.010
+Eugenia Sol Piñeiro: Es decir, ¿cuán cuánto va a ser este ene que hay acá
+
+100
+00:12:02.920 --> 00:12:05.590
+Eugenia Sol Piñeiro: 4. Perfecto. Podés la longitud del patrón.
+
+101
+00:12:06.210 --> 00:12:09.179
+Eugenia Sol Piñeiro: Entonces, en este caso voy a actualizar los pesos de esta forma
+
+102
+00:12:11.350 --> 00:12:19.280
+Eugenia Sol Piñeiro: el peso de W. J. Va a estar calculado como un cuarto por sí subí por sí subjota.
+
+103
+00:12:20.090 --> 00:12:30.470
+Eugenia Sol Piñeiro: Esto para aclarar la anotación de acá esto es si supra. Mo, en este caso solo tengo 1. Así que va a ser si supra 1, y estos son los subos, ¿no?
+
+104
+00:12:30.710 --> 00:12:35.509
+Eugenia Sol Piñeiro: Entonces, si yo tengo, por ejemplo, para calcular el W, 1 o 2
+
+105
+00:12:36.170 --> 00:12:40.430
+Eugenia Sol Piñeiro: va a ser igual a un cuarto por menos 1
+
+106
+00:12:41.920 --> 00:12:45.649
+Eugenia Sol Piñeiro: acá por 1, por menos 1. No
+
+107
+00:12:48.930 --> 00:12:52.570
+Eugenia Sol Piñeiro: estoy agarrando el si supra 1 sub 1 subjota
+
+108
+00:12:53.690 --> 00:13:02.760
+Eugenia Sol Piñeiro: lo mismo. Si quiero calcular el w 2, 3, voy a hacer un cuarto por menos 1
+
+109
+00:13:03.470 --> 00:13:07.940
+Eugenia Sol Piñeiro: que sería este de acá por 1, que es el tercero.
+
+110
+00:13:09.460 --> 00:13:17.900
+Eugenia Sol Piñeiro: Y así sucesivamente con todas las conexiones, ¿no? Entonces yo puedo calcular este W Y J. De entrada, ya está. Ya tengo. Cómo es. Es mi patrón.
+
+111
+00:13:18.000 --> 00:13:24.200
+Eugenia Sol Piñeiro: Calculo. Mis pesos y listo, Me los guardo y ya está. No los voy a actualizar. Voy a empezar a actualizar el estado.
+
+112
+00:13:24.620 --> 00:13:27.689
+Eugenia Sol Piñeiro: Entonces el estado se va a
+
+113
+00:13:28.240 --> 00:13:33.649
+Eugenia Sol Piñeiro: tranquilito un poco, acá se va a calcular como el signo de H que H. Era
+
+114
+00:13:33.750 --> 00:13:37.090
+Eugenia Sol Piñeiro: W. Y J. La conexión que tiene el
+
+115
+00:13:37.430 --> 00:13:40.519
+Eugenia Sol Piñeiro: la neurona I con la neurona J. Por si sub jota.
+
+116
+00:13:41.760 --> 00:13:45.200
+Eugenia Sol Piñeiro: Y si es un Jota Fijensé que es esto de acá
+
+117
+00:13:46.150 --> 00:13:54.990
+Eugenia Sol Piñeiro: no, Entonces me va a quedar la sumatoria de 1 sobre. N por sí, subo. Si su y
+
+118
+00:13:55.260 --> 00:14:00.559
+Eugenia Sol Piñeiro: si son J, esto de acá por este, si es un J de acá
+
+119
+00:14:04.090 --> 00:14:06.899
+Eugenia Sol Piñeiro: y cuánto me da si es un jota por sí sub jota.
+
+120
+00:14:15.800 --> 00:14:17.090
+Eugenia Sol Piñeiro: positivo?
+
+121
+00:14:18.990 --> 00:14:23.210
+Eugenia Sol Piñeiro: Okay, Sí, da positivo. Pero ¿cuánto da específicamente
+
+122
+00:14:24.580 --> 00:14:39.859
+Eugenia Sol Piñeiro: 1 claro entonces? Porque esto puede ser o es menos 1 o es 1 O sea, no no tiene otra otra posibilidad, porque tenemos justamente activaciones binarias. Entonces, o hago menos 1 por menos 1 o 1 por 1. Entonces lo importante es que esto es 1
+
+123
+00:14:40.230 --> 00:14:42.320
+Eugenia Sol Piñeiro: listo. Entonces esto se va.
+
+124
+00:14:42.630 --> 00:14:48.280
+Eugenia Sol Piñeiro: Entonces me va a quedar el signo de 1 sobre N, por si su I,
+
+125
+00:14:48.650 --> 00:14:52.089
+Eugenia Sol Piñeiro: Y estoy calculando el signo. O sea, esto es una constante, entonces
+
+126
+00:14:52.770 --> 00:14:55.349
+Eugenia Sol Piñeiro: me queda el signo de si subí
+
+127
+00:14:56.250 --> 00:15:05.510
+Eugenia Sol Piñeiro: y el signo de si subí en este caso, va directamente ser si subí, es el único patrón que tengo almacenado, el signo. Si subí o va a ser
+
+128
+00:15:06.020 --> 00:15:09.140
+Eugenia Sol Piñeiro: positivo o negativo, No 1 o menos 1. Entonces
+
+129
+00:15:09.410 --> 00:15:13.010
+Eugenia Sol Piñeiro: converge a el patrón que tenía almacenado.
+
+130
+00:15:14.440 --> 00:15:22.850
+Eugenia Sol Piñeiro: Y ahí se produce la convergencia. En este caso que tengo un solo patrón. Me converge directo. Ya en el paso, 1 ya está convergió. Vamos a ver ahora un caso donde tengo más patrones.
+
+131
+00:15:25.860 --> 00:15:35.539
+Eugenia Sol Piñeiro: Supóngase que tenemos estos 2 patrones almacenados. Ahora voy a tener el Xxi Supra, Uno y el Xxi. Supra 2 almacenados en mi red.
+
+132
+00:15:36.400 --> 00:15:43.509
+Eugenia Sol Piñeiro: De nuevo, voy a tener mi red con 4 neuronas porque tengo 4 de longitud del patrón. Entonces voy a calcular mis pesos.
+
+133
+00:15:43.750 --> 00:15:47.069
+Eugenia Sol Piñeiro: Claro, en este caso, si quiero calcular los pesos, ya
+
+134
+00:15:48.130 --> 00:15:51.850
+Eugenia Sol Piñeiro: tengo que arrancar con la sumatoria de
+
+135
+00:15:52.030 --> 00:15:55.290
+Eugenia Sol Piñeiro: en mu no, porque tengo muchos patrones almacenados.
+
+136
+00:15:55.430 --> 00:16:00.090
+Eugenia Sol Piñeiro: Entonces, por ejemplo, si tengo W. Uno, 2
+
+137
+00:16:01.010 --> 00:16:06.699
+Eugenia Sol Piñeiro: va a ser igual a un cuarto por la sumatoria de.
+
+138
+00:16:07.020 --> 00:16:08.679
+Eugenia Sol Piñeiro: voy a agarrar el primero, no
+
+139
+00:16:10.950 --> 00:16:17.890
+Eugenia Sol Piñeiro: el 1 por 1. O sea, voy a estar sumando acá con mu igual a 1 1 por 1
+
+140
+00:16:18.490 --> 00:16:25.949
+Eugenia Sol Piñeiro: más el del segundo. No tengo que agarrar el primero y el segundo de estos, o sea, menos 1
+
+141
+00:16:26.220 --> 00:16:27.670
+Eugenia Sol Piñeiro: por menos 1.
+
+142
+00:16:29.420 --> 00:16:31.929
+Eugenia Sol Piñeiro: Y esto, Bueno, es un medio.
+
+143
+00:16:33.540 --> 00:16:41.040
+Eugenia Sol Piñeiro: no priorice demasiado rápido. Uno, menos 1, 1, 2, cuarto, un medio. Bien, se entendió. Creo que fui medio rápido, pero
+
+144
+00:16:41.420 --> 00:16:56.979
+Eugenia Sol Piñeiro: es lo mismo que hacíamos antes, solo que suma, en su tramo una ninguna cuenta del otro mundo tampoco. Pero el objetivo, justamente sacar todos los patrones que tengo almacenados y empezar a ver cómo los asocio. Entonces los pesos van a tener información de todos mis patrones almacenados.
+
+145
+00:16:59.060 --> 00:17:00.000
+Eugenia Sol Piñeiro: Bien.
+
+146
+00:17:01.600 --> 00:17:10.939
+Eugenia Sol Piñeiro: de nuevo. Acuérdense y distinto de J, Por Q. Y es 0. Y si yo calculo el w 1, 2, entonces el W. Dos. Uno
+
+147
+00:17:11.050 --> 00:17:14.819
+Eugenia Sol Piñeiro: ya lo tengo. También va a ser un medio, porque la red es simétrica.
+
+148
+00:17:17.050 --> 00:17:17.920
+Eugenia Sol Piñeiro: Bien.
+
+149
+00:17:18.270 --> 00:17:25.620
+Eugenia Sol Piñeiro: vamos a ver ahora el algoritmo de actualización. Hasta acá alguna duda, en general, Hotfield se entendió el concepto general.
+
+150
+00:17:26.710 --> 00:17:28.670
+Eugenia Sol Piñeiro: Vamos a asociar patrones.
+
+151
+00:17:33.140 --> 00:17:36.540
+Eugenia Sol Piñeiro: Bueno, como resumo todo esto.
+
+152
+00:17:38.890 --> 00:17:48.559
+Eugenia Sol Piñeiro: vamos a ver el algoritmo. Tenemos que primero almacenar mis p patrones. No voy a tener oxi supramo. Tienen que estar almacenados. Son patrones n dimensionales binarios.
+
+153
+00:17:49.720 --> 00:17:58.890
+Eugenia Sol Piñeiro: Entonces, en dimensionales, esto va a ser la dimensión del patrón. Voy a calcular los pesos con la regla que dimos antes las calcula el principio, mis pesos.
+
+154
+00:17:59.080 --> 00:18:05.739
+Eugenia Sol Piñeiro: Entonces el dolor E. J va a ser igual a 1 sobre l por la sumatoria de los patrones que tengo almacenados en mi red.
+
+155
+00:18:06.910 --> 00:18:12.179
+Eugenia Sol Piñeiro: sí y distinto de jota. Y si, Y es igual a J, es 0, porque las neuronas no tienen conexión con sí mismas.
+
+156
+00:18:12.770 --> 00:18:16.539
+Eugenia Sol Piñeiro: Entonces voy a iniciar mi vector de Estados.
+
+157
+00:18:17.020 --> 00:18:20.950
+Eugenia Sol Piñeiro: Entonces, mi vector de Estados en el paso inicial va a ser igual a mi estímulo.
+
+158
+00:18:21.340 --> 00:18:25.769
+Eugenia Sol Piñeiro: no al al patrón de consulta. Esto es lo que habíamos visto al principio. Entonces.
+
+159
+00:18:26.050 --> 00:18:32.860
+Eugenia Sol Piñeiro: el estado de la neurona y T sub 0, digamos, el tiempo 0 va a ser igual a Z. Y
+
+160
+00:18:35.210 --> 00:18:48.010
+Eugenia Sol Piñeiro: y vamos a iterar hasta que converja la red. Entonces acá lo que se va a hacer es el estado En el paso siguiente va a ser igual al signo de H, que es lo que habíamos visto que va a ser
+
+161
+00:18:48.380 --> 00:18:53.139
+Eugenia Sol Piñeiro: la sumatoria de los W y J por el Estado En el paso actual.
+
+162
+00:18:53.770 --> 00:19:00.999
+Eugenia Sol Piñeiro: Entonces, de nuevo, fíjense que lo que se actualiza es el vector de Estados que ya tiene adentro la información de los pesos que yo ya calculé al principio.
+
+163
+00:19:02.610 --> 00:19:11.639
+Eugenia Sol Piñeiro: Bien, y esto lo voy a tener que repetir hasta que el Estado permanezca estable qué significa que el Estado permanezca estable y que no cambie. Es decir, llega un momento
+
+164
+00:19:12.730 --> 00:19:15.519
+Eugenia Sol Piñeiro: de la red que el S.
+
+165
+00:19:16.360 --> 00:19:21.129
+Eugenia Sol Piñeiro: Temas 1 va a ser igual a ese T más 2,
+
+166
+00:19:22.250 --> 00:19:27.419
+Eugenia Sol Piñeiro: igual a ese tema estrés. Y así ya está. No cambia. Llegó a la convergencia y corto. El algoritmo No
+
+167
+00:19:28.330 --> 00:19:29.190
+Eugenia Sol Piñeiro: listo.
+
+168
+00:19:29.760 --> 00:19:31.910
+Eugenia Sol Piñeiro: Voy a hacer un paréntesis que
+
+169
+00:19:32.040 --> 00:19:36.710
+Eugenia Sol Piñeiro: a veces lo que puede pasar es que se les quede en un loop
+
+170
+00:19:37.810 --> 00:19:40.790
+Eugenia Sol Piñeiro: y que que caiga en un ciclo. La convergencia.
+
+171
+00:19:41.650 --> 00:19:47.840
+Eugenia Sol Piñeiro: ténganlo en cuenta para la implementación que no se queden integrando ahí, ¿Que ¿qué es lo que puede pasar que
+
+172
+00:19:48.420 --> 00:19:54.420
+Eugenia Sol Piñeiro: converja, por ejemplo, a S 2, después converja S 3,
+
+173
+00:19:54.680 --> 00:20:03.090
+Eugenia Sol Piñeiro: vuelva a converger al estado anterior a ese 2. Después vuelve a converger hace 3 y se queda así entre 2 Estados convergiendo.
+
+174
+00:20:03.140 --> 00:20:14.709
+Eugenia Sol Piñeiro: convergiendo, O sea, no es que converge, sino que se queda ahí lupeando. Y llegó a esos 2 patrones, que son los 2 atractores, Entonces les puede llegar a pasar eso. Cuidado. El caso ideal es que converja 1 y listo.
+
+175
+00:20:16.020 --> 00:20:19.210
+Eugenia Sol Piñeiro: básicamente pongan un máximo de interacciones.
+
+176
+00:20:20.630 --> 00:20:29.540
+Eugenia Sol Piñeiro: Bien, entonces el output va a ser igual a 1 de los patrones almacenados. En el caso ideal.
+
+177
+00:20:31.820 --> 00:20:33.770
+Eugenia Sol Piñeiro: vamos a ver un ejemplo numérico.
+
+178
+00:20:35.110 --> 00:20:37.720
+Eugenia Sol Piñeiro: Entonces supóngase que
+
+179
+00:20:38.770 --> 00:20:51.059
+Eugenia Sol Piñeiro: tengo esta cantidad de patrones con p igual a 2. La arquitectura de mi red va a ser un percepción simple con dura, capa con 4 neuronas. La punción del día en escalón donde tengo. Si supra
+
+180
+00:20:51.200 --> 00:20:57.170
+Eugenia Sol Piñeiro: 1 y el Xxi supra 2 almacenados en mi red, ¿qué significa almacenar en la red, calcular el lector de pesos
+
+181
+00:20:57.650 --> 00:21:03.200
+Eugenia Sol Piñeiro: a partir de justamente estos patrones que tengo almacenados Entonces.
+
+182
+00:21:04.430 --> 00:21:07.870
+Eugenia Sol Piñeiro: en este caso, ¿cómo puedo calcular el W Uno, 2?
+
+183
+00:21:08.870 --> 00:21:13.359
+Eugenia Sol Piñeiro: ¿vamos a calcular la matriz de Pesos. ¿qué tengo que hacer para calcular el W? Uno o 2
+
+184
+00:21:33.480 --> 00:21:42.870
+Eugenia Sol Piñeiro: de nuevo, No, Un cuarto por la sumatoria de 1 por 1, más menos 1 por 1,
+
+185
+00:21:44.400 --> 00:21:52.199
+Eugenia Sol Piñeiro: ¿no? Y así sucesivamente. El 1. Tres, tengo que agarrar 1 por menos 1 y menos 1 por 1.
+
+186
+00:21:53.020 --> 00:21:55.050
+Eugenia Sol Piñeiro: Y así, con cada 1 de los pesos.
+
+187
+00:21:56.390 --> 00:22:03.609
+Eugenia Sol Piñeiro: Entonces, bueno, acá tienen explicados cada 1. Fíjense que tengo el un cuarto por el Xi supra 1
+
+188
+00:22:04.850 --> 00:22:12.650
+Eugenia Sol Piñeiro: sub 1 que sería este el si supra 1 sub 2. Este lo mismo que dije antes, que va a dar un medio, y el 1 3 va a dar menos un medio
+
+189
+00:22:13.700 --> 00:22:21.109
+Eugenia Sol Piñeiro: con esta regla de actualización de los pesos, entonces voy a resumir todo esto directamente en una matriz. Voy a empezar a hacer cálculos matriciales.
+
+190
+00:22:22.360 --> 00:22:28.860
+Eugenia Sol Piñeiro: entonces acá voy a tener el doble B. Uno 1
+
+191
+00:22:29.450 --> 00:22:37.149
+Eugenia Sol Piñeiro: es 0. Toda la diagonal de mi matriz es 0 directamente. Ya sé que no hay conexiones. Defino la diagonal como 0,
+
+192
+00:22:37.610 --> 00:22:50.199
+Eugenia Sol Piñeiro: y ya está después. Tengo que calcular o solo el triángulo superior de la matriz, o solo el triángulo inferior porque es simétrica. Entonces Calculo el W, Uno, 2, que es el que habíamos calculado el W, 1, 3.
+
+193
+00:22:50.530 --> 00:22:54.190
+Eugenia Sol Piñeiro: Bueno, y así, con todos. Y estos 2, ya sé que son iguales.
+
+194
+00:22:54.350 --> 00:22:58.329
+Eugenia Sol Piñeiro: porque este es el W 2 1. Entonces solo
+
+195
+00:22:58.540 --> 00:23:00.290
+Eugenia Sol Piñeiro: tengo que gastar cómputo en esto.
+
+196
+00:23:00.410 --> 00:23:01.310
+Eugenia Sol Piñeiro: Listo.
+
+197
+00:23:02.720 --> 00:23:04.890
+Eugenia Sol Piñeiro: Voy a calcular solo los pesos.
+
+198
+00:23:05.150 --> 00:23:09.090
+Eugenia Sol Piñeiro: Lo es lo mismo, no de la matriz triangular superior o triangular inferior.
+
+199
+00:23:09.470 --> 00:23:13.120
+Eugenia Sol Piñeiro: Bien, Y me quedo con este doble B.
+
+200
+00:23:13.230 --> 00:23:15.089
+Eugenia Sol Piñeiro: Entonces todo lo que vimos antes
+
+201
+00:23:15.220 --> 00:23:17.550
+Eugenia Sol Piñeiro: se puede resumir en este cálculo.
+
+202
+00:23:19.070 --> 00:23:25.680
+Eugenia Sol Piñeiro: Es la forma más rápida de calcular todos los pesos. Es poner los patrones que tengo almacenados en columnas
+
+203
+00:23:26.050 --> 00:23:32.400
+Eugenia Sol Piñeiro: que los vamos a representar Acá en una matriz. K: Entonces K va a ser igual a.
+
+204
+00:23:32.790 --> 00:23:42.570
+Eugenia Sol Piñeiro: por ejemplo, el X I Supra, 1 era 1 1 menos 1 menos 1. El Xi supra 2 era menos 1, menos 1, 1, 1.
+
+205
+00:23:43.040 --> 00:23:51.640
+Eugenia Sol Piñeiro: Y así, con todos mis patrones almacenados. Entonces, la matriz de pesos es tan sencillo como hacer un cuarto por esta matriz.
+
+206
+00:23:52.190 --> 00:24:11.179
+Eugenia Sol Piñeiro: por su traspuesta, no para poder multiplicar, que es lo mismo que veníamos haciendo antes. Al hacer la multiplicación de las matrices, te da la misma cuenta simplemente resumido en este cálculo matricial. Entonces, todo eso, en realidad, lo que se implementa es simplemente a partir de multiplicación de matrices.
+
+207
+00:24:11.360 --> 00:24:18.339
+Eugenia Sol Piñeiro: Entonces después la actualización del Estado. El paso siguiente va a ser igual al signo de mi matriz de pesos.
+
+208
+00:24:18.440 --> 00:24:24.999
+Eugenia Sol Piñeiro: que va a ser siempre la misma. Ese w lo calculo una vez, y voy actualizando el estado en el paso anterior
+
+209
+00:24:25.980 --> 00:24:29.139
+Eugenia Sol Piñeiro: y acá ojo la diagonal tiene que ser 0
+
+210
+00:24:29.340 --> 00:24:32.540
+Eugenia Sol Piñeiro: sete en la diagonal en 0, porque no hay conexiones con sí mismas.
+
+211
+00:24:33.840 --> 00:24:42.210
+Eugenia Sol Piñeiro: Así que básicamente, todo lo que estuve hablando se resume acá. En esta filmina. Ok, Bien.
+
+212
+00:24:42.710 --> 00:24:44.840
+Eugenia Sol Piñeiro: vamos a ver entonces cómo convergen.
+
+213
+00:24:46.520 --> 00:24:48.549
+Eugenia Sol Piñeiro: Vamos a buscar este patrón de consulta.
+
+214
+00:24:48.970 --> 00:24:55.850
+Eugenia Sol Piñeiro: Sé que mi patrón inicial va a ser zeta, no
+
+215
+00:24:57.060 --> 00:25:01.300
+Eugenia Sol Piñeiro: es de 0. El estado inicial lo inicial hizo como el estímulo de entrada.
+
+216
+00:25:02.010 --> 00:25:06.230
+Eugenia Sol Piñeiro: Básicamente es esto. No, Esto es S. T. Plus. Uno
+
+217
+00:25:06.720 --> 00:25:12.159
+Eugenia Sol Piñeiro: va a ser igual a el signo de W por el Estado en el paso anterior.
+
+218
+00:25:12.890 --> 00:25:22.460
+Eugenia Sol Piñeiro: o sea ese 1 igual, el signo de W por s. Cero. Y ese 0 es Z, que es mi patrón de consulta. Entonces el W, Ya lo tengo, lo acabo de calcular listo.
+
+219
+00:25:22.620 --> 00:25:32.099
+Eugenia Sol Piñeiro: Y el Z va a ser este patrón de consulta. Entonces hago el signo de W por el Z. Y me da el signo de esta cuenta
+
+220
+00:25:32.280 --> 00:25:38.459
+Eugenia Sol Piñeiro: que fíjense que esto me da ambos positivos, ambos negativos. Así que 1 1, menos 1 menos 1.
+
+221
+00:25:38.730 --> 00:25:44.040
+Eugenia Sol Piñeiro: Y este era 1 de los patrones que yo tenía almacenados. Acuerdense que teníamos.
+
+222
+00:25:44.210 --> 00:25:56.260
+Eugenia Sol Piñeiro: se acuerdan las imágenes blancas y violetas. Teníamos el 1, 1 menos 1 menos 1 y el menos 1, menos 1 1. Uno. Entonces llegó a este patrón almacenado.
+
+223
+00:25:56.910 --> 00:26:12.800
+Eugenia Sol Piñeiro: Así que para asegurarnos que realmente converja ese patrón, tenemos que hacer una iteración más y ver si efectivamente nos da igual. Entonces, Ahora, nuestro. Ese va a ser este, no el S En el estado actual, digamos a buscar el ese temas 1.
+
+224
+00:26:13.170 --> 00:26:20.360
+Eugenia Sol Piñeiro: Entonces, este 2 va a ser igual el signo de W por s. Uno que fíjense que este, ay.
+
+225
+00:26:22.570 --> 00:26:23.970
+Eugenia Sol Piñeiro: pero en que se me era.
+
+226
+00:26:24.160 --> 00:26:28.510
+Eugenia Sol Piñeiro: Este es el si supra 1 que teníamos antes
+
+227
+00:26:28.690 --> 00:26:42.039
+Eugenia Sol Piñeiro: y voy a calcular la matriz W que ya la tenía, no la cambio, Esta ya la tengo por el estado del paso anterior. Y fíjense que acá de nuevo me dio positivo, positivo, negativo negativo. Entonces otra vez llegó a
+
+228
+00:26:42.250 --> 00:26:46.329
+Eugenia Sol Piñeiro: si supra 1, entonces se dice que la red se mantiene estable
+
+229
+00:26:48.800 --> 00:26:53.239
+Eugenia Sol Piñeiro: de nuevo aclaración. Esto es el camino feliz. A veces no pasa eso
+
+230
+00:26:53.660 --> 00:27:03.570
+Eugenia Sol Piñeiro: ya vamos a ver por qué. Pero por lo pronto listo, llegamos a la convergencia y ya está cortó la ejecución del algoritmo. Uno puede ir viendo
+
+231
+00:27:03.670 --> 00:27:09.430
+Eugenia Sol Piñeiro: a medida que avanza la red. Lo que se evalúa es cuáles son esos Estados a los que va convergiendo
+
+232
+00:27:13.540 --> 00:27:17.950
+Eugenia Sol Piñeiro: Bien, vamos a ver ahora la convergencia.
+
+233
+00:27:20.870 --> 00:27:22.479
+Eugenia Sol Piñeiro: ¿qué pasa cuando
+
+234
+00:27:42.020 --> 00:27:43.829
+Eugenia Sol Piñeiro: se me escucha ahí?
+
+235
+00:27:44.140 --> 00:27:51.799
+Eugenia Sol Piñeiro: Y bien, ¿cómo quedarían las métricas para la reconstrucción del patrón.
+
+236
+00:27:52.740 --> 00:27:53.889
+Eugenia Sol Piñeiro: ¿a qué te referís?
+
+237
+00:28:05.090 --> 00:28:07.089
+Eugenia Sol Piñeiro: O sea, vos? Por ejemplo, podés ver.
+
+238
+00:28:07.540 --> 00:28:25.279
+Eugenia Sol Piñeiro: ¿Se acuerdan cuando vimos. No sé si te referís a esto igual, ¿ Hoy me abrí el micrófono, pero se acuerdan cuando vimos el true positive Folse negativo, positive trunegative acá podés hacer una especie de de definición de que es un falso positivo, que es un falso negativo. Por ejemplo.
+
+239
+00:28:25.750 --> 00:28:28.440
+Eugenia Sol Piñeiro: converge a un patrón almacenado.
+
+240
+00:28:28.610 --> 00:28:34.260
+Eugenia Sol Piñeiro: y es el patrón que yo le di de estímulo. Entonces eso es un tropositivo. No.
+
+241
+00:28:34.260 --> 00:28:43.070
+Santiago Britez: Hola. Yo me refería a que cuando converja ese patrón almacenado, Pero por ejemplo, si es binario y le falla en 1 de los valores. ¿cómo quedaría eso?
+
+242
+00:28:43.340 --> 00:28:44.350
+Santiago Britez: Por ejemplo.
+
+243
+00:28:44.920 --> 00:28:50.980
+Eugenia Sol Piñeiro: Ah, bueno es que si le falló en 1 de los valores, en realidad es que no, o sea, no es ese patrón ¿no?
+
+244
+00:28:51.380 --> 00:28:57.039
+Eugenia Sol Piñeiro: O sea, no convergió a un patrón almacenado que a ese se le llama que converge a un Estado espurio.
+
+245
+00:28:57.940 --> 00:29:04.880
+Eugenia Sol Piñeiro: Vamos a ver que son esos patrones de julio de donde salen. Pero puede pasar que no te converja ningún patrón almacenado, o sea, está mal listo. Es Es negativo.
+
+246
+00:29:06.370 --> 00:29:14.680
+Santiago Britez: okay. Pensaba que si estaba cercano al patrón, aún así consideraba la métrica, pero era totalmente espuria, como que eró totalmente un 100 por.
+
+247
+00:29:14.680 --> 00:29:17.660
+Eugenia Sol Piñeiro: Claro exactamente lo erró directamente.
+
+248
+00:29:17.830 --> 00:29:22.240
+Eugenia Sol Piñeiro: ¿por qué? Porque va a haber otros Estados que también son atractores.
+
+249
+00:29:22.610 --> 00:29:25.800
+Eugenia Sol Piñeiro: pero no son los que almacenamos en la red con los pesos
+
+250
+00:29:27.340 --> 00:29:35.190
+Eugenia Sol Piñeiro: que salen de la convergencia. Si me esperas un poquito más, ya lo vemos que
+
+251
+00:29:35.780 --> 00:29:37.730
+Eugenia Sol Piñeiro: Bien, ahí quedó más claro. Santiago.
+
+252
+00:29:41.520 --> 00:29:43.019
+Santiago Britez: Sí, Sí, todo, claro, claro.
+
+253
+00:29:43.240 --> 00:29:51.880
+Eugenia Sol Piñeiro: Okay, genial. Bien, vamos a ver. Entonces cuando llega a estabilidad o cuando no, que es esto que les estoy diciendo que quizás esto no pasa.
+
+254
+00:29:52.380 --> 00:29:57.539
+Eugenia Sol Piñeiro: Entonces supóngase que vamos a tener este patrón de consulta. El Xi suprano.
+
+255
+00:29:58.880 --> 00:30:03.090
+Eugenia Sol Piñeiro: Esto lo digo todos los cuatrimestres que odio que esto se llame nu y el otro mu.
+
+256
+00:30:03.330 --> 00:30:08.809
+Eugenia Sol Piñeiro: Así que téngame paciencia, pero esta es la natación que se usa. Entonces
+
+257
+00:30:09.380 --> 00:30:16.330
+Eugenia Sol Piñeiro: vamos a tener el signo de H Nu que va a ser igual al sinu de
+
+258
+00:30:16.470 --> 00:30:22.890
+Eugenia Sol Piñeiro: que va a ser mi patrón de estímulo el que quiero encontrar. Entonces esta va a ser mi condición de estabilidad. Quiero converger a ese patrón.
+
+259
+00:30:23.410 --> 00:30:28.259
+Eugenia Sol Piñeiro: Entonces el H se calcula como lo habíamos calculado siempre que va a ser el
+
+260
+00:30:28.410 --> 00:30:36.779
+Eugenia Sol Piñeiro: los pesos que van de la menor. J Por mi patrón de consulta, y esto va a ser igual a 1 sobre N: Acuérdense que el
+
+261
+00:30:37.180 --> 00:30:46.930
+Eugenia Sol Piñeiro: está acá. El doble Y J, era esto 1 sobre N por el si supra mu o sea, mis patrones almacenados por mi patrón de consulta
+
+262
+00:30:47.860 --> 00:30:53.959
+Eugenia Sol Piñeiro: y yo necesito llegar a una condición de estabilidad. Necesito que converja alguno de los patrones almacenados.
+
+263
+00:30:54.970 --> 00:31:04.309
+Eugenia Sol Piñeiro: Entonces, iterando, digamos, dentro de esos patrones, Lo que yo quiero encontrar es que esté el Nu
+
+264
+00:31:04.590 --> 00:31:09.689
+Eugenia Sol Piñeiro: el no, supuestamente en mi condición ideal, está almacenado. Entonces simplemente acá. Lo que se hace.
+
+265
+00:31:10.240 --> 00:31:13.620
+Eugenia Sol Piñeiro: Esto era lo que me quedó de la film mira anterior, el H.
+
+266
+00:31:13.730 --> 00:31:28.509
+Eugenia Sol Piñeiro: Lo que se hace es separar ese nu entonces. Ahora la sumatoria, en vez de estar sobre Mo: lo único que se hizo fue, Ok, sumo sobre los Mooc, distinto del patrón de consulta y el patrón de consulta. Lo pongo, acá no acá estoy
+
+267
+00:31:28.790 --> 00:31:33.480
+Eugenia Sol Piñeiro: sumando lo de moo, o sea, es lo mismo. Simplemente se desglosó en muy
+
+268
+00:31:34.240 --> 00:31:37.590
+Eugenia Sol Piñeiro: Entonces, ¿cuál es mi objetivo? Yo sé que
+
+269
+00:31:38.370 --> 00:31:45.070
+Eugenia Sol Piñeiro: si subjota por sí subjota. Creen que limpio un poco esto. Acá si es un jota por si es un jota, era 1,
+
+270
+00:31:46.080 --> 00:31:50.680
+Eugenia Sol Piñeiro: no porque o son los 2, 1 o los 2 menos 1. Esto es lo mismo. Esto me va a dar 1
+
+271
+00:31:51.530 --> 00:31:56.030
+Eugenia Sol Piñeiro: después. Estoy sumando sobre. J.
+
+272
+00:31:56.360 --> 00:32:00.519
+Eugenia Sol Piñeiro: Y acá. Tengo, I, ¿no? Entonces esta sumatoria se va.
+
+273
+00:32:00.930 --> 00:32:06.690
+Eugenia Sol Piñeiro: Entonces acá. Me está quedando 1 sobre N por el si soprano sub y
+
+274
+00:32:06.820 --> 00:32:09.190
+Eugenia Sol Piñeiro: que va a ser mi patrón de consulta.
+
+275
+00:32:09.690 --> 00:32:19.600
+Eugenia Sol Piñeiro: Para que se cumpla mi condición de estabilidad, yo necesito que el signo de H. I sea igual a si subí. Y nosotros vimos que el signo.
+
+276
+00:32:20.010 --> 00:32:30.190
+Eugenia Sol Piñeiro: esto es esto, no el H, I, el signo de 1 sobre N, por si su I va a ser igual. Así subí. Esto es constante esto sobre el signo de este de este valor.
+
+277
+00:32:30.880 --> 00:32:32.960
+Eugenia Sol Piñeiro: o sea, qué es lo que tiene que pasar.
+
+278
+00:32:33.320 --> 00:32:37.850
+Eugenia Sol Piñeiro: Todo esto se tiene que anular. No lo quiero. Esto tiene que ser 0.
+
+279
+00:32:38.630 --> 00:32:41.349
+Eugenia Sol Piñeiro: A este término se lo llama el crosstock.
+
+280
+00:32:41.510 --> 00:32:53.300
+Eugenia Sol Piñeiro: que en condiciones ideales se le va a llamar, que el sistema es estable si el crosstock es 0. Y esto es si los patrones son ortogonales.
+
+281
+00:32:53.890 --> 00:32:58.320
+Eugenia Sol Piñeiro: ¿por qué? Porque cuando 1 hace el producto interno entre patrones ortogonales, da 0,
+
+282
+00:32:59.110 --> 00:33:05.450
+Eugenia Sol Piñeiro: entonces es una de las limitaciones de la red. Vamos a ver después la clase que guía en un ejercicio
+
+283
+00:33:05.760 --> 00:33:10.649
+Eugenia Sol Piñeiro: más de ortogonalidad, pero lo que se tienen que llevar acá es que.
+
+284
+00:33:10.900 --> 00:33:17.640
+Eugenia Sol Piñeiro: idealmente, si los patrones son ortogonales, entonces la red es estable y esa convergencia es estable.
+
+285
+00:33:18.130 --> 00:33:19.090
+Eugenia Sol Piñeiro: Ahora.
+
+286
+00:33:19.240 --> 00:33:37.600
+Eugenia Sol Piñeiro: ¿qué pasa si no son ortogonales? Porque esto no siempre se cumple. Es una condición que es bastante fuerte, bastante limitante, pero no quiere decir que la red no funcione, sino que quizás le cuesta un poco más llegar a la convergencia, o quizás se confunde un poco los patrones, porque los patrones son muy parecidos porque no son ortogonales.
+
+287
+00:33:37.890 --> 00:33:38.960
+Eugenia Sol Piñeiro: ¿
+
+288
+00:33:39.320 --> 00:33:48.340
+Eugenia Sol Piñeiro: Entonces puede llegar a pasar eso. De hecho, a veces es imposible cumplir ortogonalidad. Supóngase, por ejemplo, que tienen patrones de longitud impar.
+
+289
+00:33:48.550 --> 00:33:54.009
+Eugenia Sol Piñeiro: jamás van a ser victorias ortogonales o te va a dar 1 o te va a dar menos 1, El producto interno nunca te va a dar 0,
+
+290
+00:33:54.440 --> 00:33:59.810
+Eugenia Sol Piñeiro: entonces a veces no se puede cumplir va a converger, pero
+
+291
+00:34:00.040 --> 00:34:05.220
+Eugenia Sol Piñeiro: idealmente deberían ser ortogonales. Entonces no vamos a
+
+292
+00:34:05.940 --> 00:34:24.030
+Eugenia Sol Piñeiro: tomar quizás la la flexibilidad de decir si un patrón es más o menos ortogonal, que en realidad no es que sos más o menos ortogonales o 0 o no. Pero nos referimos a estás más cercano a 0 o no. Entonces, entre más cercano a 0, sean estos patrones, o sea, el producto interno entre estos patrones.
+
+293
+00:34:24.199 --> 00:34:25.909
+Eugenia Sol Piñeiro: Mejor
+
+294
+00:34:26.060 --> 00:34:31.800
+Eugenia Sol Piñeiro: para la convergencia, para que sea más estable. ¿por qué? Porque van a ser más distintos los patrones. Entonces, es más fácil converger a 1 solo.
+
+295
+00:34:35.440 --> 00:34:37.189
+Eugenia Sol Piñeiro: Esta es una de las limitaciones.
+
+296
+00:34:37.630 --> 00:34:51.619
+Eugenia Sol Piñeiro: Siempre está bueno hacer un análisis de ortogonalidad Antes de arrancar la red, evaluar todas las limitaciones que tiene si se cumple o no? ¿qué pasa cuando 1 experimenta con esto? ¿qué pasa si agrego muchos patrones se equivoca o no. Bueno, son las cosas que se evalúan en Hookfield.
+
+297
+00:34:51.929 --> 00:34:56.809
+Eugenia Sol Piñeiro: Y bueno, pero ¿por qué converge?
+
+298
+00:34:56.949 --> 00:34:57.840
+Eugenia Sol Piñeiro: Entonces?
+
+299
+00:34:58.040 --> 00:35:03.550
+Eugenia Sol Piñeiro: Copil demostró que esta red está asociada a una función de energía. Entonces ya supóngase que
+
+300
+00:35:04.100 --> 00:35:08.339
+Eugenia Sol Piñeiro: tenemos los patrones que son ortogonales. Tenemos memoria suficiente. Entonces
+
+301
+00:35:08.680 --> 00:35:10.640
+Eugenia Sol Piñeiro: lo que queremos ver ahora es
+
+302
+00:35:10.970 --> 00:35:19.189
+Eugenia Sol Piñeiro: Okay, cómo es esta función de energía? Y por qué es que esta función converge Entonces los mínimos
+
+303
+00:35:19.440 --> 00:35:23.760
+Eugenia Sol Piñeiro: de esta función van a ser los Estados atractores de la red.
+
+304
+00:35:24.100 --> 00:35:27.369
+Eugenia Sol Piñeiro: entonces esta función puede ser algo así,
+
+305
+00:35:31.520 --> 00:35:32.710
+Eugenia Sol Piñeiro: por ejemplo.
+
+306
+00:35:35.630 --> 00:35:45.650
+Eugenia Sol Piñeiro: y esto va a ser mi si supramu no. Este puede ser Sisu. Uno. Y este puede ser el Sis Supra. Dos, perdón. Si supra 1, sí supra 2, no lo oxi su
+
+307
+00:35:46.050 --> 00:35:54.669
+Eugenia Sol Piñeiro: para no supramu Los tengo almacenados en mi red porque son mínimos. Esta función de energía ahora puede pasar que esta función tenga otros mínimos.
+
+308
+00:35:55.340 --> 00:35:58.200
+Eugenia Sol Piñeiro: Entonces, a esto me refería con que
+
+309
+00:35:59.040 --> 00:36:03.240
+Eugenia Sol Piñeiro: puedo converger algún Estado que también es atractor.
+
+310
+00:36:03.760 --> 00:36:09.539
+Eugenia Sol Piñeiro: pero no es ninguno de mis patrones almacenados a esos estados se los llaman estados espurios.
+
+311
+00:36:10.050 --> 00:36:17.490
+Eugenia Sol Piñeiro: Entonces, por eso es que en el caso ideal, Ok, converjo alguno de estos mínimos, pero son mínimos locales. Quizás estoy convergiendo a otro mínimo local.
+
+312
+00:36:17.710 --> 00:36:23.900
+Eugenia Sol Piñeiro: que no es ninguno de los que almacené, y ahí estoy en problemas, porque ya está la red, no converge, o sea, se quedó en otro mínimo.
+
+313
+00:36:27.630 --> 00:36:28.490
+Eugenia Sol Piñeiro: Bien.
+
+314
+00:36:28.770 --> 00:36:38.090
+Eugenia Sol Piñeiro: esta función se va a calcular como H, que va a ser menos un medio por de nuevo, el vector de pesos entre la neurona y la neurona J. Por S. Y por S. J.
+
+315
+00:36:39.470 --> 00:36:45.630
+Eugenia Sol Piñeiro: Ahora habíamos dicho que la red tiene esta característica de que es simétrica
+
+316
+00:36:45.910 --> 00:36:51.749
+Eugenia Sol Piñeiro: y W Y J, Lo mismo que W. J. I y que no hay pesos con
+
+317
+00:36:52.490 --> 00:36:58.429
+Eugenia Sol Piñeiro: no hay conexiones con sí mismas, No, el W I I va a ser 0. Entonces yo acá. Lo que puedo hacer es directamente
+
+318
+00:36:59.150 --> 00:37:06.450
+Eugenia Sol Piñeiro: calcular el triángulo superior, ¿no? O el inferior. Pero puedo hacer un que J. Sea mayor a 1.
+
+319
+00:37:06.980 --> 00:37:08.949
+Eugenia Sol Piñeiro: Perdón mayor a 0 estricto.
+
+320
+00:37:09.580 --> 00:37:11.799
+Eugenia Sol Piñeiro: Vamos a ponerlo directamente específico.
+
+321
+00:37:12.170 --> 00:37:18.149
+Eugenia Sol Piñeiro: J Mayorai y listo y lo multiplico por 2,
+
+322
+00:37:18.450 --> 00:37:21.580
+Eugenia Sol Piñeiro: No, porque quiero también tomar el otro triángulo
+
+323
+00:37:22.040 --> 00:37:25.589
+Eugenia Sol Piñeiro: y la diagonal no me interesa entonces por eso es estricto y no igual.
+
+324
+00:37:25.780 --> 00:37:29.749
+Eugenia Sol Piñeiro: entonces es como hacer 2. Por esto. Fíjense que esto se me va a ir.
+
+325
+00:37:30.620 --> 00:37:35.430
+Eugenia Sol Piñeiro: Entonces lo que me va a quedar es este cálculo directamente de H,
+
+326
+00:37:35.550 --> 00:37:42.289
+Eugenia Sol Piñeiro: entonces. H, la vamos a representar con menos la sumatoria de J Mayor A y de los W y J por S. I por S. J.
+
+327
+00:37:43.150 --> 00:37:47.040
+Eugenia Sol Piñeiro: Y la característica importante de esta función es que.
+
+328
+00:37:47.610 --> 00:37:53.739
+Eugenia Sol Piñeiro: o siempre decrece o permanece constante a medida que iteramos en la red.
+
+329
+00:37:54.450 --> 00:37:56.880
+Eugenia Sol Piñeiro: entonces vamos a ver por que pasa eso.
+
+330
+00:37:59.810 --> 00:38:01.990
+Eugenia Sol Piñeiro: Esta es nuestra función de energía. ¿no? H:
+
+331
+00:38:02.480 --> 00:38:06.440
+Eugenia Sol Piñeiro: Entonces supóngase que voy a tener un nuevo patrón.
+
+332
+00:38:06.550 --> 00:38:09.240
+Eugenia Sol Piñeiro: Voy a consultar el s y prima
+
+333
+00:38:09.490 --> 00:38:11.810
+Eugenia Sol Piñeiro: que va a ser el nuevo patrón de consulta.
+
+334
+00:38:12.020 --> 00:38:19.700
+Eugenia Sol Piñeiro: Entonces, supóngase que estamos en el tiempo T, y ese y prima va a ser el nuevo Estado en el tiempo, temas 1
+
+335
+00:38:21.000 --> 00:38:28.890
+Eugenia Sol Piñeiro: y sabemos que se calcula como el signo de H, que H era el W. Y J Por los si que están representados en el vector de Estados.
+
+336
+00:38:29.100 --> 00:38:34.039
+Eugenia Sol Piñeiro: entonces tengo 2 opciones: según la función de energía o la energía no se modifica.
+
+337
+00:38:34.930 --> 00:38:42.650
+Eugenia Sol Piñeiro: o sea, el ese I en el Estado. En el paso siguiente va a ser igual al Estado. En el paso actual, la energía no se modifica listo
+
+338
+00:38:43.040 --> 00:38:44.700
+Eugenia Sol Piñeiro: o cambio de signo.
+
+339
+00:38:45.170 --> 00:38:50.310
+Eugenia Sol Piñeiro: porque otra otra posibilidad no tengo sos 1 o sos menos 1, o sea, básicamente cambias de signo porque es binario.
+
+340
+00:38:50.490 --> 00:38:58.580
+Eugenia Sol Piñeiro: Entonces la otra opción es que ese y prima, o sea el Estado en el paso siguiente, sea igual a el Estado opuesto.
+
+341
+00:38:59.860 --> 00:39:13.470
+Eugenia Sol Piñeiro: Entonces, si yo quiero calcular la variación de energía para ver si efectivamente decrece, porque estamos en este caso, voy a calcular el H prima, o sea, la energía del paso siguiente, menos la energía actual. Entonces voy a tener.
+
+342
+00:39:14.730 --> 00:39:17.790
+Eugenia Sol Piñeiro: Esta es la misma función que tenemos, acá el menos
+
+343
+00:39:20.280 --> 00:39:29.679
+Eugenia Sol Piñeiro: menos, el la sumatoria en J. Mayor a 1 por los pesos. Y acá fíjense que lo tengo que hacer con
+
+344
+00:39:30.090 --> 00:39:33.450
+Eugenia Sol Piñeiro: con ese prima, ¿no?
+
+345
+00:39:33.960 --> 00:39:40.299
+Eugenia Sol Piñeiro: Y acá es bueno, menos este menos acá este menos acá me va a quedar un más
+
+346
+00:39:40.810 --> 00:39:43.910
+Eugenia Sol Piñeiro: el W B, y J, Por. S. I por S. J:
+
+347
+00:39:44.600 --> 00:39:52.719
+Eugenia Sol Piñeiro: Entonces esto directamente se puede resumir sacando el S I con 2 S. I por
+
+348
+00:39:52.870 --> 00:39:56.559
+Eugenia Sol Piñeiro: la sumatoria en J. De los W y J Por. S. J.
+
+349
+00:39:57.150 --> 00:40:07.300
+Eugenia Sol Piñeiro: Parece un trabalenguas. Pero fíjense que acá yo tenía que S y prima que era menos. S I:
+
+350
+00:40:07.860 --> 00:40:09.380
+Eugenia Sol Piñeiro: No, esto es menos.
+
+351
+00:40:09.650 --> 00:40:10.530
+Eugenia Sol Piñeiro: T. S I,
+
+352
+00:40:12.340 --> 00:40:18.229
+Eugenia Sol Piñeiro: entonces es lo mismo que tener los 2. S. I. Acá no estoy sumando 2 veces el S I.
+
+353
+00:40:18.430 --> 00:40:20.849
+Eugenia Sol Piñeiro: Ahora, esto se va como más, no por esto.
+
+354
+00:40:22.450 --> 00:40:31.269
+Eugenia Sol Piñeiro: Entonces, básicamente, hago 2 por S I, Y me queda el W. I. J, Entonces, si yo acá tengo el S. J,
+
+355
+00:40:31.650 --> 00:40:35.909
+Eugenia Sol Piñeiro: con la condición de que cambió de signo. Esto va a ser siempre negativo.
+
+356
+00:40:37.820 --> 00:40:47.069
+Eugenia Sol Piñeiro: porque la suma del final, entonces la variación de energía en el tiempo T Más, 1 respecto del tiempo Ne de T anterior va a ser negativa. Entonces, va a decrecer, o queda igual.
+
+357
+00:40:47.560 --> 00:40:58.309
+Eugenia Sol Piñeiro: ¿por qué? Porque estábamos ya directa de o queda igual, o en este caso ya asumimos que cambió de signo el S I, que era la la única otra opción que quedaba. Y si esto me queda negativo, entonces ya está la energía decrece
+
+358
+00:40:58.680 --> 00:40:59.869
+Eugenia Sol Piñeiro: en ese tiempo.
+
+359
+00:41:00.890 --> 00:41:16.019
+Eugenia Sol Piñeiro: entonces ahí termina demostrando la propiedad en general de la función de energía de que se mantiene constante o decrece, que es lo que ustedes deberían ver. Esa función de energía la pueden calcular es sencilla. Ya vieron la la cuenta y ver cómo va decreciendo a lo largo de las iteraciones
+
+360
+00:41:16.690 --> 00:41:21.080
+Eugenia Sol Piñeiro: y, efectivamente, verá que Estado converge no bien
+
+361
+00:41:22.650 --> 00:41:31.300
+Eugenia Sol Piñeiro: limitaciones de la red de Hoffield de nuevo, como el asterisco de que, con limitaciones, se refiere a
+
+362
+00:41:32.340 --> 00:41:50.950
+Eugenia Sol Piñeiro: que funciona un poco mejor si 1 le agrega y tiene en cuenta estas consideraciones, pero no quiere decir que si no se cumple esto no llega a convergencia, digamos, es un límite teórico que se define para obtener una buena performance, digamos.
+
+363
+00:41:51.020 --> 00:41:56.940
+Eugenia Sol Piñeiro: incluso puede depender de más factores. Pero ¿qué es lo que se propone para que performe bien?
+
+364
+00:41:57.490 --> 00:42:03.769
+Eugenia Sol Piñeiro: Lo primero que el número máximo de patrones que se pueda almacenar en la red debería ser un 15 por 100 de la longitud del patrón
+
+365
+00:42:03.920 --> 00:42:06.900
+Eugenia Sol Piñeiro: o de cantidad de neuronas en la red, que es lo mismo.
+
+366
+00:42:07.090 --> 00:42:18.150
+Eugenia Sol Piñeiro: entonces almaceno solo algunos patrones ya almaceno. Muchos, Y si encima no son ortogonales y cada vez están más lejanos a 0, La ortogonalidad
+
+367
+00:42:18.650 --> 00:42:34.390
+Eugenia Sol Piñeiro: más difícil es que los Estados atractores se sean distintos. Entonces va a aparecer, se van a parecer mucho entre sí y puede converger a cualquiera de los mínimos locales que están alrededor. Y ahí ya le cuesta más a la red converger al patrón almacenado que yo quería encontrar, ¿no?
+
+368
+00:42:37.440 --> 00:42:53.989
+Eugenia Sol Piñeiro: Y después tenemos el problema de los Estados, Es curiosos, que es que básicamente la red converge llegó a un Estado que es atractor, pero no es un estado de los almacenados, que básicamente es otro mínimo local de la función de energía, y eso se lo llama el estado espurio.
+
+369
+00:42:54.530 --> 00:43:01.119
+Eugenia Sol Piñeiro: Y bueno, acá les anoté lo de ojo con los ciclos que les había mencionado antes. Entonces tienen que tener en cuenta.
+
+370
+00:43:01.300 --> 00:43:13.740
+Eugenia Sol Piñeiro: converge un ciclo, convergen estado, julio, converjan patrones almacenados, no converge ese tipo de análisis es lo que se tiene que hacer en Homefield
+
+371
+00:43:15.220 --> 00:43:18.260
+Eugenia Sol Piñeiro: y, en general, evaluar las limitaciones. ¿no? Entonces
+
+372
+00:43:19.220 --> 00:43:25.290
+Eugenia Sol Piñeiro: resumen lo ideal es que los patrones sean ortogonales experimentalmente. Esto no pasa
+
+373
+00:43:25.480 --> 00:43:29.380
+Eugenia Sol Piñeiro: y que 1 almacene un 15 por 100 de los patrones
+
+374
+00:43:30.410 --> 00:43:32.829
+Eugenia Sol Piñeiro: Tari, hay una mano levantada día.
+
+375
+00:43:33.320 --> 00:43:43.269
+Santiago Britez: Una pregunta. Ese estado es curioso. Es un estado posible de los patrones que yo tengo que no observo por falta de muestreo o por qué motivo es algo de la red? Simplemente.
+
+376
+00:43:43.910 --> 00:43:45.770
+Eugenia Sol Piñeiro: No es algo en realidad de la función de energía.
+
+377
+00:43:45.890 --> 00:43:56.940
+Eugenia Sol Piñeiro: de que la función energía no necesariamente única, tiene tiene solo los mínimos que vos almacenaste puede tener otros mínimos. Es una función, como ya la vimos definida.
+
+378
+00:43:57.090 --> 00:43:57.880
+Eugenia Sol Piñeiro: ¿no?
+
+379
+00:43:58.270 --> 00:44:03.739
+Eugenia Sol Piñeiro: Entonces el el espurio es simplemente otro mínimo local de la función, pero no es los que yo había almacenado
+
+380
+00:44:04.600 --> 00:44:09.469
+Eugenia Sol Piñeiro: en mis pesos con almacenado. Me refiero a que calculé la matriz de pesos con esos patrones.
+
+381
+00:44:11.330 --> 00:44:19.339
+Eugenia Sol Piñeiro: Entonces converge, pues sí convergió un mínimo local de la función de energía. Eso significa que converge a la red de Hofffield. No, pero converge a un mínimo que
+
+382
+00:44:19.780 --> 00:44:22.899
+Eugenia Sol Piñeiro: no sabemos de dónde salió o sea, No, no es nuestro mínimo almacenado
+
+383
+00:44:23.780 --> 00:44:26.100
+Eugenia Sol Piñeiro: es parte del sistema de la función de energía.
+
+384
+00:44:37.550 --> 00:44:38.689
+Eugenia Sol Piñeiro: Y qué más claro.
+
+385
+00:44:40.070 --> 00:44:40.710
+Santiago Britez: Sí.
+
+386
+00:44:41.450 --> 00:44:46.180
+Eugenia Sol Piñeiro: Que hay bien dudas.
+
+387
+00:44:52.920 --> 00:44:54.679
+Eugenia Sol Piñeiro: esa toda la teoría de homesfile.
+
+388
+00:44:55.440 --> 00:44:58.020
+Eugenia Sol Piñeiro: Fíjense que dentro de todas las 3 redes
+
+389
+00:44:58.760 --> 00:45:10.040
+Eugenia Sol Piñeiro: son sencillas, Pero porque ya tienen todo el el trasfondo de T. P, Tres, No, ¿De de qué es un percepción. Como se ve una percepción simple como Actualizo los pesos y demás. Fíjense, son variaciones
+
+390
+00:45:10.180 --> 00:45:13.380
+Eugenia Sol Piñeiro: de los perceptores que ya vimos en.
+
+391
+00:45:15.310 --> 00:45:18.550
+Santiago Britez: una pregunta con respecto a lo del Tp. Tres.
+
+392
+00:45:18.840 --> 00:45:22.340
+Santiago Britez: las correcciones ya están o no para todos.
+
+393
+00:45:22.340 --> 00:45:26.580
+Eugenia Sol Piñeiro: No, todavía no van a estar seguramente la semana que viene Una cosa así.
+
+394
+00:45:27.220 --> 00:45:27.910
+Santiago Britez: Dale.
+
+395
+00:45:29.790 --> 00:45:30.320
+Eugenia Sol Piñeiro: Eso.
+
+396
+00:45:31.050 --> 00:45:36.659
+Eugenia Sol Piñeiro: Bien, vamos a ver el T. P. Ahora, antes de que se me vaya, John.
+
+397
+00:45:37.420 --> 00:45:42.280
+Eugenia Sol Piñeiro: Pero hasta acá dudas de Hopfield estaba abriendo.
+
+398
+00:45:51.210 --> 00:45:56.860
+Eugenia Sol Piñeiro: Bueno, ejercicio, 1 ya lo vimos. Vamos al ejercicio 2, que es el de memoria asociativa.
+
+399
+00:45:58.880 --> 00:46:02.300
+Eugenia Sol Piñeiro: Entonces, ¿qué es lo que vamos a tener Ahora, nuestros patrones
+
+400
+00:46:02.430 --> 00:46:06.369
+Eugenia Sol Piñeiro: en realidad van a ser códigos Q. R.
+
+401
+00:46:06.660 --> 00:46:08.860
+Eugenia Sol Piñeiro: Vamos a intentar ver un caso de uso
+
+402
+00:46:09.360 --> 00:46:19.370
+Eugenia Sol Piñeiro: un poco más real. Digamos que se puede dar. Entonces mi objetivo va a ser, básicamente recuperar patrones incompletos o ruidosos con una red de Hotfig.
+
+403
+00:46:19.940 --> 00:46:22.699
+Eugenia Sol Piñeiro: ¿qué es lo que quiero hacer ahí? Se me fue
+
+404
+00:46:27.800 --> 00:46:28.630
+Eugenia Sol Piñeiro: nada.
+
+405
+00:46:28.760 --> 00:46:30.100
+Eugenia Sol Piñeiro: Bueno, vamos a estar.
+
+406
+00:46:31.080 --> 00:46:39.639
+Eugenia Sol Piñeiro: pónganse un poco en tema, vamos a estar de vacaciones en Italia, aunque no estén de vacaciones en Italia y vamos a ir a almorzar a este restaurante. Ok.
+
+407
+00:46:39.700 --> 00:46:51.960
+Eugenia Sol Piñeiro: entonces nos vamos a dar cuenta que los códigos Q, R. Que están en la mesa o están rotos o tienen alguna perturbación. No se pueden escanear, está rayado, digamos, son papeles que están desgastados.
+
+408
+00:46:52.490 --> 00:46:53.420
+Eugenia Sol Piñeiro: Entonces
+
+409
+00:46:54.370 --> 00:47:03.420
+Eugenia Sol Piñeiro: le comentamos esto a la dueña y nos dice. Ok, tenemos 5 cartas digitales del restorán que son distintas. Una va a representar el menú
+
+410
+00:47:05.750 --> 00:47:10.479
+Eugenia Sol Piñeiro: ahí. Cuando tenemos 1 a 1 menos 1, necesitamos 4 patrones
+
+411
+00:47:11.220 --> 00:47:14.790
+Eugenia Sol Piñeiro: para no tener ningún Estado oscuro y
+
+412
+00:47:15.500 --> 00:47:18.000
+Eugenia Sol Piñeiro: necesitabas el 15 por 100 de la red.
+
+413
+00:47:19.080 --> 00:47:22.010
+Eugenia Sol Piñeiro: o sea, el 15 por 100 de eso.
+
+414
+00:47:24.400 --> 00:47:29.479
+Eugenia Sol Piñeiro: y no te asegura de todas formas, que no tengas estados públicos. No tenés que cumplir la tobonalidad.
+
+415
+00:47:31.110 --> 00:47:35.590
+Eugenia Sol Piñeiro: y eso es muy difícil también de cumplir. Entonces es el caso ideal.
+
+416
+00:47:35.890 --> 00:47:39.190
+Eugenia Sol Piñeiro: Después experimentalmente puede pasar otra cosa. El caso teórico, si se quiere
+
+417
+00:47:48.140 --> 00:47:49.290
+Eugenia Sol Piñeiro: Okay. Bien.
+
+418
+00:47:49.600 --> 00:47:58.280
+Eugenia Sol Piñeiro: bueno, vamos a tener estos códigos Q R que vamos a almacenar en nuestra red. Vamos a tener el menú principal, el menú de vinos de cócteles, otras bebidas postres especiales del día.
+
+419
+00:47:58.780 --> 00:48:04.349
+Eugenia Sol Piñeiro: Entonces, con el uso de estos códigos Q. R. Están deteriorados, deteriorados, entonces
+
+420
+00:48:05.420 --> 00:48:07.610
+Eugenia Sol Piñeiro: vamos a tener que recuperar los códigos Q. R.
+
+421
+00:48:07.730 --> 00:48:09.980
+Eugenia Sol Piñeiro: Los códigos Q. R. Los van a tener en esta carpeta.
+
+422
+00:48:10.200 --> 00:48:11.250
+Eugenia Sol Piñeiro: Y
+
+423
+00:48:11.590 --> 00:48:18.100
+Eugenia Sol Piñeiro: entonces lo que tienen que hacer es primero, representarlos con una matriz Binaria va a ser una matriz de 37, 37,
+
+424
+00:48:18.260 --> 00:48:19.350
+Eugenia Sol Piñeiro: y
+
+425
+00:48:20.220 --> 00:48:26.449
+Eugenia Sol Piñeiro: que es bastante chica relacionada con un código Qr. O sea, van a ver que los códigos Qr van a ser muy chiquitos.
+
+426
+00:48:26.730 --> 00:48:28.909
+Eugenia Sol Piñeiro: Se pueden escanear de todas formas.
+
+427
+00:48:29.310 --> 00:48:40.479
+Eugenia Sol Piñeiro: pero ¿por qué? Porque si No, los patrones no quedan muy grandes. Pueden llegar a probar con un código Q, R. Que esté generado más grande si quieren, Pero por costo computacional. No es necesario. Con esto alcanza
+
+428
+00:48:41.010 --> 00:48:55.409
+Eugenia Sol Piñeiro: bien. Van a tener que almacenar los 5 vectores en la red. Fíjense que son binarios. Esa es un poco la la idea de tener códigos Q, R. O sea, voy a tener una imagen que ya está umbralizada. Ya está en blanco y negro. Entonces voy a tener 1, y menos 1 para representar mis patrones
+
+429
+00:48:55.630 --> 00:48:57.309
+Eugenia Sol Piñeiro: a partir de esta matriz.
+
+430
+00:48:58.270 --> 00:49:05.099
+Eugenia Sol Piñeiro: Entonces almaceno mis 5 Q Rs en la en la red, Y tengo que analizar la alteración de los códigos Q, r
+
+431
+00:49:05.220 --> 00:49:07.600
+Eugenia Sol Piñeiro: agregándoles ruido. O sea.
+
+432
+00:49:08.200 --> 00:49:17.509
+Eugenia Sol Piñeiro: Primero, lo que tienen que probar es que sin ruido con 0 por 100 de ruido, les recupere efectivamente el Q. R, que está almacenado y que ustedes le dieron como estímulo
+
+433
+00:49:17.790 --> 00:49:22.220
+Eugenia Sol Piñeiro: después. La idea es agregar un poquito de ruido. Ese ruido lo tienen que definir ustedes
+
+434
+00:49:22.320 --> 00:49:36.220
+Eugenia Sol Piñeiro: y empezar a analizar las limitaciones de la red. No, ¿Cómo converge la energía, ¿Cómo es la ortogonalidad de los patrones? ¿cuál es esa limitación de la cantidad de patrones que pueda almacenar. ¿qué pasa? Se almaceno menos se almaceno más.
+
+435
+00:49:36.370 --> 00:49:48.840
+Eugenia Sol Piñeiro: Cuáles son esas limitaciones en general del caso uso y cómo se comporta su red converge en estado espurio o converja 1 de los que almacené o se me queda tirando en un loop y no converge.
+
+436
+00:49:49.200 --> 00:49:52.189
+Eugenia Sol Piñeiro: Ese tipo de cosas es lo que tienen que evaluar.
+
+437
+00:49:54.340 --> 00:49:57.950
+SANTIAGO REYES: Un un comentario rápido.
+
+438
+00:49:58.090 --> 00:50:01.040
+SANTIAGO REYES: Primero que nada en la presentación
+
+439
+00:50:01.430 --> 00:50:20.369
+SANTIAGO REYES: definan su función de ruido. Es importante que nosotros sepamos qué función de ruido están usando. Hay un montón de funciones de ruido distintas que pueden usar la mayoría por default va al pongo un número, y ese porcentaje de pixeles en el en el en la imagen se da vuelta. No, Eso es
+
+440
+00:50:20.470 --> 00:50:23.769
+SANTIAGO REYES: válido para mí, es un poco limitada. Esa
+
+441
+00:50:24.220 --> 00:50:32.249
+SANTIAGO REYES: ese análisis de ruido pueden hacer ruido un poquito más interesante e inclusive en este caso particular que estamos hablando de un q R.
+
+442
+00:50:32.310 --> 00:50:45.639
+SANTIAGO REYES: Pueden hacer un ruido un poco más realista en el que, por ejemplo, un Q R se va a gastar y los negros generalmente no van a camp O sea, los los negros pueden cambiar a blancos, pero los blancos normalmente no van a cambiar a negros, ¿no? Entonces pueden probar
+
+443
+00:50:45.790 --> 00:50:58.070
+SANTIAGO REYES: distintos tipos de ruido. Pueden probar un ruido que esté más orientado en los bordes y después en el centro. O sea, tampoco es para que hagan un Tp de análisis de ruido, ¿no? Pero tienen
+
+444
+00:50:58.500 --> 00:51:09.549
+SANTIAGO REYES: varias herramientas para para probar con el ruido no tienen por qué quedarse solamente con una implementación, pero la que elijan o las que elijan póngalas a la presentación.
+
+445
+00:51:12.460 --> 00:51:16.290
+Eugenia Sol Piñeiro: Eso. Bien buenísimo, el el aporte.
+
+446
+00:51:18.350 --> 00:51:35.129
+Eugenia Sol Piñeiro: Bien, entonces este es un caso de uso que es un poco más complejo. Fíjense que los patrones son grandes. Estábamos viendo patrones de longitud, Cuatro acá, ya tienen patrones, 37 37. Entonces, como sugerencia, así como en el ejercicio. Tres tenían el ejercicio del short
+
+447
+00:51:35.130 --> 00:51:46.059
+Eugenia Sol Piñeiro: ejercicio, 3 en T. P. Tres tenían el ejercicio del short en este caso como opcional, recomendable, fuertemente recomendable, porque son varios en el grupo. También esto lo puede hacer 1 en el grupo y probar
+
+448
+00:51:46.090 --> 00:51:52.940
+Eugenia Sol Piñeiro: antes de probar el funcionamiento con los Q. R, se pueden construir patrones más chiquitos, por ejemplo, que representen letras
+
+449
+00:51:53.380 --> 00:52:04.609
+Eugenia Sol Piñeiro: letras o números, algo que sea muy sencillo. Este, por ejemplo, se representa la J con los 1, no. Si yo 1 a los 1 se ve acá la J,
+
+450
+00:52:05.340 --> 00:52:06.440
+Eugenia Sol Piñeiro: que
+
+451
+00:52:06.930 --> 00:52:16.459
+Eugenia Sol Piñeiro: y así pueden hacer. Por ejemplo, se lo definen de 5 por 5, que es una matriz muy chica, y almacenan solo 4, que es la limitación del 15 por 100 de la red.
+
+452
+00:52:16.460 --> 00:52:32.239
+Eugenia Sol Piñeiro: Creo que era 3 coma. Tres, coma, algo el 15 por 100 pueden realizar el análisis de ortodonalidad, ver esas limitaciones y demás simplemente con esto. Y una vez que les funcione, ya está es simplemente cambiar el input, o sea, ustedes lo tienen parametrizado esto idealmente.
+
+453
+00:52:32.500 --> 00:52:35.610
+Eugenia Sol Piñeiro: Entonces, simplemente cambiar el input del patrón, y ya está,
+
+454
+00:52:35.750 --> 00:52:41.499
+Eugenia Sol Piñeiro: pero acá es una forma rápida de asegurarse que la red funciona bien.
+
+455
+00:52:42.170 --> 00:52:47.989
+Eugenia Sol Piñeiro: Y después van con este caso de U. S. O L, e pasan los 37 por 37 que va a ser el vector de unos y menos unos, no.
+
+456
+00:52:48.100 --> 00:52:49.000
+Eugenia Sol Piñeiro: Mhm.
+
+457
+00:52:49.480 --> 00:52:51.800
+Eugenia Sol Piñeiro: Y listo bien
+
+458
+00:52:52.990 --> 00:53:04.489
+Eugenia Sol Piñeiro: de nuevo como sugerencia. También. Fíjense esto que había dicho de los Trump: positives, Fall negative defínanlos según su caso. De uso. Está Bueno, que lo evalúen de esa forma
+
+459
+00:53:04.600 --> 00:53:08.490
+Eugenia Sol Piñeiro: y y demás
+
+460
+00:53:16.060 --> 00:53:17.340
+Eugenia Sol Piñeiro: dudas hasta acá la
+
+461
+00:53:27.360 --> 00:53:38.780
+Eugenia Sol Piñeiro: No sé si entendí bien, tiene sentido. Lo que planteó. Se podría hacer más grande la matriz para que la relación de la cantidad de patrones almacenados versus tamaño de patrón sea mejor y se recupere mejor el patrón.
+
+462
+00:53:40.420 --> 00:53:45.360
+Eugenia Sol Piñeiro: o sea, por lo que tendría que ser dominado el quinto. 200, y
+
+463
+00:53:48.710 --> 00:53:54.470
+Eugenia Sol Piñeiro: estoy pensando, pues, por más que yo creo que te funcionaría
+
+464
+00:53:55.150 --> 00:54:01.010
+Eugenia Sol Piñeiro: experimentalmente, o sea, lo tenés que probar pasa que a veces ahí perdés costo computacional. No También
+
+465
+00:54:01.230 --> 00:54:06.539
+Eugenia Sol Piñeiro: Entre más grande sea el patrón más difícil. Y puedes perder el tema de la ortogonalidad, pues, por ejemplo.
+
+466
+00:54:06.540 --> 00:54:06.939
+SANTIAGO REYES: Ahí está.
+
+467
+00:54:06.940 --> 00:54:12.210
+Eugenia Sol Piñeiro: Barandas con que todo sea blanco alrededor y van a ser todos iguales alrededor.
+
+468
+00:54:13.930 --> 00:54:27.740
+SANTIAGO REYES: Claro, eso te iba a decir. No sé si lo estás considerando en la pregunta, pero fíjate que el tamaño de la matriz está definido por el input en sí. Para poder agrandar el tamaño de la matriz tenés que modificar el input, no no vas a poder agrandar la matriz sin modificar el input.
+
+469
+00:54:28.050 --> 00:54:29.250
+SANTIAGO REYES: Hemos.
+
+470
+00:54:30.270 --> 00:54:31.200
+Eugenia Sol Piñeiro: A lo contrario.
+
+471
+00:54:31.200 --> 00:54:31.590
+SANTIAGO REYES: Sí.
+
+472
+00:54:31.590 --> 00:54:32.110
+Eugenia Sol Piñeiro: Claro.
+
+473
+00:54:32.870 --> 00:54:33.490
+SANTIAGO REYES: Claro.
+
+474
+00:54:33.650 --> 00:54:34.829
+Eugenia Sol Piñeiro: Sincera matriz para el mismo.
+
+475
+00:54:34.830 --> 00:54:37.650
+Santiago Britez: Y no se podría hacer un Padding, por ejemplo.
+
+476
+00:54:38.040 --> 00:54:41.550
+Santiago Britez: para agrandar todo con una matriz más grande.
+
+477
+00:54:41.700 --> 00:54:47.980
+Santiago Britez: porque nos quedó la duda, todos parece el el lo del 15 por 100 de cómo se aq, ¿Qué significaría exactamente eso?
+
+478
+00:54:49.160 --> 00:54:49.729
+Eugenia Sol Piñeiro: Es una.
+
+479
+00:54:49.730 --> 00:54:50.260
+SANTIAGO REYES: Yo, de.
+
+480
+00:54:50.260 --> 00:54:52.769
+Eugenia Sol Piñeiro: Histórica, digamos, no es no experimental.
+
+481
+00:54:53.300 --> 00:55:08.140
+SANTIAGO REYES: Lo pueden propician un Padding alrededor. Lo que va a terminar pasando es que esos píxeles, así como un poco sin hacer la cuenta sería: no. Pero el producto interno entre ese Padding y entre todos los píxeles va a ser igual.
+
+482
+00:55:08.560 --> 00:55:08.890
+Eugenia Sol Piñeiro: Claro.
+
+483
+00:55:08.890 --> 00:55:16.639
+SANTIAGO REYES: Es es eso? Nos va a afectar negativamente a la memoria asociativa? Porque recuerden que también la idea es
+
+484
+00:55:16.950 --> 00:55:20.899
+SANTIAGO REYES: sí, sería malo para la rentabilidad. Claro, porque la la idea es justamente tratar de que
+
+485
+00:55:21.060 --> 00:55:27.500
+SANTIAGO REYES: de que todos los patrones sean linealmente independientes, no que sean todos ortogonales entre sí.
+
+486
+00:55:27.710 --> 00:55:29.679
+SANTIAGO REYES: Eso obviamente.
+
+487
+00:55:29.680 --> 00:55:30.190
+Eugenia Sol Piñeiro: Hecho a.
+
+488
+00:55:30.190 --> 00:55:30.950
+SANTIAGO REYES: A pasar?
+
+489
+00:55:32.350 --> 00:55:33.110
+SANTIAGO REYES: Sí.
+
+490
+00:55:34.720 --> 00:55:38.409
+Eugenia Sol Piñeiro: De hecho, ahí, cuando
+
+491
+00:55:39.120 --> 00:55:54.069
+Eugenia Sol Piñeiro: cuando 1, si si estudian un poquito de códigos Q Rs en general, o ver cómo se construye el código Qr. Hay distintas versiones de Q. R. Esta es la versión más sencilla, justamente para que les sea más sencillo. El Tp también, ¿no? Pero por lo general el Q R tiene
+
+492
+00:55:54.200 --> 00:56:00.570
+Eugenia Sol Piñeiro: un un Padding blanco alrededor así, y eso les va a afectar.
+
+493
+00:56:00.700 --> 00:56:05.500
+Eugenia Sol Piñeiro: Entonces lo saqué a propósito, que no es necesario tenerlo para el análisis.
+
+494
+00:56:07.990 --> 00:56:17.120
+Eugenia Sol Piñeiro: Se entiende eso rescalando. Te cambia la ortogonalidad también y te cambia la limitación.
+
+495
+00:56:18.780 --> 00:56:20.249
+Eugenia Sol Piñeiro: Pueden Pueden probarlo.
+
+496
+00:56:20.880 --> 00:56:26.379
+Eugenia Sol Piñeiro: Eso es un 37 por 37 ojo, porque el Q. R no es que es tan sencillo de reescalar.
+
+497
+00:56:27.040 --> 00:56:28.130
+Eugenia Sol Piñeiro: ¿
+
+498
+00:56:29.140 --> 00:56:29.940
+Eugenia Sol Piñeiro: Y a.
+
+499
+00:56:29.940 --> 00:56:31.280
+SANTIAGO REYES: Por 4, básicamente.
+
+500
+00:56:31.280 --> 00:56:32.790
+Eugenia Sol Piñeiro: Claro, Sí,
+
+501
+00:56:42.930 --> 00:56:49.480
+Eugenia Sol Piñeiro: ahí van a perder. Les va a ser complicado con el costo computacional. Y la ortogonalidad no de nuevo puede servir, puede servir.
+
+502
+00:56:50.020 --> 00:56:53.889
+Eugenia Sol Piñeiro: empiecen a perder otro tipo de de limitaciones de la red.
+
+503
+00:56:55.060 --> 00:57:01.259
+SANTIAGO REYES: Este es el tipo de cosas, igual que capaz, pueden probar también con el ejemplo ese de recomendación
+
+504
+00:57:02.760 --> 00:57:12.269
+SANTIAGO REYES: y evaluarlo sin tener que entrar a multiplicar 37 por 4 pueden multiplicar 5 por 4, 20. Todavía está más chico que un Q R no.
+
+505
+00:57:12.430 --> 00:57:22.179
+SANTIAGO REYES: y y pueden probar en este caso, cómo afecta y extrapolar un poco desde ahí y después, en caso de que vean una mejora así, evaluarlo con los Qr. Por ejemplo.
+
+506
+00:57:22.540 --> 00:57:33.469
+SANTIAGO REYES: en el generalmente está bueno tratar de hacer como pruebas más chicas o experimentos que no necesariamente
+
+507
+00:57:33.590 --> 00:57:35.860
+SANTIAGO REYES: sean el producto final, pero los guíen
+
+508
+00:57:36.700 --> 00:57:39.350
+SANTIAGO REYES: hacia lo que van a hacer al final.
+
+509
+00:57:40.390 --> 00:57:43.709
+Eugenia Sol Piñeiro: Incluso ahí, cuando descarguen los Q Rs.
+
+510
+00:57:44.160 --> 00:57:56.749
+Eugenia Sol Piñeiro: Van a ver que son Co: R. Muy chiquitos. Estamos hablando de píxeles, 37 por 37. O sea, es una imagen súper chica. Esto está reescalado para visualización, no para la red de Hotfit, Esa distinción también la pueden hacer
+
+511
+00:57:57.010 --> 00:58:02.719
+Eugenia Sol Piñeiro: en general, pues ya ya me van a abrir los cuadros si son chiquititos
+
+512
+00:58:04.490 --> 00:58:09.000
+Eugenia Sol Piñeiro: en G P U A: Bueno, de G, P. U estamos. Okay
+
+513
+00:58:10.610 --> 00:58:17.720
+Eugenia Sol Piñeiro: estar seguir escalando? Sí, es que sí pueden generar códigos Q. R. Más grandes y empezar a empezar a probar
+
+514
+00:58:17.880 --> 00:58:25.359
+Eugenia Sol Piñeiro: eso sí, de una. De hecho, como prototipo, le pueden pasar la u R L a cualquier combinating o a
+
+515
+00:58:25.560 --> 00:58:30.299
+Eugenia Sol Piñeiro: Chachi Pit, Alhama o demás, y de general Q. R. Con distintas versiones.
+
+516
+00:58:31.860 --> 00:58:36.379
+Eugenia Sol Piñeiro: Veo, aunque el Q R. De depende del tamaño depende de también la longitud de la U. R. L,
+
+517
+00:58:37.340 --> 00:58:41.950
+Eugenia Sol Piñeiro: Entonces hay un mínimo que se puede representar esta U. R, L, Y lo vas escalando también.
+
+518
+00:58:47.130 --> 00:58:54.220
+Eugenia Sol Piñeiro: bien, o sea, el resultado en el T. P. Tenemos que po poner es poder escanear el su Q R y que realmente esté corrigiendo
+
+519
+00:59:03.880 --> 00:59:04.510
+Eugenia Sol Piñeiro: bien.
+
+520
+00:59:04.510 --> 00:59:11.250
+SANTIAGO REYES: También algún comentario acerca de la presentación. Ay, Qué bien que le dijiste lo de escanear Euge. Fíjense que
+
+521
+00:59:11.900 --> 00:59:17.240
+SANTIAGO REYES: no es trivial, capaz, las letras, por ejemplo, es un poquito más fácil ver cuando hay un
+
+522
+00:59:17.750 --> 00:59:20.689
+SANTIAGO REYES: un píxel fuera de lugar o algo así en el Q. R.
+
+523
+00:59:20.870 --> 00:59:24.250
+SANTIAGO REYES: Si hay un pixel malo, mal puesto No es tan fácil de ver.
+
+524
+00:59:24.250 --> 00:59:25.040
+Eugenia Sol Piñeiro: Es rey.
+
+525
+00:59:25.040 --> 00:59:25.400
+SANTIAGO REYES: Sí.
+
+526
+00:59:25.400 --> 00:59:26.010
+Eugenia Sol Piñeiro: Sí.
+
+527
+00:59:26.010 --> 00:59:32.240
+SANTIAGO REYES: Fijense de representar eso bien en la presentación, no de decir que este es el
+
+528
+00:59:32.680 --> 00:59:36.920
+SANTIAGO REYES: el Target. El objetivo. Esto es lo que salió si hay algún
+
+529
+00:59:37.250 --> 00:59:39.150
+SANTIAGO REYES: un Estado en el que está diferente.
+
+530
+00:59:39.840 --> 00:59:47.210
+SANTIAGO REYES: colorear el borde de los píxeles que están mal o las partes que están mal como para que sea nada de alguna manera ser evidente
+
+531
+00:59:48.890 --> 00:59:55.879
+SANTIAGO REYES: lo que lo que está distinto y lo que se y lo que se busca, no porque ciclaban ahí.
+
+532
+00:59:56.040 --> 00:59:57.500
+SANTIAGO REYES: Q. R.
+
+533
+00:59:57.840 --> 01:00:02.130
+SANTIAGO REYES: Suelto. Es muy difícil ver si es el Q. R, Si, ese Q: R Está bien. Si ese Q, R.
+
+534
+01:00:02.990 --> 01:00:14.370
+SANTIAGO REYES: Tiene algún, es un estado espurio o ese tipo de cosas acaba justo si se corta el píxel de paridad o o los de orientación, o algo así. Si se puede ver más fácil, pero cualquiera de los del medio.
+
+535
+01:00:14.820 --> 01:00:15.710
+SANTIAGO REYES: te la de.
+
+536
+01:00:51.460 --> 01:00:56.009
+Eugenia Sol Piñeiro: No se puede hacer un error de reconstrucción con algunos de los patrones originales
+
+537
+01:00:58.060 --> 01:01:05.319
+Eugenia Sol Piñeiro: con que, a saber cuál sería exactamente a qué te refieres, Comparar el que te dio versus el que querías que te dé
+
+538
+01:01:05.570 --> 01:01:08.049
+Eugenia Sol Piñeiro: y ver en cuántos difieren. Sí, puede ser.
+
+539
+01:01:08.050 --> 01:01:08.940
+Santiago Britez: Altamente.
+
+540
+01:01:09.320 --> 01:01:09.970
+Eugenia Sol Piñeiro: Sí.
+
+541
+01:01:09.970 --> 01:01:12.060
+Santiago Britez: O si no?
+
+542
+01:01:12.800 --> 01:01:14.140
+Santiago Britez: Bueno, sí, eso.
+
+543
+01:01:14.820 --> 01:01:22.229
+Eugenia Sol Piñeiro: Sí, o sea, entre pueden hacer el error en función de el nivel de ruido
+
+544
+01:01:22.560 --> 01:01:27.339
+Eugenia Sol Piñeiro: Y en tu caso, el error. Lo definís como cantidad de píxeles que difieren, por ejemplo.
+
+545
+01:01:28.360 --> 01:01:35.889
+Eugenia Sol Piñeiro: Otra Es esto de definirlo como los true for positive que les mencioné no, porque no es lo mismo. Si converge en Estado espurio.
+
+546
+01:01:36.010 --> 01:01:38.710
+Eugenia Sol Piñeiro: si no converge Otra que puede pasar es
+
+547
+01:01:38.980 --> 01:01:53.769
+Eugenia Sol Piñeiro: que converja a otro de los almacenados, pero no era el que yo le di estímulo ruidoso, o quizás lo hiciste que se parezca más. Eso lo pueden ver mucho más sencillo con el de las letras. Por ejemplo, es Okay. Le di estímulo. Una A
+
+548
+01:01:53.940 --> 01:01:56.270
+Eugenia Sol Piñeiro: que tenía almacenado a B C
+
+549
+01:01:56.560 --> 01:02:04.459
+Eugenia Sol Piñeiro: me puede converger una A me puede converger a una B o una C me puede converger a un espurio decir otra cosa que no sea ni A, B, C,
+
+550
+01:02:04.810 --> 01:02:12.400
+Eugenia Sol Piñeiro: o me puede quedar en un loop, entonces sí pueden ir definiendo su métrica personalizada. El caso de uso
+
+551
+01:02:17.690 --> 01:02:21.570
+Eugenia Sol Piñeiro: claro, te converge a una letra. Quiero Es una letra.
+
+552
+01:02:23.880 --> 01:02:31.970
+Eugenia Sol Piñeiro: Tienen redundancia. Los Qr. No es interesante para la presentación analizar si, por más que tenga error. Aún se puede obtener valor original. Después de escanearlo, sí
+
+553
+01:02:36.020 --> 01:02:40.280
+Eugenia Sol Piñeiro: pueden pueden analizarlo si quieren, que
+
+554
+01:02:41.010 --> 01:02:51.289
+Eugenia Sol Piñeiro: depende de cómo definan el error también. No. Si tienen un error que es muy invasivo y ya me están flipiando los los píxeles, o sea, los blancos, por ejemplo, hay algunos que son negros y ya va a ser más
+
+555
+01:02:51.430 --> 01:02:52.920
+Eugenia Sol Piñeiro: más difícil.
+
+556
+01:02:57.500 --> 01:02:58.480
+SANTIAGO REYES: Y con el
+
+557
+01:02:59.010 --> 01:03:06.999
+SANTIAGO REYES: con el nivel de ahí, en realidad, para hacer ese análisis de de redundancia. Esto yo lo consideraría un poquito como opcional, ¿no?
+
+558
+01:03:07.240 --> 01:03:17.150
+SANTIAGO REYES: Y puede que no esté diciendo del todo bien, porque tampoco es que la tengo recontra media clara con los Qr, Pero hasta donde yo sé, cuando ustedes crean un Q. R, lo pueden crear con distintos niveles
+
+559
+01:03:17.670 --> 01:03:29.039
+SANTIAGO REYES: de redundancia entre comillas o Earl correction. Sería no como que los Qrs están hechos, viste que tienen esos cuadrados. Ahí a los costados, después tienen un cuadradito abajo a la derecha.
+
+560
+01:03:29.150 --> 01:03:43.269
+SANTIAGO REYES: Los 3 cuadrados son de orientación. Los 3 para saber cuál es la parte de arriba del Qr. Y después, en el otro está un sector de Texam y después hay un poco de de redundancia. Y eso para poder recomputar el el contenido
+
+561
+01:03:44.870 --> 01:03:47.819
+SANTIAGO REYES: después de hacer el ejercicio con estos Q. R que tienen.
+
+562
+01:03:49.240 --> 01:04:08.400
+SANTIAGO REYES: Creo que ustedes pueden cambiarlo. La verdad, igual puedo estar equivocado, pero sé que se puede variar un poco dependiendo del tamaño del Qr que tenga. Si es como es como el el el punto flotante viste que la mantisa que cuando el número es más chico, tiene más lugar para decimales, pero con el número más grande tenés, menos lugar es como una cosa. Así. Si vos almacenas un dato más chiquitito.
+
+563
+01:04:09.150 --> 01:04:19.969
+SANTIAGO REYES: tienes más lugar para hacer corrección de error, entonces sería como una opcional si les da el tiempo y las ganas que pasa algo divertido para explorar, de probar.
+
+564
+01:04:20.140 --> 01:04:27.890
+SANTIAGO REYES: generar algún otro Q, R y y ver si capaz, usando un Q. R. No, Quiero decir más grande, también por el tema de cómputo, y eso, pero
+
+565
+01:04:28.070 --> 01:04:35.450
+SANTIAGO REYES: en el probar en codear algún contenido chiquitito con más tolerancia para errores.
+
+566
+01:04:36.100 --> 01:04:40.580
+SANTIAGO REYES: Ver si eso afecta, lo que pueden re escanear, igual. Insisto.
+
+567
+01:04:40.800 --> 01:04:49.770
+SANTIAGO REYES: todo ese análisis, especialmente la parte que implica crear Q. R. Nuevos. La trataría como opcional y solamente háganla una vez de haber cubierto
+
+568
+01:04:49.930 --> 01:04:52.069
+SANTIAGO REYES: todos los temas del T, P.
+
+569
+01:04:52.820 --> 01:04:55.290
+Eugenia Sol Piñeiro: Eso sí hagan el el mínimo
+
+570
+01:04:55.540 --> 01:05:07.630
+Eugenia Sol Piñeiro: que le funcione. Por lo menos poner el Pat. El mismo patrón de estímulo que recupere el mismo sin ruido. Y a partir de ahí empiezan a iterar con ruido más nivel de ruido, aumenta el tamaño.
+
+571
+01:05:08.090 --> 01:05:08.910
+Eugenia Sol Piñeiro: literar.
+
+572
+01:05:19.520 --> 01:05:20.910
+Eugenia Sol Piñeiro: Bien, Bueno.
+
