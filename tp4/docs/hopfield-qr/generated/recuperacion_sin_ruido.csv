@@ -1,0 +1,6 @@
+target,remains_stable,outcome,status,matched_pattern,iterations,cycle_length,final_error_pixels,final_error_fraction,initial_energy,final_energy,energy_change
+beverages,False,spurious_fixed,fixed_point,,2,,225,0.1643535427319211,-1789.7063550035361,-2172.879474068474,-383.17311906493774
+dessert,False,spurious_fixed,fixed_point,,2,,225,0.1643535427319211,-1801.8466033599973,-2172.879474068474,-371.0328707084766
+food,False,spurious_fixed,fixed_point,,2,,71,0.05186267348429511,-2077.449233016625,-2172.879474068474,-95.43024105184895
+specials,False,spurious_fixed,fixed_point,,2,,103,0.07523739956172389,-1982.466033601016,-2172.879474068474,-190.4134404674578
+wine,False,spurious_fixed,fixed_point,,2,,91,0.0664718772826881,-2041.53104455791,-2172.879474068474,-131.34842951056385

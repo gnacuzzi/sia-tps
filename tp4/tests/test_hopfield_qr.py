@@ -8,10 +8,12 @@ import pytest
 from sia_tp4.hopfield_qr import (
     QR_FILENAMES,
     _binary_grayscale,
+    energy_trajectory_rows,
     gram_matrices,
     load_qr_patterns,
     pairwise_similarity_rows,
     pixel_balance_rows,
+    run_zero_noise_recall,
 )
 
 
@@ -100,4 +102,32 @@ def test_pixel_balance_accounts_for_every_pixel():
     assert all(
         row["black_pixels"] + row["white_pixels"] == 37 * 37
         for row in rows
+    )
+
+
+def test_five_stored_qr_collapse_to_one_spurious_state_without_noise():
+    patterns = load_qr_patterns(DATA_DIRECTORY)
+
+    rows, cases = run_zero_noise_recall(patterns)
+
+    assert len(rows) == len(cases) == 5
+    assert all(not row["remains_stable"] for row in rows)
+    assert all(row["outcome"] == "spurious_fixed" for row in rows)
+    assert all(row["status"] == "fixed_point" for row in rows)
+    assert all(row["matched_pattern"] == "" for row in rows)
+    assert [row["iterations"] for row in rows] == [2, 2, 2, 2, 2]
+    assert [row["final_error_pixels"] for row in rows] == [225, 225, 71, 103, 91]
+    assert len({case["result"].final_state.tobytes() for case in cases}) == 1
+    for case in cases:
+        result = case["result"]
+        assert len(result.energies) == result.iterations + 1
+        assert np.all(np.diff(result.energies) <= 1e-9)
+
+    energy_rows = energy_trajectory_rows(cases)
+    assert len(energy_rows) == 5 * 3
+    assert [row["iteration"] for row in energy_rows[:3]] == [0, 1, 2]
+    assert all(
+        row["error_pixels"] == 0
+        for row in energy_rows
+        if row["iteration"] == 0
     )

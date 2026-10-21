@@ -10,6 +10,7 @@ from typing import List, Optional, Sequence, Tuple
 
 import numpy as np
 
+from .hopfield import HopfieldModel, RecallResult, fit_hopfield
 from .pca_analysis import _load_pyplot, _save_figure
 
 
@@ -134,6 +135,101 @@ def pixel_balance_rows(patterns: QRPatternSet) -> List[dict]:
     return rows
 
 
+def _recall_outcome(
+    model: HopfieldModel,
+    target_index: int,
+    result: RecallResult,
+) -> Tuple[str, Optional[int]]:
+    """Clasificar el destino de una consulta respecto de los patrones guardados."""
+
+    if result.status == "cycle":
+        return "cycle", None
+    if result.status == "max_iterations":
+        return "max_iterations", None
+    matched_index = model.matching_pattern_index(result.final_state)
+    if matched_index == target_index:
+        return "correct", matched_index
+    if matched_index is not None:
+        return "other_stored", matched_index
+    return "spurious_fixed", None
+
+
+def run_zero_noise_recall(
+    patterns: QRPatternSet,
+    max_iterations: int = 100,
+) -> Tuple[List[dict], List[dict]]:
+    """Consultar cada QR original en una red que almacena los cinco juntos."""
+
+    model = fit_hopfield(patterns.vectors)
+    rows = []
+    cases = []
+    for target_index, (name, target) in enumerate(
+        zip(patterns.names, patterns.vectors)
+    ):
+        result = model.recall(target, max_iterations=max_iterations)
+        outcome, matched_index = _recall_outcome(
+            model, target_index, result
+        )
+        final_error = int(np.count_nonzero(result.final_state != target))
+        remains_stable = bool(
+            result.status == "fixed_point"
+            and len(result.states) >= 2
+            and np.array_equal(result.states[0], result.states[1])
+        )
+        row = {
+            "target": name,
+            "remains_stable": remains_stable,
+            "outcome": outcome,
+            "status": result.status,
+            "matched_pattern": (
+                patterns.names[matched_index]
+                if matched_index is not None
+                else ""
+            ),
+            "iterations": result.iterations,
+            "cycle_length": result.cycle_length or "",
+            "final_error_pixels": final_error,
+            "final_error_fraction": final_error / len(target),
+            "initial_energy": float(result.energies[0]),
+            "final_energy": float(result.energies[-1]),
+            "energy_change": float(
+                result.energies[-1] - result.energies[0]
+            ),
+        }
+        rows.append(row)
+        cases.append(
+            {
+                "target_index": target_index,
+                "target": target,
+                "row": row,
+                "result": result,
+            }
+        )
+    return rows, cases
+
+
+def energy_trajectory_rows(cases: Sequence[dict]) -> List[dict]:
+    """Convertir las trayectorias de energía en una tabla larga."""
+
+    rows = []
+    for case in cases:
+        target = case["target"]
+        name = case["row"]["target"]
+        result = case["result"]
+        for iteration, (state, energy) in enumerate(
+            zip(result.states, result.energies)
+        ):
+            rows.append(
+                {
+                    "target": name,
+                    "iteration": iteration,
+                    "energy": float(energy),
+                    "error_pixels": int(np.count_nonzero(state != target)),
+                }
+            )
+    return rows
+
+
 def _write_csv(path: Path, fieldnames: Sequence[str], rows: Sequence[dict]) -> None:
     with path.open("w", encoding="utf-8", newline="") as stream:
         writer = csv.DictWriter(stream, fieldnames=fieldnames)
@@ -173,6 +269,24 @@ def write_orthogonality_tables(output: Path, patterns: QRPatternSet) -> None:
     )
 
 
+def write_zero_noise_tables(
+    output: Path,
+    rows: Sequence[dict],
+    cases: Sequence[dict],
+) -> None:
+    """Guardar el resumen y la energía completa de las consultas sin ruido."""
+
+    generated = output / "generated"
+    generated.mkdir(parents=True, exist_ok=True)
+    _write_csv(generated / "recuperacion_sin_ruido.csv", list(rows[0]), rows)
+    energy_rows = energy_trajectory_rows(cases)
+    _write_csv(
+        generated / "energia_sin_ruido.csv",
+        list(energy_rows[0]),
+        energy_rows,
+    )
+
+
 def write_orthogonality_plot(output: Path, patterns: QRPatternSet) -> None:
     """Graficar la matriz normalizada con sus valores explícitos."""
 
@@ -203,7 +317,74 @@ def write_orthogonality_plot(output: Path, patterns: QRPatternSet) -> None:
     plt.close(figure)
 
 
-def write_orthogonality_report(output: Path, patterns: QRPatternSet) -> None:
+def write_zero_noise_plots(output: Path, cases: Sequence[dict]) -> None:
+    """Comparar objetivos, consultas y destinos, y mostrar sus energías."""
+
+    generated = output / "generated"
+    generated.mkdir(parents=True, exist_ok=True)
+    plt = _load_pyplot()
+
+    figure, axes = plt.subplots(
+        len(cases), 4, figsize=(9.4, 2.15 * len(cases)), squeeze=False
+    )
+    titles = ("Objetivo", "Consulta S(0)", "Estado final", "Diferencias")
+    for column, title in enumerate(titles):
+        axes[0, column].set_title(title)
+    for row_index, case in enumerate(cases):
+        target = case["target"].reshape(QR_SHAPE)
+        initial = case["result"].states[0].reshape(QR_SHAPE)
+        final = case["result"].final_state.reshape(QR_SHAPE)
+        difference = target != final
+        for axis in axes[row_index]:
+            axis.set_xticks([])
+            axis.set_yticks([])
+        axes[row_index, 0].imshow(target, cmap="binary", vmin=-1, vmax=1)
+        axes[row_index, 1].imshow(initial, cmap="binary", vmin=-1, vmax=1)
+        axes[row_index, 2].imshow(final, cmap="binary", vmin=-1, vmax=1)
+        axes[row_index, 3].imshow(
+            difference, cmap="Reds", vmin=0, vmax=1
+        )
+        row = case["row"]
+        axes[row_index, 0].set_ylabel(
+            f"{row['target']}\n{row['outcome']} · "
+            f"{row['final_error_pixels']} errores",
+            rotation=0,
+            ha="right",
+            va="center",
+            labelpad=8,
+            fontsize=8,
+        )
+    figure.suptitle("Recuperación de los cinco QR sin ruido", y=1.0)
+    figure.tight_layout()
+    _save_figure(figure, generated / "recuperacion_sin_ruido.svg")
+    plt.close(figure)
+
+    figure, axes = plt.subplots(2, 3, figsize=(11, 6.4), squeeze=False)
+    for axis, case in zip(axes.reshape(-1), cases):
+        energies = case["result"].energies
+        iterations = np.arange(len(energies))
+        axis.plot(iterations, energies, marker="o", color="#3b82f6")
+        axis.set_title(case["row"]["target"])
+        axis.set_xlabel("Iteración")
+        axis.set_ylabel("Energía")
+        axis.set_xticks(iterations)
+        axis.margins(x=0.12, y=0.15)
+        axis.grid(alpha=0.25)
+    for axis in axes.reshape(-1)[len(cases) :]:
+        axis.axis("off")
+    figure.suptitle("Energía durante la recuperación sin ruido")
+    figure.tight_layout()
+    _save_figure(figure, generated / "energia_sin_ruido.svg")
+    plt.close(figure)
+
+
+def write_report(
+    output: Path,
+    patterns: QRPatternSet,
+    zero_noise_rows: Sequence[dict],
+    zero_noise_cases: Sequence[dict],
+    max_iterations: int,
+) -> None:
     """Documentar los resultados descriptivos del análisis."""
 
     pairs = pairwise_similarity_rows(patterns)
@@ -218,6 +399,17 @@ def write_orthogonality_report(output: Path, patterns: QRPatternSet) -> None:
     ]
     least_similar_names = ", ".join(
         f"**{row['first']}–{row['second']}**" for row in least_similar
+    )
+    unique_final_states = {
+        case["result"].final_state.tobytes() for case in zero_noise_cases
+    }
+    correct_count = sum(
+        row["outcome"] == "correct" for row in zero_noise_rows
+    )
+    stable_count = sum(row["remains_stable"] for row in zero_noise_rows)
+    transitions = ", ".join(
+        f"**{row['target']}→{row['matched_pattern'] or 'espurio'}**"
+        for row in zero_noise_rows
     )
     report = f"""# Análisis inicial de los QR para Hopfield
 
@@ -245,9 +437,9 @@ indicaría mayor cercanía a la ortogonalidad.
 
 Todos los productos internos son positivos y altos. Por lo tanto, estos QR no
 son cercanos a ser ortogonales: comparten muchos más píxeles con el mismo signo
-que con signo opuesto. Esto anticipa interferencia al almacenar los cinco,
-pero todavía no demuestra qué ocurrirá durante la recuperación; eso debe
-comprobarse entrenando la red en la etapa siguiente.
+que con signo opuesto. Esta observación anticipa interferencia al almacenar los
+cinco, pero por sí sola no demuestra el comportamiento dinámico; la prueba de
+recuperación que aparece debajo comprueba esa hipótesis.
 
 ## Balance de píxeles
 
@@ -259,13 +451,50 @@ negro, sino por posiciones coincidentes entre los QR, incluidas sus estructuras
 compartidas. No se modifica ni se centra la entrada: se conserva la
 codificación bipolar pedida para Hopfield.
 
+## Recuperación sin ruido
+
+Se entrenó una única red mediante la regla de Hebb almacenando simultáneamente
+los cinco vectores. Luego cada QR original se usó como consulta, sin modificar
+ningún píxel. El límite de {max_iterations} iteraciones funciona sólo como
+resguardo y no fue alcanzado. Esta prueba tampoco usa semillas.
+
+- patrones que permanecieron estables: **{stable_count}/5**;
+- recuperaciones correctas: **{correct_count}/5**;
+- estados finales distintos encontrados: **{len(unique_final_states)}**;
+- destinos: {transitions}.
+
+La primera actualización lleva cada consulta al estado espurio y la segunda
+confirma que ese estado no cambia; por eso todas las filas registran dos
+iteraciones.
+
+{chr(10).join(f"- **{row['target']}**: `{row['outcome']}`, {row['iterations']} iteraciones, {row['final_error_pixels']} píxeles de error, energía {row['initial_energy']:.1f} → {row['final_energy']:.1f}." for row in zero_noise_rows)}
+
+En los cinco recorridos la energía disminuye durante la primera actualización
+y permanece constante al confirmar el punto fijo. Esta observación describe
+estas trayectorias concretas; no se usa para cambiar la regla de actualización.
+
+![Recuperación sin ruido](generated/recuperacion_sin_ruido.svg)
+
+![Energía sin ruido](generated/energia_sin_ruido.svg)
+
+El chequeo reproducible confirma que ninguno de los QR originales es un punto
+fijo cuando se almacenan los cinco juntos. Todos convergen al mismo estado
+fijo espurio. Por lo tanto, un barrido de ruido sobre esta red no puede
+interpretarse aisladamente como robustez frente a perturbaciones: ya existe
+interferencia con 0 % de ruido. El paso siguiente debe separar este efecto
+estudiando subconjuntos de uno a cinco patrones.
+
 ## Archivos generados
 
 - `generated/matriz_gram.csv`: productos internos crudos;
 - `generated/matriz_gram_normalizada.csv`: productos internos divididos por 1369;
 - `generated/similitud_pares.csv`: los diez pares y sus píxeles diferentes;
 - `generated/balance_pixeles.csv`: cantidad de módulos negros y blancos;
-- `generated/matriz_gram_normalizada.svg`: visualización única del Gram.
+- `generated/recuperacion_sin_ruido.csv`: resultado de cada consulta original;
+- `generated/energia_sin_ruido.csv`: energía y error en cada iteración;
+- `generated/matriz_gram_normalizada.svg`: visualización del Gram;
+- `generated/recuperacion_sin_ruido.svg`: objetivos, consultas y estados finales;
+- `generated/energia_sin_ruido.svg`: trayectorias de energía.
 """
     output.mkdir(parents=True, exist_ok=True)
     (output / "README.md").write_text(report, encoding="utf-8")
@@ -285,15 +514,32 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         default=Path("docs/hopfield-qr"),
         help="Directorio del informe reproducible.",
     )
+    parser.add_argument(
+        "--max-iterations",
+        type=int,
+        default=100,
+        help="Límite de seguridad para cada recuperación (por defecto, 100).",
+    )
     return parser.parse_args(argv)
 
 
 def main(argv: Optional[Sequence[str]] = None) -> int:
     args = parse_args(argv)
     patterns = load_qr_patterns(args.data)
+    zero_noise_rows, zero_noise_cases = run_zero_noise_recall(
+        patterns, max_iterations=args.max_iterations
+    )
     write_orthogonality_tables(args.output, patterns)
+    write_zero_noise_tables(args.output, zero_noise_rows, zero_noise_cases)
     write_orthogonality_plot(args.output, patterns)
-    write_orthogonality_report(args.output, patterns)
+    write_zero_noise_plots(args.output, zero_noise_cases)
+    write_report(
+        args.output,
+        patterns,
+        zero_noise_rows,
+        zero_noise_cases,
+        args.max_iterations,
+    )
     similarities = [
         row["normalized_inner_product"]
         for row in pairwise_similarity_rows(patterns)
@@ -301,7 +547,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     print(
         f"Informe generado en {args.output}; "
         f"similitud media={np.mean(similarities):.3f}; "
-        f"máxima={np.max(np.abs(similarities)):.3f}"
+        f"máxima={np.max(np.abs(similarities)):.3f}; "
+        f"recuperaciones sin ruido="
+        f"{sum(row['outcome'] == 'correct' for row in zero_noise_rows)}/5"
     )
     return 0
 
