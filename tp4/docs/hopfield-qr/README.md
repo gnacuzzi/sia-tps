@@ -93,12 +93,14 @@ semillas:
    pero su peso de selección decrece linealmente con la distancia al borde. En
    una imagen 37×37 el peso sin normalizar es `19 - distancia_al_borde`.
 
-El diseño usa niveles de 0 %, 5 %, 10 %, 15 %, 20 %, 25 %, 30 %, 35 %, 40 %, 45 %, 50 %,
+El diseño usa niveles de 0 %, 5 %, 10 %, 15 %, 20 %, 25 %, 30 %, 35 %, 40 %, 45 %, 50 %, 55 %, 60 %, 65 %, 70 %, 75 %, 80 %, 85 %, 90 %, 95 %, 100 %,
 semillas 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 y un máximo de
 100 iteraciones como resguardo. El 0 % corresponde a las
-cinco consultas deterministas ya analizadas; para cada nivel positivo se
-evalúan los cinco QR con 10 semillas. En total se ejecutan
-1500 consultas aleatorias más las cinco consultas base.
+cinco consultas deterministas ya analizadas. Cada uno de los
+19 niveles entre 5 % y 95 % evalúa los cinco QR con
+10 semillas. El 100 % se ejecuta una vez porque deteriorar
+todos los píxeles produce la misma consulta con cualquier semilla. En total se
+ejecutan 2865 consultas con ruido más las cinco consultas base.
 
 El nivel es **nominal**: indica cuántas posiciones se seleccionan. En el flip
 todas cambian; en los borrados sólo cambian efectivamente las que eran negras.
@@ -112,16 +114,22 @@ como si fueran una secuencia temporal y no se elige un nivel de ruido óptimo.
 Cuando el desvío es cero, la barra coincide con el marcador y no tiene longitud
 visible; esto ocurre en toda la curva de recuperación.
 
-- **Flip uniforme**: a 50 % nominal modifica en promedio 684.0 píxeles; recuperación 0.0 %, error final 1058.5 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
-- **Borrado uniforme**: a 50 % nominal modifica en promedio 348.3 píxeles; recuperación 0.0 %, error final 143.0 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
-- **Borrado hacia bordes**: a 50 % nominal modifica en promedio 356.5 píxeles; recuperación 0.0 %, error final 143.0 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
+- **Flip uniforme**: a 100 % nominal modifica en promedio 1369.0 píxeles; recuperación 0.0 %, error final 1226.0 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
+- **Borrado uniforme**: a 100 % nominal modifica en promedio 710.0 píxeles; recuperación 0.0 %, error final 1226.0 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
+- **Borrado hacia bordes**: a 100 % nominal modifica en promedio 710.0 píxeles; recuperación 0.0 %, error final 1226.0 píxeles. No hubo recuperaciones correctas en ningún nivel positivo.
 
-En **1458** corridas el destino fue el mismo espurio de
-0 %; en **42** fue su inverso y en
-**0** apareció otro destino. El inverso apareció en:
-**Flip uniforme al 50 % (42 de 50 corridas)**. En las demás condiciones se
-conserva el espurio base. Esto explica cualquier salto del error final sin
-confundirlo con una recuperación.
+En **2304** corridas el destino fue el mismo espurio de
+0 %; en **561** fue su inverso y en
+**0** apareció otro destino. Con flip, el inverso pasa de
+84 % al 50 % a
+100 % al 55 %, y conserva ese
+dominio hasta el 100 %. Con borrado, la transición aparece mucho más tarde: al
+95 % el inverso representa
+52 % de las corridas uniformes
+y 56 % de las sesgadas hacia los
+bordes; al 100 % alcanza
+100 % en ambos casos. Esto
+explica el salto del error final sin confundirlo con una recuperación correcta.
 
 ![Recuperación frente al ruido](generated/recuperacion_vs_ruido.svg)
 
@@ -131,7 +139,7 @@ confundirlo con una recuperación.
 
 ![Tipos de resultado](generated/resultados_vs_ruido.svg)
 
-Las 1500 corridas presentaron **0** trayectorias
+Las 2865 corridas presentaron **0** trayectorias
 con algún aumento de energía. Las trayectorias completas quedan en CSV para no
 seleccionar conclusiones a partir de un único ejemplo.
 
@@ -139,7 +147,7 @@ seleccionar conclusiones a partir de un único ejemplo.
 
 Para mostrar cómo actúa cada función sin elegir casos por su resultado, se usa
 la primera etiqueta en el orden del dataset (**beverages**), el
-nivel positivo central configurado (**25 %**)
+nivel positivo central configurado (**50 %**)
 y la menor semilla (**0**). La selección se fija antes de
 mirar el estado final.
 
@@ -160,7 +168,7 @@ después de completar el caso obligatorio con los cinco QR.
 La red se entrenó con los cinco QR simultáneamente, tal como pide la consigna.
 Sin embargo, ninguno de los cinco patrones originales permanece estable al ser
 usado como consulta sin ruido: todos convergen al mismo punto fijo espurio.
-Además, ninguna de las 1500 consultas deterioradas recupera su QR
+Además, ninguna de las 2865 consultas deterioradas recupera su QR
 objetivo. La mayor parte converge al mismo espurio encontrado sin ruido y, en
 los casos restantes, a su inverso.
 

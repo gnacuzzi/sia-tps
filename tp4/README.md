@@ -213,9 +213,10 @@ python3 scripts/analyze_hopfield_qr.py
 El comando valida los cinco PNG, calcula las matrices de Gram cruda y
 normalizada, registra el balance de píxeles y prueba la recuperación de cada
 QR original después de almacenar los cinco juntos. Luego compara flip uniforme,
-borrado uniforme y borrado sesgado hacia los bordes con diez semillas por nivel.
-El diseño está en `configs/hopfield/qr.json`; el informe, las tablas y los
-gráficos quedan en `docs/hopfield-qr/`.
+borrado uniforme y borrado sesgado hacia los bordes entre 0 % y 100 %, con diez
+semillas por nivel aleatorio. El extremo de 100 % se ejecuta una sola vez porque
+es determinista. El diseño está en `configs/hopfield/qr.json`; el informe, las
+tablas y los gráficos quedan en `docs/hopfield-qr/`.
 
 El barrido de capacidad sin ruido enumera los 31 subconjuntos no vacíos de los
 cinco QR y consulta todos los patrones almacenados mediante:
@@ -235,9 +236,10 @@ estables se evalúa con el mismo diseño de ruido mediante:
 python3 scripts/analyze_hopfield_qr_robustness.py
 ```
 
-El script reutiliza `configs/hopfield/qr.json` para mantener los tres ruidos,
-los niveles y las diez semillas del experimento principal. Sus tablas y
-gráficos quedan en `docs/hopfield-qr-robustez/`.
+El script usa `configs/hopfield/qr_robustness.json` para mantener los tres
+ruidos, las diez semillas y el barrido extendido entre 0 % y 100 %. El extremo
+de 100 % se ejecuta una sola vez porque allí la consulta es determinista. Sus
+tablas y gráficos quedan en `docs/hopfield-qr-robustez/`.
 
 El experimento controlado con letras 5×5 se reproduce mediante:
 

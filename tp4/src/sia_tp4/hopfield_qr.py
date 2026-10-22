@@ -349,6 +349,16 @@ def add_qr_noise(
     return noisy, selected_count, changed_count
 
 
+def seeds_for_noise_level(
+    design: QRExperimentDesign, level: float
+) -> Tuple[int, ...]:
+    """Usar una sola réplica cuando el deterioro del 100 % es determinista."""
+
+    if np.isclose(level, 1.0):
+        return (min(design.seeds),)
+    return design.seeds
+
+
 def run_noise_experiment(
     patterns: QRPatternSet,
     design: QRExperimentDesign,
@@ -368,7 +378,7 @@ def run_noise_experiment(
             for level in design.noise_levels:
                 if level == 0.0:
                     continue
-                for seed in design.seeds:
+                for seed in seeds_for_noise_level(design, level):
                     query, selected_count, changed_count = add_qr_noise(
                         target, noise_type, level, seed
                     )
@@ -559,7 +569,7 @@ def summarize_noise_runs(
             if level == 0.0:
                 continue
             seed_metrics = []
-            for seed in design.seeds:
+            for seed in seeds_for_noise_level(design, level):
                 selected = [
                     row
                     for row in rows
@@ -643,7 +653,8 @@ def summarize_noise_by_target(
                     and row["target"] == target
                     and row["noise_level"] == level
                 ]
-                if len(selected) != len(design.seeds):
+                expected_seeds = seeds_for_noise_level(design, level)
+                if len(selected) != len(expected_seeds):
                     raise ValueError(
                         "cada ruido, QR y nivel debe incluir todas las semillas"
                     )
@@ -1060,7 +1071,7 @@ def write_noise_plots(
             bottom += values
         axis.set_title(NOISE_LABELS[noise_type])
         axis.set_xlabel("Ruido nominal (%)")
-        axis.set_xlim(-3, 53)
+        axis.set_xlim(-3, 103)
         axis.set_ylim(0, 100)
         axis.grid(axis="y", alpha=0.2)
     axes[0].set_ylabel("Proporción de resultados (%)")
@@ -1204,17 +1215,17 @@ def write_report(
     other_attractor_count = len(noise_rows) - (
         baseline_attractor_count + inverse_attractor_count
     )
-    inverse_groups: Dict[Tuple[str, float], int] = {}
-    for row in noise_rows:
-        if row["attractor"] == "inverse_baseline_spurious":
-            key = (row["noise_type"], row["noise_level"])
-            inverse_groups[key] = inverse_groups.get(key, 0) + 1
-    inverse_description = ", ".join(
-        f"{NOISE_LABELS[noise_type]} al {level * 100:g} % "
-        f"({count} de "
-        f"{sum(row['noise_type'] == noise_type and row['noise_level'] == level for row in noise_rows)} corridas)"
-        for (noise_type, level), count in sorted(inverse_groups.items())
-    )
+    summary_lookup = {
+        (row["noise_type"], row["noise_level"]): row for row in noise_summary
+    }
+    flip_50 = summary_lookup[("uniform_flip", 0.5)]
+    flip_55 = summary_lookup[("uniform_flip", 0.55)]
+    uniform_95 = summary_lookup[("uniform_erasure", 0.95)]
+    edge_95 = summary_lookup[("edge_erasure", 0.95)]
+    uniform_100 = summary_lookup[("uniform_erasure", 1.0)]
+    positive_random_levels = [
+        level for level in design.noise_levels if 0.0 < level < 1.0
+    ]
     controlled = controlled_cases[0]["row"]
     report = f"""# Análisis inicial de los QR para Hopfield
 
@@ -1306,9 +1317,11 @@ semillas:
 El diseño usa niveles de {', '.join(f'{level * 100:g} %' for level in design.noise_levels)},
 semillas {', '.join(map(str, design.seeds))} y un máximo de
 {design.max_iterations} iteraciones como resguardo. El 0 % corresponde a las
-cinco consultas deterministas ya analizadas; para cada nivel positivo se
-evalúan los cinco QR con {len(design.seeds)} semillas. En total se ejecutan
-{len(noise_rows)} consultas aleatorias más las cinco consultas base.
+cinco consultas deterministas ya analizadas. Cada uno de los
+{len(positive_random_levels)} niveles entre 5 % y 95 % evalúa los cinco QR con
+{len(design.seeds)} semillas. El 100 % se ejecuta una vez porque deteriorar
+todos los píxeles produce la misma consulta con cualquier semilla. En total se
+ejecutan {len(noise_rows)} consultas con ruido más las cinco consultas base.
 
 El nivel es **nominal**: indica cuántas posiciones se seleccionan. En el flip
 todas cambian; en los borrados sólo cambian efectivamente las que eran negras.
@@ -1326,10 +1339,16 @@ visible; esto ocurre en toda la curva de recuperación.
 
 En **{baseline_attractor_count}** corridas el destino fue el mismo espurio de
 0 %; en **{inverse_attractor_count}** fue su inverso y en
-**{other_attractor_count}** apareció otro destino. El inverso apareció en:
-**{inverse_description or 'ninguna condición'}**. En las demás condiciones se
-conserva el espurio base. Esto explica cualquier salto del error final sin
-confundirlo con una recuperación.
+**{other_attractor_count}** apareció otro destino. Con flip, el inverso pasa de
+{flip_50['inverse_spurious_rate_mean'] * 100:.0f} % al 50 % a
+{flip_55['inverse_spurious_rate_mean'] * 100:.0f} % al 55 %, y conserva ese
+dominio hasta el 100 %. Con borrado, la transición aparece mucho más tarde: al
+95 % el inverso representa
+{uniform_95['inverse_spurious_rate_mean'] * 100:.0f} % de las corridas uniformes
+y {edge_95['inverse_spurious_rate_mean'] * 100:.0f} % de las sesgadas hacia los
+bordes; al 100 % alcanza
+{uniform_100['inverse_spurious_rate_mean'] * 100:.0f} % en ambos casos. Esto
+explica el salto del error final sin confundirlo con una recuperación correcta.
 
 ![Recuperación frente al ruido](generated/recuperacion_vs_ruido.svg)
 

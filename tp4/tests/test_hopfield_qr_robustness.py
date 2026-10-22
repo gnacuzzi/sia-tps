@@ -4,6 +4,7 @@ from pathlib import Path
 
 from sia_tp4.hopfield_qr import (
     QRExperimentDesign,
+    QRPatternSet,
     load_qr_patterns,
 )
 from sia_tp4.hopfield_qr_robustness import (
@@ -68,3 +69,33 @@ def test_summaries_preserve_sizes_subsets_levels_and_ten_seeds():
     assert all(row["seed_count"] == 10 for row in by_subset if row["noise_level"] > 0)
     assert len(pairs) == 10
     assert all(row["recovery_at_10_percent"] >= 0 for row in pairs)
+
+
+def test_full_noise_is_run_once_and_identifies_inverse_target():
+    all_patterns = load_qr_patterns(DATA_DIRECTORY)
+    patterns = QRPatternSet(
+        names=all_patterns.names[:2],
+        images=all_patterns.images[:2],
+        vectors=all_patterns.vectors[:2],
+    )
+    design = QRExperimentDesign(
+        noise_types=("uniform_flip",),
+        noise_levels=(0.0, 1.0),
+        seeds=tuple(range(10)),
+        max_iterations=20,
+    )
+
+    baseline, noisy = run_robustness_sweep(patterns, design)
+    by_size = summarize_by_storage_size(baseline, noisy, design)
+
+    assert len(baseline) == 4
+    assert len(noisy) == 4
+    assert {row["seed"] for row in noisy} == {0}
+    assert all(row["selected_pixels"] == 1369 for row in noisy)
+    assert all(row["changed_pixels"] == 1369 for row in noisy)
+    assert all(row["outcome"] == "inverse_target" for row in noisy)
+    assert all(
+        row["seed_count"] == 1
+        for row in by_size
+        if row["noise_level"] == 1.0
+    )

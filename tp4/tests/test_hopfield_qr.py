@@ -20,6 +20,7 @@ from sia_tp4.hopfield_qr import (
     pixel_balance_rows,
     run_noise_experiment,
     run_zero_noise_recall,
+    seeds_for_noise_level,
     select_controlled_noise_cases,
     summarize_noise_by_target,
     summarize_noise_runs,
@@ -153,6 +154,7 @@ def test_qr_design_defines_three_noises_and_at_least_ten_seeds():
         "edge_erasure",
     )
     assert design.noise_levels[0] == 0.0
+    assert design.noise_levels[-1] == 1.0
     assert len(design.seeds) >= 10
 
 
@@ -246,3 +248,29 @@ def test_noise_experiment_uses_ten_seeds_and_selects_cases_without_outcomes():
     assert selected[0]["row"]["target"] == patterns.names[0]
     assert selected[0]["row"]["noise_level"] == 0.1
     assert selected[0]["row"]["seed"] == 0
+
+
+def test_full_noise_is_evaluated_once_because_it_is_deterministic():
+    patterns = load_qr_patterns(DATA_DIRECTORY)
+    design = QRExperimentDesign(
+        noise_types=("uniform_flip",),
+        noise_levels=(0.0, 1.0),
+        seeds=tuple(range(10)),
+        max_iterations=20,
+    )
+    zero_rows, _ = run_zero_noise_recall(patterns, design.max_iterations)
+
+    rows, _ = run_noise_experiment(patterns, design)
+    summary = summarize_noise_runs(rows, zero_rows, design)
+    by_target = summarize_noise_by_target(rows, zero_rows, design)
+
+    assert seeds_for_noise_level(design, 1.0) == (0,)
+    assert len(rows) == 5
+    assert {row["seed"] for row in rows} == {0}
+    assert all(row["selected_pixels"] == 1369 for row in rows)
+    assert summary[-1]["seed_count"] == 1
+    assert all(
+        row["seed_count"] == 1
+        for row in by_target
+        if row["noise_level"] == 1.0
+    )

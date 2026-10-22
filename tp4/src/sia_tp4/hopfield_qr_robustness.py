@@ -18,6 +18,7 @@ from .hopfield_qr import (
     add_qr_noise,
     load_design,
     load_qr_patterns,
+    seeds_for_noise_level,
 )
 from .pca_analysis import _load_pyplot, _save_figure
 
@@ -48,6 +49,8 @@ def _classify_result(
         return "correct", matched
     if matched is not None:
         return "other_stored", matched
+    if np.array_equal(result.final_state, -model.stored_patterns[target_index]):
+        return "inverse_target", None
     return "spurious_fixed", None
 
 
@@ -137,7 +140,7 @@ def run_robustness_sweep(
                 for level in design.noise_levels:
                     if level == 0.0:
                         continue
-                    for seed in design.seeds:
+                    for seed in seeds_for_noise_level(design, level):
                         key = (global_index, noise_type, level, seed)
                         if key not in query_cache:
                             query_cache[key] = add_qr_noise(
@@ -196,6 +199,10 @@ def _metrics(rows: Sequence[dict]) -> dict:
             row["outcome"] == "other_stored" for row in rows
         )
         / count,
+        "inverse_target_rate": sum(
+            row["outcome"] == "inverse_target" for row in rows
+        )
+        / count,
         "spurious_rate": sum(
             row["outcome"] == "spurious_fixed" for row in rows
         )
@@ -221,12 +228,14 @@ def _metrics(rows: Sequence[dict]) -> dict:
 
 def _mean_and_std(values: Sequence[float]) -> Tuple[float, float]:
     array = np.asarray(values, dtype=np.float64)
-    return float(np.mean(array)), float(np.std(array, ddof=1))
+    deviation = 0.0 if len(array) == 1 else float(np.std(array, ddof=1))
+    return float(np.mean(array)), deviation
 
 
 METRICS = (
     "recovery_rate",
     "other_stored_rate",
+    "inverse_target_rate",
     "spurious_rate",
     "cycle_rate",
     "max_iterations_rate",
@@ -286,7 +295,7 @@ def summarize_by_storage_size(
                 if level == 0.0:
                     continue
                 per_seed = []
-                for seed in design.seeds:
+                for seed in seeds_for_noise_level(design, level):
                     selected = [
                         row
                         for row in noise_rows
@@ -295,7 +304,7 @@ def summarize_by_storage_size(
                         and row["noise_level"] == level
                         and row["seed"] == seed
                     ]
-                    expected = 5 if storage_size == 1 else 20
+                    expected = len(baseline)
                     if len(selected) != expected:
                         raise ValueError(
                             "faltan consultas para una condición y semilla"
@@ -343,7 +352,7 @@ def summarize_by_subset(
                 if level == 0.0:
                     continue
                 per_seed = []
-                for seed in design.seeds:
+                for seed in seeds_for_noise_level(design, level):
                     selected = [
                         row
                         for row in noise_rows
@@ -418,6 +427,8 @@ def summarize_pair_robustness(subset_summary: Sequence[dict]) -> List[dict]:
                     "recovery_at_10_percent": recovery_at(0.1),
                     "recovery_at_30_percent": recovery_at(0.3),
                     "recovery_at_50_percent": recovery_at(0.5),
+                    "recovery_at_75_percent": recovery_at(0.75),
+                    "recovery_at_100_percent": recovery_at(1.0),
                     "first_level_below_50_percent": (
                         below_half[0]["noise_level"] if below_half else ""
                     ),
@@ -509,7 +520,7 @@ def write_plots(
             )
         axis.set_title(NOISE_LABELS[noise_type])
         axis.set_xlabel("Ruido nominal (%)")
-        axis.set_xlim(-2, 52)
+        axis.set_xlim(-2, 102)
         axis.set_ylim(-3, 103)
         axis.grid(alpha=0.25)
     axes[0].set_ylabel("Recuperación correcta (%)")
@@ -547,9 +558,10 @@ def write_plots(
         )
         image = axis.imshow(matrix, cmap="RdYlGn", vmin=0, vmax=1, aspect="auto")
         axis.set_title(NOISE_LABELS[noise_type])
+        tick_positions = np.arange(0, len(levels), 2)
         axis.set_xticks(
-            np.arange(len(levels)),
-            [f"{level * 100:g}" for level in levels],
+            tick_positions,
+            [f"{levels[index] * 100:g}" for index in tick_positions],
             rotation=45,
             ha="right",
         )
@@ -593,6 +605,83 @@ def write_plots(
     _save_figure(figure, generated / "robustez_vs_similitud.svg")
     plt.close(figure)
 
+    figure, axes = plt.subplots(1, 2, figsize=(11.5, 4.8), sharey=True)
+    noise_colors = {
+        "uniform_flip": "#2563eb",
+        "uniform_erasure": "#ea580c",
+        "edge_erasure": "#16a34a",
+    }
+    for axis, storage_size in zip(axes, (1, 2)):
+        for noise_type in design.noise_types:
+            rows = _series(storage_summary, noise_type, storage_size)
+            effective_damage = np.asarray(
+                [row["changed_pixels_mean"] / 1369 * 100 for row in rows]
+            )
+            recovery = np.asarray(
+                [row["recovery_rate_mean"] * 100 for row in rows]
+            )
+            deviations = np.asarray(
+                [row["recovery_rate_std"] * 100 for row in rows]
+            )
+            axis.errorbar(
+                effective_damage,
+                recovery,
+                yerr=_bounded_error(recovery, deviations),
+                color=noise_colors[noise_type],
+                marker="o",
+                markersize=3.5,
+                linewidth=1.6,
+                capsize=3,
+                label=NOISE_LABELS[noise_type],
+            )
+        axis.set_title(f"{storage_size} QR almacenado{'s' if storage_size > 1 else ''}")
+        axis.set_xlabel("Píxeles efectivamente modificados (%)")
+        axis.set_xlim(-2, 102)
+        axis.set_ylim(-3, 103)
+        axis.grid(alpha=0.25)
+    axes[0].set_ylabel("Recuperación correcta (%)")
+    handles, labels = axes[-1].get_legend_handles_labels()
+    figure.legend(handles, labels, loc="upper center", ncol=3)
+    figure.tight_layout(rect=(0, 0, 1, 0.9))
+    _save_figure(figure, generated / "recuperacion_vs_dano_efectivo.svg")
+    plt.close(figure)
+
+    figure, axes = plt.subplots(1, 2, figsize=(11.5, 4.8), sharey=True)
+    destination_fields = (
+        ("recovery_rate_mean", "Objetivo", "#16a34a"),
+        ("other_stored_rate_mean", "Otro almacenado", "#2563eb"),
+        ("inverse_target_rate_mean", "Inverso del objetivo", "#7c3aed"),
+        ("spurious_rate_mean", "Espurio", "#ea580c"),
+        ("cycle_rate_mean", "Ciclo", "#dc2626"),
+        ("max_iterations_rate_mean", "Máx. iteraciones", "#64748b"),
+    )
+    for axis, storage_size in zip(axes, (1, 2)):
+        rows = _series(storage_summary, "uniform_flip", storage_size)
+        levels_array = np.asarray([row["noise_level"] * 100 for row in rows])
+        bottom = np.zeros(len(rows))
+        for field, label, color in destination_fields:
+            values = np.asarray([row[field] * 100 for row in rows])
+            axis.fill_between(
+                levels_array,
+                bottom,
+                bottom + values,
+                label=label,
+                color=color,
+                alpha=0.9,
+            )
+            bottom += values
+        axis.set_title(f"{storage_size} QR almacenado{'s' if storage_size > 1 else ''}")
+        axis.set_xlabel("Flip uniforme nominal (%)")
+        axis.set_xlim(0, 100)
+        axis.set_ylim(0, 100)
+        axis.grid(alpha=0.2)
+    axes[0].set_ylabel("Destino de la recuperación (%)")
+    handles, labels = axes[-1].get_legend_handles_labels()
+    figure.legend(handles, labels, loc="upper center", ncol=3)
+    figure.tight_layout(rect=(0, 0, 1, 0.82))
+    _save_figure(figure, generated / "destinos_flip.svg")
+    plt.close(figure)
+
 
 def _find_summary(
     rows: Sequence[dict], noise_type: str, storage_size: int, level: float
@@ -617,16 +706,20 @@ def write_report(
 ) -> None:
     comparison_lines = []
     for noise_type in design.noise_types:
-        single_30 = _find_summary(storage_summary, noise_type, 1, 0.3)
-        pair_30 = _find_summary(storage_summary, noise_type, 2, 0.3)
         single_50 = _find_summary(storage_summary, noise_type, 1, 0.5)
         pair_50 = _find_summary(storage_summary, noise_type, 2, 0.5)
+        single_75 = _find_summary(storage_summary, noise_type, 1, 0.75)
+        pair_75 = _find_summary(storage_summary, noise_type, 2, 0.75)
+        single_100 = _find_summary(storage_summary, noise_type, 1, 1.0)
+        pair_100 = _find_summary(storage_summary, noise_type, 2, 1.0)
         comparison_lines.append(
             f"| {NOISE_LABELS[noise_type]} | "
-            f"{single_30['recovery_rate_mean'] * 100:.1f} % | "
-            f"{pair_30['recovery_rate_mean'] * 100:.1f} % | "
             f"{single_50['recovery_rate_mean'] * 100:.1f} % | "
-            f"{pair_50['recovery_rate_mean'] * 100:.1f} % |"
+            f"{pair_50['recovery_rate_mean'] * 100:.1f} % | "
+            f"{single_75['recovery_rate_mean'] * 100:.1f} % | "
+            f"{pair_75['recovery_rate_mean'] * 100:.1f} % | "
+            f"{single_100['recovery_rate_mean'] * 100:.1f} % | "
+            f"{pair_100['recovery_rate_mean'] * 100:.1f} % |"
         )
     pair_extremes = []
     for noise_type in design.noise_types:
@@ -643,10 +736,18 @@ def write_report(
         else:
             best_count = sum(np.isclose(value, maximum) for value in values)
             worst_count = sum(np.isclose(value, minimum) for value in values)
+            best_phrase = (
+                "1 dupla alcanza"
+                if best_count == 1
+                else f"{best_count} duplas alcanzan"
+            )
+            worst_phrase = (
+                "1 queda" if worst_count == 1 else f"{worst_count} quedan"
+            )
             sentence = (
                 f"los promedios quedan entre {minimum * 100:.1f} % y "
-                f"{maximum * 100:.1f} %; {best_count} duplas alcanzan el "
-                f"máximo y {worst_count} quedan en el mínimo."
+                f"{maximum * 100:.1f} %; {best_phrase} el máximo y "
+                f"{worst_phrase} en el mínimo."
             )
         pair_extremes.append(
             f"- **{NOISE_LABELS[noise_type]}:** {sentence}"
@@ -659,8 +760,32 @@ def write_report(
     flip_pair_45 = _find_summary(storage_summary, "uniform_flip", 2, 0.45)
     flip_pair_50 = _find_summary(storage_summary, "uniform_flip", 2, 0.5)
     flip_single_50 = _find_summary(storage_summary, "uniform_flip", 1, 0.5)
-    erased_50 = _find_summary(storage_summary, "uniform_erasure", 1, 0.5)
-    edge_erased_50 = _find_summary(storage_summary, "edge_erasure", 1, 0.5)
+    flip_single_55 = _find_summary(storage_summary, "uniform_flip", 1, 0.55)
+    flip_pair_55 = _find_summary(storage_summary, "uniform_flip", 2, 0.55)
+    flip_pair_65 = _find_summary(storage_summary, "uniform_flip", 2, 0.65)
+    uniform_pair_90 = _find_summary(
+        storage_summary, "uniform_erasure", 2, 0.9
+    )
+    edge_pair_90 = _find_summary(storage_summary, "edge_erasure", 2, 0.9)
+    uniform_single_95 = _find_summary(
+        storage_summary, "uniform_erasure", 1, 0.95
+    )
+    uniform_pair_95 = _find_summary(
+        storage_summary, "uniform_erasure", 2, 0.95
+    )
+    edge_single_95 = _find_summary(
+        storage_summary, "edge_erasure", 1, 0.95
+    )
+    edge_pair_95 = _find_summary(storage_summary, "edge_erasure", 2, 0.95)
+    uniform_single_100 = _find_summary(
+        storage_summary, "uniform_erasure", 1, 1.0
+    )
+    uniform_pair_100 = _find_summary(
+        storage_summary, "uniform_erasure", 2, 1.0
+    )
+    positive_random_levels = [
+        level for level in design.noise_levels if 0.0 < level < 1.0
+    ]
     early_pair_failures = [
         row
         for row in subset_summary
@@ -683,27 +808,29 @@ cinco conjuntos individuales y las diez duplas son los únicos subconjuntos
 completamente estables sin ruido. Sobre esas 15 memorias se aplican los tres
 deterioros ya definidos: flip uniforme, borrado uniforme y borrado hacia los
 bordes. Se usan los niveles
-{', '.join(f'{level * 100:g} %' for level in design.noise_levels)} y las
-semillas {', '.join(map(str, design.seeds))}.
+{', '.join(f'{level * 100:g} %' for level in design.noise_levels)}. Para los
+niveles aleatorios se usan las semillas {', '.join(map(str, design.seeds))}.
 
 Para cada QR, tipo, nivel y semilla se reutiliza exactamente la misma consulta
 deteriorada en el conjunto individual y en todas las duplas que contienen ese
 QR. Este pareo permite que la comparación mida el efecto de guardar un segundo
 patrón y no el de haber elegido posiciones de ruido diferentes.
 
-El 0 % corresponde a {len(baseline_rows)} consultas deterministas. Los niveles
-positivos producen {len(noise_rows)} corridas: 25 consultas objetivo por
-condición, tres ruidos, diez niveles y diez semillas. Las métricas se calculan
-primero dentro de cada semilla y luego se informa su media y desvío estándar
-entre las diez realizaciones. No se busca un nivel óptimo: el ruido es una
-variable de deterioro, no un hiperparámetro de la red.
+El 0 % corresponde a {len(baseline_rows)} consultas deterministas. Cada uno de
+los {len(positive_random_levels)} niveles entre 5 % y 95 % usa diez semillas.
+El 100 % se ejecuta una vez porque deteriorar todos los píxeles produce la
+misma consulta con cualquier semilla; repetirla diez veces no aportaría
+variabilidad. En total se conservan {len(noise_rows)} corridas con ruido. Las
+métricas se calculan primero dentro de cada semilla y luego se informa su media
+y desvío estándar. No se busca un nivel óptimo: el ruido es una variable de
+deterioro, no un hiperparámetro de la red.
 
 ## Uno frente a dos patrones almacenados
 
 ![Recuperación con uno y dos QR](generated/recuperacion_uno_vs_dos.svg)
 
-| Ruido | 1 QR a 30 % | 2 QR a 30 % | 1 QR a 50 % | 2 QR a 50 % |
-|---|---:|---:|---:|---:|
+| Ruido | 1 QR a 50 % | 2 QR a 50 % | 1 QR a 75 % | 2 QR a 75 % | 1 QR a 100 % | 2 QR a 100 % |
+|---|---:|---:|---:|---:|---:|---:|
 {chr(10).join(comparison_lines)}
 
 Las barras representan el desvío entre semillas. Cuando el desvío es cero,
@@ -713,21 +840,54 @@ combinación después de observar su resultado.
 
 Con flip uniforme, almacenar un solo QR mantiene
 {flip_single_50['recovery_rate_mean'] * 100:.0f} % de recuperación hasta el
-50 %. En las duplas la recuperación es 100 % hasta 35 %, baja a
+50 %. A partir de 55 %, el {flip_single_55['inverse_target_rate_mean'] * 100:.0f} %
+converge al patrón inverso. Esto es esperable: con más de la mitad de los bits
+invertidos, la consulta queda más cerca de `-xi` que de `xi`, y la simetría de
+la regla de Hebb hace que ambos sean puntos fijos. No es un error de
+implementación.
+
+En las duplas la recuperación es 100 % hasta 35 %, baja a
 {flip_pair_40['recovery_rate_mean'] * 100:.0f} % al 40 % y a
 {flip_pair_45['recovery_rate_mean'] * 100:.0f} % al 45 %, y cae a
-{flip_pair_50['recovery_rate_mean'] * 100:.0f} % al 50 %. En ese último nivel,
-{flip_pair_50['other_stored_rate_mean'] * 100:.0f} % converge al otro QR
-almacenado, {flip_pair_50['spurious_rate_mean'] * 100:.0f} % a puntos fijos
-espurios y {flip_pair_50['cycle_rate_mean'] * 100:.0f} % entra en ciclos.
+{flip_pair_50['recovery_rate_mean'] * 100:.0f} % al 50 %. En ese nivel,
+{flip_pair_50['other_stored_rate_mean'] * 100:.0f} % converge al otro QR,
+{flip_pair_50['spurious_rate_mean'] * 100:.0f} % a puntos fijos espurios y
+{flip_pair_50['cycle_rate_mean'] * 100:.0f} % entra en ciclos. Al 55 %,
+{flip_pair_55['inverse_target_rate_mean'] * 100:.0f} % ya converge al inverso;
+desde 65 %, ese destino representa
+{flip_pair_65['inverse_target_rate_mean'] * 100:.0f} % de las corridas.
 
-Los porcentajes nominales no representan el mismo daño efectivo. Al 50 %, el
-flip modifica {flip_pair_50['changed_pixels_mean']:.0f} píxeles, mientras que
-el borrado uniforme modifica en promedio
-{erased_50['changed_pixels_mean']:.1f} y el borrado hacia los bordes
-{edge_erased_50['changed_pixels_mean']:.1f}. Los borrados sólo afectan una
-posición seleccionada cuando era negra; por eso su 100 % de recuperación no
-debe compararse como si las consultas tuvieran 684 cambios.
+![Destino de las recuperaciones con flip](generated/destinos_flip.svg)
+
+El gráfico separa recuperación correcta, otro patrón almacenado, inverso del
+objetivo, estado espurio y ciclo. Esa separación es importante por encima de
+50 %: informar solamente "falló" ocultaría la transición sistemática al
+inverso.
+
+## Ruido nominal y daño efectivo
+
+![Recuperación según daño efectivo](generated/recuperacion_vs_dano_efectivo.svg)
+
+Los porcentajes nominales no representan el mismo daño efectivo. Un flip del
+50 % modifica {flip_pair_50['changed_pixels_mean']:.0f} píxeles. En cambio, el
+borrado sólo modifica una posición si originalmente era negra; incluso al
+100 % cambia en promedio {uniform_single_100['changed_pixels_mean']:.0f} de los
+1369 píxeles. Por eso se incluye otra lectura con el porcentaje realmente
+modificado en el eje horizontal.
+
+Los borrados permanecen mucho más robustos: con dos QR, a 90 % la recuperación
+es {uniform_pair_90['recovery_rate_mean'] * 100:.1f} % para borrado uniforme y
+{edge_pair_90['recovery_rate_mean'] * 100:.1f} % para borrado hacia bordes. Al
+95 %, los individuales recuperan
+{uniform_single_95['recovery_rate_mean'] * 100:.1f} % y
+{edge_single_95['recovery_rate_mean'] * 100:.1f} %, mientras las duplas bajan a
+{uniform_pair_95['recovery_rate_mean'] * 100:.1f} % y
+{edge_pair_95['recovery_rate_mean'] * 100:.1f} %, respectivamente. En 100 % la
+consulta queda completamente blanca y deja de contener información sobre qué
+QR era el objetivo; por eso la recuperación correcta cae a 0 %. En las duplas,
+{uniform_pair_100['inverse_target_rate_mean'] * 100:.0f} % termina en el
+inverso, {uniform_pair_100['spurious_rate_mean'] * 100:.0f} % en un punto fijo
+espurio y {uniform_pair_100['cycle_rate_mean'] * 100:.0f} % en un ciclo.
 
 ## Diferencias entre duplas
 
@@ -744,10 +904,10 @@ combinaciones y permite ver si la degradación ocurre en el mismo nivel.
 ![Robustez frente a similitud](generated/robustez_vs_similitud.svg)
 
 Cada punto es una de las diez duplas. El eje vertical promedia por igual los
-diez niveles positivos configurados, por lo que sirve como resumen descriptivo
-de toda la curva y no como una métrica optimizada. Con sólo diez pares, el
-gráfico se usa para inspeccionar la asociación y no para afirmar una ley general
-entre producto interno y tolerancia al ruido.
+veinte niveles positivos configurados, por lo que sirve como resumen
+descriptivo de toda la curva y no como una métrica optimizada. Con sólo diez
+pares, el gráfico se usa para inspeccionar la asociación y no para afirmar una
+ley general entre producto interno y tolerancia al ruido.
 
 Antes de la caída general del 50 %, las únicas desviaciones fueron:
 **{early_failure_description or 'ninguna'}**. Se concentran entre las duplas de
@@ -760,8 +920,8 @@ no alcanzan para convertir esa observación en una relación general.
 Se recuperaron correctamente **{correct} de {len(noise_rows)}** consultas
 deterioradas. Hubo **{energy_violations}** corridas con algún aumento de energía.
 La tabla completa conserva resultados, errores, iteraciones y energías finales;
-no se guardan imágenes ni trayectorias redundantes para cada una de las 7.500
-corridas.
+no se guardan imágenes ni trayectorias redundantes para cada una de las
+{len(noise_rows)} corridas.
 
 ## Archivos generados
 
@@ -772,7 +932,9 @@ corridas.
 - `generated/resumen_robustez_duplas.csv`: resumen de las diez duplas;
 - `generated/recuperacion_uno_vs_dos.svg`: curvas con diez semillas;
 - `generated/mapa_robustez_duplas.svg`: todas las duplas y niveles;
-- `generated/robustez_vs_similitud.svg`: relación descriptiva con el Gram.
+- `generated/robustez_vs_similitud.svg`: relación descriptiva con el Gram;
+- `generated/recuperacion_vs_dano_efectivo.svg`: comparación por cambios reales;
+- `generated/destinos_flip.svg`: destinos de la dinámica con flip uniforme.
 """
     output.mkdir(parents=True, exist_ok=True)
     (output / "README.md").write_text(report, encoding="utf-8")
@@ -789,8 +951,8 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "--config",
         type=Path,
-        default=Path("configs/hopfield/qr.json"),
-        help="Configuración compartida de ruido y semillas.",
+        default=Path("configs/hopfield/qr_robustness.json"),
+        help="Configuración del barrido extendido de robustez.",
     )
     parser.add_argument(
         "--output",
