@@ -840,7 +840,10 @@ combinación después de observar su resultado.
 
 Con flip uniforme, almacenar un solo QR mantiene
 {flip_single_50['recovery_rate_mean'] * 100:.0f} % de recuperación hasta el
-50 %. A partir de 55 %, el {flip_single_55['inverse_target_rate_mean'] * 100:.0f} %
+50 %. Como cada QR tiene 1369 píxeles, el 50 % nominal invierte 684 y deja 685
+sin modificar: la consulta todavía está un píxel más cerca del original que de
+su inverso. En el siguiente nivel evaluado, 55 %, el
+{flip_single_55['inverse_target_rate_mean'] * 100:.0f} %
 converge al patrón inverso. Esto es esperable: con más de la mitad de los bits
 invertidos, la consulta queda más cerca de `-xi` que de `xi`, y la simetría de
 la regla de Hebb hace que ambos sean puntos fijos. No es un error de
@@ -875,7 +878,8 @@ borrado sólo modifica una posición si originalmente era negra; incluso al
 1369 píxeles. Por eso se incluye otra lectura con el porcentaje realmente
 modificado en el eje horizontal.
 
-Los borrados permanecen mucho más robustos: con dos QR, a 90 % la recuperación
+Los borrados conservan recuperación correcta hasta porcentajes nominales mucho
+mayores que el flip: con dos QR, a 90 % la recuperación
 es {uniform_pair_90['recovery_rate_mean'] * 100:.1f} % para borrado uniforme y
 {edge_pair_90['recovery_rate_mean'] * 100:.1f} % para borrado hacia bordes. Al
 95 %, los individuales recuperan
@@ -887,7 +891,9 @@ consulta queda completamente blanca y deja de contener información sobre qué
 QR era el objetivo; por eso la recuperación correcta cae a 0 %. En las duplas,
 {uniform_pair_100['inverse_target_rate_mean'] * 100:.0f} % termina en el
 inverso, {uniform_pair_100['spurious_rate_mean'] * 100:.0f} % en un punto fijo
-espurio y {uniform_pair_100['cycle_rate_mean'] * 100:.0f} % en un ciclo.
+espurio y {uniform_pair_100['cycle_rate_mean'] * 100:.0f} % en un ciclo. Estos
+porcentajes agregan los 20 objetivos de las diez duplas; no representan
+variabilidad entre semillas, porque al 100 % la consulta es determinista.
 
 ## Diferencias entre duplas
 

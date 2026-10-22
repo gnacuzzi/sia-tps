@@ -33,16 +33,16 @@ máximo. No se construye un score ponderado.
 - grupo favorable **ORTV**: media
   1.33, máximo
   3, repetido
-  1 vez/veces;
+  una vez;
 - grupo desfavorable **HMNW**: media
   18.33, máximo
   21, repetido
-  2 vez/veces.
+  2 veces.
 
 Se conservan sólo los diez extremos de cada lado en la tabla generada; el
 ranking completo se recalcula de forma determinista al ejecutar el script.
 
-## Resultados iniciales
+## Resultados
 
 Sin ruido, la recuperación correcta fue
 **100.0 %** para el grupo
@@ -51,8 +51,9 @@ para el desfavorable. Con 50 % de ruido fue
 **0.0 %** y
 **22.5 %**, respectivamente.
 
-El 25 % sin ruido del grupo desfavorable no representa una recuperación parcial
-uniforme: sus transiciones son **H→N, M→N, N→N, W→N**. Por lo tanto, una
+La recuperación de 25 % sin ruido del grupo desfavorable no representa un
+éxito parcial repartido entre sus cuatro letras: sus transiciones son
+**H→N, M→N, N→N, W→N**. Por lo tanto, una
 sola letra funciona como atractor dominante. Su porcentaje agregado en niveles
 altos de ruido no debe interpretarse como una mejora ni como robustez del grupo.
 

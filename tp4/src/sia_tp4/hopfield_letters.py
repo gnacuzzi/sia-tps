@@ -749,6 +749,16 @@ def write_report(
         f"{letter}→{zero_noise_transitions[('desfavorable', letter)]}"
         for letter in groups["desfavorable"]
     )
+    best_repetition = (
+        "una vez"
+        if best.maximum_pair_count == 1
+        else f"{best.maximum_pair_count} veces"
+    )
+    worst_repetition = (
+        "una vez"
+        if worst.maximum_pair_count == 1
+        else f"{worst.maximum_pair_count} veces"
+    )
     report = f"""# Experimento controlado de Hopfield con letras 5×5
 
 ## Objetivo
@@ -784,16 +794,16 @@ máximo. No se construye un score ponderado.
 - grupo favorable **{''.join(groups['favorable'])}**: media
   {best.mean_absolute_inner_product:.2f}, máximo
   {best.maximum_absolute_inner_product}, repetido
-  {best.maximum_pair_count} vez/veces;
+  {best_repetition};
 - grupo desfavorable **{''.join(groups['desfavorable'])}**: media
   {worst.mean_absolute_inner_product:.2f}, máximo
   {worst.maximum_absolute_inner_product}, repetido
-  {worst.maximum_pair_count} vez/veces.
+  {worst_repetition}.
 
 Se conservan sólo los diez extremos de cada lado en la tabla generada; el
 ranking completo se recalcula de forma determinista al ejecutar el script.
 
-## Resultados iniciales
+## Resultados
 
 Sin ruido, la recuperación correcta fue
 **{zero_noise['favorable']['recovery_rate_mean'] * 100:.1f} %** para el grupo
@@ -802,8 +812,9 @@ para el desfavorable. Con {last_noise * 100:g} % de ruido fue
 **{last['favorable']['recovery_rate_mean'] * 100:.1f} %** y
 **{last['desfavorable']['recovery_rate_mean'] * 100:.1f} %**, respectivamente.
 
-El 25 % sin ruido del grupo desfavorable no representa una recuperación parcial
-uniforme: sus transiciones son **{unfavorable_transitions}**. Por lo tanto, una
+La recuperación de 25 % sin ruido del grupo desfavorable no representa un
+éxito parcial repartido entre sus cuatro letras: sus transiciones son
+**{unfavorable_transitions}**. Por lo tanto, una
 sola letra funciona como atractor dominante. Su porcentaje agregado en niveles
 altos de ruido no debe interpretarse como una mejora ni como robustez del grupo.
 

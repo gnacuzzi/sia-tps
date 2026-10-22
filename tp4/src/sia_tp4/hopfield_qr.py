@@ -1227,7 +1227,7 @@ def write_report(
         level for level in design.noise_levels if 0.0 < level < 1.0
     ]
     controlled = controlled_cases[0]["row"]
-    report = f"""# Análisis inicial de los QR para Hopfield
+    report = f"""# Análisis de los QR con una red de Hopfield
 
 ## Representación
 
@@ -1358,9 +1358,9 @@ explica el salto del error final sin confundirlo con una recuperación correcta.
 
 ![Tipos de resultado](generated/resultados_vs_ruido.svg)
 
-Las {len(noise_rows)} corridas presentaron **{energy_violations}** trayectorias
-con algún aumento de energía. Las trayectorias completas quedan en CSV para no
-seleccionar conclusiones a partir de un único ejemplo.
+Se observaron **{energy_violations}** corridas con algún aumento de energía entre
+las {len(noise_rows)} evaluadas. Las trayectorias completas quedan en CSV para
+no seleccionar conclusiones a partir de un único ejemplo.
 
 ## Comparación visual controlada
 
@@ -1374,11 +1374,10 @@ mirar el estado final.
 
 ![Energía de los casos controlados](generated/energia_ruido_controlado.svg)
 
-Como la recuperación base es 0/5, una eventual mejora al agregar ruido no
-significa que la red sea robusta: significa que alguna perturbación desplazó
-la consulta desde el atractor espurio hacia otro atractor. El análisis de
-capacidad mediante subconjuntos se reserva para la sección de limitaciones,
-después de completar el caso obligatorio con los cinco QR.
+La recuperación base es 0/5 y ninguna consulta deteriorada recuperó su objetivo:
+en esta red, agregar ruido no corrige la interferencia que ya existe con los
+cinco patrones originales. Por eso, la robustez sólo se evalúa después sobre
+subconjuntos que sí son memorias estables sin ruido.
 
 ## Limitaciones observadas e hipótesis de capacidad
 
@@ -1399,11 +1398,12 @@ importante de sus píxeles y, por lo tanto, no constituyen patrones cercanos a
 la ortogonalidad. Al sumar sus productos externos, la regla de Hebb introduce
 términos cruzados que modifican los mínimos de energía de la red.
 
-Que la energía no aumente durante las actualizaciones confirma que la dinámica
-implementada desciende —o se mantiene— sobre la función de energía. No
-garantiza, en cambio, que el mínimo alcanzado sea una memoria deseada. En este
-caso, el punto fijo espurio es un atractor válido de la dinámica, aunque no
-coincida con ninguno de los cinco QR almacenados.
+En las trayectorias evaluadas, la energía descendió o se mantuvo; este resultado
+describe las consultas observadas y no se extrapola como garantía para cualquier
+estado inicial bajo actualización sincrónica. Tampoco garantiza que el estado
+alcanzado sea una memoria deseada. En este caso, el punto fijo espurio es un
+atractor válido de la dinámica, aunque no coincida con ninguno de los cinco QR
+almacenados.
 
 ### Capacidad teórica frente a capacidad efectiva
 
@@ -1415,10 +1415,10 @@ independiente de los datos: supone patrones suficientemente separados y no
 contempla por sí solo la fuerte correlación observada aquí.
 
 Por eso, que la red falle con solo cinco patrones no contradice esa referencia.
-Muestra que la **capacidad efectiva** para este conjunto particular de QR es
-menor que cinco cuando se usa la regla de Hebb implementada. Con los resultados
-actuales todavía no puede determinarse cuántos QR sí puede almacenar ni si el
-resultado depende principalmente de la cantidad o de la combinación elegida.
+Este experimento principal sólo permite afirmar que la capacidad efectiva es
+menor que cinco para este conjunto y esta regla de Hebb; por sí solo no indica
+cuántos QR sí pueden almacenarse. El barrido exhaustivo de la sección siguiente
+responde esa pregunta sin extrapolarla a otras familias de patrones.
 
 ### Contraste de capacidad sin ruido
 

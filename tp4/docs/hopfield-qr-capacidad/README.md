@@ -12,7 +12,9 @@ El experimento es determinista: no agrega ruido, no inicializa pesos al azar y
 no necesita semillas. El límite de 100 iteraciones es sólo
 un resguardo de ejecución. En total se evalúan 80 consultas
 originales. Un subconjunto se considera completamente estable únicamente si
-todos sus patrones son puntos fijos desde la primera actualización.
+la primera actualización deja sin cambios a todos sus patrones. Este criterio
+es más estricto que converger luego a algún patrón almacenado: comprueba que
+cada original sea efectivamente un punto fijo de la memoria.
 
 Para cada combinación también se calculan la media y el máximo de los productos
 internos absolutos normalizados entre pares. En los conjuntos de un único QR no
