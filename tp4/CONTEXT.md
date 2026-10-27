@@ -67,6 +67,12 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   usa un score compuesto. Los candidatos de fútbol son `INF021`, `INF041` e
   `INF027`; los de belleza `INF006`, `INF022` e `INF038`; los de perros
   `INF039`, `INF023` e `INF043`; y los de arte `INF024`, `INF012` e `INF016`.
+  Esa síntesis regional se conserva como antecedente. La decisión revisada ya
+  no convierte la región modal de Kohonen en un filtro: exige al menos 50 % de
+  afinidad temática individual, prioriza alcance argentino nuevo y afín, usa
+  visitas al perfil como señal secundaria de intención y compara contra dos
+  baselines de igual tamaño, followers globales y followers entre afines. El
+  informe revisado está en `docs/campanas-creadores-revisado/`.
   El mantenimiento también está documentado: una actualización mensual o la
   incorporación de creadores vuelve a entrenar el pipeline completo; campañas
   o variables nuevas requieren revisar explícitamente el diseño. Los informes

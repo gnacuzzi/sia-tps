@@ -1,0 +1,36 @@
+{
+  "name": "campaign-decision-revised",
+  "affinity_threshold_pct": 50.0,
+  "shortlist_size": 3,
+  "kohonen_stability_config": "../kohonen/stability.json",
+  "campaigns": [
+    {
+      "name": "futbol",
+      "label": "Fútbol",
+      "client": "Ropa de entrenamiento para fútbol",
+      "business_goal": "Aumentar ventas",
+      "topic_feature": "topic_football_pct"
+    },
+    {
+      "name": "belleza",
+      "label": "Belleza",
+      "client": "Productos de belleza",
+      "business_goal": "Aumentar ventas",
+      "topic_feature": "topic_makeup_pct"
+    },
+    {
+      "name": "perros",
+      "label": "Perros",
+      "client": "Refugios que promueven adopciones",
+      "business_goal": "Generar consultas y adopciones",
+      "topic_feature": "topic_dogs_pct"
+    },
+    {
+      "name": "arte",
+      "label": "Arte",
+      "client": "Materiales de arte",
+      "business_goal": "Aumentar ventas",
+      "topic_feature": "topic_art_pct"
+    }
+  ]
+}

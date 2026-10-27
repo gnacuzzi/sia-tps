@@ -181,6 +181,18 @@ dos gráficos comparativos. Finalmente propone tres perfiles complementarios por
 campaña —alcance, equilibrio y especialización/eficiencia— mediante umbrales y
 ordenamientos explícitos, sin combinar las variables en un score.
 
+La revisión de la decisión comercial conserva esa síntesis como antecedente,
+pero deja de usar la región de Kohonen como filtro obligatorio. Exige mayoría
+temática individual, estima alcance argentino nuevo y afín, y compara la
+selección con followers globales y con followers entre creadores afines:
+
+```bash
+python3 scripts/analyze_campaigns_revised.py
+```
+
+El informe queda en `docs/campanas-creadores-revisado/`. Kohonen se mantiene
+como evidencia descriptiva y de estabilidad, no como una etiqueta comercial.
+
 El procedimiento para incorporar creadores, actualizar el catálogo cada mes y
 decidir cuándo revisar campañas, variables o hiperparámetros está documentado
 en `docs/mantenimiento.md`.
