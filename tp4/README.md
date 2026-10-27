@@ -163,6 +163,43 @@ El diseño completo está en `configs/kohonen/stability.json`. El comando genera
 un único informe en `docs/kohonen-experimentos/08-stability/`, con tablas y
 gráficos agregados y sin una carpeta por semilla.
 
+## Índice mediante la regla de Oja
+
+La implementación de Oja usa las mismas 15 variables y el mismo z-score
+muestral que PCA. La selección de hiperparámetros se reproduce en dos etapas.
+La primera compara ocho tasas de aprendizaje, dos schedules y diez semillas:
+
+```bash
+python3 scripts/experiment_oja_rate.py
+```
+
+Su diseño está en `configs/oja/01-rate.json` y el informe se genera en
+`docs/oja-experimentos/01-rate/README.md`. La segunda etapa compara ocho
+cantidades de épocas para los tres perfiles finalistas:
+
+```bash
+python3 scripts/experiment_oja_epochs.py
+```
+
+La configuración está en `configs/oja/02-epochs.json` y el informe queda en
+`docs/oja-experimentos/02-epochs/README.md`. A partir de esos barridos se elige
+un descenso lineal de `0.001` a `0.0001` durante 100 épocas.
+
+El análisis final entrena esa configuración con diez semillas, compara los
+pesos aprendidos con el autovector de PC1 y contrasta el índice de cada creador
+con su score de PCA:
+
+```bash
+python3 scripts/analyze_oja.py
+```
+
+El diseño final está en `configs/oja/final.json`. Las métricas, tablas,
+gráficos e interpretación del índice quedan en `docs/oja-creadores/README.md`.
+El índice describe la dirección de máxima variabilidad de los datos; no es una
+función de utilidad ni un ranking automático para cualquier campaña.
+
+## Decisión para las campañas
+
 La síntesis para las cuatro campañas integra los datos originales, las regiones
 temáticas completas de las diez redes de Kohonen, PC1-PC2 y el índice de Oja:
 

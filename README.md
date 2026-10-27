@@ -46,3 +46,15 @@ cruzada; métricas de clasificación; data augmentation y evaluaciones finales
 reproducibles sobre conjuntos de test reservados.
 
 La consigna, las fórmulas, los comandos y resultados están en el [README del TP3](tp3/README.md).
+
+## TP4 — Aprendizaje no supervisado
+
+El cuarto trabajo estudia métodos de aprendizaje no supervisado y memoria
+asociativa. Para la selección de creadores se realizan EDA y PCA, se implementa
+una red de Kohonen y se construye un índice mediante la regla de Oja; los
+resultados se integran en decisiones reproducibles para cuatro tipos de
+campañas. Además, se implementa una red de Hopfield y se analiza su capacidad y
+robustez para recuperar letras y códigos QR deteriorados.
+
+La preparación del entorno, los comandos para reproducir los experimentos y el
+detalle de los resultados se encuentran en el [README del TP4](tp4/README.md).

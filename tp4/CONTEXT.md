@@ -83,7 +83,10 @@ manda `docs/SIATP42026.pdf` y, para las técnicas, el material de cátedra de
   fijos, ciclos y corte por máximo de iteraciones. El caso controlado de letras
   5×5 también está implementado: rankea exhaustivamente los grupos de cuatro
   letras y compara los extremos con once niveles de ruido y diez semillas.
-  Todavía falta el análisis de los códigos QR.
+  El análisis de los códigos QR también está completo: evalúa la recuperación
+  conjunta de los cinco patrones, la capacidad exacta sobre todos sus
+  subconjuntos y la robustez de los conjuntos individuales y las duplas
+  estables frente a tres tipos de deterioro entre 0 % y 100 %.
 - El EDA define 15 variables base para la primera ejecución de PCA. Las
   justificaciones y variables auxiliares están en `docs/decisiones.md`.
   La comparación controlada entre engagement total y sus cuatro componentes
