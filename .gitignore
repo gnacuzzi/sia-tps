@@ -221,6 +221,7 @@ __marimo__/
 tmp/
 .DS_Store
 output/
+/tp5/results/
 
 # Transcripciones anteriores locales; publicar solo las nuevas de clases 12.2 y 13.
 /tp3/docs/transcripciones/*

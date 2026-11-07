@@ -18,6 +18,61 @@ class GradientDescent:
             parameter -= self.learning_rate * gradient
 
 
+class Momentum(GradientDescent):
+    """Acumular una fraccion del cambio aplicado en el paso anterior."""
+
+    def __init__(self, learning_rate: float, *, alpha: float = 0.9):
+        super().__init__(learning_rate)
+        if not np.isfinite(alpha) or not 0 <= alpha < 1:
+            raise ValueError("alpha debe pertenecer a [0, 1)")
+        self.alpha = float(alpha)
+        self._previous_changes = None
+
+    def step(self, parameters, gradients):
+        if len(parameters) == 0 or len(parameters) != len(gradients):
+            raise ValueError("parameters y gradients deben coincidir")
+        if self._previous_changes is None:
+            self._previous_changes = [np.zeros_like(parameter)
+                                      for parameter in parameters]
+        for parameter, gradient, previous in zip(
+                parameters, gradients, self._previous_changes):
+            if parameter.shape != gradient.shape:
+                raise ValueError("cada gradiente debe coincidir con su parametro")
+            change = -self.learning_rate * gradient + self.alpha * previous
+            parameter += change
+            previous[...] = change
+
+
+class RMSProp(GradientDescent):
+    """Adaptar cada paso usando el promedio movil del gradiente al cuadrado."""
+
+    def __init__(self, learning_rate: float, *, gamma: float = 0.9,
+                 epsilon: float = 1e-8):
+        super().__init__(learning_rate)
+        if not np.isfinite(gamma) or not 0 <= gamma < 1:
+            raise ValueError("gamma debe pertenecer a [0, 1)")
+        if not np.isfinite(epsilon) or epsilon <= 0:
+            raise ValueError("epsilon debe ser positivo y finito")
+        self.gamma = float(gamma)
+        self.epsilon = float(epsilon)
+        self._squared_averages = None
+
+    def step(self, parameters, gradients):
+        if len(parameters) == 0 or len(parameters) != len(gradients):
+            raise ValueError("parameters y gradients deben coincidir")
+        if self._squared_averages is None:
+            self._squared_averages = [np.zeros_like(parameter)
+                                      for parameter in parameters]
+        for parameter, gradient, average in zip(
+                parameters, gradients, self._squared_averages):
+            if parameter.shape != gradient.shape:
+                raise ValueError("cada gradiente debe coincidir con su parametro")
+            average *= self.gamma
+            average += (1.0 - self.gamma) * gradient ** 2
+            parameter -= (self.learning_rate * gradient
+                          / np.sqrt(average + self.epsilon))
+
+
 class Adam(GradientDescent):
     def __init__(self, learning_rate: float = 0.001, *, beta1: float = 0.9,
                  beta2: float = 0.999, epsilon: float = 1e-8):
@@ -56,3 +111,20 @@ class Adam(GradientDescent):
             parameter -= self.learning_rate * (first / correction1) / (
                 np.sqrt(second / correction2) + self.epsilon
             )
+
+
+def optimizer_from_config(configuration):
+    """Construir un optimizador a partir de su configuracion serializable."""
+    if not isinstance(configuration, dict) or "name" not in configuration:
+        raise ValueError("la configuracion del optimizador requiere name")
+    name = configuration["name"]
+    options = {key: value for key, value in configuration.items() if key != "name"}
+    classes = {
+        "gradient_descent": GradientDescent,
+        "momentum": Momentum,
+        "rmsprop": RMSProp,
+        "adam": Adam,
+    }
+    if name not in classes:
+        raise ValueError(f"optimizador desconocido: {name}")
+    return classes[name](**options)

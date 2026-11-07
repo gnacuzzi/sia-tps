@@ -218,23 +218,55 @@ cambia en la señal de error.
 
 **Objetivo:** alcanzar el criterio obligatorio sin hacer un barrido ciego.
 
-Orden de experimentacion propuesto:
+La arquitectura y el optimizador pueden interactuar: una red profunda puede ser
+dificil para descenso basico y funcionar con Adam, por ejemplo. Por eso no se
+hara primero un estudio exhaustivo de arquitectura con un unico optimizador ni
+un producto cartesiano ciego de todos los hiperparametros.
 
-1. Fijar una arquitectura base razonable y comprobar que aprende.
-2. Ajustar la tasa del optimizador en un rango corto y logaritmico.
-3. Comparar dos o tres capacidades simetricas, por ejemplo una red con una capa
-   oculta por lado y otra con dos. Estos tamaños son candidatos iniciales, no
-   decisiones tomadas.
-4. Solo si sigue fallando, comparar activacion oculta o un segundo optimizador
-   ya implementado en el TP3.
-5. Reentrenar los dos finalistas con varias semillas.
+Orden de experimentacion acordado:
+
+1. **Calibracion minima de optimizadores.** Copiar y probar los optimizadores de
+   la materia: descenso, Momentum, RMSProp y Adam. Sobre dos arquitecturas ancla
+   (`35 -> 15 -> 2 -> 15 -> 35` y `35 -> 35 -> 2 -> 35 -> 35`), probar pocas
+   tasas logaritmicamente separadas con una semilla. Esta etapa solo descarta
+   tasas divergentes o evidentemente lentas; no elige un ganador.
+2. **Cruce grueso arquitectura x optimizador.** Comparar inicialmente:
+   - `A0: 35 -> 2 -> 35`, control sin capas ocultas intermedias;
+   - `A1: 35 -> 10 -> 2 -> 10 -> 35`, red angosta;
+   - `A2: 35 -> 20 -> 2 -> 20 -> 35`, capacidad intermedia;
+   - `A3: 35 -> 35 -> 2 -> 35 -> 35`, red ancha;
+   - `A4: 35 -> 20 -> 10 -> 2 -> 10 -> 20 -> 35`, red profunda.
+   Cada arquitectura se cruza con los optimizadores que sobrevivan la
+   calibracion y con tres semillas. Las activaciones, loss, modalidad full-batch
+   y presupuesto maximo de actualizaciones se mantienen fijos.
+3. **Descarte temprano con evidencia.** Un optimizador puede retirarse antes del
+   cruce completo si, despues de probar tasas razonables en las dos arquitecturas
+   ancla y mas de una semilla, diverge o queda claramente dominado en error y
+   costo. Una mala corrida aislada no alcanza para descartarlo. Cada descarte se
+   documenta con la comparacion que lo respalda.
+4. **Refinamiento dirigido de arquitectura.** Si aparece una frontera entre un
+   ancho que falla y uno que funciona, probar valores intermedios. Si el
+   rendimiento sigue mejorando al aumentar el ancho, explorar tambien por encima
+   del rango inicial. Si la profundidad ayuda, probar uno o dos perfiles internos
+   adicionales. Cuando sea util, comparar redes anchas y profundas con cantidades
+   de parametros parecidas.
+5. **Refinamiento de combinaciones.** Si hay interaccion fuerte, conservar y
+   refinar pares arquitectura-optimizador. Si el ranking de arquitecturas casi no
+   cambia entre optimizadores, usar el mas estable para el refinamiento final.
+6. **Epocas y schedule al final.** Estudiar cantidad de epocas o disminucion de
+   tasa sobre pocas combinaciones finalistas, no sobre todo el espacio. Evaluar
+   el modelo de la ultima epoca de cada presupuesto; no elegir retrospectivamente
+   el mejor checkpoint de una unica semilla.
+7. **Confirmacion.** Repetir los finalistas con cinco semillas y preferir la
+   arquitectura mas simple que cumpla de forma estable, salvo que una alternativa
+   algo mayor demuestre mejor estabilidad o costo.
 
 Metricas obligatorias por corrida:
 
 - maximo de pixeles incorrectos en un patron;
 - cantidad de patrones con 0, 1 y mas de 1 errores;
 - promedio de pixeles incorrectos;
-- loss continua final y mejor epoca;
+- loss continua final y trayectoria de entrenamiento;
 - tiempo y cantidad de actualizaciones.
 
 No alcanza con que el error promedio sea menor que uno: el requisito dice que
@@ -405,24 +437,34 @@ de medir el primer piloto.
 
 ### Embudo de experimentos
 
-1. **Depuracion:** una configuracion, una semilla, pocas epocas. No se usa para
+1. **Depuracion:** una configuracion, una semilla y pocas epocas. No se usa para
    concluir.
-2. **Piloto:** pocos valores bien separados, una semilla y corte temprano si es
-   claramente inviable.
-3. **Refinamiento:** uno o dos valores alrededor de la mejor region.
-4. **Confirmacion:** dos finalistas con al menos 3 semillas; usar 5 solo si el
-   costo medido es razonable o los resultados son muy variables.
-5. **Final:** configuracion congelada y artefactos reproducibles.
+2. **Calibracion:** pocas tasas sobre dos arquitecturas ancla para evitar una
+   comparacion injusta entre optimizadores.
+3. **Tamiz cruzado:** arquitecturas representativas por optimizadores viables y
+   tres semillas, con un presupuesto comun y sin figuras por corrida.
+4. **Descarte:** retirar opciones consistentemente dominadas o divergentes y
+   guardar la evidencia; no completar combinaciones que ya no pueden cambiar la
+   decision.
+5. **Refinamiento:** probar valores intermedios o ampliar el rango solo donde la
+   tendencia observada lo justifique.
+6. **Confirmacion:** pocos finalistas con cinco semillas.
+7. **Final:** configuracion congelada y artefactos reproducibles.
 
 ### Limites practicos
 
 - No lanzar un grid de arquitectura x activacion x optimizador x tasa x batch.
+  El unico cruce permitido es el tamiz pequeño arquitectura x optimizador,
+  despues de calibrar y podar opciones inviables.
 - Para los 32 sprites, full-batch es un baseline natural; comparar otra modalidad
   solo si hay una hipotesis.
-- Usar una cantidad maxima de epocas como seguro, pero guardar el mejor estado
-  segun el criterio definido.
+- Usar una cantidad maxima de epocas como presupuesto comun. Se puede detener
+  cuando se alcanza el requisito fijado de antemano, pero no elegir a posteriori
+  el mejor checkpoint de una trayectoria inestable.
 - Medir tiempo desde la primera corrida y estimar el costo total antes de cada
   tanda.
+- En las tandas de seleccion guardar metricas e historias, pero generar figuras
+  solo para controles y finalistas.
 - Toda corrida larga debe poder dejarse ejecutando y reanudarse/analizarse sin
   repetir las anteriores.
 - Si una tanda supera el presupuesto acordado, reducir candidatos o semillas,
@@ -435,17 +477,15 @@ conserva el orden y se recorta primero una extension, nunca las validaciones.
 
 | Fecha | Foco | Resultado minimo al cerrar |
 |---|---|---|
-| 4 nov | Plan y lectura | Alcance, riesgos y preguntas identificados |
-| 5 nov | Etapas 0-1 | Reglas, parser probado y grilla de sprites |
-| 6 nov | Etapa 2 | Forward/backward y un patron sobreajustado |
-| 7 nov | Etapa 3, pilotos | Baseline de 32 patrones y primer diagnostico |
-| 8 nov | Etapas 3-4 | Finalistas, mapa latente y generacion AE |
-| 9 nov | Etapa 5 | DAE con curva inicial de ruido |
-| 10 nov | Cierre parte 1 | Resultados repetibles y texto preliminar |
-| 11 nov | Etapa 6, pasos 1-3 | `mu`, `log_var` y reparametrizacion entendidos |
-| 12 nov | Etapa 6, pasos 4-6 | Gradientes verificados y VAE de juguete |
-| 13 nov | Etapa 7 | Dataset final elegido, preparado y visualizado |
-| 14 nov | Etapa 8 | VAE final y pilotos medidos |
+| 4-6 nov | Plan inicial | Alcance y riesgos identificados, sin implementacion |
+| 7 nov | Etapas 0-2 y entrada a 3 | Datos verificados, AE minimo probado, baseline y diseño experimental |
+| 8 nov | Etapa 3, tamiz | Calibracion, descarte temprano y cruce grueso medido |
+| 9 nov | Etapas 3-4 | Refinamiento, finalistas, mapa latente y generacion AE |
+| 10 nov | Etapa 5 | DAE con curva inicial de ruido |
+| 11 nov | Cierre parte 1 | Resultados repetibles, texto preliminar y margen para demoras |
+| 12 nov | Etapa 6, pasos 1-4 | `mu`, `log_var`, reparametrizacion y gradientes entendidos |
+| 13 nov | Etapas 6-7 | VAE de juguete y dataset final preparado |
+| 14 nov | Etapa 8 | VAE final y experimentos acotados |
 | 15 nov | Etapas 8-9 | Confirmacion, figuras e informe/presentacion |
 | 16 nov | Colchon y ensayo | Corrida reproducible, defensa y revision final |
 | 17 nov | Entrega | Solo empaquetado y verificacion, sin experimentos nuevos |

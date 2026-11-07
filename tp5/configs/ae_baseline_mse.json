@@ -1,0 +1,17 @@
+{
+  "name": "ae-baseline-mse-15-seed-0",
+  "architecture": [35, 15, 2, 15, 35],
+  "latent_layer": 2,
+  "activations": ["tanh", "linear", "tanh", "logistic"],
+  "loss": "mse",
+  "optimizer": {
+    "name": "adam",
+    "learning_rate": 0.01,
+    "beta1": 0.9,
+    "beta2": 0.999,
+    "epsilon": 1e-8
+  },
+  "max_epochs": 20000,
+  "target_max_pixel_errors": 1,
+  "seed": 0
+}

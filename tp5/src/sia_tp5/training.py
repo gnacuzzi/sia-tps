@@ -20,9 +20,16 @@ def reconstruction_metrics(expected, predicted, *, threshold: float = 0.5):
 
 
 def fit_autoencoder(model, inputs, *, optimizer, max_epochs: int,
-                    target_max_pixel_errors: int = 0):
+                    target_max_pixel_errors=0, progress=None):
     """Entrenar full-batch y detenerse al cumplir el criterio binario."""
     inputs = np.asarray(inputs, dtype=np.float64)
+    if isinstance(max_epochs, bool) or not isinstance(max_epochs, int) or max_epochs < 1:
+        raise ValueError("max_epochs debe ser un entero positivo")
+    if (target_max_pixel_errors is not None
+            and (isinstance(target_max_pixel_errors, bool)
+                 or not isinstance(target_max_pixel_errors, int)
+                 or target_max_pixel_errors < 0)):
+        raise ValueError("target_max_pixel_errors debe ser None o un entero no negativo")
     history = []
     for epoch in range(max_epochs + 1):
         predictions = model.predict(inputs)
@@ -35,7 +42,10 @@ def fit_autoencoder(model, inputs, *, optimizer, max_epochs: int,
             "exact_patterns": metrics["exact_patterns"],
         }
         history.append(row)
-        if metrics["max_pixel_errors"] <= target_max_pixel_errors:
+        if progress is not None:
+            progress(row.copy())
+        if (target_max_pixel_errors is not None
+                and metrics["max_pixel_errors"] <= target_max_pixel_errors):
             break
         if epoch == max_epochs:
             break

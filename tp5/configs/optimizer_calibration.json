@@ -1,0 +1,42 @@
+{
+  "name": "optimizer-calibration-v1",
+  "architectures": {
+    "anchor-15": {
+      "layers": [35, 15, 2, 15, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    },
+    "anchor-35": {
+      "layers": [35, 35, 2, 35, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    }
+  },
+  "optimizers": [
+    {
+      "name": "gradient_descent",
+      "learning_rates": [0.01, 0.1, 1.0]
+    },
+    {
+      "name": "momentum",
+      "learning_rates": [0.01, 0.05, 0.2],
+      "alpha": 0.9
+    },
+    {
+      "name": "rmsprop",
+      "learning_rates": [0.0001, 0.001, 0.01],
+      "gamma": 0.9,
+      "epsilon": 1e-8
+    },
+    {
+      "name": "adam",
+      "learning_rates": [0.0001, 0.001, 0.01],
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-8
+    }
+  ],
+  "seeds": [0],
+  "max_epochs": 2000,
+  "requirement_max_pixel_errors": 1
+}
