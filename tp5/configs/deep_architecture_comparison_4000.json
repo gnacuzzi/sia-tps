@@ -1,0 +1,34 @@
+{
+  "name": "deep-architecture-comparison-4000-v1",
+  "architectures": {
+    "deep-35-15": {
+      "layers": [35, 35, 15, 2, 15, 35, 35],
+      "latent_layer": 3,
+      "activations": ["tanh", "tanh", "linear", "tanh", "tanh", "logistic"]
+    },
+    "deep-45-20": {
+      "layers": [35, 45, 20, 2, 20, 45, 35],
+      "latent_layer": 3,
+      "activations": ["tanh", "tanh", "linear", "tanh", "tanh", "logistic"]
+    }
+  },
+  "combinations": [
+    {
+      "architecture": "deep-35-15",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.3
+      }
+    },
+    {
+      "architecture": "deep-45-20",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.3
+      }
+    }
+  ],
+  "seeds": [0, 1, 2],
+  "max_epochs": 4000,
+  "requirement_max_pixel_errors": 1
+}

@@ -1,0 +1,9 @@
+{
+  "model": "results/ae-final-bce-width45-seed0/model.npz",
+  "left_label": "a",
+  "right_label": "x",
+  "t_values": [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0],
+  "threshold": 0.5,
+  "figure_output": "docs/latent-interpolation-a-x.png",
+  "data_output": "docs/latent-interpolation-a-x.json"
+}

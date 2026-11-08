@@ -13,7 +13,7 @@ from .training import fit_autoencoder, reconstruction_metrics
 
 
 SUMMARY_FIELDS = (
-    "run_id", "architecture", "parameters", "optimizer", "learning_rate",
+    "run_id", "architecture", "parameters", "loss", "optimizer", "learning_rate",
     "seed", "status", "epochs_completed", "initial_loss", "final_loss",
     "loss_reduction", "minimum_loss", "minimum_loss_epoch",
     "final_minus_minimum_loss", "best_observed_max_pixel_errors",
@@ -46,29 +46,48 @@ def _expanded_optimizer(base, learning_rate):
     return configuration
 
 
+def _trial_specs(configuration):
+    """Producir pares arquitectura-optimizador, cruzados o explicitos."""
+    if "combinations" in configuration:
+        for combination in configuration["combinations"]:
+            architecture_name = combination["architecture"]
+            architecture = configuration["architectures"][architecture_name]
+            for seed in configuration["seeds"]:
+                yield (architecture_name, architecture,
+                       dict(combination["optimizer"]), seed)
+        return
+
+    for architecture_name, architecture in configuration["architectures"].items():
+        for optimizer_base in configuration["optimizers"]:
+            for rate in optimizer_base["learning_rates"]:
+                optimizer_config = _expanded_optimizer(optimizer_base, rate)
+                optimizer_config.pop("learning_rates")
+                for seed in configuration["seeds"]:
+                    yield architecture_name, architecture, optimizer_config, seed
+
+
 def planned_trials(configuration):
     """Expandir la configuracion sin entrenar ni escribir resultados."""
     trials = []
-    for architecture_name in configuration["architectures"]:
-        for optimizer in configuration["optimizers"]:
-            for rate in optimizer["learning_rates"]:
-                for seed in configuration["seeds"]:
-                    trials.append({
-                        "run_id": (
-                            f"{architecture_name}__{optimizer['name']}"
-                            f"__lr-{_rate_tag(rate)}__seed-{seed}"
-                        ),
-                        "architecture": architecture_name,
-                        "optimizer": optimizer["name"],
-                        "learning_rate": rate,
-                        "seed": seed,
-                        "max_epochs": configuration["max_epochs"],
-                    })
+    for architecture_name, _, optimizer, seed in _trial_specs(configuration):
+        rate = optimizer["learning_rate"]
+        trials.append({
+            "run_id": (
+                f"{architecture_name}__{optimizer['name']}"
+                f"__lr-{_rate_tag(rate)}__seed-{seed}"
+            ),
+            "architecture": architecture_name,
+            "loss": configuration.get("loss", "mse"),
+            "optimizer": optimizer["name"],
+            "learning_rate": rate,
+            "seed": seed,
+            "max_epochs": configuration["max_epochs"],
+        })
     return trials
 
 
 def _run_trial(dataset, architecture_name, architecture, optimizer_config,
-               seed, max_epochs, requirement):
+               seed, max_epochs, requirement, loss):
     rate = optimizer_config["learning_rate"]
     optimizer_name = optimizer_config["name"]
     run_id = (f"{architecture_name}__{optimizer_name}__lr-{_rate_tag(rate)}"
@@ -77,6 +96,7 @@ def _run_trial(dataset, architecture_name, architecture, optimizer_config,
         architecture["layers"],
         latent_layer=architecture["latent_layer"],
         activations=architecture["activations"],
+        loss=loss,
         seed=seed,
     )
     initial_loss = model.loss(dataset.patterns)
@@ -126,6 +146,7 @@ def _run_trial(dataset, architecture_name, architecture, optimizer_config,
         "run_id": run_id,
         "architecture": architecture_name,
         "parameters": _parameter_count(model),
+        "loss": loss,
         "optimizer": optimizer_name,
         "learning_rate": rate,
         "seed": seed,
@@ -186,28 +207,25 @@ def run_calibration(configuration, output_root):
 
     dataset = load_font()
     summaries = []
-    for architecture_name, architecture in configuration["architectures"].items():
-        for optimizer_base in configuration["optimizers"]:
-            for rate in optimizer_base["learning_rates"]:
-                optimizer_config = _expanded_optimizer(optimizer_base, rate)
-                optimizer_config.pop("learning_rates")
-                for seed in configuration["seeds"]:
-                    summary, history = _run_trial(
-                        dataset,
-                        architecture_name,
-                        architecture,
-                        optimizer_config,
-                        seed,
-                        configuration["max_epochs"],
-                        configuration["requirement_max_pixel_errors"],
-                    )
-                    summaries.append(summary)
-                    if history:
-                        _write_csv(
-                            history_output / f"{summary['run_id']}.csv",
-                            history,
-                            history[0].keys(),
-                        )
+    for architecture_name, architecture, optimizer_config, seed in _trial_specs(
+            configuration):
+        summary, history = _run_trial(
+            dataset,
+            architecture_name,
+            architecture,
+            optimizer_config,
+            seed,
+            configuration["max_epochs"],
+            configuration["requirement_max_pixel_errors"],
+            configuration.get("loss", "mse"),
+        )
+        summaries.append(summary)
+        if history:
+            _write_csv(
+                history_output / f"{summary['run_id']}.csv",
+                history,
+                history[0].keys(),
+            )
 
     _write_csv(output / "summary.csv", summaries, SUMMARY_FIELDS)
     (output / "summary.json").write_text(

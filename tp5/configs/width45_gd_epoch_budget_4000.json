@@ -1,0 +1,22 @@
+{
+  "name": "width45-gd-epoch-budget-4000-v1",
+  "architectures": {
+    "width-45": {
+      "layers": [35, 45, 2, 45, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    }
+  },
+  "combinations": [
+    {
+      "architecture": "width-45",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.3
+      }
+    }
+  ],
+  "seeds": [0, 1, 2],
+  "max_epochs": 4000,
+  "requirement_max_pixel_errors": 1
+}

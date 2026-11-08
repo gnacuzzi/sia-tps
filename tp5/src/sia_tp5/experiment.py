@@ -24,6 +24,32 @@ def _write_history(path, history):
         writer.writerows(history)
 
 
+def _write_latent(path, latent, labels):
+    with path.open("w", encoding="utf-8", newline="") as output:
+        writer = csv.DictWriter(output, fieldnames=["label", "z1", "z2"])
+        writer.writeheader()
+        writer.writerows(
+            {"label": label, "z1": coordinates[0], "z2": coordinates[1]}
+            for label, coordinates in zip(labels, latent)
+        )
+
+
+def _plot_loss(path, history, loss_name):
+    figure, axis = plt.subplots(figsize=(8, 5))
+    axis.plot(
+        [row["epoch"] for row in history],
+        [row["loss"] for row in history],
+        color="tab:blue",
+    )
+    axis.set_xlabel("Época")
+    axis.set_ylabel(loss_name.upper())
+    axis.set_title("Pérdida de reconstrucción durante el entrenamiento")
+    axis.grid(alpha=0.2)
+    figure.tight_layout()
+    figure.savefig(path, dpi=180, bbox_inches="tight")
+    plt.close(figure)
+
+
 def _plot_reconstructions(path, images, predictions, labels):
     binary = (predictions >= 0.5).reshape(-1, 7, 5)
     figure, axes = plt.subplots(8, 8, figsize=(10, 13))
@@ -64,13 +90,12 @@ def _plot_latent(path, latent, labels):
 
 
 def run_experiment(configuration, output_root):
-    if configuration.get("loss") != "mse":
-        raise ValueError("la implementación inicial sólo admite loss MSE")
     dataset = load_font()
     model = Autoencoder(
         configuration["architecture"],
         latent_layer=configuration["latent_layer"],
         activations=configuration["activations"],
+        loss=configuration["loss"],
         seed=configuration["seed"],
     )
     optimizer = optimizer_from_config(configuration["optimizer"])
@@ -81,13 +106,21 @@ def run_experiment(configuration, output_root):
         )
     output.mkdir(parents=True)
 
+    requirement = configuration.get(
+        "requirement_max_pixel_errors",
+        configuration.get("target_max_pixel_errors"),
+    )
+    if requirement is None:
+        raise ValueError("falta requirement_max_pixel_errors")
+    early_stopping = configuration.get("early_stopping", True)
+
     start = perf_counter()
     history = fit_autoencoder(
         model,
         dataset.patterns,
         optimizer=optimizer,
         max_epochs=configuration["max_epochs"],
-        target_max_pixel_errors=configuration["target_max_pixel_errors"],
+        target_max_pixel_errors=requirement if early_stopping else None,
     )
     elapsed = perf_counter() - start
     predictions = model.predict(dataset.patterns)
@@ -103,7 +136,7 @@ def run_experiment(configuration, output_root):
         "elapsed_seconds": elapsed,
         "converged": (
             metrics["max_pixel_errors"]
-            <= configuration["target_max_pixel_errors"]
+            <= requirement
         ),
         "pixel_errors_by_pattern": per_pattern,
     }
@@ -116,10 +149,13 @@ def run_experiment(configuration, output_root):
     )
     _write_history(output / "history.csv", history)
     model.save(output / "model.npz")
+    _plot_loss(output / "loss.png", history, configuration["loss"])
     _plot_reconstructions(
         output / "reconstructions.png", dataset.images, predictions, dataset.labels
     )
-    _plot_latent(output / "latent.png", model.encode(dataset.patterns), dataset.labels)
+    latent = model.encode(dataset.patterns)
+    _write_latent(output / "latent.csv", latent, dataset.labels)
+    _plot_latent(output / "latent.png", latent, dataset.labels)
     return output, summary
 
 

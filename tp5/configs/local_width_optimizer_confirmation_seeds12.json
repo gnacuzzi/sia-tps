@@ -1,0 +1,45 @@
+{
+  "name": "local-width-optimizer-confirmation-seeds12-v1",
+  "architectures": {
+    "width-35": {
+      "layers": [35, 35, 2, 35, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    },
+    "width-45": {
+      "layers": [35, 45, 2, 45, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    }
+  },
+  "combinations": [
+    {
+      "architecture": "width-45",
+      "optimizer": {"name": "gradient_descent", "learning_rate": 0.3}
+    },
+    {
+      "architecture": "width-45",
+      "optimizer": {
+        "name": "rmsprop", "learning_rate": 0.03,
+        "gamma": 0.9, "epsilon": 1e-8
+      }
+    },
+    {
+      "architecture": "width-35",
+      "optimizer": {
+        "name": "rmsprop", "learning_rate": 0.03,
+        "gamma": 0.9, "epsilon": 1e-8
+      }
+    },
+    {
+      "architecture": "width-35",
+      "optimizer": {
+        "name": "adam", "learning_rate": 0.003,
+        "beta1": 0.9, "beta2": 0.999, "epsilon": 1e-8
+      }
+    }
+  ],
+  "seeds": [1, 2],
+  "max_epochs": 2000,
+  "requirement_max_pixel_errors": 1
+}

@@ -1,0 +1,32 @@
+{
+  "name": "a3-optimizer-rate-refinement-v1",
+  "architectures": {
+    "A3-width-35": {
+      "layers": [35, 35, 2, 35, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    }
+  },
+  "optimizers": [
+    {
+      "name": "gradient_descent",
+      "learning_rates": [0.2, 0.4]
+    },
+    {
+      "name": "rmsprop",
+      "learning_rates": [0.003, 0.03],
+      "gamma": 0.9,
+      "epsilon": 1e-8
+    },
+    {
+      "name": "adam",
+      "learning_rates": [0.003, 0.03],
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-8
+    }
+  ],
+  "seeds": [0],
+  "max_epochs": 2000,
+  "requirement_max_pixel_errors": 1
+}

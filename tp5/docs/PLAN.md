@@ -8,7 +8,56 @@ y recien entonces agregar la siguiente. Las pausas marcadas como **PING-PONG** s
 parte del trabajo, no demoras: no se avanza hasta poder explicar con palabras
 propias que entra, que sale y que error se esta minimizando.
 
-## Estado actual - 7 de noviembre
+## Estado actual - cierre de la sesión del 7 de noviembre
+
+### Completado
+
+- Etapas 0-2: reglas, dataset, parser, autoencoder mínimo y gradientes
+  numéricos verificados.
+- Etapa 3: búsqueda de arquitectura y optimización cerrada mediante un embudo
+  reproducible, sin elegir retrospectivamente checkpoints favorables.
+- Configuración final: `35 -> 45 -> 2 -> 45 -> 35`, BCE, descenso de gradiente
+  con tasa 0.1 y 2.000 épocas full-batch.
+- Verificación: reconstrucción exacta de los 32 patrones en las diez semillas
+  0-9.
+- Corrida final: semilla 0, 2.000 épocas completas, pesos, historia, métricas,
+  reconstrucciones y coordenadas latentes guardadas en
+  `results/ae-final-bce-width45-seed0/`.
+- Publicación: curva, reconstrucciones, mapa latente, métricas y coordenadas
+  finales copiadas a `docs/` para que el informe no dependa de `results/`, que
+  está ignorado por Git.
+- Mapa latente generado y discutido: cualquier par puede entrar al decoder,
+  pero solo las regiones aprendidas tienen respaldo empírico; los ejes no poseen
+  semántica fija.
+- Generación: el segmento `m-n` fue descartado porque sus interpolaciones se
+  binarizan como patrones existentes. El punto medio `a-x` produce un patrón
+  nuevo, a distancia de Hamming 1 de `c`, y quedó congelado como caso final.
+- Etapa 4 cerrada: la utilidad reproducible carga el modelo, genera siete puntos
+  del recorrido `a-x`, verifica pertenencia y distancia de Hamming, y guarda
+  datos más una figura original en `docs/`.
+- Ejercicio 1A cerrado: no reabrir arquitectura, optimización, semillas ni
+  selección del segmento latente sin una hipótesis nueva que lo justifique.
+
+### Próximo paso
+
+1. Comenzar el ping-pong de la Etapa 5: diferenciar entrada ruidosa, objetivo
+   limpio y conjunto de corrupciones de evaluación.
+2. Definir el primer protocolo mínimo de ruido bit-flip antes de implementar el
+   denoising autoencoder.
+
+La explicación conceptual y la especificación de la figura quedaron en
+`docs/ejercicio_1a.md`, sección **Movimiento en el espacio latente**.
+
+No realizar `git push` desde el asistente. Los pushes quedan exclusivamente a
+cargo de la usuaria.
+
+## Bitácora histórica del avance
+
+Los checkpoints siguientes se conservan para reconstruir por qué se tomaron las
+decisiones. Sus textos de “próximo paso” describen el estado de ese momento y no
+reemplazan el checkpoint actual anterior.
+
+### Estado inicial - 7 de noviembre
 
 La **Etapa 0** quedo cerrada conceptualmente. Se tomaron estas decisiones:
 
@@ -62,6 +111,110 @@ La **Etapa 2** quedo cerrada en su version minima el 7 de noviembre:
 Proximo paso exacto: crear una corrida base reproducible sobre los 32 patrones
 manteniendo inicialmente la misma arquitectura, loss y optimizador, para que el
 unico cambio conceptual sea la cantidad de muestras.
+
+### Checkpoint de cierre - 7 de noviembre
+
+Se completo la calibracion minima de optimizadores:
+
+- Se implementaron y probaron descenso, Momentum, RMSProp y Adam.
+- La calibracion inicial ejecuto 24 corridas de 2.000 epocas sobre las
+  arquitecturas ancla de 15 y 35 neuronas, con semilla 0. No hubo divergencias.
+- Las tasas muy pequenas siguieron mejorando, pero quedaron descartadas del
+  tamiz por baja eficiencia dentro del presupuesto, no por incapacidad.
+- Se detecto interaccion arquitectura-tasa: GD 1.0 y Momentum 0.2 fueron
+  inestables en la ancla de 15, pero continuaron mejorando en la de 35.
+- Se ejecutaron seis corridas de refinamiento. GD 0.3 fue el compromiso mas
+  estable; GD 0.5 y Momentum 0.1 no aportaron una mejora consistente.
+- Los perfiles que pasan al tamiz son GD 0.3, Momentum 0.01, RMSProp 0.01 y
+  Adam 0.01. Son representantes provisionales, no hiperparametros finales.
+- El hilo experimental y las tablas quedaron documentados en
+  `docs/ejercicio_1a.md`.
+
+Proximo paso exacto al retomar:
+
+1. Definir una configuracion de tamiz con A0-A4, los cuatro perfiles anteriores,
+   semilla 0 y presupuesto fijo de 2.000 epocas.
+2. Verificar en modo seco que sean 20 corridas.
+3. Ejecutar sin figuras ni modelos individuales.
+4. Analizar estado final y trayectoria; no seleccionar por el mejor checkpoint.
+5. Promover solo combinaciones justificadas a semillas 1 y 2.
+
+El commit local de esta etapa es
+`c802fe7 feat(tp5): agregar calibracion de optimizadores`. No realizar `git push`
+desde el asistente; los pushes quedan exclusivamente a cargo de la usuaria.
+
+### Avance del cruce grueso
+
+El tamiz A0-A4 por los cuatro perfiles con semilla 0 ya fue ejecutado: 20
+corridas, 2.000 epocas, 9 segundos y ninguna divergencia. Ninguna combinacion
+cumplio aun el maximo de un pixel. A0 y A1 quedaron detras; A2, A3 y A4 con GD
+o RMSProp llegaron a maximo 2. Adam fue inestable en A4 y Momentum quedo
+dominado en esta semilla.
+
+Proximo paso exacto:
+
+1. La confirmacion con semillas 1 y 2 ya fue ejecutada para siete combinaciones.
+   A3 + GD obtuvo maximos 2, 2 y 1 y definio la region principal.
+2. Se refinaron localmente las tasas de GD, RMSProp y Adam sobre A3. Esto mostro
+   que Adam 0.003 y RMSProp 0.03 merecian controles acotados, aunque GD siguio
+   siendo la opcion principal.
+3. El tamiz local comparo anchos 30 y 45. Ancho 45 + GD 0.3 cumplio el requisito
+   en semilla 0; el ancho 30 no mejoro A3.
+4. La confirmacion local dio, para ancho 45 + GD 0.3, maximos 1, 2 y 1 en las
+   semillas 0, 1 y 2. Cumple en dos de tres y queda como finalista principal.
+   Ancho 45 + RMSProp 0.03 cumple en una de tres y queda como control secundario.
+
+Proximo paso exacto al retomar:
+
+1. La prueba de presupuesto ya se ejecuto: ancho 45 + GD 0.3 con semillas 0, 1
+   y 2 a 4.000 epocas. Las losses bajaron y no hubo deterioro, pero las metricas
+   discretas quedaron iguales que a 2.000: maximos 1, 2 y 1.
+2. El refinamiento de capacidad tambien se ejecuto a 4.000 epocas. Ancho 50 dio
+   maximos 1, 2 y 2; ancho 60 dio 1, 2 y 3. Ambos cumplen solo en una de tres
+   semillas y no superan al ancho 45.
+3. La comparacion profunda tambien se ejecuto. D1
+   (`35 -> 35 -> 15 -> 2 -> 15 -> 35 -> 35`) fue inestable y cumple en una de
+   tres. D2 (`35 -> 45 -> 20 -> 2 -> 20 -> 45 -> 35`) dio maximos 1, 1 y 2 y
+   cumple en dos de tres, igual que ancho 45, pero con mas parametros.
+4. Se eligio ancho 45 sobre D2 por parsimonia: mismo numero de cumplimientos con
+   aproximadamente 50 % menos parametros. D2 queda como evidencia de que la
+   profundidad puede funcionar, no como finalista principal.
+5. Se implemento BCE, se valido su gradiente numericamente y se calibro la tasa
+   sin reutilizar automaticamente la de MSE. GD 0.01 fue lento, 0.3 inestable y
+   0.03/0.1 viables.
+6. Ancho 45 + BCE + GD 0.1 termino con reconstruccion exacta de los 32 patrones
+   en las diez semillas 0-9 a 2.000 epocas. Las semillas 5-9 se agregaron solo
+   como verificacion posterior, sin reabrir hiperparametros. La Etapa 3 queda
+   cerrada; no se justifica ampliar el barrido.
+
+Proximo paso exacto:
+
+1. La corrida final reproducible ya fue ejecutada con semilla 0 y 2.000 epocas
+   completas. Guarda modelo, metricas, historia, curva, reconstrucciones y
+   coordenadas latentes; reconstruye exactamente los 32 patrones.
+2. Hacer el ping-pong de lectura del mapa latente: que significan distancia,
+   vecindad e interpolacion, y que conclusiones no permite sacar.
+3. Elegir justificadamente un punto nuevo del espacio latente y decodificarlo.
+4. Con eso cerrar el ejercicio 1A antes de comenzar el denoising autoencoder.
+
+Figura pendiente para el informe:
+
+- crear una visualizacion propia del recorrido entre dos codigos latentes, no
+  copiar el diseño de la referencia;
+- mostrar los extremos y varios valores de `t` para
+  `z(t) = (1-t) z_a + t z_b`;
+- para cada punto, decodificar, umbralizar y mostrar el sprite `7x5`;
+- marcar objetivamente si el patrón coincide con uno de entrenamiento o si es
+  nuevo;
+- acompañar la tira con los valores de `t` y, si no sobrecarga la figura, la
+  distancia de Hamming al patrón conocido más cercano;
+- usar el segmento `a-x` ya identificado como candidato, cuyo punto medio es
+  nuevo y queda a un píxel de `c`; no seguir buscando una salida más atractiva
+  después de congelar esta elección.
+
+La figura debe enseñar que moverse continuamente en el latente no implica que
+la salida binarizada cambie de manera continua: puede permanecer igual durante
+parte del trayecto y cambiar al cruzar el umbral de uno o varios píxeles.
 
 ## 1. Que pide el TP
 
@@ -518,9 +671,9 @@ Proximo paso exacto (un solo paso):
 Esto evita volver a leer todo el proyecto y, sobre todo, evita confundir una
 idea pendiente con una decision ya respaldada por resultados.
 
-## 8. Primer paso cuando empecemos a implementar
+## 8. Próximo paso al retomar
 
-Empezaremos por **PING-PONG 0** y la Etapa 1. No elegiremos todavia la
-arquitectura final ni el dataset del VAE. La primera meta concreta sera poder
-mirar los 32 sprites, explicar su representacion y confiar en que el modelo
-recibira exactamente los bits que creemos.
+El ejercicio 1A y la Etapa 4 están cerrados. No reabrir la búsqueda de
+arquitectura, optimizador, tasa, épocas, semillas ni segmentos latentes. Retomar
+con el ping-pong de la Etapa 5 y definir el protocolo mínimo del denoising
+autoencoder antes de modificar el entrenamiento.

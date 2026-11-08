@@ -12,7 +12,7 @@ class Autoencoder:
 
     def __init__(self, architecture: Sequence[int], *, latent_layer: int,
                  activations: Sequence[str], beta: float = 1.0,
-                 seed: int = 0, init_scale: float = 0.5):
+                 loss: str = "mse", seed: int = 0, init_scale: float = 0.5):
         self.architecture = tuple(architecture)
         self.activations = tuple(activations)
         if (len(self.architecture) < 3
@@ -29,6 +29,10 @@ class Autoencoder:
         if any(name not in {"linear", "tanh", "logistic"}
                for name in self.activations):
             raise ValueError("activación desconocida")
+        if loss not in {"mse", "bce"}:
+            raise ValueError("loss debe ser 'mse' o 'bce'")
+        if loss == "bce" and self.activations[-1] != "logistic":
+            raise ValueError("BCE requiere activación logística en la salida")
         if not np.isfinite(beta) or beta <= 0:
             raise ValueError("beta debe ser positivo y finito")
         if not np.isfinite(init_scale) or init_scale < 0:
@@ -36,6 +40,7 @@ class Autoencoder:
 
         self.latent_layer = latent_layer
         self.beta = float(beta)
+        self.loss_name = loss
         generator = np.random.default_rng(seed)
         self.weights = [
             generator.uniform(-init_scale, init_scale, (output_size, input_size))
@@ -116,17 +121,32 @@ class Autoencoder:
         return self._forward(inputs)[-1]
 
     def loss(self, inputs):
-        """MSE por muestra, con factor 1/2 para simplificar la derivada."""
+        """Pérdida de reconstrucción media por muestra."""
         inputs = self._matrix(inputs, self.architecture[0], "inputs")
-        difference = self.predict(inputs) - inputs
-        return float(0.5 * np.mean(np.sum(difference ** 2, axis=1)))
+        predictions = self.predict(inputs)
+        if self.loss_name == "mse":
+            difference = predictions - inputs
+            return float(0.5 * np.mean(np.sum(difference ** 2, axis=1)))
+        if np.any((inputs < 0.0) | (inputs > 1.0)):
+            raise ValueError("BCE requiere objetivos entre 0 y 1")
+        epsilon = np.finfo(np.float64).eps
+        probabilities = np.clip(predictions, epsilon, 1.0 - epsilon)
+        per_pixel = -(inputs * np.log(probabilities)
+                      + (1.0 - inputs) * np.log1p(-probabilities))
+        return float(np.mean(np.sum(per_pixel, axis=1)))
 
     def gradients(self, inputs):
         """Calcular gradientes de reconstrucción sin actualizar parámetros."""
         inputs = self._matrix(inputs, self.architecture[0], "inputs")
+        if self.loss_name == "bce" and np.any((inputs < 0.0) | (inputs > 1.0)):
+            raise ValueError("BCE requiere objetivos entre 0 y 1")
         outputs = self._forward(inputs)
-        delta = ((outputs[-1] - inputs)
-                 * self._derivative(outputs[-1], self.activations[-1]))
+        if self.loss_name == "bce":
+            # d(BCE)/dh para y_hat = sigmoid(2 beta h).
+            delta = 2.0 * self.beta * (outputs[-1] - inputs)
+        else:
+            delta = ((outputs[-1] - inputs)
+                     * self._derivative(outputs[-1], self.activations[-1]))
         weight_gradients = [None] * len(self.weights)
         bias_gradients = [None] * len(self.biases)
         for layer in range(len(self.weights) - 1, -1, -1):
@@ -149,12 +169,37 @@ class Autoencoder:
     def parameters(self):
         return self.weights + self.biases
 
+    @classmethod
+    def load(cls, path):
+        """Reconstruir un autoencoder desde un archivo creado por ``save``."""
+        with np.load(Path(path), allow_pickle=False) as archive:
+            metadata = json.loads(str(archive["metadata"].item()))
+            model = cls(
+                metadata["architecture"],
+                latent_layer=metadata["latent_layer"],
+                activations=metadata["activations"],
+                beta=metadata["beta"],
+                loss=metadata.get("loss", "mse"),
+            )
+            for index, parameter in enumerate(model.weights):
+                stored = archive[f"w{index}"]
+                if stored.shape != parameter.shape:
+                    raise ValueError("los pesos guardados no coinciden con la arquitectura")
+                parameter[...] = stored
+            for index, parameter in enumerate(model.biases):
+                stored = archive[f"b{index}"]
+                if stored.shape != parameter.shape:
+                    raise ValueError("los sesgos guardados no coinciden con la arquitectura")
+                parameter[...] = stored
+        return model
+
     def save(self, path):
         metadata = json.dumps({
             "architecture": self.architecture,
             "latent_layer": self.latent_layer,
             "activations": self.activations,
             "beta": self.beta,
+            "loss": self.loss_name,
         })
         arrays = {"metadata": np.array(metadata)}
         arrays.update({f"w{index}": value

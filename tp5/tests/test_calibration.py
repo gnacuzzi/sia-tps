@@ -56,3 +56,33 @@ def test_dry_plan_has_no_side_effects(tmp_path):
     assert len(trials) == 8
     assert len({trial["run_id"] for trial in trials}) == 8
     assert not list(tmp_path.iterdir())
+
+
+def test_explicit_combinations_do_not_create_a_cartesian_product():
+    configuration = {
+        "architectures": {"a": {}, "b": {}},
+        "combinations": [
+            {
+                "architecture": "a",
+                "optimizer": {
+                    "name": "gradient_descent",
+                    "learning_rate": 0.1,
+                },
+            },
+            {
+                "architecture": "b",
+                "optimizer": {
+                    "name": "adam",
+                    "learning_rate": 0.01,
+                },
+            },
+        ],
+        "seeds": [1, 2],
+        "max_epochs": 10,
+    }
+
+    trials = planned_trials(configuration)
+
+    assert len(trials) == 4
+    assert {(trial["architecture"], trial["optimizer"])
+            for trial in trials} == {("a", "gradient_descent"), ("b", "adam")}

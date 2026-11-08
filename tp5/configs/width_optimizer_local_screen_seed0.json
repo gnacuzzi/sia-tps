@@ -1,0 +1,37 @@
+{
+  "name": "width-optimizer-local-screen-seed0-v1",
+  "architectures": {
+    "width-30": {
+      "layers": [35, 30, 2, 30, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    },
+    "width-45": {
+      "layers": [35, 45, 2, 45, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    }
+  },
+  "optimizers": [
+    {
+      "name": "gradient_descent",
+      "learning_rates": [0.3, 0.4]
+    },
+    {
+      "name": "rmsprop",
+      "learning_rates": [0.03],
+      "gamma": 0.9,
+      "epsilon": 1e-8
+    },
+    {
+      "name": "adam",
+      "learning_rates": [0.003],
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-8
+    }
+  ],
+  "seeds": [0],
+  "max_epochs": 2000,
+  "requirement_max_pixel_errors": 1
+}

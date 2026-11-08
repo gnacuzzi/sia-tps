@@ -1,0 +1,20 @@
+{
+  "name": "bce-gd-rate-calibration-seed0-v1",
+  "loss": "bce",
+  "architectures": {
+    "width-45": {
+      "layers": [35, 45, 2, 45, 35],
+      "latent_layer": 2,
+      "activations": ["tanh", "linear", "tanh", "logistic"]
+    }
+  },
+  "optimizers": [
+    {
+      "name": "gradient_descent",
+      "learning_rates": [0.01, 0.03, 0.1, 0.3]
+    }
+  ],
+  "seeds": [0],
+  "max_epochs": 2000,
+  "requirement_max_pixel_errors": 1
+}
