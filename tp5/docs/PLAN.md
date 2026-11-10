@@ -8,7 +8,7 @@ y recien entonces agregar la siguiente. Las pausas marcadas como **PING-PONG** s
 parte del trabajo, no demoras: no se avanza hasta poder explicar con palabras
 propias que entra, que sale y que error se esta minimizando.
 
-## Estado actual - cierre de la sesión del 7 de noviembre
+## Estado actual - ejercicio 1B cerrado el 10 de noviembre
 
 ### Completado
 
@@ -37,13 +37,141 @@ propias que entra, que sale y que error se esta minimizando.
   datos más una figura original en `docs/`.
 - Ejercicio 1A cerrado: no reabrir arquitectura, optimización, semillas ni
   selección del segmento latente sin una hipótesis nueva que lo justifique.
+- El entrenamiento ya admite entradas y objetivos distintos, y conserva el
+  comportamiento anterior cuando no se indican objetivos explícitos.
+- El ruido bit-flip es reproducible y el DAE genera una corrupción nueva en
+  cada época manteniendo siempre el patrón limpio como objetivo.
+- Se ejecutó el primer piloto con `p_train = 0.10`, arquitectura
+  `35 -> 45 -> 2 -> 45 -> 35`, BCE, descenso con tasa 0.1, semilla de modelo 0
+  y 2.000 épocas. La evaluación usó 3.200 corrupciones independientes con
+  `p_test = 0.10`.
+- El piloto todavía no elimina ruido en promedio: la entrada tuvo 3,470 errores
+  por patrón y la salida 3,581, una mejora media de -0,111. Recuperó exactamente
+  el 28,1 % de los casos, mejoró el 50,6 % y empeoró el 39,1 %.
+- El control limpio del mismo modelo produjo 1,875 errores medios y 13 de 32
+  reconstrucciones exactas. Por eso el resultado no demuestra aún falta de
+  capacidad de la arquitectura: primero hay que separar presupuesto y
+  optimización insuficientes del efecto del cuello latente.
+- Al extender únicamente el presupuesto de 2.000 a 10.000 épocas, con las
+  mismas semillas y exactamente la misma evaluación, la salida bajó a 3,275
+  errores medios frente a 3,470 de entrada: una mejora de 0,195. La recuperación
+  exacta subió de 28,1 % a 34,0 %, pero el control limpio permaneció en 1,875
+  errores medios y bajó de 13 a 12 patrones exactos.
+- Más épocas corrigieron la mejora media, pero no estabilizaron el aprendizaje:
+  varias letras que eran fáciles a las 2.000 épocas pasaron a estar entre las
+  difíciles a las 10.000. No se justifica seguir aumentando el presupuesto sin
+  revisar primero la variabilidad de las actualizaciones con ruido y tasa 0.1.
+- Manteniendo las 10.000 épocas y bajando solamente la tasa de 0.1 a 0.03, el
+  error de salida cayó a 1,304 frente a 3,470 de entrada. La mejora media fue
+  2,166, la recuperación exacta 70,5 % y las 32 letras mejoraron en promedio.
+  El control limpio alcanzó 0,219 errores medios y 27 de 32 patrones exactos.
+- Los tres pilotos y su protocolo quedaron documentados en
+  `docs/ejercicio_1b.md`. La evidencia apunta a inestabilidad de optimización en
+  los primeros intentos, no a una falta demostrada de capacidad arquitectónica.
+- El modelo congelado se evaluó en `p_test = 0`, `0.05`, `0.10`, `0.20` y
+  `0.30`, con 3.200 casos independientes por nivel. Los errores medios de salida
+  fueron 0,219; 0,464; 1,304; 5,219 y 9,498, respectivamente.
+- La recuperación es fuerte hasta `p = 0.10`, sigue siendo positiva pero se
+  degrada en `p = 0.20`, y en `p = 0.30` queda una mejora media menor a un
+  píxel. La figura y los agregados se publicaron en
+  `docs/dae-pilot-noise-curve-seed0.*`.
+- El refinamiento local comparó tasas `0.01`, `0.03` y `0.05` sobre la misma
+  inicialización y los mismos 16.000 casos. `0.03` produjo el menor error de
+  salida en los cinco niveles y la mayor recuperación exacta hasta `p = 0.20`.
+  Se selecciona provisionalmente, todavía sin declararla final por tratarse de
+  una sola semilla. La tabla completa está en
+  `docs/dae-rate-comparison-seed0.csv` y `docs/ejercicio_1b.md`.
+- La tasa `0.03` se confirmó con semillas 0, 1 y 2, variando inicialización y
+  ruido de entrenamiento. En `p = 0.10` el error de salida fue
+  1,258 ± 0,040 y la recuperación exacta 73,4 ± 2,6 %. La forma de la curva
+  se conservó en las tres corridas. Los resultados por semilla y agregados están
+  en `docs/dae-confirmation-seeds012.csv` y
+  `docs/dae-confirmation-aggregate.csv`.
+- Se comparó una corrupción por letra (`K = 1`) contra cuatro (`K = 4`) durante
+  10.000 actualizaciones y tres semillas. `K = 4` fue peor y mucho más variable:
+  en `p = 0.10` produjo 2,582 ± 1,389 errores frente a 1,258 ± 0,040 con
+  `K = 1`. Se conserva una corrupción por letra. La comparación completa está en
+  `docs/dae-corruptions-comparison.csv` y `docs/ejercicio_1b.md`.
+- El tamiz arquitectónico comparó el baseline `35-45-2-45-35`, una variante
+  ancha `35-60-2-60-35` y una profunda `35-45-15-2-15-45-35`. Las dos variantes
+  mejoraron con semilla 0; la profunda ganó en ruido medio y pasó a confirmación.
+- En tres semillas, la profunda redujo el error respecto del baseline de 1,258
+  a 1,013 en `p = 0.10` y de 5,056 a 4,389 en `p = 0.20`. La recuperación exacta
+  subió de 73,4 % a 79,9 % y de 37,8 % a 49,8 %, respectivamente. Se selecciona
+  `35-45-15-2-15-45-35` como arquitectura del DAE. Los agregados están en
+  `docs/dae-architecture-comparison.csv`.
+- Sobre la arquitectura profunda se comparó entrenamiento exclusivamente
+  ruidoso contra un lote con 32 entradas limpias y 32 corrupciones nuevas por
+  época. La mezcla mejoró los cinco niveles en tres semillas: la recuperación
+  exacta subió de 90,6 % a 99,0 % en `p = 0`, de 88,2 % a 96,7 % en `p = 0.05`
+  y de 79,9 % a 88,4 % en `p = 0.10`. Se selecciona el lote limpio + ruidoso.
+  La comparación está en `docs/dae-clean-noisy-comparison.csv`.
+- Se incorporó un schedule exponencial de tasa `0.03 -> 0.003`. En tres semillas
+  redujo el error medio en los cinco niveles y casi eliminó la dispersión en
+  `p = 0.10` (0,659 ± 0,002 errores), pero la recuperación exacta allí pasó de
+  88,4 % a 87,8 %. Se selecciona el schedule por error y estabilidad, dejando
+  explícito el trade-off. Los datos están en
+  `docs/dae-schedule-comparison.csv`.
+- Se comparó el latente bidimensional contra uno de dimensión 5, manteniendo el
+  protocolo estable. El latente 5 redujo el error de 0,659 a 0,400 en
+  `p = 0.10`, de 4,037 a 3,073 en `p = 0.20` y de 8,664 a 7,538 en `p = 0.30`.
+  La recuperación exacta subió a 98,3 % en `p = 0.05` y 90,4 % en `p = 0.10`.
+  Se selecciona `35-45-15-5-15-45-35`; la comparación está en
+  `docs/dae-latent-comparison.csv`.
+- Con el latente 5 se comparó entrenar solo con `p_train = 0.10` contra un lote
+  limpio + `0.05` + `0.10` + `0.20`. En tres semillas, la mezcla subió la
+  recuperación exacta a 98,7 % en `p = 0.05`, 91,7 % en `p = 0.10`, 57,1 % en
+  `p = 0.20` y 21,2 % en `p = 0.30`. Se selecciona el entrenamiento multinivel;
+  los datos están en `docs/dae-multilevel-comparison.csv`.
+- Sobre el protocolo multinivel se comparó `tanh` contra Leaky ReLU en las capas
+  ocultas. En tres semillas, Leaky ReLU subió la recuperación exacta de 91,7 % a
+  93,8 % en `p = 0.10`, de 57,1 % a 64,4 % en `p = 0.20` y de 21,2 % a 28,0 %
+  en `p = 0.30`. Se selecciona Leaky ReLU; la comparación está en
+  `docs/dae-activation-comparison.csv`.
+- El tamiz de optimizadores del DAE mostró que Adam supera al descenso con
+  schedule. El refinamiento local comparó tasas `0.001`, `0.002`, `0.003` y
+  `0.005`; luego se confirmaron `0.003` y `0.005` con semillas 0, 1 y 2.
+  Adam `0.005` redujo el error medio en toda la curva y alcanzó 96,34 % exacto
+  en `p = 0.10`, 75,47 % en `p = 0.20` y 37,09 % en `p = 0.30`. Se selecciona
+  Adam `0.005`. Los resultados están en `docs/dae-adam-rate-screen-seed0.csv`
+  y `docs/dae-adam-rate-confirmation.csv`.
+- La configuración seleccionada se confirmó finalmente con diez semillas sin
+  reabrir los hiperparámetros. La recuperación exacta fue 99,06 ± 0,14 % en
+  `p = 0.05`, 96,06 ± 0,47 % en `p = 0.10`, 74,65 ± 1,24 % en `p = 0.20` y
+  36,58 ± 1,31 % en `p = 0.30`. En limpio alcanzó 100 % en las diez semillas.
+  La baja dispersión permite congelar formalmente el DAE. Los resultados están
+  en `docs/dae-final-confirmation-seeds.csv` y
+  `docs/dae-final-confirmation-aggregate.csv`.
+- Se publicó la curva agregada de diez semillas y un análisis reproducible de
+  casos. En `p = 0.10` el error baja de 3,514 a 0,151; en `p = 0.20`, de 7,010
+  a 1,715; y en `p = 0.30`, de 10,505 a 6,059, aunque allí 16,93 % de los casos
+  empeoran. Los ejemplos fácil, difícil y fallido se eligen mediante reglas
+  fijadas, no por inspección visual. Los artefactos están en
+  `docs/dae-final-analysis/`.
+- El ejercicio 1B queda cerrado respecto de la consigna: se distorsionaron las
+  entradas en cinco niveles y la capacidad de eliminar ruido se estudió con
+  error antes/después, recuperación exacta, casos empeorados, diez semillas y
+  ejemplos representativos. La conclusión y las limitaciones están redactadas
+  en `docs/ejercicio_1b.md`.
 
 ### Próximo paso
 
-1. Comenzar el ping-pong de la Etapa 5: diferenciar entrada ruidosa, objetivo
-   limpio y conjunto de corrupciones de evaluación.
-2. Definir el primer protocolo mínimo de ruido bit-flip antes de implementar el
-   denoising autoencoder.
+1. Mantener congeladas las configuraciones finales del AE y del DAE.
+2. Avanzar a la Etapa 6: VAE mínimo de juguete, incorporando `mu`, `log_var`,
+   reparametrización y KL de manera incremental.
+
+### Extensiones opcionales del DAE
+
+Solo se retoman después del trabajo obligatorio y sin modificar la conclusión
+principal:
+
+- matriz de confusión por nivel, asignando salidas incorrectas al patrón limpio
+  más cercano por distancia de Hamming y registrando empates;
+- análisis del latente de dimensión 5 mediante distancias en el espacio original
+  y PCA exclusivamente como visualización;
+- evaluación con ruido estructurado, como filas, columnas o bloques;
+- una nueva búsqueda de arquitectura u optimización únicamente si se formula
+  una hipótesis nueva y se la trata como extensión separada.
 
 La explicación conceptual y la especificación de la figura quedaron en
 `docs/ejercicio_1a.md`, sección **Movimiento en el espacio latente**.
@@ -453,7 +581,7 @@ el **peor patron** debe tener como maximo un pixel incorrecto.
 
 **Salida:** mapa latente, grilla generativa y al menos un caso discutido.
 
-### Etapa 5 - Denoising autoencoder
+### Etapa 5 - Denoising autoencoder — COMPLETADA
 
 **Objetivo:** medir recuperacion, no mostrar solo ejemplos favorables.
 
@@ -475,6 +603,11 @@ el **peor patron** debe tener como maximo un pixel incorrecto.
 - Explicar por que a ruido extremo puede ser imposible identificar el original.
 
 **Salida:** curva capacidad de recuperacion vs. ruido y ejemplos representativos.
+
+**Cierre:** se entregaron los dos elementos de salida con cinco niveles de ruido,
+diez semillas y casos elegidos mediante reglas reproducibles. La matriz de
+confusión, el análisis latente y el ruido estructurado permanecen como
+extensiones opcionales; no bloquean la Etapa 6.
 
 ### Etapa 6 - VAE de juguete, todavia sin dataset final
 
@@ -673,7 +806,7 @@ idea pendiente con una decision ya respaldada por resultados.
 
 ## 8. Próximo paso al retomar
 
-El ejercicio 1A y la Etapa 4 están cerrados. No reabrir la búsqueda de
-arquitectura, optimizador, tasa, épocas, semillas ni segmentos latentes. Retomar
-con el ping-pong de la Etapa 5 y definir el protocolo mínimo del denoising
-autoencoder antes de modificar el entrenamiento.
+Los ejercicios 1A y 1B y las Etapas 4 y 5 están cerrados. No reabrir la búsqueda
+de arquitectura, optimizador, tasa, épocas, semillas ni segmentos latentes. Al
+retomar, comenzar la Etapa 6 con el VAE mínimo de juguete: primero separar `mu`
+y `log_var` manteniendo temporalmente `z = mu`, antes de agregar muestreo y KL.

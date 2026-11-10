@@ -1,0 +1,7 @@
+{
+  "name": "dae-schedule-mixed-deep-curve-seed1",
+  "model_path": "results/dae-schedule-mixed-deep-seed1/model.npz",
+  "noise_probabilities": [0.0, 0.05, 0.1, 0.2, 0.3],
+  "evaluation_repetitions": 100,
+  "evaluation_seed": 200
+}

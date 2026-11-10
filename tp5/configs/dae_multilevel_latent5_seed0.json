@@ -1,0 +1,24 @@
+{
+  "name": "dae-multilevel-latent5-seed0",
+  "architecture": [35, 45, 15, 5, 15, 45, 35],
+  "latent_layer": 3,
+  "activations": ["tanh", "tanh", "linear", "tanh", "tanh", "logistic"],
+  "loss": "bce",
+  "optimizer": {
+    "name": "gradient_descent",
+    "learning_rate": 0.03,
+    "schedule": {
+      "name": "exponential",
+      "final_learning_rate": 0.003,
+      "total_steps": 10000
+    }
+  },
+  "max_epochs": 10000,
+  "model_seed": 0,
+  "training_noise_probabilities": [0.05, 0.1, 0.2],
+  "training_noise_seed": 100,
+  "include_clean_inputs": true,
+  "evaluation_noise_probability": 0.1,
+  "evaluation_noise_seed": 200,
+  "evaluation_repetitions": 100
+}

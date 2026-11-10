@@ -1,0 +1,19 @@
+{
+  "name": "dae-k4-lr003-seed2",
+  "architecture": [35, 45, 2, 45, 35],
+  "latent_layer": 2,
+  "activations": ["tanh", "linear", "tanh", "logistic"],
+  "loss": "bce",
+  "optimizer": {
+    "name": "gradient_descent",
+    "learning_rate": 0.03
+  },
+  "max_epochs": 10000,
+  "model_seed": 2,
+  "training_noise_probability": 0.1,
+  "training_noise_seed": 102,
+  "corruptions_per_sample": 4,
+  "evaluation_noise_probability": 0.1,
+  "evaluation_noise_seed": 200,
+  "evaluation_repetitions": 100
+}

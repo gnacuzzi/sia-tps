@@ -1,0 +1,73 @@
+{
+  "output_dir": "docs/dae-final-analysis",
+  "noise_probabilities": [
+    0.0,
+    0.05,
+    0.1,
+    0.2,
+    0.3
+  ],
+  "evaluation_repetitions": 100,
+  "runs": [
+    {
+      "seed": 0,
+      "model_path": "results/dae-adam-lr005-seed0/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed0/summary.json",
+      "evaluation_seed": 200
+    },
+    {
+      "seed": 1,
+      "model_path": "results/dae-adam-lr005-seed1/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed1/summary.json",
+      "evaluation_seed": 201
+    },
+    {
+      "seed": 2,
+      "model_path": "results/dae-adam-lr005-seed2/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed2/summary.json",
+      "evaluation_seed": 202
+    },
+    {
+      "seed": 3,
+      "model_path": "results/dae-adam-lr005-seed3/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed3/summary.json",
+      "evaluation_seed": 203
+    },
+    {
+      "seed": 4,
+      "model_path": "results/dae-adam-lr005-seed4/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed4/summary.json",
+      "evaluation_seed": 204
+    },
+    {
+      "seed": 5,
+      "model_path": "results/dae-adam-lr005-seed5/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed5/summary.json",
+      "evaluation_seed": 205
+    },
+    {
+      "seed": 6,
+      "model_path": "results/dae-adam-lr005-seed6/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed6/summary.json",
+      "evaluation_seed": 206
+    },
+    {
+      "seed": 7,
+      "model_path": "results/dae-adam-lr005-seed7/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed7/summary.json",
+      "evaluation_seed": 207
+    },
+    {
+      "seed": 8,
+      "model_path": "results/dae-adam-lr005-seed8/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed8/summary.json",
+      "evaluation_seed": 208
+    },
+    {
+      "seed": 9,
+      "model_path": "results/dae-adam-lr005-seed9/model.npz",
+      "curve_summary": "results/dae-adam-lr005-curve-seed9/summary.json",
+      "evaluation_seed": 209
+    }
+  ]
+}

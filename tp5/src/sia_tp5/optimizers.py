@@ -113,12 +113,47 @@ class Adam(GradientDescent):
             )
 
 
+class ExponentialDecay:
+    """Reducir exponencialmente la tasa de un optimizador entre dos extremos."""
+
+    def __init__(self, optimizer, *, final_learning_rate: float,
+                 total_steps: int):
+        if (not np.isfinite(final_learning_rate)
+                or final_learning_rate <= 0):
+            raise ValueError("final_learning_rate debe ser positivo y finito")
+        if (isinstance(total_steps, bool) or not isinstance(total_steps, int)
+                or total_steps < 2):
+            raise ValueError("total_steps debe ser un entero mayor o igual a 2")
+        self.optimizer = optimizer
+        self.initial_learning_rate = optimizer.learning_rate
+        self.final_learning_rate = float(final_learning_rate)
+        self.total_steps = total_steps
+        self._step = 0
+
+    @property
+    def learning_rate(self):
+        return self.optimizer.learning_rate
+
+    def step(self, parameters, gradients):
+        bounded_step = min(self._step, self.total_steps - 1)
+        fraction = bounded_step / (self.total_steps - 1)
+        ratio = self.final_learning_rate / self.initial_learning_rate
+        self.optimizer.learning_rate = (
+            self.initial_learning_rate * ratio ** fraction
+        )
+        self.optimizer.step(parameters, gradients)
+        self._step += 1
+
+
 def optimizer_from_config(configuration):
     """Construir un optimizador a partir de su configuracion serializable."""
     if not isinstance(configuration, dict) or "name" not in configuration:
         raise ValueError("la configuracion del optimizador requiere name")
     name = configuration["name"]
-    options = {key: value for key, value in configuration.items() if key != "name"}
+    options = {
+        key: value for key, value in configuration.items()
+        if key not in {"name", "schedule"}
+    }
     classes = {
         "gradient_descent": GradientDescent,
         "momentum": Momentum,
@@ -127,4 +162,13 @@ def optimizer_from_config(configuration):
     }
     if name not in classes:
         raise ValueError(f"optimizador desconocido: {name}")
-    return classes[name](**options)
+    optimizer = classes[name](**options)
+    schedule = configuration.get("schedule")
+    if schedule is None:
+        return optimizer
+    if not isinstance(schedule, dict) or schedule.get("name") != "exponential":
+        raise ValueError("schedule debe definir name='exponential'")
+    schedule_options = {
+        key: value for key, value in schedule.items() if key != "name"
+    }
+    return ExponentialDecay(optimizer, **schedule_options)

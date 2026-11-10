@@ -1,0 +1,19 @@
+{
+  "name": "dae-arch-width60-seed0",
+  "architecture": [35, 60, 2, 60, 35],
+  "latent_layer": 2,
+  "activations": ["tanh", "linear", "tanh", "logistic"],
+  "loss": "bce",
+  "optimizer": {
+    "name": "gradient_descent",
+    "learning_rate": 0.03
+  },
+  "max_epochs": 10000,
+  "model_seed": 0,
+  "training_noise_probability": 0.1,
+  "training_noise_seed": 100,
+  "corruptions_per_sample": 1,
+  "evaluation_noise_probability": 0.1,
+  "evaluation_noise_seed": 200,
+  "evaluation_repetitions": 100
+}

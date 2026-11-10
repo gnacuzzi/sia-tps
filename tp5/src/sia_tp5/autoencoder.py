@@ -12,7 +12,8 @@ class Autoencoder:
 
     def __init__(self, architecture: Sequence[int], *, latent_layer: int,
                  activations: Sequence[str], beta: float = 1.0,
-                 loss: str = "mse", seed: int = 0, init_scale: float = 0.5):
+                 loss: str = "mse", seed: int = 0, init_scale: float = 0.5,
+                 leaky_slope: float = 0.01):
         self.architecture = tuple(architecture)
         self.activations = tuple(activations)
         if (len(self.architecture) < 3
@@ -26,7 +27,7 @@ class Autoencoder:
             raise ValueError("latent_layer debe identificar una capa interna")
         if len(self.activations) != len(self.architecture) - 1:
             raise ValueError("se necesita una activación por capa de pesos")
-        if any(name not in {"linear", "tanh", "logistic"}
+        if any(name not in {"linear", "tanh", "logistic", "leaky_relu"}
                for name in self.activations):
             raise ValueError("activación desconocida")
         if loss not in {"mse", "bce"}:
@@ -37,10 +38,14 @@ class Autoencoder:
             raise ValueError("beta debe ser positivo y finito")
         if not np.isfinite(init_scale) or init_scale < 0:
             raise ValueError("init_scale debe ser no negativo y finito")
+        if (not np.isfinite(leaky_slope)
+                or not 0.0 < leaky_slope < 1.0):
+            raise ValueError("leaky_slope debe pertenecer a (0, 1)")
 
         self.latent_layer = latent_layer
         self.beta = float(beta)
         self.loss_name = loss
+        self.leaky_slope = float(leaky_slope)
         generator = np.random.default_rng(seed)
         self.weights = [
             generator.uniform(-init_scale, init_scale, (output_size, input_size))
@@ -54,6 +59,8 @@ class Autoencoder:
             return values
         if name == "tanh":
             return np.tanh(self.beta * values)
+        if name == "leaky_relu":
+            return np.where(values >= 0.0, values, self.leaky_slope * values)
         # sigmoid(2 beta h), la logística utilizada en el TP3.
         return np.exp(-np.logaddexp(0.0, -2.0 * self.beta * values))
 
@@ -62,6 +69,8 @@ class Autoencoder:
             return np.ones_like(output)
         if name == "tanh":
             return self.beta * (1.0 - output ** 2)
+        if name == "leaky_relu":
+            return np.where(output >= 0.0, 1.0, self.leaky_slope)
         return 2.0 * self.beta * output * (1.0 - output)
 
     def _layer_output(self, inputs, weights, biases, activation):
@@ -120,32 +129,48 @@ class Autoencoder:
         inputs = self._matrix(inputs, self.architecture[0], "inputs")
         return self._forward(inputs)[-1]
 
-    def loss(self, inputs):
-        """Pérdida de reconstrucción media por muestra."""
+    def loss(self, inputs, targets=None):
+        """Pérdida media entre la predicción y los objetivos esperados.
+
+        Si no se indican ``targets``, se usa la entrada como objetivo para
+        conservar el comportamiento del autoencoder común.
+        """
         inputs = self._matrix(inputs, self.architecture[0], "inputs")
+        if targets is None:
+            targets = inputs
+        else:
+            targets = self._matrix(targets, self.architecture[-1], "targets")
+            if len(targets) != len(inputs):
+                raise ValueError("inputs y targets deben tener igual cantidad de muestras")
         predictions = self.predict(inputs)
         if self.loss_name == "mse":
-            difference = predictions - inputs
+            difference = predictions - targets
             return float(0.5 * np.mean(np.sum(difference ** 2, axis=1)))
-        if np.any((inputs < 0.0) | (inputs > 1.0)):
+        if np.any((targets < 0.0) | (targets > 1.0)):
             raise ValueError("BCE requiere objetivos entre 0 y 1")
         epsilon = np.finfo(np.float64).eps
         probabilities = np.clip(predictions, epsilon, 1.0 - epsilon)
-        per_pixel = -(inputs * np.log(probabilities)
-                      + (1.0 - inputs) * np.log1p(-probabilities))
+        per_pixel = -(targets * np.log(probabilities)
+                      + (1.0 - targets) * np.log1p(-probabilities))
         return float(np.mean(np.sum(per_pixel, axis=1)))
 
-    def gradients(self, inputs):
-        """Calcular gradientes de reconstrucción sin actualizar parámetros."""
+    def gradients(self, inputs, targets=None):
+        """Calcular gradientes respecto de los objetivos sin actualizar."""
         inputs = self._matrix(inputs, self.architecture[0], "inputs")
-        if self.loss_name == "bce" and np.any((inputs < 0.0) | (inputs > 1.0)):
+        if targets is None:
+            targets = inputs
+        else:
+            targets = self._matrix(targets, self.architecture[-1], "targets")
+            if len(targets) != len(inputs):
+                raise ValueError("inputs y targets deben tener igual cantidad de muestras")
+        if self.loss_name == "bce" and np.any((targets < 0.0) | (targets > 1.0)):
             raise ValueError("BCE requiere objetivos entre 0 y 1")
         outputs = self._forward(inputs)
         if self.loss_name == "bce":
             # d(BCE)/dh para y_hat = sigmoid(2 beta h).
-            delta = 2.0 * self.beta * (outputs[-1] - inputs)
+            delta = 2.0 * self.beta * (outputs[-1] - targets)
         else:
-            delta = ((outputs[-1] - inputs)
+            delta = ((outputs[-1] - targets)
                      * self._derivative(outputs[-1], self.activations[-1]))
         weight_gradients = [None] * len(self.weights)
         bias_gradients = [None] * len(self.biases)
@@ -180,6 +205,7 @@ class Autoencoder:
                 activations=metadata["activations"],
                 beta=metadata["beta"],
                 loss=metadata.get("loss", "mse"),
+                leaky_slope=metadata.get("leaky_slope", 0.01),
             )
             for index, parameter in enumerate(model.weights):
                 stored = archive[f"w{index}"]
@@ -200,6 +226,7 @@ class Autoencoder:
             "activations": self.activations,
             "beta": self.beta,
             "loss": self.loss_name,
+            "leaky_slope": self.leaky_slope,
         })
         arrays = {"metadata": np.array(metadata)}
         arrays.update({f"w{index}": value

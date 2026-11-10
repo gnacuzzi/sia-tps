@@ -1,0 +1,32 @@
+{
+  "easy": {
+    "seed": 2,
+    "noise_probability": 0.1,
+    "repetition": 49,
+    "label": "f",
+    "index": 6,
+    "input_pixel_errors": 13,
+    "output_pixel_errors": 0,
+    "improvement": 13
+  },
+  "difficult": {
+    "seed": 0,
+    "noise_probability": 0.2,
+    "repetition": 1,
+    "label": "z",
+    "index": 26,
+    "input_pixel_errors": 9,
+    "output_pixel_errors": 4,
+    "improvement": 5
+  },
+  "failed": {
+    "seed": 0,
+    "noise_probability": 0.3,
+    "repetition": 0,
+    "label": "d",
+    "index": 4,
+    "input_pixel_errors": 12,
+    "output_pixel_errors": 14,
+    "improvement": -2
+  }
+}

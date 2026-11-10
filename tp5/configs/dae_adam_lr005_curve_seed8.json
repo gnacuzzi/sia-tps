@@ -1,0 +1,1 @@
+{"name":"dae-adam-lr005-curve-seed8","model_path":"results/dae-adam-lr005-seed8/model.npz","noise_probabilities":[0.0,0.05,0.1,0.2,0.3],"evaluation_repetitions":100,"evaluation_seed":208}

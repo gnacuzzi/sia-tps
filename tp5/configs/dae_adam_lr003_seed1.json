@@ -1,0 +1,22 @@
+{
+  "name": "dae-adam-lr003-seed1",
+  "architecture": [35, 45, 15, 5, 15, 45, 35],
+  "latent_layer": 3,
+  "activations": ["leaky_relu", "leaky_relu", "linear", "leaky_relu", "leaky_relu", "logistic"],
+  "leaky_slope": 0.01,
+  "loss": "bce",
+  "optimizer": {
+    "name": "adam",
+    "learning_rate": 0.003,
+    "beta1": 0.9,
+    "beta2": 0.999
+  },
+  "max_epochs": 10000,
+  "model_seed": 1,
+  "training_noise_probabilities": [0.05, 0.1, 0.2],
+  "training_noise_seed": 101,
+  "include_clean_inputs": true,
+  "evaluation_noise_probability": 0.1,
+  "evaluation_noise_seed": 200,
+  "evaluation_repetitions": 100
+}

@@ -1,0 +1,18 @@
+{
+  "name": "dae-pilot-p010-seed0",
+  "architecture": [35, 45, 2, 45, 35],
+  "latent_layer": 2,
+  "activations": ["tanh", "linear", "tanh", "logistic"],
+  "loss": "bce",
+  "optimizer": {
+    "name": "gradient_descent",
+    "learning_rate": 0.1
+  },
+  "max_epochs": 2000,
+  "model_seed": 0,
+  "training_noise_probability": 0.1,
+  "training_noise_seed": 100,
+  "evaluation_noise_probability": 0.1,
+  "evaluation_noise_seed": 200,
+  "evaluation_repetitions": 100
+}

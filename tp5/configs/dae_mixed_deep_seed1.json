@@ -1,0 +1,19 @@
+{
+  "name": "dae-mixed-deep-seed1",
+  "architecture": [35, 45, 15, 2, 15, 45, 35],
+  "latent_layer": 3,
+  "activations": ["tanh", "tanh", "linear", "tanh", "tanh", "logistic"],
+  "loss": "bce",
+  "optimizer": {
+    "name": "gradient_descent",
+    "learning_rate": 0.03
+  },
+  "max_epochs": 10000,
+  "model_seed": 1,
+  "training_noise_probability": 0.1,
+  "training_noise_seed": 101,
+  "include_clean_inputs": true,
+  "evaluation_noise_probability": 0.1,
+  "evaluation_noise_seed": 200,
+  "evaluation_repetitions": 100
+}

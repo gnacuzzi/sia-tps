@@ -1,0 +1,72 @@
+[
+  {
+    "noise_probability": 0.0,
+    "repetitions": 100,
+    "evaluated_samples": 3200,
+    "mean_input_pixel_errors": 0.0,
+    "std_input_pixel_errors": 0.0,
+    "mean_output_pixel_errors": 0.21875,
+    "std_output_pixel_errors": 0.5986638768958755,
+    "mean_improvement": -0.21875,
+    "exact_recovery_rate": 0.84375,
+    "improved_rate": 0.0,
+    "unchanged_rate": 0.84375,
+    "worsened_rate": 0.15625
+  },
+  {
+    "noise_probability": 0.05,
+    "repetitions": 100,
+    "evaluated_samples": 3200,
+    "mean_input_pixel_errors": 1.734375,
+    "std_input_pixel_errors": 1.2903752785042808,
+    "mean_output_pixel_errors": 0.46375,
+    "std_output_pixel_errors": 1.3894462701018706,
+    "mean_improvement": 1.270625,
+    "exact_recovery_rate": 0.8215625,
+    "improved_rate": 0.731875,
+    "unchanged_rate": 0.1803125,
+    "worsened_rate": 0.0878125
+  },
+  {
+    "noise_probability": 0.1,
+    "repetitions": 100,
+    "evaluated_samples": 3200,
+    "mean_input_pixel_errors": 3.47,
+    "std_input_pixel_errors": 1.7655664813311336,
+    "mean_output_pixel_errors": 1.30375,
+    "std_output_pixel_errors": 2.8236033605129456,
+    "mean_improvement": 2.16625,
+    "exact_recovery_rate": 0.705,
+    "improved_rate": 0.8259375,
+    "unchanged_rate": 0.0584375,
+    "worsened_rate": 0.115625
+  },
+  {
+    "noise_probability": 0.2,
+    "repetitions": 100,
+    "evaluated_samples": 3200,
+    "mean_input_pixel_errors": 6.9665625,
+    "std_input_pixel_errors": 2.352486861513524,
+    "mean_output_pixel_errors": 5.21875,
+    "std_output_pixel_errors": 5.477649900961177,
+    "mean_improvement": 1.7478125,
+    "exact_recovery_rate": 0.355625,
+    "improved_rate": 0.6371875,
+    "unchanged_rate": 0.0553125,
+    "worsened_rate": 0.3075
+  },
+  {
+    "noise_probability": 0.3,
+    "repetitions": 100,
+    "evaluated_samples": 3200,
+    "mean_input_pixel_errors": 10.471875,
+    "std_input_pixel_errors": 2.7140530548194888,
+    "mean_output_pixel_errors": 9.4978125,
+    "std_output_pixel_errors": 5.709093204252646,
+    "mean_improvement": 0.9740625,
+    "exact_recovery_rate": 0.13,
+    "improved_rate": 0.5075,
+    "unchanged_rate": 0.08,
+    "worsened_rate": 0.4125
+  }
+]
