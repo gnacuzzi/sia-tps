@@ -1,5 +1,5 @@
 {
-  "output_dir": "docs/dae-final-analysis",
+  "output_dir": "docs/dae/final",
   "noise_probabilities": [0.0, 0.05, 0.1, 0.2, 0.3],
   "evaluation_repetitions": 100,
   "runs": [

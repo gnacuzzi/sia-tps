@@ -109,7 +109,7 @@ piloto.
 | 0,20 | 6,967 | 5,219 | 1,748 | 35,6 % | 63,7 % | 30,8 % |
 | 0,30 | 10,472 | 9,498 | 0,974 | 13,0 % | 50,7 % | 41,2 % |
 
-![Curva inicial de capacidad de recuperación](dae-pilot-noise-curve-seed0.png)
+![Curva inicial de capacidad de recuperación](dae/pilot/noise-curve-seed0.png)
 
 El DAE elimina una proporción clara del ruido en `p = 0.05` y `p = 0.10`. En
 `p = 0.20` todavía reduce 1,748 errores en promedio, pero la recuperación exacta
@@ -541,8 +541,8 @@ recuperación exacta. En `p = 0.10` alcanza **96,34 %**, frente a 95,55 % con
 Se selecciona por lo tanto **Adam con tasa `0.005`**. La elección no depende de
 una única inicialización y no requirió cambiar la arquitectura. Los resultados
 del tamiz local y la confirmación se publican en
-`docs/dae-adam-rate-screen-seed0.csv` y
-`docs/dae-adam-rate-confirmation.csv`.
+`docs/dae/experiments/adam-rate-screen-seed0.csv` y
+`docs/dae/experiments/adam-rate-confirmation.csv`.
 
 ## Confirmación final con diez semillas
 
@@ -567,8 +567,8 @@ aumentar el ruido aparece en todas las semillas con la misma forma, por lo que
 no se debe a una inicialización aislada.
 
 La configuración queda **formalmente congelada**. Los valores individuales y
-agregados se publican en `docs/dae-final-confirmation-seeds.csv` y
-`docs/dae-final-confirmation-aggregate.csv`.
+agregados se publican en `docs/dae/final/confirmation-seeds.csv` y
+`docs/dae/final/confirmation-aggregate.csv`.
 
 ## Curva final y análisis de casos
 
@@ -577,7 +577,7 @@ modelos y la banda, un desvío estándar entre semillas. Cada modelo fue evaluad
 con 3.200 corrupciones independientes por nivel, es decir, 32.000 casos por
 punto de la curva.
 
-![Curva final agregada](dae-final-analysis/noise-curve-aggregate.png)
+![Curva final agregada](dae/final/noise-curve-aggregate.png)
 
 Se distinguen tres regímenes:
 
@@ -601,7 +601,7 @@ graficar:
 - **Fallido:** en `p = 0.30`, la salida tiene más errores que la entrada; también
   se selecciona un caso representativo, no el peor extremo.
 
-![Casos representativos](dae-final-analysis/representative-cases.png)
+![Casos representativos](dae/final/representative-cases.png)
 
 El caso fácil es una `f` que pasa de 13 errores a reconstrucción exacta. El
 difícil es una `z` que mejora de 9 a 4 errores: la red elimina ruido, pero su
@@ -618,9 +618,9 @@ la corrupción. Esta última explicación es una interpretación compatible con
 los resultados, no una propiedad demostrada de cada unidad latente.
 
 Los datos reproducibles están en
-`docs/dae-final-analysis/noise-curve-aggregate.csv`,
-`docs/dae-final-analysis/label-difficulty.csv` y
-`docs/dae-final-analysis/representative-cases.json`. La utilidad
+`docs/dae/final/noise-curve-aggregate.csv`,
+`docs/dae/final/label-difficulty.csv` y
+`docs/dae/final/representative-cases.json`. La utilidad
 `sia_tp5.denoising_final_analysis` regenera tablas y figuras desde los diez
 modelos congelados.
 
@@ -777,7 +777,7 @@ accidente un resultado ya utilizado en la comparación.
 Los artefactos crudos se guardan en `results/`, que está excluido de Git. Cada
 carpeta contiene configuración, modelo, historia, los 3.200 casos de evaluación y
 un resumen agregado. La tabla de la curva, su resumen JSON y la figura se
-publican además como `docs/dae-pilot-noise-curve-seed0.*`.
+publican además como `docs/dae/pilot/noise-curve-seed0.*`.
 
 ## Próximo paso
 

@@ -66,7 +66,7 @@ propias que entra, que sale y que error se esta minimizando.
   2,166, la recuperación exacta 70,5 % y las 32 letras mejoraron en promedio.
   El control limpio alcanzó 0,219 errores medios y 27 de 32 patrones exactos.
 - Los tres pilotos y su protocolo quedaron documentados en
-  `docs/ejercicio_1b.md`. La evidencia apunta a inestabilidad de optimización en
+  `docs/dae/ejercicio_1b.md`. La evidencia apunta a inestabilidad de optimización en
   los primeros intentos, no a una falta demostrada de capacidad arquitectónica.
 - El modelo congelado se evaluó en `p_test = 0`, `0.05`, `0.10`, `0.20` y
   `0.30`, con 3.200 casos independientes por nivel. Los errores medios de salida
@@ -74,24 +74,24 @@ propias que entra, que sale y que error se esta minimizando.
 - La recuperación es fuerte hasta `p = 0.10`, sigue siendo positiva pero se
   degrada en `p = 0.20`, y en `p = 0.30` queda una mejora media menor a un
   píxel. La figura y los agregados se publicaron en
-  `docs/dae-pilot-noise-curve-seed0.*`.
+  `docs/dae/pilot/noise-curve-seed0.*`.
 - El refinamiento local comparó tasas `0.01`, `0.03` y `0.05` sobre la misma
   inicialización y los mismos 16.000 casos. `0.03` produjo el menor error de
   salida en los cinco niveles y la mayor recuperación exacta hasta `p = 0.20`.
   Se selecciona provisionalmente, todavía sin declararla final por tratarse de
   una sola semilla. La tabla completa está en
-  `docs/dae-rate-comparison-seed0.csv` y `docs/ejercicio_1b.md`.
+  `docs/dae/experiments/rate-comparison-seed0.csv` y `docs/dae/ejercicio_1b.md`.
 - La tasa `0.03` se confirmó con semillas 0, 1 y 2, variando inicialización y
   ruido de entrenamiento. En `p = 0.10` el error de salida fue
   1,258 ± 0,040 y la recuperación exacta 73,4 ± 2,6 %. La forma de la curva
   se conservó en las tres corridas. Los resultados por semilla y agregados están
-  en `docs/dae-confirmation-seeds012.csv` y
-  `docs/dae-confirmation-aggregate.csv`.
+  en `docs/dae/experiments/confirmation-seeds012.csv` y
+  `docs/dae/experiments/confirmation-aggregate.csv`.
 - Se comparó una corrupción por letra (`K = 1`) contra cuatro (`K = 4`) durante
   10.000 actualizaciones y tres semillas. `K = 4` fue peor y mucho más variable:
   en `p = 0.10` produjo 2,582 ± 1,389 errores frente a 1,258 ± 0,040 con
   `K = 1`. Se conserva una corrupción por letra. La comparación completa está en
-  `docs/dae-corruptions-comparison.csv` y `docs/ejercicio_1b.md`.
+  `docs/dae/experiments/corruptions-comparison.csv` y `docs/dae/ejercicio_1b.md`.
 - El tamiz arquitectónico comparó el baseline `35-45-2-45-35`, una variante
   ancha `35-60-2-60-35` y una profunda `35-45-15-2-15-45-35`. Las dos variantes
   mejoraron con semilla 0; la profunda ganó en ruido medio y pasó a confirmación.
@@ -99,60 +99,60 @@ propias que entra, que sale y que error se esta minimizando.
   a 1,013 en `p = 0.10` y de 5,056 a 4,389 en `p = 0.20`. La recuperación exacta
   subió de 73,4 % a 79,9 % y de 37,8 % a 49,8 %, respectivamente. Se selecciona
   `35-45-15-2-15-45-35` como arquitectura del DAE. Los agregados están en
-  `docs/dae-architecture-comparison.csv`.
+  `docs/dae/experiments/architecture-comparison.csv`.
 - Sobre la arquitectura profunda se comparó entrenamiento exclusivamente
   ruidoso contra un lote con 32 entradas limpias y 32 corrupciones nuevas por
   época. La mezcla mejoró los cinco niveles en tres semillas: la recuperación
   exacta subió de 90,6 % a 99,0 % en `p = 0`, de 88,2 % a 96,7 % en `p = 0.05`
   y de 79,9 % a 88,4 % en `p = 0.10`. Se selecciona el lote limpio + ruidoso.
-  La comparación está en `docs/dae-clean-noisy-comparison.csv`.
+  La comparación está en `docs/dae/experiments/clean-noisy-comparison.csv`.
 - Se incorporó un schedule exponencial de tasa `0.03 -> 0.003`. En tres semillas
   redujo el error medio en los cinco niveles y casi eliminó la dispersión en
   `p = 0.10` (0,659 ± 0,002 errores), pero la recuperación exacta allí pasó de
   88,4 % a 87,8 %. Se selecciona el schedule por error y estabilidad, dejando
   explícito el trade-off. Los datos están en
-  `docs/dae-schedule-comparison.csv`.
+  `docs/dae/experiments/schedule-comparison.csv`.
 - Se comparó el latente bidimensional contra uno de dimensión 5, manteniendo el
   protocolo estable. El latente 5 redujo el error de 0,659 a 0,400 en
   `p = 0.10`, de 4,037 a 3,073 en `p = 0.20` y de 8,664 a 7,538 en `p = 0.30`.
   La recuperación exacta subió a 98,3 % en `p = 0.05` y 90,4 % en `p = 0.10`.
   Se selecciona `35-45-15-5-15-45-35`; la comparación está en
-  `docs/dae-latent-comparison.csv`.
+  `docs/dae/experiments/latent-comparison.csv`.
 - Con el latente 5 se comparó entrenar solo con `p_train = 0.10` contra un lote
   limpio + `0.05` + `0.10` + `0.20`. En tres semillas, la mezcla subió la
   recuperación exacta a 98,7 % en `p = 0.05`, 91,7 % en `p = 0.10`, 57,1 % en
   `p = 0.20` y 21,2 % en `p = 0.30`. Se selecciona el entrenamiento multinivel;
-  los datos están en `docs/dae-multilevel-comparison.csv`.
+  los datos están en `docs/dae/experiments/multilevel-comparison.csv`.
 - Sobre el protocolo multinivel se comparó `tanh` contra Leaky ReLU en las capas
   ocultas. En tres semillas, Leaky ReLU subió la recuperación exacta de 91,7 % a
   93,8 % en `p = 0.10`, de 57,1 % a 64,4 % en `p = 0.20` y de 21,2 % a 28,0 %
   en `p = 0.30`. Se selecciona Leaky ReLU; la comparación está en
-  `docs/dae-activation-comparison.csv`.
+  `docs/dae/experiments/activation-comparison.csv`.
 - El tamiz de optimizadores del DAE mostró que Adam supera al descenso con
   schedule. El refinamiento local comparó tasas `0.001`, `0.002`, `0.003` y
   `0.005`; luego se confirmaron `0.003` y `0.005` con semillas 0, 1 y 2.
   Adam `0.005` redujo el error medio en toda la curva y alcanzó 96,34 % exacto
   en `p = 0.10`, 75,47 % en `p = 0.20` y 37,09 % en `p = 0.30`. Se selecciona
-  Adam `0.005`. Los resultados están en `docs/dae-adam-rate-screen-seed0.csv`
-  y `docs/dae-adam-rate-confirmation.csv`.
+  Adam `0.005`. Los resultados están en `docs/dae/experiments/adam-rate-screen-seed0.csv`
+  y `docs/dae/experiments/adam-rate-confirmation.csv`.
 - La configuración seleccionada se confirmó finalmente con diez semillas sin
   reabrir los hiperparámetros. La recuperación exacta fue 99,06 ± 0,14 % en
   `p = 0.05`, 96,06 ± 0,47 % en `p = 0.10`, 74,65 ± 1,24 % en `p = 0.20` y
   36,58 ± 1,31 % en `p = 0.30`. En limpio alcanzó 100 % en las diez semillas.
   La baja dispersión permite congelar formalmente el DAE. Los resultados están
-  en `docs/dae-final-confirmation-seeds.csv` y
-  `docs/dae-final-confirmation-aggregate.csv`.
+  en `docs/dae/final/confirmation-seeds.csv` y
+  `docs/dae/final/confirmation-aggregate.csv`.
 - Se publicó la curva agregada de diez semillas y un análisis reproducible de
   casos. En `p = 0.10` el error baja de 3,514 a 0,151; en `p = 0.20`, de 7,010
   a 1,715; y en `p = 0.30`, de 10,505 a 6,059, aunque allí 16,93 % de los casos
   empeoran. Los ejemplos fácil, difícil y fallido se eligen mediante reglas
   fijadas, no por inspección visual. Los artefactos están en
-  `docs/dae-final-analysis/`.
+  `docs/dae/final/`.
 - El ejercicio 1B queda cerrado respecto de la consigna: se distorsionaron las
   entradas en cinco niveles y la capacidad de eliminar ruido se estudió con
   error antes/después, recuperación exacta, casos empeorados, diez semillas y
   ejemplos representativos. La conclusión y las limitaciones están redactadas
-  en `docs/ejercicio_1b.md`.
+  en `docs/dae/ejercicio_1b.md`.
 
 ### Próximo paso
 
