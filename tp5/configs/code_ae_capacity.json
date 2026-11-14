@@ -1,0 +1,34 @@
+{
+  "split_seed": 17,
+  "model_seed": 0,
+  "latent_layer": 2,
+  "activations": ["tanh", "linear", "tanh", "grouped_softmax"],
+  "init_scale": 0.25,
+  "optimizer": {
+    "name": "adam",
+    "learning_rate": 0.005
+  },
+  "max_epochs": 3000,
+  "evaluation_interval": 25,
+  "required_gate_hits": 3,
+  "selection_gates": {
+    "train_exact_source_rate": 1.0,
+    "validation_exact_source_rate": 0.99,
+    "validation_grammar_rate": 1.0
+  },
+  "candidates": [
+    {
+      "name": "width64-latent16",
+      "architecture": [650, 64, 16, 64, 650]
+    },
+    {
+      "name": "width128-latent16",
+      "architecture": [650, 128, 16, 128, 650]
+    },
+    {
+      "name": "width256-latent16",
+      "architecture": [650, 256, 16, 256, 650]
+    }
+  ],
+  "result_root": "results/code-ae-capacity-v1"
+}

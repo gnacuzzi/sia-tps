@@ -1,0 +1,10 @@
+{
+  "model_path": "results/code-vae-selected/model.npz",
+  "split_seed": 17,
+  "train_fraction": 0.8,
+  "prior_sample_count": 1000,
+  "prior_seed": 44,
+  "interpolation_points": 9,
+  "analysis_output": "docs/vae/code-generation-analysis.json",
+  "prior_output": "docs/vae/code-prior-samples-seed0.csv"
+}

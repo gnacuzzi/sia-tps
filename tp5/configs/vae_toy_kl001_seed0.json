@@ -1,0 +1,20 @@
+{
+  "name": "vae-toy-kl001-seed0",
+  "architecture": [9, 8, 2, 8, 9],
+  "latent_layer": 2,
+  "activations": ["tanh", "linear", "tanh", "logistic"],
+  "loss": "bce",
+  "kl_weight": 0.01,
+  "model_seed": 0,
+  "sampling_seed": 7,
+  "training_seed": 7,
+  "epochs": 2000,
+  "optimizer": {
+    "name": "adam",
+    "learning_rate": 0.01
+  },
+  "history_output": "docs/vae/toy-kl001-history.csv",
+  "summary_output": "docs/vae/toy-kl001-summary.json",
+  "figure_output": "docs/vae/toy-kl001-loss.png",
+  "model_output": "results/vae-toy-kl001-seed0/model.npz"
+}

@@ -6,6 +6,10 @@ import json
 
 import numpy as np
 
+from .categorical import (categorical_cross_entropy, grouped_softmax,
+                          validate_categorical_groups,
+                          validate_categorical_targets)
+
 
 class Autoencoder:
     """Red densa con una capa latente accesible como encoder y decoder."""
@@ -13,7 +17,7 @@ class Autoencoder:
     def __init__(self, architecture: Sequence[int], *, latent_layer: int,
                  activations: Sequence[str], beta: float = 1.0,
                  loss: str = "mse", seed: int = 0, init_scale: float = 0.5,
-                 leaky_slope: float = 0.01):
+                 leaky_slope: float = 0.01, categorical_groups=None):
         self.architecture = tuple(architecture)
         self.activations = tuple(activations)
         if (len(self.architecture) < 3
@@ -27,13 +31,28 @@ class Autoencoder:
             raise ValueError("latent_layer debe identificar una capa interna")
         if len(self.activations) != len(self.architecture) - 1:
             raise ValueError("se necesita una activación por capa de pesos")
-        if any(name not in {"linear", "tanh", "logistic", "leaky_relu"}
+        if any(name not in {
+                "linear", "tanh", "logistic", "leaky_relu", "grouped_softmax"
+        }
                for name in self.activations):
             raise ValueError("activación desconocida")
-        if loss not in {"mse", "bce"}:
-            raise ValueError("loss debe ser 'mse' o 'bce'")
+        if "grouped_softmax" in self.activations[:-1]:
+            raise ValueError("grouped_softmax solo puede usarse en la salida")
+        if loss not in {"mse", "bce", "categorical_cross_entropy"}:
+            raise ValueError("loss desconocida")
         if loss == "bce" and self.activations[-1] != "logistic":
             raise ValueError("BCE requiere activación logística en la salida")
+        categorical = loss == "categorical_cross_entropy"
+        if categorical != (self.activations[-1] == "grouped_softmax"):
+            raise ValueError(
+                "grouped_softmax y categorical_cross_entropy se usan juntos"
+            )
+        if categorical:
+            validate_categorical_groups(self.architecture[-1], categorical_groups)
+        elif categorical_groups is not None:
+            raise ValueError(
+                "categorical_groups solo corresponde a la loss categorica"
+            )
         if not np.isfinite(beta) or beta <= 0:
             raise ValueError("beta debe ser positivo y finito")
         if not np.isfinite(init_scale) or init_scale < 0:
@@ -46,6 +65,7 @@ class Autoencoder:
         self.beta = float(beta)
         self.loss_name = loss
         self.leaky_slope = float(leaky_slope)
+        self.categorical_groups = categorical_groups
         generator = np.random.default_rng(seed)
         self.weights = [
             generator.uniform(-init_scale, init_scale, (output_size, input_size))
@@ -61,6 +81,8 @@ class Autoencoder:
             return np.tanh(self.beta * values)
         if name == "leaky_relu":
             return np.where(values >= 0.0, values, self.leaky_slope * values)
+        if name == "grouped_softmax":
+            return grouped_softmax(values, self.categorical_groups)
         # sigmoid(2 beta h), la logística utilizada en el TP3.
         return np.exp(-np.logaddexp(0.0, -2.0 * self.beta * values))
 
@@ -146,6 +168,10 @@ class Autoencoder:
         if self.loss_name == "mse":
             difference = predictions - targets
             return float(0.5 * np.mean(np.sum(difference ** 2, axis=1)))
+        if self.loss_name == "categorical_cross_entropy":
+            return categorical_cross_entropy(
+                predictions, targets, self.categorical_groups
+            )
         if np.any((targets < 0.0) | (targets > 1.0)):
             raise ValueError("BCE requiere objetivos entre 0 y 1")
         epsilon = np.finfo(np.float64).eps
@@ -165,8 +191,12 @@ class Autoencoder:
                 raise ValueError("inputs y targets deben tener igual cantidad de muestras")
         if self.loss_name == "bce" and np.any((targets < 0.0) | (targets > 1.0)):
             raise ValueError("BCE requiere objetivos entre 0 y 1")
+        if self.loss_name == "categorical_cross_entropy":
+            validate_categorical_targets(targets, self.categorical_groups)
         outputs = self._forward(inputs)
-        if self.loss_name == "bce":
+        if self.loss_name == "categorical_cross_entropy":
+            delta = outputs[-1] - targets
+        elif self.loss_name == "bce":
             # d(BCE)/dh para y_hat = sigmoid(2 beta h).
             delta = 2.0 * self.beta * (outputs[-1] - targets)
         else:
@@ -206,6 +236,7 @@ class Autoencoder:
                 beta=metadata["beta"],
                 loss=metadata.get("loss", "mse"),
                 leaky_slope=metadata.get("leaky_slope", 0.01),
+                categorical_groups=metadata.get("categorical_groups"),
             )
             for index, parameter in enumerate(model.weights):
                 stored = archive[f"w{index}"]
@@ -227,6 +258,7 @@ class Autoencoder:
             "beta": self.beta,
             "loss": self.loss_name,
             "leaky_slope": self.leaky_slope,
+            "categorical_groups": self.categorical_groups,
         })
         arrays = {"metadata": np.array(metadata)}
         arrays.update({f"w{index}": value

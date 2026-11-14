@@ -8,7 +8,39 @@ y recien entonces agregar la siguiente. Las pausas marcadas como **PING-PONG** s
 parte del trabajo, no demoras: no se avanza hasta poder explicar con palabras
 propias que entra, que sale y que error se esta minimizando.
 
-## Estado actual - ejercicio 1B cerrado el 10 de noviembre
+## Estado actual - Etapa 8 iniciada el 14 de noviembre
+
+> **Corrección de proceso:** la gramática, el split y la representación que se
+> enumeran abajo ya fueron discutidos y aprobados por la usuaria. Las
+> arquitecturas, pesos KL y corridas de código anteriores siguen siendo pilotos
+> exploratorios del asistente: no seleccionan el modelo final ni reemplazan el
+> embudo experimental que se acordará con la usuaria antes de iniciar las
+> corridas del VAE final.
+
+### Decisiones aprobadas de la Etapa 7
+
+- Familia de plantilla fija:
+  `def f(x): return (x <op1> c1) <op2> c2`.
+- Operadores `{+, -, *}` y constantes enteras de 0 a 99: universo de 90.000
+  fuentes posibles.
+- Split estratificado por los nueve pares de operadores: 1.800 train, 450
+  validación y 450 test. Cada par aporta 200/50/50 casos.
+- Una generación se evaluará por compilación, pertenencia AST, ausencia textual
+  de los 2.700 casos guardados y novedad semántica de su firma exacta `(a,b)`.
+- El dataset guardado contiene 1.786 firmas semánticas; el universo contiene
+  41.524 y deja 39.738 comportamientos fuera de todos los splits.
+- Cada una de las 26 posiciones se representa mediante un one-hot sobre un
+  vocabulario de 25 caracteres: 650 valores por fuente.
+- El decoder producirá 26 distribuciones separadas mediante softmax agrupado y
+  la reconstrucción se medirá como la suma de 26 entropías cruzadas, promediada
+  sobre el lote. Esta combinación ya tiene gradientes numéricos verificados en
+  el AE y en el VAE completo con KL.
+- El control de capacidad del AE comparó anchuras 64, 128 y 256 con latente 16
+  bajo un protocolo prefijado. Solo `650-256-16-256-650` superó 100 % exacto en
+  train, 99 % en validación y 100 % de gramática durante tres controles.
+- Al abrir test una vez, el AE seleccionado reconstruyó 448/450 fuentes
+  (`99,56 %`); las 450 compilaron y pertenecieron a la gramática. Esta evidencia
+  habilita el embudo variacional, pero no selecciona todavía el VAE final.
 
 ### Completado
 
@@ -153,12 +185,80 @@ propias que entra, que sale y que error se esta minimizando.
   error antes/después, recuperación exacta, casos empeorados, diez semillas y
   ejemplos representativos. La conclusión y las limitaciones están redactadas
   en `docs/dae/ejercicio_1b.md`.
+- Se completó el ping-pong 6A y la introducción de 6B: `mu` ubica el centro de
+  la distribución de una entrada, `log_var` controla su dispersión y la loss de
+  reconstrucción y KL ejercen fuerzas opuestas que deben equilibrarse.
+- Para aislar el mecanismo se creó un dataset de juguete de seis barras binarias
+  `3x3`. No es el dataset nuevo exigido por el ejercicio 2 ni condiciona su
+  elección posterior.
+- Se agregó un `VariationalAutoencoder` separado del AE/DAE congelado, con
+  encoder compartido y dos ramas lineales de igual dimensión para `mu` y
+  `log_var`. El primer checkpoint mantuvo deliberadamente `z = mu` y reconstruyó
+  sin errores las seis barras en 92 épocas con la semilla 0.
+- Se incorporó la reparametrización
+  `z = mu + exp(0.5 * log_var) * epsilon`, todavía sin KL. El muestreo usa un
+  generador con semilla separada y puede recibir un `epsilon` explícito para
+  hacer comparaciones controladas.
+- Con `epsilon` fijo y no nulo, los gradientes de reconstrucción de ambas ramas
+  coincidieron con diferencias finitas. La discrepancia máxima fue menor que
+  `4e-10`; los gradientes de `log_var` son ahora distintos de cero.
+- Con `epsilon = 0` se recupera exactamente `z = mu` y el gradiente de
+  `log_var` vuelve a cero, como exige la derivación. Cinco pruebas cubren formas,
+  fórmula, gradientes, checkpoint determinista y muestreo reproducible.
+- Se agregó la KL diagonal cerrada y su peso configurable. La loss total y sus
+  gradientes completos coincidieron con diferencias finitas; incluso con
+  `epsilon = 0`, KL actualiza ahora la rama `log_var`.
+- El entrenador específico del VAE reutiliza el mismo `epsilon` en predicción,
+  loss y backward de cada época y registra total, reconstrucción y KL por
+  separado. Nueve pruebas cubren el mecanismo y su reproducibilidad.
+- El primer piloto usa `kl_weight = 0.01`, Adam `0.01`, 2.000 épocas y semilla
+  de modelo 0. En las últimas 100 épocas obtuvo BCE `0,0128`, KL sin ponderar
+  `5,856`, `0,0033` errores medios y `5,99/6` patrones exactos. Es una prueba de
+  funcionamiento, no una selección final del peso KL.
+- El VAE puede guardarse y cargarse preservando distribución, decoder y peso
+  KL. El piloto quedó almacenado en `results/vae-toy-kl001-seed0/model.npz`.
+- Se muestrearon 1.000 puntos reproducibles de `N(0,I)` y se decodificaron sin
+  usar el encoder. El `58,7 %` produjo exactamente una de las seis barras; la
+  distancia de Hamming mínima media fue `0,62`, el máximo fue 3 y aparecieron
+  las seis clases válidas.
+- Las 1.000 muestras generaron 46 patrones binarios distintos y mostraron sesgo
+  hacia la barra vertical central. Esto es consistente con un peso KL pequeño:
+  demuestra generación desde el prior, pero también que la alineación no es
+  perfecta. La grilla, el CSV y el resumen están en `docs/vae/`.
+- Como piloto exploratorio se construyó una gramática de 900 funciones Python
+  aritméticas de 24 caracteres. Cada carácter usa siete bits ASCII, dando 168
+  features binarias. El split reproducible contiene 720 fuentes de train y 180
+  de test; el CSV está en `data/python_functions.csv`.
+- Las tres métricas del dataset se mantienen separadas: compilación sin
+  ejecución, pertenencia del AST a la gramática y novedad sintáctica respecto
+  de train. Las 900 fuentes originales pasan las dos primeras.
+- El AE control `168-64-8-64-168` reconstruyó exactamente train en 2.301 épocas.
+  En test reconstruyó 175 de 180 fuentes; las 180 compilaron y pertenecieron a
+  la gramática, descartando una falta de capacidad base.
+- Un tamiz exploratorio de KL comparó `0.01`, `0.1` y `1.0` con semilla 0. `0.1` conservó
+  reconstrucción media exacta en train/test y elevó la pertenencia del prior a
+  `89,6 %`; `0.01` obtuvo `50,8 %` y `1.0` obtuvo `99,4 %` a costa de reducir
+  la reconstrucción exacta a 149/720 y 20/180.
+- El piloto señaló `kl_weight = 0.1` como candidato y se lo ejecutó con semillas 0, 1 y 2. Sobre
+  1.000 puntos fijos del prior, `90,63 ± 3,76 %` perteneció a la gramática y
+  `15,93 ± 1,27 %` fue válido y no visto en train. Las tres semillas
+  reconstruyeron exactamente train y test en modo `z=mu`.
+- La primera muestra válida y nueva por una regla prefijada fue
+  `def f(x): return (x+1)+3`. También se conservaron casos compilables fuera de
+  la familia e inválidos. En una interpolación objetiva, ocho de nueve puntos
+  pertenecieron a la gramática y el punto medio no compiló.
+- Existe un borrador exploratorio del ejercicio 2 en `docs/ejercicio_2.md`; no
+  debe tratarse como informe aprobado hasta rehacer juntos las decisiones.
 
 ### Próximo paso
 
 1. Mantener congeladas las configuraciones finales del AE y del DAE.
-2. Avanzar a la Etapa 6: VAE mínimo de juguete, incorporando `mu`, `log_var`,
-   reparametrización y KL de manera incremental.
+2. Conservar las corridas de código solo como pilotos exploratorios; no hay VAE
+   final congelado.
+3. Diseñar con la usuaria un embudo del VAE que produzca evidencia suficiente
+   sobre reconstrucción, regularización, validez, diversidad, novedad y
+   estabilidad. No iniciar esas corridas antes de acordar sus factores,
+   métricas, reglas de selección y cantidad de semillas.
 
 ### Extensiones opcionales del DAE
 
@@ -609,19 +709,20 @@ diez semillas y casos elegidos mediante reglas reproducibles. La matriz de
 confusión, el análisis latente y el ruido estructurado permanecen como
 extensiones opcionales; no bloquean la Etapa 6.
 
-### Etapa 6 - VAE de juguete, todavia sin dataset final
+### Etapa 6 - VAE de juguete, todavia sin dataset final — COMPLETADA
 
 **Objetivo:** aprender el mecanismo variacional por partes, tal como indico el
 docente.
 
 Subpasos que deben funcionar por separado:
 
-1. Autoencoder determinista sobre un conjunto diminuto.
-2. Encoder con dos salidas, `mu` y `log_var`, aun usando `z = mu`.
-3. Agregar `epsilon` y reparametrizacion, con KL temporalmente en cero.
-4. Verificar los gradientes de ambas ramas.
-5. Agregar KL con un peso pequeno y registrar reconstruccion y KL por separado.
-6. Muestrear `z ~ N(0,I)` y pasar por el decoder.
+1. [x] Autoencoder determinista sobre un conjunto diminuto.
+2. [x] Encoder con dos salidas, `mu` y `log_var`, aun usando `z = mu`.
+3. [x] Agregar `epsilon` y reparametrizacion, con KL temporalmente en cero.
+4. [x] Verificar los gradientes de ambas ramas.
+5. [x] Agregar KL con un peso pequeno y registrar reconstruccion y KL por
+   separado.
+6. [x] Muestrear `z ~ N(0,I)` y pasar por el decoder.
 
 **PING-PONG 6A - probabilidad sin formulas largas**
 
@@ -636,7 +737,13 @@ Subpasos que deben funcionar por separado:
 
 **Salida:** VAE minimo probado, con curvas separadas de reconstruccion y KL.
 
-### Etapa 7 - Elegir y preparar el dataset nuevo
+**Cierre:** los seis subpasos funcionan por separado. El backward completo fue
+validado con diferencias finitas, las curvas separan reconstrucción y KL, y
+1.000 muestras del prior fueron evaluadas con una regla objetiva. La tasa de
+validez de `58,7 %` no se interpreta como óptima: expone el efecto del peso KL
+pequeño y deja la comparación de pesos para el VAE final.
+
+### Etapa 7 - Elegir y preparar el dataset nuevo — COMPLETADA
 
 **Objetivo:** elegir algo evaluable y terminable, no solo llamativo.
 
@@ -667,7 +774,15 @@ No implementar el dataset definitivo hasta tomar esta decision conscientemente.
 **Salida:** dataset versionado, visualizacion/ejemplos, reglas de pertenencia y
 division reproducible si corresponde.
 
-### Etapa 8 - VAE final y experimentos acotados
+**Cierre:** están acordados la plantilla, el universo de 90.000 funciones, los
+criterios de novedad y el split balanceado 1.800/450/450. La representación
+aprobada es one-hot por carácter (`26 x 25 = 650`), con 26 softmax agrupados y
+entropía cruzada categórica por posición. El round-trip es exacto y los
+gradientes de esta salida fueron verificados por diferencias finitas tanto en
+el AE como en el VAE con KL. Esto cierra la preparación del dataset, pero no
+selecciona ninguna arquitectura ni hiperparámetro de la Etapa 8.
+
+### Etapa 8 - VAE final y experimentos acotados — EN CURSO
 
 **Objetivo:** obtener reconstrucciones y muestras nuevas defendibles.
 
@@ -692,6 +807,140 @@ division reproducible si corresponde.
 
 **Salida:** comparacion pequena, modelo elegido, interpolaciones y muestras del
 prior juzgadas con el criterio definido en la etapa 7.
+
+**Control AE completado:** se compararon secuencialmente tres anchuras con
+latente 16, Adam `0.005`, una semilla y un máximo común de 3.000 épocas. Solo
+`650-256-16-256-650` sostuvo los umbrales prefijados. Obtuvo 446/450 exactas en
+validación y, tras la selección, 448/450 en test, con 100 % de compilación y
+pertenencia a la gramática. El protocolo, la comparación y los fallos están en
+`docs/vae/code-ae-capacity.md`. El siguiente paso es acordar un embudo VAE más
+amplio; no se adopta automáticamente la arquitectura del AE como modelo final.
+
+#### Hipótesis narrativa para el ejercicio 2
+
+El AE y el VAE no se presentarán como dos competidores equivalentes. El AE es
+el control que demuestra capacidad de reconstrucción. La hipótesis a evaluar es
+que ese AE no impone una distribución conocida sobre sus códigos, mientras que
+el VAE acepta un posible costo de reconstrucción para aproximar el latente a
+`N(0,I)` y volver significativo el muestreo desde ese prior.
+
+No se afirmará de antemano que el VAE “soluciona” el espacio latente. Se deberá
+mostrar empíricamente si mejora la generación desde `N(0,I)`, cuánto cuesta en
+reconstrucción y qué limitaciones conserva.
+
+Esto no significa que el AE sea incapaz de reconstruir. Cuando recibe una
+fuente, el recorrido `x -> encoder -> z -> decoder -> x_hat` usa un código
+producido por su propio encoder y ya alcanzó reconstrucción casi perfecta. El
+problema aparece al generar sin una entrada: el AE nunca fue obligado a ubicar
+sus códigos cerca de una distribución conocida, por lo que un punto tomado de
+`N(0,I)` puede caer en una región que su decoder nunca vio.
+
+El VAE no busca “más representación”, sino una representación más organizada y
+muestreable. Sus ramas `mu` y `log_var`, la reparametrización y la KL entrenan
+al decoder con vecindades latentes y aproximan los códigos al prior normal. La
+comparación deberá mostrar por separado:
+
+- **reconstrucción:** qué ocurre cuando el código proviene del encoder;
+- **generación:** qué ocurre cuando el código se toma directamente de
+  `N(0,I)`, sin una fuente de entrada.
+
+La hipótesis esperada es que el AE reconstruya igual o mejor y que el VAE genere
+desde el prior con mayor validez, diversidad y novedad. Si las métricas no
+muestran esa diferencia, no se concluirá que el VAE resolvió el problema.
+
+La presentación debería separar dos preguntas:
+
+1. **¿Por qué hace falta el VAE?** Comparación controlada AE-VAE sobre el mismo
+   dataset, backbone, dimensión latente, semillas y puntos del prior.
+2. **¿Por qué se eligió ese VAE?** Embudo de entrenamiento con curvas separadas,
+   métricas de validación, diagnóstico del latente y confirmación multisemilla.
+
+#### Evidencia común para comparar AE y VAE
+
+- Reconstrucción determinista: entropía cruzada, exactitud por carácter y por
+  fuente, compilación y pertenencia a la gramática por split.
+- En el VAE, reconstrucción tanto con `z = mu` como con muestras repetidas del
+  posterior; no esconder la variabilidad usando solo la media.
+- Distribución latente: media y desvío por dimensión, correlaciones, KL por
+  dimensión, cantidad de unidades activas y señales de colapso.
+- Generación sobre los mismos puntos fijos `z ~ N(0,I)`: compilación, gramática,
+  novedad sintáctica y semántica, fuentes únicas, duplicación, cobertura de los
+  nueve pares de operadores y concentración en pocos resultados.
+- Interpolaciones prefijadas: porcentaje de pasos válidos y ejemplos elegidos
+  por regla, no mediante inspección posterior.
+- Estabilidad: distribución de las métricas entre semillas, no solo la mejor
+  corrida.
+
+#### Recomendación de embudo — PENDIENTE DE APROBACIÓN DE LA USUARIA
+
+Ningún bloque de esta propuesta autoriza corridas por sí solo. La usuaria da el
+OK final sobre candidatos, presupuestos, umbrales y semillas antes de cada
+tanda.
+
+**Bloque A — completar el baseline AE**
+
+- Congelar `650-256-16-256-650`; no volver a buscar anchuras.
+- Confirmarlo con semillas 0-9 y el mismo presupuesto.
+- Para cada semilla, evaluar una colección común de 5.000 puntos de `N(0,I)`.
+- Propósito: obtener estabilidad y el baseline generativo que permita mostrar
+  el problema del latente no regularizado.
+
+**Bloque B — calibración técnica del VAE**
+
+- Usar primero el mismo backbone y latente 16 para conservar una comparación
+  causal con el AE.
+- Recomendada: calibración breve de Adam con tasas `0.001`, `0.003` y `0.005`,
+  una semilla y un peso KL intermedio provisional.
+- Descartar solo divergencias o configuraciones claramente inviables; esta
+  tanda no elige el modelo final.
+
+**Bloque C — tamiz del peso KL**
+
+- Incluir `KL = 0` únicamente como diagnóstico.
+- Recomendado: escala logarítmica
+  `{0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03, 0.1}` con una semilla.
+- Comparar reconstrucción, prior, posterior y unidades activas. No seleccionar
+  por loss total, que no es comparable entre pesos distintos.
+- Conservar la frontera de Pareto: configuraciones no dominadas entre
+  reconstrucción, validez, novedad/diversidad y alineación con el prior.
+
+**Bloque D — refinamientos con hipótesis**
+
+- Probar valores KL intermedios solo si el tamiz muestra un cambio claro entre
+  dos puntos.
+- Recomendado: comparar KL constante contra warm-up lineal para el finalista si
+  aparece colapso temprano o una pérdida brusca de reconstrucción.
+- Dimensiones latentes `{8, 16, 32}` son una extensión posible, no automática.
+  Se abre únicamente si latente 16 muestra saturación, colapso o diversidad
+  insuficiente.
+- No cambiar simultáneamente anchura, latente, tasa y KL.
+
+**Bloque E — confirmación y comparación final**
+
+- Confirmar hasta tres finalistas con semillas 0, 1 y 2.
+- Congelar una configuración antes de test.
+- Ejecutar el ganador con semillas 0-9 y compararlo contra las mismas diez
+  semillas del AE usando los mismos puntos del prior.
+- Publicar media, desvío y box-plots, además de una muestra fija y casos de
+  fallo elegidos por reglas reproducibles.
+
+#### Decisiones que conserva la usuaria
+
+Antes de cada bloque se deben aprobar explícitamente las decisiones que le
+correspondan:
+
+1. si la comparación final tendrá diez semillas para ambos modelos;
+2. si se aceptan las tres tasas recomendadas;
+3. el rango de pesos KL y si se incluye warm-up;
+4. los mínimos aceptables de reconstrucción y validez para filtrar candidatos;
+5. si la dimensión latente queda fija en 16 o bajo qué diagnóstico se reabre;
+6. cantidad de muestras del prior y presupuesto máximo de épocas.
+
+**Piloto disponible, no cierre:** se ejecutó un AE control y se compararon tres
+pesos KL sin que la usuaria hubiera aprobado previamente el embudo. Los datos
+pueden informar el futuro diseño, pero no seleccionan arquitectura, peso KL ni
+modelo final. Ninguna corrida del VAE final comenzará hasta aprobar juntos el
+bloque correspondiente del protocolo experimental.
 
 ### Etapa 9 - Informe, presentacion y defensa
 
@@ -806,7 +1055,24 @@ idea pendiente con una decision ya respaldada por resultados.
 
 ## 8. Próximo paso al retomar
 
-Los ejercicios 1A y 1B y las Etapas 4 y 5 están cerrados. No reabrir la búsqueda
-de arquitectura, optimizador, tasa, épocas, semillas ni segmentos latentes. Al
-retomar, comenzar la Etapa 6 con el VAE mínimo de juguete: primero separar `mu`
-y `log_var` manteniendo temporalmente `z = mu`, antes de agregar muestreo y KL.
+**Estado actual:** Etapas 1A, 1B, 6 y 7 cerradas. Etapa 8 en curso y pausada
+antes de ejecutar el Bloque A del embudo propuesto.
+
+**Última evidencia confiable:** el control AE seleccionó
+`650-256-16-256-650` con latente 16 mediante umbrales prefijados. Reconstruyó
+446/450 fuentes de validación y 448/450 de test; todas las decodificaciones
+compilaron y pertenecieron a la gramática.
+
+**Decisiones tomadas:** dataset Python de plantilla fija, split
+1.800/450/450, one-hot `26 x 25`, softmax y entropía cruzada por posición. El AE
+es control de capacidad; no es todavía evidencia del comportamiento generativo
+ni determina automáticamente la arquitectura final del VAE.
+
+**Pregunta abierta:** aprobar o modificar el Bloque A recomendado: confirmar el
+AE congelado con semillas 0-9, máximo de 3.000 épocas y evaluar los mismos 5.000
+puntos de `N(0,I)` por semilla. Ese bloque establecerá el baseline generativo y
+la estabilidad con los que luego se fijarán los umbrales del VAE.
+
+**Próximo paso exacto:** no ejecutar nuevas corridas hasta recibir el OK de la
+usuaria sobre el Bloque A. Después de completarlo, presentar sus resultados y
+pedir aprobación separada para la calibración del VAE del Bloque B.

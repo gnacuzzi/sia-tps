@@ -1,0 +1,15 @@
+{
+  "epochs": 2000,
+  "kl_weight": 0.01,
+  "initial_total_loss": 6.191887104595382,
+  "final_total_loss": 0.05834929689363961,
+  "tail_mean_total_loss": 0.0713493043255661,
+  "tail_mean_reconstruction_loss": 0.012785889568663347,
+  "tail_mean_kl_loss": 5.856341475690275,
+  "tail_mean_pixel_errors": 0.003333333333333333,
+  "tail_mean_exact_patterns": 5.99,
+  "mu_min": -2.723017097711778,
+  "mu_max": 2.2834346128612624,
+  "variance_min": 0.007788264366338685,
+  "variance_max": 0.13740404119799743
+}

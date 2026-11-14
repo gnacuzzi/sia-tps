@@ -82,6 +82,39 @@ def test_bce_backpropagation_matches_a_numerical_gradient():
         np.testing.assert_allclose(gradient, numerical, rtol=2e-4, atol=2e-6)
 
 
+def test_grouped_softmax_cross_entropy_gradients_match_finite_differences():
+    model = Autoencoder(
+        [6, 4, 2, 4, 6],
+        latent_layer=2,
+        activations=["tanh", "linear", "tanh", "grouped_softmax"],
+        loss="categorical_cross_entropy",
+        categorical_groups=2,
+        seed=7,
+        init_scale=0.2,
+    )
+    inputs = np.array([
+        [1.0, 0.0, 0.0, 0.0, 1.0, 0.0],
+        [0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+    ])
+    predictions = model.predict(inputs).reshape(2, 2, 3)
+    np.testing.assert_allclose(predictions.sum(axis=2), np.ones((2, 2)))
+    weight_gradients, bias_gradients = model.gradients(inputs)
+    analytical = weight_gradients + bias_gradients
+    epsilon = 1e-6
+
+    for parameter, gradient in zip(model.parameters, analytical):
+        numerical = np.empty_like(parameter)
+        for index in np.ndindex(parameter.shape):
+            original = parameter[index]
+            parameter[index] = original + epsilon
+            plus = model.loss(inputs)
+            parameter[index] = original - epsilon
+            minus = model.loss(inputs)
+            parameter[index] = original
+            numerical[index] = (plus - minus) / (2 * epsilon)
+        np.testing.assert_allclose(gradient, numerical, rtol=2e-4, atol=2e-6)
+
+
 def test_backpropagation_with_separate_targets_matches_a_numerical_gradient():
     model = _small_autoencoder()
     inputs = np.array([[1.0, 1.0, 1.0], [1.0, 0.0, 0.0]])
@@ -156,6 +189,26 @@ def test_saved_model_preserves_predictions_when_loaded(tmp_path):
 
     assert loaded.loss_name == model.loss_name
     np.testing.assert_allclose(loaded.predict(inputs), expected)
+
+
+def test_saved_categorical_model_preserves_groups_and_predictions(tmp_path):
+    model = Autoencoder(
+        [6, 4, 2, 4, 6],
+        latent_layer=2,
+        activations=["tanh", "linear", "tanh", "grouped_softmax"],
+        loss="categorical_cross_entropy",
+        categorical_groups=2,
+        seed=4,
+    )
+    inputs = np.array([[1.0, 0.0, 0.0, 0.0, 1.0, 0.0]])
+    path = tmp_path / "categorical-ae.npz"
+
+    model.save(path)
+    loaded = Autoencoder.load(path)
+
+    assert loaded.categorical_groups == 2
+    assert loaded.loss_name == "categorical_cross_entropy"
+    np.testing.assert_array_equal(loaded.predict(inputs), model.predict(inputs))
 
 
 def test_autoencoder_can_memorize_one_letter():

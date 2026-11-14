@@ -1,0 +1,18 @@
+{
+  "sample_count": 1000,
+  "seed": 21,
+  "threshold": 0.5,
+  "valid_samples": 587,
+  "valid_rate": 0.587,
+  "mean_minimum_hamming_distance": 0.62,
+  "maximum_minimum_hamming_distance": 3,
+  "unique_binary_patterns": 46,
+  "valid_counts": {
+    "horizontal_0": 44,
+    "horizontal_1": 88,
+    "horizontal_2": 119,
+    "vertical_0": 69,
+    "vertical_1": 199,
+    "vertical_2": 68
+  }
+}

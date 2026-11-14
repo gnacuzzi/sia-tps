@@ -1,0 +1,4 @@
+name,architecture,parameters,epochs,train_exact_rate,validation_exact_rate,validation_character_accuracy,validation_compile_rate,validation_grammar_rate,passed_gate
+width64-latent16,650-64-16-64-650,86042,3000,1.0,0.9733333333333334,0.9989743589743589,1.0,1.0,False
+width128-latent16,650-128-16-128-650,171418,3000,1.0,0.9577777777777777,0.9976923076923077,1.0,1.0,False
+width256-latent16,650-256-16-256-650,342170,2725,1.0,0.9911111111111112,0.9994871794871795,1.0,1.0,True

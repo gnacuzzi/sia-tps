@@ -161,3 +161,46 @@ def fit_multilevel_denoising_autoencoder(
         progress=progress,
         input_corruptor=corrupt_levels,
     )
+
+
+def fit_variational_autoencoder(model, inputs, targets=None, *, optimizer,
+                                max_epochs: int, generator, progress=None):
+    """Entrenar un VAE usando el mismo epsilon en loss, metricas y backward."""
+    inputs = np.asarray(inputs, dtype=np.float64)
+    if targets is None:
+        targets = inputs
+    else:
+        targets = np.asarray(targets, dtype=np.float64)
+    if inputs.shape != targets.shape or inputs.ndim != 2 or len(inputs) == 0:
+        raise ValueError("inputs y targets deben ser matrices no vacias de igual forma")
+    if isinstance(max_epochs, bool) or not isinstance(max_epochs, int) or max_epochs < 1:
+        raise ValueError("max_epochs debe ser un entero positivo")
+    latent_size = model.architecture[model.latent_layer]
+    history = []
+    for epoch in range(max_epochs + 1):
+        epsilon = generator.standard_normal((len(inputs), latent_size))
+        predictions = model.predict(inputs, epsilon)
+        metrics = reconstruction_metrics(targets, predictions)
+        components = model.loss_components(inputs, targets, epsilon)
+        row = {
+            "epoch": epoch,
+            "loss": components["total"],
+            "total_loss": components["total"],
+            "reconstruction_loss": components["reconstruction"],
+            "kl_loss": components["kl"],
+            "kl_weight": model.kl_weight,
+            "learning_rate": optimizer.learning_rate,
+            "max_pixel_errors": metrics["max_pixel_errors"],
+            "mean_pixel_errors": metrics["mean_pixel_errors"],
+            "exact_patterns": metrics["exact_patterns"],
+        }
+        history.append(row)
+        if progress is not None:
+            progress(row.copy())
+        if epoch == max_epochs:
+            break
+        weight_gradients, bias_gradients = model.gradients(
+            inputs, targets, epsilon
+        )
+        optimizer.step(model.parameters, weight_gradients + bias_gradients)
+    return history

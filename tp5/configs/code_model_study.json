@@ -1,0 +1,69 @@
+{
+  "architecture": [168, 64, 8, 64, 168],
+  "latent_layer": 2,
+  "activations": ["tanh", "linear", "tanh", "logistic"],
+  "init_scale": 0.25,
+  "split_seed": 17,
+  "train_fraction": 0.8,
+  "optimizer": {
+    "name": "adam",
+    "learning_rate": 0.005
+  },
+  "prior_sample_count": 1000,
+  "prior_seed": 44,
+  "result_root": "results/code-model-study",
+  "comparison_output": "docs/vae/code-model-comparison.csv",
+  "selected_run": "vae-beta01-seed0",
+  "selected_prior_output": "docs/vae/code-prior-samples-seed0.csv",
+  "selected_figure_output": "docs/vae/code-vae-loss-seed0.png",
+  "selected_model_output": "results/code-vae-selected/model.npz",
+  "runs": [
+    {
+      "name": "ae-control-seed0",
+      "type": "ae",
+      "model_seed": 0,
+      "training_seed": 31,
+      "epochs": 5000
+    },
+    {
+      "name": "vae-beta001-seed0",
+      "type": "vae",
+      "model_seed": 0,
+      "training_seed": 31,
+      "kl_weight": 0.01,
+      "epochs": 2000
+    },
+    {
+      "name": "vae-beta01-seed0",
+      "type": "vae",
+      "model_seed": 0,
+      "training_seed": 31,
+      "kl_weight": 0.1,
+      "epochs": 2000
+    },
+    {
+      "name": "vae-beta1-seed0",
+      "type": "vae",
+      "model_seed": 0,
+      "training_seed": 31,
+      "kl_weight": 1.0,
+      "epochs": 2000
+    },
+    {
+      "name": "vae-beta01-seed1",
+      "type": "vae",
+      "model_seed": 1,
+      "training_seed": 32,
+      "kl_weight": 0.1,
+      "epochs": 2000
+    },
+    {
+      "name": "vae-beta01-seed2",
+      "type": "vae",
+      "model_seed": 2,
+      "training_seed": 33,
+      "kl_weight": 0.1,
+      "epochs": 2000
+    }
+  ]
+}

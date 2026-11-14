@@ -1,0 +1,7 @@
+metric,mean,std
+prior_compile_rate,0.913000,0.035791
+prior_grammar_rate,0.906333,0.037581
+prior_novel_rate,0.159333,0.012702
+prior_unique_sources,610.666667,13.316656
+tail_reconstruction_loss,0.142059,0.003803
+tail_kl_loss,10.371829,0.106880

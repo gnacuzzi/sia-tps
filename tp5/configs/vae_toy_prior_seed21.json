@@ -1,0 +1,11 @@
+{
+  "name": "vae-toy-prior-seed21",
+  "model_path": "results/vae-toy-kl001-seed0/model.npz",
+  "sample_count": 1000,
+  "display_count": 36,
+  "seed": 21,
+  "threshold": 0.5,
+  "records_output": "docs/vae/toy-prior-samples.csv",
+  "summary_output": "docs/vae/toy-prior-summary.json",
+  "figure_output": "docs/vae/toy-prior-samples.png"
+}
