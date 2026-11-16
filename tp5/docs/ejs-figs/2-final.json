@@ -1,0 +1,448 @@
+{
+  "seeds": [
+    {
+      "seed": 0,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.962,
+      "prior_novel_semantic": 0.557,
+      "tv_operator_pairs": 0.042555555555555555,
+      "tv_constants": 0.14350000000000002,
+      "kl": 22.45211007572252,
+      "prior_unique_valid": 992,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 1,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.964,
+      "prior_novel_semantic": 0.528,
+      "tv_operator_pairs": 0.027666666666666666,
+      "tv_constants": 0.14400000000000002,
+      "kl": 22.38362916473742,
+      "prior_unique_valid": 992,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 2,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.956,
+      "prior_novel_semantic": 0.53,
+      "tv_operator_pairs": 0.042555555555555555,
+      "tv_constants": 0.14550000000000002,
+      "kl": 22.32738338443481,
+      "prior_unique_valid": 995,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 3,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.966,
+      "prior_novel_semantic": 0.531,
+      "tv_operator_pairs": 0.04166666666666666,
+      "tv_constants": 0.14400000000000002,
+      "kl": 21.80093128526819,
+      "prior_unique_valid": 992,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 4,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.974,
+      "prior_novel_semantic": 0.546,
+      "tv_operator_pairs": 0.06155555555555555,
+      "tv_constants": 0.15200000000000002,
+      "kl": 22.052939363192568,
+      "prior_unique_valid": 988,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 5,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.962,
+      "prior_novel_semantic": 0.538,
+      "tv_operator_pairs": 0.026444444444444458,
+      "tv_constants": 0.15050000000000002,
+      "kl": 22.50153632341619,
+      "prior_unique_valid": 994,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 6,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.954,
+      "prior_novel_semantic": 0.533,
+      "tv_operator_pairs": 0.04966666666666666,
+      "tv_constants": 0.14900000000000002,
+      "kl": 22.845592630685147,
+      "prior_unique_valid": 998,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 7,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.972,
+      "prior_novel_semantic": 0.574,
+      "tv_operator_pairs": 0.04222222222222225,
+      "tv_constants": 0.14300000000000002,
+      "kl": 21.888423973174596,
+      "prior_unique_valid": 996,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 8,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.966,
+      "prior_novel_semantic": 0.557,
+      "tv_operator_pairs": 0.05466666666666666,
+      "tv_constants": 0.15100000000000002,
+      "kl": 22.356498513708843,
+      "prior_unique_valid": 996,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    },
+    {
+      "seed": 9,
+      "validation_exact": 1.0,
+      "prior_grammar": 1.0,
+      "prior_novel_text": 0.968,
+      "prior_novel_semantic": 0.543,
+      "tv_operator_pairs": 0.035555555555555556,
+      "tv_constants": 0.1315,
+      "kl": 22.19630412416233,
+      "prior_unique_valid": 992,
+      "test_exact": 1.0,
+      "test_character_accuracy": 1.0
+    }
+  ],
+  "samples": [
+    {
+      "sample": "0",
+      "source": "def f(x): return (x+10)*88",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "True"
+    },
+    {
+      "sample": "1",
+      "source": "def f(x): return (x*74)+30",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "False",
+      "novel_semantic": "False"
+    },
+    {
+      "sample": "2",
+      "source": "def f(x): return (x-89)+ 8",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "False"
+    },
+    {
+      "sample": "3",
+      "source": "def f(x): return (x-93)*31",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "True"
+    },
+    {
+      "sample": "4",
+      "source": "def f(x): return (x+14)-58",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "False"
+    },
+    {
+      "sample": "5",
+      "source": "def f(x): return (x*85)-13",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "True"
+    },
+    {
+      "sample": "6",
+      "source": "def f(x): return (x-69)*18",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "True"
+    },
+    {
+      "sample": "7",
+      "source": "def f(x): return (x* 5)*59",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "False"
+    },
+    {
+      "sample": "8",
+      "source": "def f(x): return (x*35)+71",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "True"
+    },
+    {
+      "sample": "9",
+      "source": "def f(x): return (x- 6)-90",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "False"
+    },
+    {
+      "sample": "10",
+      "source": "def f(x): return (x+19)*32",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "True"
+    },
+    {
+      "sample": "11",
+      "source": "def f(x): return (x+97)+48",
+      "compiles": "True",
+      "grammar": "True",
+      "novel_text": "True",
+      "novel_semantic": "False"
+    }
+  ],
+  "interpolation": [
+    {
+      "t": 0.0,
+      "source": "def f(x): return (x+12)+22",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.1,
+      "source": "def f(x): return (x+12)+22",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.2,
+      "source": "def f(x): return (x+12)+22",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.3,
+      "source": "def f(x): return (x+12)+22",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.4,
+      "source": "def f(x): return (x+12)+22",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.5,
+      "source": "def f(x): return (x+92)*22",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.6,
+      "source": "def f(x): return (x*94)*99",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.7,
+      "source": "def f(x): return (x*94)*99",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.8,
+      "source": "def f(x): return (x*94)*99",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 0.9,
+      "source": "def f(x): return (x*94)*99",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    },
+    {
+      "t": 1.0,
+      "source": "def f(x): return (x*94)*99",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": false,
+      "novel_semantic": false,
+      "in_train": true
+    }
+  ],
+  "prior_interpolation": [
+    {
+      "t": 0.0,
+      "source": "def f(x): return (x+10)*88",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.1,
+      "source": "def f(x): return (x+10)*88",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.2,
+      "source": "def f(x): return (x+10)*88",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.3,
+      "source": "def f(x): return (x+13)*36",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.4,
+      "source": "def f(x): return (x+93)*36",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.5,
+      "source": "def f(x): return (x+93)*36",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.6,
+      "source": "def f(x): return (x+93)*36",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.7,
+      "source": "def f(x): return (x-93)*36",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.8,
+      "source": "def f(x): return (x-93)*30",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 0.9,
+      "source": "def f(x): return (x-93)*30",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    },
+    {
+      "t": 1.0,
+      "source": "def f(x): return (x-93)*31",
+      "compiles": true,
+      "grammar": true,
+      "novel_text": true,
+      "novel_semantic": true,
+      "in_train": false
+    }
+  ],
+  "prior_interpolation_ends": [
+    0,
+    3
+  ],
+  "latent_stats": {
+    "beta0-l16-s0": {
+      "mu_std": 4.861780697373819,
+      "valid": 0.286
+    },
+    "beta003-l32-s0": {
+      "mu_std": 0.855103258264587,
+      "valid": 1.0
+    }
+  }
+}

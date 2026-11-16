@@ -1,0 +1,7 @@
+{
+  "prior_novel_text": 0.9684999999999999,
+  "prior_novel_semantic": 0.5496800000000001,
+  "prior_unique_valid": 995.24,
+  "tv_operator_pairs": 0.03346666666666667,
+  "tv_constants": 0.12494
+}
