@@ -1,0 +1,198 @@
+{
+  "result_root": "results/vae-code-study",
+  "summary_output": "docs/ejs-figs/2-vae-estudio.csv",
+  "defaults": {
+    "width": 256,
+    "latent": 16,
+    "init_scale": 0.25,
+    "learning_rate": 0.005,
+    "epochs": 3000,
+    "prior_samples": 1000,
+    "prior_seed": 44
+  },
+  "runs": [
+    {
+      "name": "beta0-l16-s0",
+      "step": "1-beta",
+      "beta": 0.0,
+      "seed": 0
+    },
+    {
+      "name": "beta001-l16-s0",
+      "step": "1-beta",
+      "beta": 0.01,
+      "seed": 0
+    },
+    {
+      "name": "beta003-l16-s0",
+      "step": "1-beta",
+      "beta": 0.03,
+      "seed": 0
+    },
+    {
+      "name": "beta01-l16-s0",
+      "step": "1-beta",
+      "beta": 0.1,
+      "seed": 0
+    },
+    {
+      "name": "beta03-l16-s0",
+      "step": "1-beta",
+      "beta": 0.3,
+      "seed": 0
+    },
+    {
+      "name": "beta10-l16-s0",
+      "step": "1-beta",
+      "beta": 1.0,
+      "seed": 0
+    },
+    {
+      "name": "beta003-l2-s0",
+      "step": "2-latente",
+      "beta": 0.03,
+      "latent": 2,
+      "seed": 0
+    },
+    {
+      "name": "beta003-l8-s0",
+      "step": "2-latente",
+      "beta": 0.03,
+      "latent": 8,
+      "seed": 0
+    },
+    {
+      "name": "beta003-l32-s0",
+      "step": "2-latente",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 0
+    },
+    {
+      "name": "beta01-l2-s0",
+      "step": "2-latente",
+      "beta": 0.1,
+      "latent": 2,
+      "seed": 0
+    },
+    {
+      "name": "beta01-l8-s0",
+      "step": "2-latente",
+      "beta": 0.1,
+      "latent": 8,
+      "seed": 0
+    },
+    {
+      "name": "beta01-l32-s0",
+      "step": "2-latente",
+      "beta": 0.1,
+      "latent": 32,
+      "seed": 0
+    },
+    {
+      "name": "beta01-l16-s1",
+      "step": "3-confirmacion",
+      "beta": 0.1,
+      "latent": 16,
+      "seed": 1
+    },
+    {
+      "name": "beta01-l16-s2",
+      "step": "3-confirmacion",
+      "beta": 0.1,
+      "latent": 16,
+      "seed": 2
+    },
+    {
+      "name": "beta03-l16-s1",
+      "step": "3-confirmacion",
+      "beta": 0.3,
+      "latent": 16,
+      "seed": 1
+    },
+    {
+      "name": "beta03-l16-s2",
+      "step": "3-confirmacion",
+      "beta": 0.3,
+      "latent": 16,
+      "seed": 2
+    },
+    {
+      "name": "beta01-l32-s1",
+      "step": "3-confirmacion",
+      "beta": 0.1,
+      "latent": 32,
+      "seed": 1
+    },
+    {
+      "name": "beta01-l32-s2",
+      "step": "3-confirmacion",
+      "beta": 0.1,
+      "latent": 32,
+      "seed": 2
+    },
+    {
+      "name": "beta003-l32-s1",
+      "step": "3-confirmacion",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 1
+    },
+    {
+      "name": "beta003-l32-s2",
+      "step": "3-confirmacion",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 2
+    },
+    {
+      "name": "beta003-l32-s3",
+      "step": "4-final",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 3
+    },
+    {
+      "name": "beta003-l32-s4",
+      "step": "4-final",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 4
+    },
+    {
+      "name": "beta003-l32-s5",
+      "step": "4-final",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 5
+    },
+    {
+      "name": "beta003-l32-s6",
+      "step": "4-final",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 6
+    },
+    {
+      "name": "beta003-l32-s7",
+      "step": "4-final",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 7
+    },
+    {
+      "name": "beta003-l32-s8",
+      "step": "4-final",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 8
+    },
+    {
+      "name": "beta003-l32-s9",
+      "step": "4-final",
+      "beta": 0.03,
+      "latent": 32,
+      "seed": 9
+    }
+  ]
+}

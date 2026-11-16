@@ -1,0 +1,300 @@
+{
+  "name": "bce-architecture-comparison-seeds0-9",
+  "loss": "bce",
+  "architectures": {
+    "A0-direct": {
+      "layers": [
+        35,
+        2,
+        35
+      ],
+      "latent_layer": 1,
+      "activations": [
+        "linear",
+        "logistic"
+      ]
+    },
+    "A1-width-10": {
+      "layers": [
+        35,
+        10,
+        2,
+        10,
+        35
+      ],
+      "latent_layer": 2,
+      "activations": [
+        "tanh",
+        "linear",
+        "tanh",
+        "logistic"
+      ]
+    },
+    "width-15": {
+      "layers": [
+        35,
+        15,
+        2,
+        15,
+        35
+      ],
+      "latent_layer": 2,
+      "activations": [
+        "tanh",
+        "linear",
+        "tanh",
+        "logistic"
+      ]
+    },
+    "A2-width-20": {
+      "layers": [
+        35,
+        20,
+        2,
+        20,
+        35
+      ],
+      "latent_layer": 2,
+      "activations": [
+        "tanh",
+        "linear",
+        "tanh",
+        "logistic"
+      ]
+    },
+    "A3-width-35": {
+      "layers": [
+        35,
+        35,
+        2,
+        35,
+        35
+      ],
+      "latent_layer": 2,
+      "activations": [
+        "tanh",
+        "linear",
+        "tanh",
+        "logistic"
+      ]
+    },
+    "width-45": {
+      "layers": [
+        35,
+        45,
+        2,
+        45,
+        35
+      ],
+      "latent_layer": 2,
+      "activations": [
+        "tanh",
+        "linear",
+        "tanh",
+        "logistic"
+      ]
+    },
+    "A4-depth-20-10": {
+      "layers": [
+        35,
+        20,
+        10,
+        2,
+        10,
+        20,
+        35
+      ],
+      "latent_layer": 3,
+      "activations": [
+        "tanh",
+        "tanh",
+        "linear",
+        "tanh",
+        "tanh",
+        "logistic"
+      ]
+    },
+    "D1-deep-35-15": {
+      "layers": [
+        35,
+        35,
+        15,
+        2,
+        15,
+        35,
+        35
+      ],
+      "latent_layer": 3,
+      "activations": [
+        "tanh",
+        "tanh",
+        "linear",
+        "tanh",
+        "tanh",
+        "logistic"
+      ]
+    },
+    "D2-deep-45-20": {
+      "layers": [
+        35,
+        45,
+        20,
+        2,
+        20,
+        45,
+        35
+      ],
+      "latent_layer": 3,
+      "activations": [
+        "tanh",
+        "tanh",
+        "linear",
+        "tanh",
+        "tanh",
+        "logistic"
+      ]
+    }
+  },
+  "combinations": [
+    {
+      "architecture": "A0-direct",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "A0-direct",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    },
+    {
+      "architecture": "A1-width-10",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "A1-width-10",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    },
+    {
+      "architecture": "width-15",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "width-15",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    },
+    {
+      "architecture": "A2-width-20",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "A2-width-20",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    },
+    {
+      "architecture": "A3-width-35",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "A3-width-35",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    },
+    {
+      "architecture": "width-45",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "width-45",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    },
+    {
+      "architecture": "A4-depth-20-10",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "A4-depth-20-10",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    },
+    {
+      "architecture": "D1-deep-35-15",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "D1-deep-35-15",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    },
+    {
+      "architecture": "D2-deep-45-20",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.1
+      }
+    },
+    {
+      "architecture": "D2-deep-45-20",
+      "optimizer": {
+        "name": "gradient_descent",
+        "learning_rate": 0.03
+      }
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_epochs": 2000,
+  "requirement_max_pixel_errors": 1
+}
