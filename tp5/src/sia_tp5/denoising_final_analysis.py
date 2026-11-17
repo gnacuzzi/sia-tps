@@ -171,11 +171,14 @@ def _plot_curve(path, rows):
 
 
 def _plot_cases(path, selected):
-    categories = [("easy", "Fácil"), ("difficult", "Difícil"),
-                  ("failed", "Fallido")]
-    columns = [("clean", "Objetivo limpio"), ("noisy", "Entrada corrupta"),
-               ("output", "Reconstrucción")]
-    figure, axes = plt.subplots(3, 3, figsize=(7.5, 8.5))
+    categories = [
+        ("easy", "Recuperación\nexacta"),
+        ("difficult", "Recuperación\nparcial"),
+        ("failed", "La red empeora\nla entrada"),
+    ]
+    columns = [("clean", "Letra original"), ("noisy", "Entrada con ruido"),
+               ("output", "Salida de la red")]
+    figure, axes = plt.subplots(3, 3, figsize=(8.8, 9.6))
     for row_index, (key, category) in enumerate(categories):
         case = selected[key]
         for column_index, (field, title) in enumerate(columns):
@@ -189,11 +192,13 @@ def _plot_cases(path, selected):
                 axis.set_title(title)
         axes[row_index, 0].set_ylabel(
             f"{category}\np={case['noise_probability']:.2f}, {case['label']}\n"
-            f"{case['input_pixel_errors']} → {case['output_pixel_errors']} errores",
-            rotation=0, labelpad=48, va="center",
+            f"Entrada: {case['input_pixel_errors']} errores\n"
+            f"Salida: {case['output_pixel_errors']} errores",
+            rotation=0, labelpad=62, va="center",
         )
     figure.suptitle("Casos representativos del DAE congelado", y=0.99)
-    figure.tight_layout(rect=(0.08, 0, 1, 0.97))
+    figure.subplots_adjust(left=0.29, right=0.98, bottom=0.04, top=0.88,
+                           wspace=0.18, hspace=0.18)
     figure.savefig(path, dpi=180, bbox_inches="tight")
     plt.close(figure)
 

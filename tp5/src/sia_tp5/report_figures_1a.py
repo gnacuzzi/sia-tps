@@ -135,6 +135,186 @@ def plot_funnel_seeds(path: Path) -> None:
     plt.close(fig)
 
 
+def plot_funnel_seeds_mse(path: Path) -> None:
+    """Resumir la robustez de los finalistas MSE sin desplazar puntos entre filas."""
+    mse_finalists = [row for row in FINALISTS if row[1] == "MSE"]
+    short_labels = [
+        "A3  35-35-2-35-35",
+        "A4  35-20-10-2-10-20-35",
+        "Ancho 45  35-45-2-45-35",
+        "Ancho 50  35-50-2-50-35",
+        "Ancho 60  35-60-2-60-35",
+        "D1  35-35-15-2-15-35-35",
+        "D2  35-45-20-2-20-45-35",
+    ]
+
+    fig, ax = plt.subplots(figsize=(9.4, 4.9))
+    for index, (_, _, raw_values) in enumerate(mse_finalists):
+        values = np.asarray(raw_values, dtype=int)
+        for value in np.unique(values):
+            count = int(np.sum(values == value))
+            ax.scatter(value, index, s=52 + 34 * (count - 1), color=SERIES_MSE,
+                       edgecolor="white", linewidth=0.8, zorder=3)
+            if count > 1:
+                ax.text(value, index, str(count), ha="center", va="center",
+                        fontsize=7, color="white", fontweight="bold", zorder=4)
+        compliant = int(np.sum(values <= 1))
+        ax.text(1.01, index, f"{compliant}/3 cumplen",
+                transform=ax.get_yaxis_transform(), va="center", ha="left",
+                fontsize=9, color=TEXT_SECONDARY)
+
+    ax.axvspan(-0.5, 1.5, color="#1baf7a", alpha=0.10, zorder=0)
+    ax.axvline(1.5, color="#1baf7a", linewidth=1.2, linestyle="--", zorder=1)
+    ax.text(1.65, -0.72, "zona que cumple: máximo <= 1", ha="left", va="center",
+            fontsize=9, color=TEXT_SECONDARY)
+    ax.set_yticks(range(len(short_labels)), short_labels, fontsize=9)
+    ax.set_xlim(-0.5, 11.7)
+    ax.set_ylim(len(short_labels) - 0.5, -1.05)
+    ax.set_xticks(range(0, 12))
+    ax.set_xlabel("máximo de píxeles incorrectos al final (menor es mejor)",
+                  color=TEXT_SECONDARY)
+    ax.grid(axis="x", color=GRID, linewidth=0.8, zorder=0)
+    _style_axes(ax)
+    ax.set_title("Refinamiento de arquitectura con MSE\n"
+                 "GD 0,3 y tres semillas por configuración",
+                 color=TEXT_PRIMARY, fontsize=11)
+    fig.text(0.34, 0.025,
+             "Un número dentro de un punto indica semillas con el mismo resultado",
+             ha="left", va="bottom", fontsize=8, color=TEXT_SECONDARY)
+    fig.subplots_adjust(left=0.34, right=0.83, top=0.86, bottom=0.13)
+    fig.savefig(path, dpi=200)
+    plt.close(fig)
+
+
+def plot_bce_rate_speed(path: Path) -> None:
+    """Comparar cuándo las tasas BCE viables alcanzan el requisito."""
+    rates = ["0,03", "0,1"]
+    first_requirement_epochs = {
+        "0,03": [1599, 1501, 1577],
+        "0,1": [582, 583, 770],
+    }
+    colors = ["#6a9bd4", SERIES_BCE]
+    x = np.arange(len(rates))
+    offsets = np.array([-0.035, 0.0, 0.035])
+
+    fig, ax = plt.subplots(figsize=(7.2, 4.6))
+    for index, rate in enumerate(rates):
+        values = np.asarray(first_requirement_epochs[rate])
+        ax.scatter(np.full(values.size, index) + offsets, values, s=58,
+                   color=colors[index],
+                   edgecolor="white", linewidth=0.8, zorder=3)
+        median = int(np.median(values))
+        ax.plot([index - 0.12, index + 0.12], [median, median],
+                color=TEXT_PRIMARY, linewidth=2.2, zorder=4)
+        ax.text(index, median - 70, f"mediana: {median}", ha="center", va="top",
+                fontsize=9, color=TEXT_PRIMARY)
+
+    ax.set_xticks(x, ["GD 0,03", "GD 0,1"])
+    ax.set_xlim(-0.35, 1.35)
+    ax.set_ylim(0, 1850)
+    ax.set_ylabel("primera época con máximo de errores <= 1",
+                  color=TEXT_SECONDARY)
+    ax.set_title("BCE con tasa 0,1 alcanza el requisito antes\n"
+                 "Misma arquitectura y mismas tres inicializaciones",
+                 color=TEXT_PRIMARY, fontsize=11)
+    ax.grid(axis="y", color=GRID, linewidth=0.8)
+    _style_axes(ax)
+    fig.text(0.16, 0.025,
+             "Cada punto representa una semilla. Menos épocas indica mayor rapidez.",
+             ha="left", va="bottom", fontsize=8, color=TEXT_SECONDARY)
+    fig.subplots_adjust(left=0.16, right=0.84, top=0.84, bottom=0.16)
+    fig.savefig(path, dpi=200)
+    plt.close(fig)
+
+
+def plot_bce_rate_curves_seed0(path: Path) -> None:
+    """Mostrar la trayectoria completa de las cuatro tasas del tamiz BCE."""
+    import csv
+
+    histories = (Path(__file__).resolve().parents[2] / "results"
+                 / "bce-gd-rate-calibration-seed0-v1" / "histories")
+    series = [
+        ("0,01", "0p01", "#7b8794", "lenta"),
+        ("0,03", "0p03", "#2a78d6", "viable"),
+        ("0,1", "0p1", "#1baf7a", "más rápida"),
+        ("0,3", "0p3", "#d43c2f", "inestable"),
+    ]
+
+    fig, ax = plt.subplots(figsize=(8.6, 4.8))
+    for rate, tag, color, reading in series:
+        source = histories / (
+            f"width-45__gradient_descent__lr-{tag}__seed-0.csv"
+        )
+        with source.open(encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+        epochs = np.array([int(row["epoch"]) for row in rows])
+        errors = np.array([int(row["max_pixel_errors"]) for row in rows])
+        ax.plot(epochs, errors, color=color, linewidth=1.25,
+                label=f"tasa {rate}: {reading}", alpha=0.92)
+
+    ax.axhspan(-0.5, 1.5, color="#1baf7a", alpha=0.09, zorder=0)
+    ax.axhline(1, color="#1baf7a", linewidth=1.1, linestyle="--", zorder=1)
+    ax.text(1980, 1.6, "requisito: máximo <= 1", ha="right", va="bottom",
+            fontsize=8, color="#16825d")
+    ax.set_xlim(0, 2000)
+    ax.set_ylim(-0.5, 33)
+    ax.set_xlabel("época", color=TEXT_SECONDARY)
+    ax.set_ylabel("máximo de píxeles incorrectos", color=TEXT_SECONDARY)
+    ax.set_title("Calibración de la tasa con BCE\n"
+                 "Red 35-45-2-45-35, descenso de gradiente y semilla 0",
+                 color=TEXT_PRIMARY, fontsize=11)
+    ax.grid(color=GRID, linewidth=0.8)
+    _style_axes(ax)
+    ax.legend(frameon=False, loc="upper right", fontsize=9)
+    fig.tight_layout()
+    fig.savefig(path, dpi=200)
+    plt.close(fig)
+
+
+def plot_bce_rate_requirement_seed0(path: Path) -> None:
+    """Comparar el primer cumplimiento de las cuatro tasas BCE en semilla 0."""
+    rates = ["0,01", "0,03", "0,1", "0,3"]
+    first_epoch = [None, 1599, 582, None]
+    final_errors = [6, 0, 0, 22]
+    colors = ["#7b8794", "#2a78d6", "#1baf7a", "#d43c2f"]
+    x = np.arange(len(rates))
+
+    fig, ax = plt.subplots(figsize=(7.6, 4.6))
+    ax.axhline(2000, color="#9aa5b1", linewidth=1.1, linestyle="--")
+    ax.text(3.45, 2000, "presupuesto: 2.000 épocas", ha="right", va="bottom",
+            fontsize=8, color=TEXT_SECONDARY)
+
+    for index, (epoch, errors, color) in enumerate(
+            zip(first_epoch, final_errors, colors)):
+        if epoch is None:
+            ax.scatter(index, 2075, marker="x", s=90, linewidth=2.4,
+                       color=color, zorder=3)
+            ax.text(index, 1980, f"no alcanzó\n{errors} errores al final",
+                    ha="center", va="top", fontsize=9, color=TEXT_SECONDARY)
+        else:
+            ax.scatter(index, epoch, s=95, color=color, edgecolor="white",
+                       linewidth=0.9, zorder=3)
+            ax.text(index, epoch + 70, f"época {epoch}\n0 errores al final",
+                    ha="center", va="bottom", fontsize=9, color=TEXT_SECONDARY)
+
+    ax.set_xticks(x, [f"tasa {rate}" for rate in rates])
+    ax.set_xlim(-0.45, 3.45)
+    ax.set_ylim(0, 2180)
+    ax.set_ylabel("primera época con máximo de errores <= 1",
+                  color=TEXT_SECONDARY)
+    ax.set_title("Velocidad de las cuatro tasas con BCE\n"
+                 "Red 35-45-2-45-35, descenso de gradiente y semilla 0",
+                 color=TEXT_PRIMARY, fontsize=11)
+    ax.grid(axis="y", color=GRID, linewidth=0.8)
+    _style_axes(ax)
+    fig.text(0.16, 0.025,
+             "Las cruces indican que la tasa no cumplió dentro del presupuesto.",
+             ha="left", va="bottom", fontsize=8, color=TEXT_SECONDARY)
+    fig.subplots_adjust(left=0.16, right=0.96, top=0.84, bottom=0.17)
+    fig.savefig(path, dpi=200)
+    plt.close(fig)
+
+
 # Resumen de configs/bce_architecture_comparison_seeds0_9.json, copiado a docs/
 # porque results/ no se versiona.
 BCE_SUMMARY = OUTPUT_DIR / "1a-bce-arquitecturas.csv"

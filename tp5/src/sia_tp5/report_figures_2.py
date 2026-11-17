@@ -150,10 +150,12 @@ def plot_losses(path: Path) -> None:
     left.plot(epochs, reconstruction_loss, color=BLUE, label="reconstrucción")
     left.plot(epochs, 0.03 * kl, color=ORANGE, label="beta · KL")
     left.set_yscale("log")
-    left.set_title("Términos de la pérdida", fontsize=10, color=TEXT_PRIMARY)
+    left.set_title("Evolución de los términos de la pérdida\n(escala logarítmica)",
+                   fontsize=10, color=TEXT_PRIMARY)
     left.legend(frameon=False)
     right.plot(epochs, kl, color=AQUA)
-    right.set_title("KL sin ponderar", fontsize=10, color=TEXT_PRIMARY)
+    right.set_title("Evolución de la regularización KL", fontsize=10,
+                    color=TEXT_PRIMARY)
     for axis in (left, right):
         axis.set_xlabel("época", color=TEXT_SECONDARY)
         _style(axis)
@@ -198,7 +200,7 @@ def plot_latent_space(dataset, path: Path) -> dict:
         _style(axis)
         stats[name] = {"mu_std": float(mu.std()), "valid": float(valid.mean())}
     axes[1].legend(frameon=False, fontsize=8.5, loc="lower right", markerscale=2)
-    fig.suptitle("Dónde están los datos y dónde cae el prior N(0, I)\n"
+    fig.suptitle("Comparación del muestreo en el espacio latente\n"
                  "proyección PCA de los códigos, solo para visualizar",
                  color=TEXT_PRIMARY, fontsize=11)
     fig.tight_layout()

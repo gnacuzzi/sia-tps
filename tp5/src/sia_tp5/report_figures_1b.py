@@ -90,8 +90,7 @@ def plot_evolution(path: Path) -> None:
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
     ax.legend(title="ruido de evaluación", frameon=False, loc="lower right", fontsize=9)
-    ax.set_title("Evolución del DAE: cada paso agrega un cambio al anterior\n"
-                 "media ± desvío entre semillas (3 por paso, 10 en el final)",
+    ax.set_title("Recuperación exacta después de cada decisión",
                  color=TEXT_PRIMARY, fontsize=11)
     fig.tight_layout()
     fig.savefig(path, dpi=200)
@@ -118,7 +117,8 @@ def plot_label_difficulty(path: Path, level: str = "0.2") -> None:
     ax.set_axisbelow(True)
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
-    ax.set_title(f"Dificultad por carácter con p = {level.replace('.', ',')}\n"
+    ax.set_title(f"Recuperación exacta de cada carácter con p = "
+                 f"{level.replace('.', ',')}\n"
                  "10 semillas x 100 corrupciones por carácter",
                  color=TEXT_PRIMARY, fontsize=11)
     fig.tight_layout()
@@ -177,7 +177,7 @@ def plot_decision(path: Path, title: str, series: list[tuple[str, bool, dict]]) 
     fig, (left, right) = plt.subplots(1, 2, figsize=(10, 3.6))
     x = np.array([float(level) for level in ALL_LEVELS])
     left.plot(x, 35 * x, color=TEXT_SECONDARY, linestyle=":", linewidth=1.2,
-              label="entrada (35·p, sin DAE)")
+              label="errores de entrada antes de la red")
     alternative = iter(ALTERNATIVES)
     for label, chosen, data in series:
         color = CHOSEN if chosen else next(alternative)
@@ -207,8 +207,9 @@ def plot_decision(path: Path, title: str, series: list[tuple[str, bool, dict]]) 
             axis.spines[side].set_visible(False)
     handles, labels = right.get_legend_handles_labels()
     ref_handle, ref_label = left.get_legend_handles_labels()
-    fig.legend(handles + ref_handle[:1], labels + ref_label[:1], loc="lower center",
-               ncol=len(labels) + 1, frameon=False, fontsize=9)
+    fig.legend(handles + ref_handle[:1], labels + ref_label[:1],
+               loc="lower center", ncol=len(labels) + 1,
+               frameon=False, fontsize=9)
     fig.suptitle(title, color=TEXT_PRIMARY, fontsize=11)
     fig.tight_layout(rect=(0, 0.1, 1, 0.95))
     fig.savefig(path, dpi=200)
@@ -222,7 +223,8 @@ def decision_figures() -> list[tuple[str, str, list]]:
         ("1b-d1-tasa.png", "Tasa de descenso de gradiente (red del 1A, 1 semilla)", [
             ("tasa 0,01", False, _series_single(ex / "rate-comparison-seed0.csv",
                                                 {"learning_rate": "0.01"})),
-            ("tasa 0,03", True, _series_single(ex / "rate-comparison-seed0.csv",
+            ("tasa 0,03", "punto de partida",
+             _series_single(ex / "rate-comparison-seed0.csv",
                                                {"learning_rate": "0.03"})),
             ("tasa 0,05", False, _series_single(ex / "rate-comparison-seed0.csv",
                                                 {"learning_rate": "0.05"})),
@@ -253,20 +255,22 @@ def decision_figures() -> list[tuple[str, str, list]]:
         ("1b-d5-tasa-decreciente.png", "Tasa constante o decreciente (3 semillas)", [
             ("constante 0,03", False, agg(ex / "schedule-comparison.csv",
                                           "schedule", "constant_0.03")),
-            ("decreciente 0,03 -> 0,003", True,
+            ("decreciente 0,03 → 0,003", "elegida para GD",
              agg(ex / "schedule-comparison.csv", "schedule",
                  "exponential_0.03_to_0.003")),
         ]),
         ("1b-d6-latente.png", "Dimensión del espacio latente (3 semillas)", [
-            ("latente 2", False, agg(ex / "latent-comparison.csv",
+            ("latente de 2 valores", False, agg(ex / "latent-comparison.csv",
                                      "latent_dimension", "2")),
-            ("latente 5", True, agg(ex / "latent-comparison.csv",
+            ("latente de 5 valores", True, agg(ex / "latent-comparison.csv",
                                     "latent_dimension", "5")),
         ]),
         ("1b-d7-ruido-entrenamiento.png", "Niveles de ruido al entrenar (3 semillas)", [
-            ("solo p = 0,10", False, agg(ex / "multilevel-comparison.csv",
+            ("entrenamiento solo con p = 0,10", False,
+             agg(ex / "multilevel-comparison.csv",
                                          "training_noise", "single_0.10")),
-            ("0,05 + 0,10 + 0,20", True, agg(ex / "multilevel-comparison.csv",
+            ("entrenamiento con p = 0,05 + 0,10 + 0,20", True,
+             agg(ex / "multilevel-comparison.csv",
                                               "training_noise",
                                               "multilevel_0.05_0.10_0.20")),
         ]),

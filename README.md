@@ -58,3 +58,15 @@ robustez para recuperar letras y códigos QR deteriorados.
 
 La preparación del entorno, los comandos para reproducir los experimentos y el
 detalle de los resultados se encuentran en el [README del TP4](tp4/README.md).
+
+## TP5 — Autoencoders
+
+El quinto trabajo implementa autoencoders desde cero. Se estudian
+arquitecturas, optimizadores y funciones de pérdida para reconstruir los
+caracteres de una fuente en un espacio latente bidimensional; se entrena un
+denoising autoencoder para recuperar patrones afectados por ruido; y se
+construye un autoencoder variacional capaz de generar funciones simples de
+Python.
+
+La preparación del entorno, los comandos de reproducción, las pruebas y el
+detalle de la documentación se encuentran en el [README del TP5](tp5/README.md).
